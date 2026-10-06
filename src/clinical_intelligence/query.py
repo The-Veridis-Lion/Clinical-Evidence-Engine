@@ -5,6 +5,7 @@ from itertools import product
 from typing import Literal
 from pydantic import Field, model_validator
 from .domain import CalculationTrace, Model, PatientAbstraction, ServiceEvent, ServiceType, THERAPY_TYPES
+from .evidence import quantitative_evidence
 
 
 class QuerySpec(Model):
@@ -47,19 +48,40 @@ def _period(abstraction, spec):
     return spec.start or min(dates), spec.end or max(dates)
 
 
+def _service_accounting(event: ServiceEvent):
+    """Use psychotherapy eligibility only for psychotherapy; other care needs delivery/presence."""
+    if set(event.type_options) <= THERAPY_TYPES:
+        return event.countable, event.minutes_lower, event.minutes_upper
+    # The persisted countable flag excludes all nontherapy from plan accounting.
+    # Explicit service queries instead use already-reconciled patient contact.
+    if (event.patient_present is False or event.delivered is False
+            or any(d.rule == "no_delivered_care_assertion" for d in event.decisions)):
+        return False, 0, 0
+    definite = (event.patient_present is True and event.delivered is True
+                and bool(event.encounter_ref or event.appointment_refs))
+    countable = True if definite else None
+    lower = min(event.minute_options) if definite and event.minute_options else 0
+    upper = max(event.minute_options) if event.minute_options else None
+    # An invalid time correction affects duration, not an established service count.
+    if any(u.explanation == "Explicit correction creates an invalid interval." for u in event.uncertainties):
+        lower, upper = 0, None
+    return countable, lower, upper
+
+
 def _contribution(event: ServiceEvent, start, end, service_types):
     possible_dates = [d for d in event.date_options if start <= d <= end]
     possible_type = any(t in service_types for t in event.type_options)
-    if not possible_dates or not possible_type or event.countable is False:
+    countable, lower, upper = _service_accounting(event)
+    if not possible_dates or not possible_type or countable is False:
         return None
     # A guaranteed contribution must be eligible under every supported date/type choice.
     certain = all(start <= d <= end for d in event.date_options) and all(t in service_types for t in event.type_options)
-    definite = certain and event.countable is True
+    definite = certain and countable is True
     return {"event_id": event.event_id, "encounter_ref": event.encounter_ref,
             "service_date": event.service_date, "date_options": possible_dates,
             "service_type": event.service_type, "type_options": event.type_options,
             "sessions": bounded(int(definite), 1),
-            "minutes": bounded(event.minutes_lower if definite else 0, event.minutes_upper),
+            "minutes": bounded(lower if definite else 0, upper),
             "minute_options": event.minute_options if definite else sorted({0, *event.minute_options}),
             "definite": definite, "state": event.state, "claim_ids": event.claim_ids,
             "calculations": [c.model_dump() for c in event.calculations],
@@ -67,7 +89,8 @@ def _contribution(event: ServiceEvent, start, end, service_types):
 
 
 def utilization(abstraction: PatientAbstraction, start: date, end: date, service_types=None) -> dict:
-    service_types = set(service_types or THERAPY_TYPES)
+    # None means psychotherapy; explicit types (including an empty set) are respected.
+    service_types = set(THERAPY_TYPES if service_types is None else service_types)
     contributions = [c for e in abstraction.events if (c := _contribution(e, start, end, service_types)) is not None]
     sessions = bounded(sum(c["sessions"]["lower"] for c in contributions), sum(c["sessions"]["upper"] for c in contributions))
     low = sum(c["minutes"]["lower"] for c in contributions)
@@ -327,13 +350,20 @@ def attach_evidence(answer: dict, abstractions: list[PatientAbstraction], docume
     visit(answer)
     docs = {d.document_id: d for d in documents}
     claims = {c.claim_id: c for a in abstractions for c in a.source_claims}
+    document_claims = {}
+    for claim in claims.values():
+        document_claims.setdefault(claim.document_id, []).append(claim)
     if not identifiers <= set(claims):
         raise ValueError("Audit result references nonexistent source claims")
     answer["evidence"] = {identifier: {"kind": claims[identifier].kind, "statement": claims[identifier].statement,
                                        "document_id": claims[identifier].document_id,
                                        "declared_id": docs[claims[identifier].document_id].declared_id,
                                        "source_names": docs[claims[identifier].document_id].source_names,
-                                       "passages": [p.model_dump() for p in claims[identifier].passages]}
+                                       "passages": [p.model_dump() for p in claims[identifier].passages],
+                                       # Numeric audit links are computed from immutable claims and retained text.
+                                       "quantitative_fields": quantitative_evidence(
+                                           claims[identifier], docs[claims[identifier].document_id],
+                                           document_claims[claims[identifier].document_id])}
                            for identifier in sorted(identifiers)}
     answer["document_coverage"] = [{"document_id": d.document_id, "declared_id": d.declared_id, "status": d.status,
                                     "source_names": d.source_names} for d in documents]
