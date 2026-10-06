@@ -19,6 +19,10 @@ def write_result(result, output=None):
 
 
 def main(argv=None):
+    # JSON pipes must use the same encoding as saved source text on Windows too.
+    for stream in (sys.stdout, sys.stderr):
+        if hasattr(stream, "reconfigure"):
+            stream.reconfigure(encoding="utf-8")
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--db", default="artifacts/clinical.sqlite")
     parser.add_argument("--output")
@@ -50,10 +54,11 @@ def main(argv=None):
     bench = commands.add_parser("benchmark")
     bench.add_argument("--iterations", type=int, default=30)
     bench.add_argument("--processing-report", default="artifacts/initial_processing.json")
+    args = parser.parse_args(argv)
     try:
-        with SQLiteStore(parser.parse_args(argv).db) as store:
-            args = parser.parse_args(argv)
+        with SQLiteStore(args.db) as store:
             if args.command == "process":
+                # Saved inspections and queries do not construct a model provider.
                 from .provider import CodexCLIProvider, ProviderConfig
                 from .extraction import LangExtractExtractor
                 path = Path(args.input)
@@ -100,6 +105,7 @@ def main(argv=None):
                     result = query_patient(patients[0], spec) if spec.patient_id else query_collection(patients, spec)
                     write_result(attach_evidence(result, patients, store.documents()), args.output)
                 else:
+                    # Development questions supply QuerySpecs, not bespoke clinical logic.
                     questions = json.loads(Path(args.questions).read_text(encoding="utf-8"))
                     specifications = {r["id"]: QuerySpec.model_validate(r["spec"]) for r in json.loads(Path(args.specs).read_text(encoding="utf-8"))}
                     if {q["id"] for q in questions} != set(specifications):
@@ -118,7 +124,7 @@ def main(argv=None):
                 result = experiment(store) if args.command == "experiment" else benchmark(store, args.iterations, Path(args.processing_report))
                 write_result(result, args.output)
                 return 0
-    except (ValueError, KeyError, RuntimeError) as error:
+    except (ValueError, KeyError, RuntimeError, OSError) as error:
         print(f"ERROR: {error}", file=sys.stderr)
         return 1
 
