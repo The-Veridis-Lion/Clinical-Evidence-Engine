@@ -13,9 +13,26 @@ Reviewed 2026-10-06 against `pyproject.toml`, all **65** entries in `requirement
 | [setuptools](https://pypi.org/project/setuptools/80.10.2/) | 80.10.2 | MIT | Build backend pinned separately in `pyproject.toml`; resolved by isolated builds. |
 | [SQLite core](https://www.sqlite.org/copyright.html) | Python-bundled; reported by benchmark | Public domain | Persistent registry, claims, and clinical abstraction through `sqlite3`. |
 | [Python](https://docs.python.org/3/license.html) | Tested with 3.12.14; project requires >=3.12 | PSF license and included component notices | Standard-library ingestion, hashing, CLI, subprocess, timing, and storage support. |
-| [OpenAI Codex CLI](https://github.com/openai/codex/blob/rust-v0.160.0/LICENSE) | Tested with 0.160.0 | Apache-2.0 for CLI code; hosted-service terms are separate | External model provider invoked as a local process; not a Python dependency. |
+| [OpenAI Codex CLI](https://github.com/openai/codex/blob/rust-v0.159.3/LICENSE) | Actual extraction 0.159.3; PATH preflight 0.160.0 | Apache-2.0 for CLI code; hosted-service terms are separate | External model provider invoked as a local process; not a Python dependency. |
 
 Pydantic and pytest are established validation/testing dependencies; intervaltree supplies tested interval operations. LangExtract 1.7.0 is a recent pinned release, its contribution guidance requires tests, and it is not an officially supported Google product. Our adapter contains its types and provider interface so it can be replaced without changing clinical logic. These choices favor tested infrastructure while retaining custom reconciliation and arithmetic in this repository. [LangExtract release and disclaimer](https://pypi.org/project/langextract/1.7.0/), [contribution/testing guidance](https://github.com/google/langextract/blob/v1.7.0/CONTRIBUTING.md)
+
+## Choice and replacement cost
+
+These are engineering judgments and estimates, not measured implementation times.
+
+| Selected component | Alternative | Replacement burden and reason to retain it |
+|---|---|---|
+| Pydantic | Standard-library dataclasses plus validators/serialization | Several hours initially, with ongoing schema validation work; boundary validation is central here. |
+| LangExtract | An isolated structured-output provider plus exact span checking | Moderate for short notes; larger for alignment diagnostics/chunking. Health terms and install footprint require production review. |
+| intervaltree | A sorted interval sweep | Low for union alone; retaining tested merge/chop operations limits temporal mistakes. Its sortedcontainers dependency has an older release, so used operations were tested on the target interpreter. |
+| pytest | Standard-library unittest | Low porting effort, with more verbose parameterization and fixtures. |
+| SQLite | Retain Python's bundled sqlite3 | No dependency removal needed; production changes should follow measured query/concurrency needs. |
+| Codex CLI provider | Another isolated model transport | Transport replacement is local to the adapter; authentication, usage measurement and semantic extraction require revalidation. No alternative service is used by this prototype. |
+
+The current environment passed `pip check`, actual extraction and the regression suite.
+This establishes prototype compatibility, not a complete production dependency or
+clinical validation review.
 
 ## LangExtract health-use terms
 
@@ -31,7 +48,7 @@ The terms address downstream use restrictions, provision of the agreement, modif
 
 The provider uses the **local Codex CLI with `gpt-6-luna`**. The CLI process is local; model inference is supplied by OpenAI's hosted service using the operator's own existing sign-in. Credentials and user configuration are not distributed in this submission.
 
-The CLI's Apache-2.0 license covers its code, not model weights, hosted inference rights, or a subscription. Its pinned upstream [LICENSE](https://github.com/openai/codex/blob/rust-v0.160.0/LICENSE) and [NOTICE](https://github.com/openai/codex/blob/rust-v0.160.0/NOTICE) remain with an independently installed CLI. Hosted use is governed by the applicable [OpenAI Terms of Use](https://openai.com/policies/terms-of-use/) or [OpenAI Services Agreement](https://openai.com/policies/services-agreement/), together with applicable service policies and the operator's plan.
+The CLI's Apache-2.0 license covers its code, not model weights, hosted inference rights, or a subscription. Its pinned upstream [LICENSE](https://github.com/openai/codex/blob/rust-v0.159.3/LICENSE) and [NOTICE](https://github.com/openai/codex/blob/rust-v0.159.3/NOTICE) remain with an independently installed CLI. Hosted use is governed by the applicable [OpenAI Terms of Use](https://openai.com/policies/terms-of-use/) or [OpenAI Services Agreement](https://openai.com/policies/services-agreement/), together with applicable service policies and the operator's plan.
 
 Recorded CLI usage is reported as tokens/calls when the CLI supplies it. Actual billed USD cost is unavailable. Subscription usage and API token pricing are separate, so API prices are not used to claim the cost of these subscription-authenticated extractions. [Official OpenAI pricing guidance](https://learn.chatgpt.com/docs/pricing)
 
