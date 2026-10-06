@@ -4,6 +4,7 @@ import hashlib
 import json
 import re
 from time import perf_counter
+from pathlib import Path
 from typing import Protocol
 from .domain import (SCHEMA_VERSION, AssessmentClaim, ClinicalObservation, CorrectionRelationship,
                      DocumentExtraction, FunctionalAction, Patient, PlanClaim, RegisteredDocument, ServiceClaim, SourcePassage)
@@ -151,20 +152,32 @@ def _examples():
 
 
 class LangExtractExtractor:
-    def __init__(self, provider: Provider):
+    def __init__(self, provider: Provider, contract: str = "baseline"):
+        if contract not in {"baseline", "sparse"}:
+            raise ValueError("Extraction contract must be baseline or sparse")
         self.provider = provider
+        self.contract = contract
+        # Baseline is an explicit release choice, never an automatic failure fallback.
+        self._baseline = json.loads((Path(__file__).parent / "contracts" / "baseline.json").read_text(encoding="utf-8")) if contract == "baseline" else None
+
+    def examples(self):
+        if self.contract == "sparse":
+            return _examples()
+        import langextract as lx
+        return [lx.data.ExampleData(text=text, extractions=[lx.data.Extraction(
+            extraction_class=kind, extraction_text=text, attributes=attributes)
+            for kind, attributes in rows]) for text, rows in self._baseline["examples"]]
 
     @property
     def key(self):
         # Actual examples/prompt contents, schema and relevant model settings determine cache reuse.
         import importlib.metadata
-        from . import domain
         contract = {cls.__name__: cls.model_json_schema() for cls in
-                    (Patient, ServiceClaim, PlanClaim, AssessmentClaim, ClinicalObservation, FunctionalAction, CorrectionRelationship)}
-        payload = {"schema": SCHEMA_VERSION, "prompt_version": PROMPT_VERSION, "prompt": PROMPT,
+                    (Patient, ServiceClaim, PlanClaim, AssessmentClaim, ClinicalObservation, FunctionalAction, CorrectionRelationship)} if self._baseline is None else None
+        payload = dict(self._baseline) if self._baseline is not None else {"schema": SCHEMA_VERSION, "prompt_version": PROMPT_VERSION, "prompt": PROMPT,
                    "examples": [(e.text, [(x.extraction_class, x.attributes) for x in e.extractions]) for e in _examples()],
-                   "contract": contract, "provider": self.provider.config.model_dump(),
-                   "langextract": importlib.metadata.version("langextract")}
+                   "contract": contract}
+        payload.update(provider=self.provider.config.model_dump(), langextract=importlib.metadata.version("langextract"))
         return hashlib.sha256(json.dumps(payload, sort_keys=True).encode()).hexdigest()
 
     def extract(self, document):
@@ -181,12 +194,12 @@ class LangExtractExtractor:
 
     def _extract(self, document):
         import langextract as lx
-        examples = _examples()
+        examples = self.examples()
         self.provider.reset_usage()
         start = perf_counter()
         model = self.provider.language_model(examples, document.text)
         # One semantic pass produces source claims; reconciliation happens later in code.
-        result = lx.extract(text_or_documents=document.text, prompt_description=PROMPT,
+        result = lx.extract(text_or_documents=document.text, prompt_description=self._baseline["prompt"] if self._baseline is not None else PROMPT,
                             examples=examples, model=model, use_schema_constraints=False, extraction_passes=1,
                             max_char_buffer=max(10000, len(document.text) + 1), max_workers=1,
                             resolver_params={"suppress_parse_errors": False, "enable_fuzzy_alignment": False},
@@ -194,6 +207,9 @@ class LangExtractExtractor:
         classes = {"service": ServiceClaim, "treatment_plan": PlanClaim, "assessment": AssessmentClaim,
                    "clinical_observation": ClinicalObservation, "functional_action": FunctionalAction,
                    "document_relationship": CorrectionRelationship}
+        if self.contract == "baseline":
+            classes = {"service": ServiceClaim, "plan": PlanClaim, "assessment": AssessmentClaim,
+                       "observation": ClinicalObservation, "relationship": CorrectionRelationship}
         patient = None
         declared_id = None
         pending = []

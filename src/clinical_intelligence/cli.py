@@ -31,6 +31,8 @@ def main(argv=None):
     ingest.add_argument("--input", default="data/documents")
     ingest.add_argument("--model", default="gpt-6-luna")
     ingest.add_argument("--reasoning", default="high")
+    ingest.add_argument("--contract", choices=["baseline", "sparse"], default="baseline",
+                        help="Sparse is an experimental contract; the reviewed baseline remains the default")
     inspect = commands.add_parser("inspect")
     inspect.add_argument("--patient")
     inspect.add_argument("--document")
@@ -67,7 +69,7 @@ def main(argv=None):
                     raise ValueError("No .txt source documents found")
                 def progress(item):
                     print(json.dumps({k: item[k] for k in ("source", "status", "error") if k in item}), file=sys.stderr, flush=True)
-                result = process(store, paths, LangExtractExtractor(CodexCLIProvider(ProviderConfig(model=args.model, reasoning_effort=args.reasoning))), progress)
+                result = process(store, paths, LangExtractExtractor(CodexCLIProvider(ProviderConfig(model=args.model, reasoning_effort=args.reasoning)), contract=args.contract), progress)
                 write_result(result, args.output)
                 return int(result["failed"] > 0)
             if args.command == "inspect":

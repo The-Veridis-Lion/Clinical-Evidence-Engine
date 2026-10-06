@@ -59,13 +59,27 @@ class CodexCLIProvider:
         self._call_metrics = []
         self._parse_failures = 0
 
+    def output_schema(self, classes, source_text):
+        return extraction_envelope_schema(classes, source_text)
+
+    def prepare_prompt(self, prompt):
+        return prompt
+
+    def map_output(self, output):
+        return output
+
+    def run_cli(self, command, request, folder):
+        return subprocess.run(command, input=request, cwd=folder, capture_output=True,
+                              text=True, encoding="utf-8", timeout=self.config.timeout_seconds,
+                              check=False)
+
     def language_model(self, examples, source_text):
         # LangExtract-specific types stay inside this adapter and the extractor.
         from langextract.core.base_model import BaseLanguageModel
         from langextract.core.types import ScoredOutput
         owner = self
         classes = sorted({x.extraction_class for e in examples for x in e.extractions})
-        schema = extraction_envelope_schema(classes, source_text)
+        schema = owner.output_schema(classes, source_text)
 
         class CodexLanguageModel(BaseLanguageModel):
             def __init__(self):
@@ -90,7 +104,7 @@ class CodexCLIProvider:
                         owner._calls += 1
                         request = ("Perform only the extraction requested below. "
                                    "Do not use tools, read files, or perform calculations. "
-                                   "Return raw JSON matching the supplied schema.\n\n" + prompt)
+                                   "Return raw JSON matching the supplied schema.\n\n" + owner.prepare_prompt(prompt))
                         schema_text = schema_path.read_text(encoding="utf-8")
                         quote_schema_chars = len(json.dumps(schema["$defs"]["source_passage"]["enum"]))
                         metric = {"source_characters": len(source_text),
@@ -106,9 +120,7 @@ class CodexCLIProvider:
                         owner._call_metrics.append(metric)
                         call_started = perf_counter()
                         try:
-                            completed = subprocess.run(command, input=request,
-                                                   cwd=folder, capture_output=True, text=True, encoding="utf-8",
-                                                   timeout=owner.config.timeout_seconds, check=False)
+                            completed = owner.run_cli(command, request, folder)
                         except subprocess.TimeoutExpired:
                             metric["status"] = "timeout"
                             raise
@@ -143,6 +155,7 @@ class CodexCLIProvider:
                             metric["status"] = "parse_failed"
                             raise
                         metric["status"] = "completed"
+                        output = owner.map_output(output)
                         # This score satisfies the library interface; it is not clinical confidence.
                         yield [ScoredOutput(score=1.0, output=output)]
 
