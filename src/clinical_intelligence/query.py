@@ -6,6 +6,7 @@ from typing import Literal
 from pydantic import Field, model_validator
 from .domain import CalculationTrace, Model, PatientAbstraction, ServiceEvent, ServiceType, THERAPY_TYPES
 from .evidence import quantitative_evidence
+from .provenance import add_runtime_provenance
 
 
 class QuerySpec(Model):
@@ -119,7 +120,9 @@ def utilization(abstraction: PatientAbstraction, start: date, end: date, service
     included = {c["event_id"] for c in contributions}
     excluded = [e for e in abstraction.events if e.event_id not in included and any(start <= d <= end for d in e.date_options)]
     claim_ids = sorted({i for c in contributions for i in c["claim_ids"]})
-    totals = {"sessions": sessions, "therapy_days": days, "minutes": bounded(low, high),
+    totals = {"sessions": sessions, "distinct_service_days": days,
+              # Compatibility alias; plan comparisons explicitly use qualifying therapy days.
+              "therapy_days": days, "minutes": bounded(low, high),
               "hours": bounded(low / 60, high / 60 if high is not None else None),
               "minute_alternatives": sorted(options) if options is not None else None}
     trace = CalculationTrace(operation="sum_events_and_count_distinct_local_dates",
@@ -254,7 +257,9 @@ def query_patient(abstraction: PatientAbstraction, spec: QuerySpec) -> dict:
     start, end = _period(abstraction, spec)
     if spec.family == "utilization":
         result = utilization(abstraction, start, end, spec.service_types)
-        result["by_service_type"] = {str(t): utilization(abstraction, start, end, [t])["totals"] for t in spec.service_types}
+        details = {str(t): utilization(abstraction, start, end, [t]) for t in spec.service_types}
+        result["by_service_type"] = {t: row["totals"] for t, row in details.items()}
+        result["by_service_type_details"] = details
     elif spec.family == "weekly_utilization":
         result = {"overall": utilization(abstraction, start, end, spec.service_types),
                   "weeks": weekly_utilization(abstraction, start, end, spec.service_types)}
@@ -272,13 +277,13 @@ def query_patient(abstraction: PatientAbstraction, spec: QuerySpec) -> dict:
             changes = sorted({p.effective_start for p in abstraction.plans if start < p.effective_start <= end})
             if len(changes) != 1:
                 result = {"status": "insufficient_evidence", "explanation": "No unique documented plan change in this period; specify an explicit comparison date if desired."}
-                return {"patient": abstraction.patient.model_dump(), "query": spec.model_dump(), "result": result}
+                return attach_evidence({"patient": abstraction.patient.model_dump(), "query": spec.model_dump(), "result": result}, [abstraction])
             change = changes[0]
         if not start < change <= end:
             raise ValueError("Comparison date must divide the review period into two nonempty periods")
         before, after = utilization(abstraction, start, change - timedelta(days=1), spec.service_types), utilization(abstraction, change, end, spec.service_types)
         differences = {}
-        for field in ("sessions", "therapy_days", "minutes", "hours"):
+        for field in ("sessions", "distinct_service_days", "therapy_days", "minutes", "hours"):
             # Subtract opposite bounds to retain conservative difference estimates.
             a, b = after["totals"][field], before["totals"][field]
             differences[field] = bounded(a["lower"] - b["upper"] if b["upper"] is not None else None,
@@ -317,10 +322,14 @@ def query_patient(abstraction: PatientAbstraction, spec: QuerySpec) -> dict:
         # Definite and conditional membership use the same bounds as patient queries.
         met = all(v is None or actual["totals"][k]["lower"] >= v for k, v in thresholds.items())
         excluded = any(v is not None and actual["totals"][k]["upper"] is not None and actual["totals"][k]["upper"] < v for k, v in thresholds.items())
-        result = {"included": met, "conditional_inclusion": not met and not excluded, "actual": actual}
+        result = {"included": met, "conditional_inclusion": not met and not excluded, "actual": actual,
+                  # User-supplied query thresholds are distinct from clinical source facts.
+                  "comparison": {"thresholds": thresholds, "threshold_source": "QuerySpec",
+                                 "operation": "all requested lower bounds >= thresholds; otherwise check upper bounds"}}
     else:
         raise ValueError("Unsupported query family")
-    return {"patient": abstraction.patient.model_dump(), "query": spec.model_dump(), "result": result}
+    # Normal queries include evidence and runtime traces automatically.
+    return attach_evidence({"patient": abstraction.patient.model_dump(), "query": spec.model_dump(), "result": result}, [abstraction])
 
 
 def query_collection(abstractions: list[PatientAbstraction], spec: QuerySpec) -> dict:
@@ -331,40 +340,45 @@ def query_collection(abstractions: list[PatientAbstraction], spec: QuerySpec) ->
     if spec.family in {"cohort", "consecutive_under_target"}:
         answer["included_patient_ids"] = [r["patient"]["patient_id"] for r in results if r["result"]["included"]]
         answer["conditional_patient_ids"] = [r["patient"]["patient_id"] for r in results if r["result"]["conditional_inclusion"]]
-    return answer
+    return attach_evidence(answer, abstractions)
 
 
-def attach_evidence(answer: dict, abstractions: list[PatientAbstraction], documents) -> dict:
-    # Collect references from nested decisions and traces, then attach only their evidence.
+def attach_evidence(answer: dict, abstractions: list[PatientAbstraction], documents=None) -> dict:
+    # Resolve persisted references at runtime; no semantic citation search occurs.
     identifiers = set()
     def visit(value):
         if isinstance(value, dict):
             identifiers.update(value.get("claim_ids", []))
             if "claim_id" in value:
                 identifiers.add(value["claim_id"])
-            for item in value.values():
-                visit(item)
+            for key, item in value.items():
+                if key not in {"evidence", "provenance"}:
+                    visit(item)
         elif isinstance(value, list):
             for item in value:
                 visit(item)
     visit(answer)
-    docs = {d.document_id: d for d in documents}
+    docs = {d.document_id: d for d in documents or []}
     claims = {c.claim_id: c for a in abstractions for c in a.source_claims}
     document_claims = {}
     for claim in claims.values():
         document_claims.setdefault(claim.document_id, []).append(claim)
     if not identifiers <= set(claims):
         raise ValueError("Audit result references nonexistent source claims")
-    answer["evidence"] = {identifier: {"kind": claims[identifier].kind, "statement": claims[identifier].statement,
-                                       "document_id": claims[identifier].document_id,
-                                       "declared_id": docs[claims[identifier].document_id].declared_id,
-                                       "source_names": docs[claims[identifier].document_id].source_names,
-                                       "passages": [p.model_dump() for p in claims[identifier].passages],
-                                       # Numeric audit links are computed from immutable claims and retained text.
-                                       "quantitative_fields": quantitative_evidence(
-                                           claims[identifier], docs[claims[identifier].document_id],
-                                           document_claims[claims[identifier].document_id])}
-                           for identifier in sorted(identifiers)}
-    answer["document_coverage"] = [{"document_id": d.document_id, "declared_id": d.declared_id, "status": d.status,
-                                    "source_names": d.source_names} for d in documents]
-    return answer
+    evidence = {}
+    for identifier in sorted(identifiers):
+        claim = claims[identifier]
+        document = docs.get(claim.document_id)
+        evidence[identifier] = {
+            "kind": claim.kind, "statement": claim.statement, "document_id": claim.document_id,
+            "declared_id": document.declared_id if document else None,
+            "source_names": document.source_names if document else [],
+            "passages": [p.model_dump() for p in claim.passages],
+            "quantitative_fields": quantitative_evidence(claim, document, document_claims[claim.document_id]),
+            # Unknown registry availability differs from an explicitly missing source.
+            "retained_source_available": document is not None if documents is not None else None,
+        }
+    answer["evidence"] = evidence
+    answer["document_coverage"] = [{"document_id": d.document_id, "declared_id": d.declared_id,
+                                    "status": d.status, "source_names": d.source_names} for d in docs.values()]
+    return add_runtime_provenance(answer, abstractions)

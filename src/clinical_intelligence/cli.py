@@ -8,8 +8,13 @@ from .pipeline import process, load_patient
 from .storage import SQLiteStore
 
 
-def write_result(result, output=None):
-    text = json.dumps(result, indent=2, ensure_ascii=False, default=str)
+def write_result(result, output=None, output_format="json"):
+    # Both formats use the same runtime result and deterministic source links.
+    if output_format == "audit":
+        from .audit import render_audit
+        text = render_audit(result)
+    else:
+        text = json.dumps(result, indent=2, ensure_ascii=False, default=str)
     if output:
         path = Path(output)
         path.parent.mkdir(parents=True, exist_ok=True)
@@ -38,6 +43,7 @@ def main(argv=None):
     inspect.add_argument("--document")
     inspect.add_argument("--event")
     query = commands.add_parser("query")
+    query.add_argument("--format", choices=["json", "audit"], default="json")
     query.add_argument("--spec", help="JSON QuerySpec file")
     query.add_argument("--family", choices=["utilization", "weekly_utilization", "compliance", "encounters", "compare_periods", "consecutive_under_target", "assessments", "progress", "cohort"])
     query.add_argument("--patient")
@@ -50,6 +56,7 @@ def main(argv=None):
     query.add_argument("--min-sessions", type=int)
     query.add_argument("--min-minutes", type=int)
     dev = commands.add_parser("run-development")
+    dev.add_argument("--format", choices=["json", "audit"], default="json")
     dev.add_argument("--questions", default="data/questions.json")
     dev.add_argument("--specs", default="data/development_queries.json")
     commands.add_parser("experiment")
@@ -105,7 +112,7 @@ def main(argv=None):
                     spec = QuerySpec.model_validate(payload)
                     patients = [load_patient(store, i) for i in ([spec.patient_id] if spec.patient_id else store.patient_ids())]
                     result = query_patient(patients[0], spec) if spec.patient_id else query_collection(patients, spec)
-                    write_result(attach_evidence(result, patients, store.documents()), args.output)
+                    write_result(attach_evidence(result, patients, store.documents()), args.output, args.format)
                 else:
                     # Development questions supply QuerySpecs, not bespoke clinical logic.
                     questions = json.loads(Path(args.questions).read_text(encoding="utf-8"))
@@ -119,7 +126,7 @@ def main(argv=None):
                         relevant = [patients[spec.patient_id]] if spec.patient_id else list(patients.values())
                         answer = query_patient(relevant[0], spec) if spec.patient_id else query_collection(relevant, spec)
                         results.append({**question, "answer": attach_evidence(answer, relevant, store.documents())})
-                    write_result(results, args.output)
+                    write_result(results, args.output, args.format)
                 return 0
             if args.command in {"experiment", "benchmark"}:
                 from .evaluation import experiment, benchmark

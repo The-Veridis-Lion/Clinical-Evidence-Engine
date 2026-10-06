@@ -143,7 +143,7 @@ def _table_passages(claim: ClinicalClaim, document: RegisteredDocument, field: s
     return matches[0] if len(matches) == 1 else []
 
 
-def quantitative_evidence(claim: ClinicalClaim, document: RegisteredDocument,
+def quantitative_evidence(claim: ClinicalClaim, document: RegisteredDocument | None,
                           document_claims: Iterable[ClinicalClaim] = ()) -> dict:
     """Return field references without altering immutable extraction snapshots.
 
@@ -151,18 +151,19 @@ def quantitative_evidence(claim: ClinicalClaim, document: RegisteredDocument,
     lookup additionally requires an evidence-role cue and unambiguous event scope.
     Absence of a safe match is reported, never replaced by an unrelated number.
     """
-    if document.document_id != claim.document_id:
+    if document is not None and document.document_id != claim.document_id:
         raise ValueError("Claim and retained source document do not match")
     for passage in claim.passages:
-        if passage.document_id != document.document_id or document.text[passage.start:passage.end] != passage.quote:
+        if document is not None and (passage.document_id != document.document_id or document.text[passage.start:passage.end] != passage.quote):
             raise ValueError("Quantitative evidence requires exact retained source passages")
     peers = tuple(document_claims)
-    units = _source_units(document)
+    # In-memory queries can cite persisted passages without a document registry.
+    units = _source_units(document) if document is not None else []
     result = {}
     for field, value in _fields(claim).items():
         passages = [p for p in claim.passages if _matches(claim, field, value, p.quote, existing=True)]
         basis = "existing_claim_passage"
-        if not passages:
+        if not passages and document is not None:
             passages = _table_passages(claim, document, field, value)
             basis = "exact_table_header_and_row"
         if not passages:
