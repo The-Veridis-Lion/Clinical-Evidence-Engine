@@ -40,6 +40,8 @@ def _period(abstraction, spec):
     dates += [d for a in abstraction.assessments for d in a.date_options]
     dates += [p.effective_start for p in abstraction.plans]
     dates += [p.effective_end for p in abstraction.plans if p.effective_end]
+    dates += [o.observation_date for o in abstraction.observations]
+    dates += [a.report_date for a in abstraction.functional_actions]
     if not dates and (spec.start is None or spec.end is None):
         raise ValueError("No episode dates established; supply an explicit review period")
     return spec.start or min(dates), spec.end or max(dates)
@@ -283,6 +285,7 @@ def query_patient(abstraction: PatientAbstraction, spec: QuerySpec) -> dict:
                                                                 output={"instrument": instrument, "difference_options": differences}, claim_ids=a.claim_ids + b.claim_ids).model_dump())
         if spec.family == "progress":
             result["observations"] = [o.model_dump() for o in sorted(abstraction.observations, key=lambda o: (o.observation_date, o.claim_id)) if start <= o.observation_date <= end]
+            result["functional_actions"] = [a.model_dump() for a in sorted(abstraction.functional_actions, key=lambda a: (a.report_date, a.claim_id)) if start <= a.report_date <= end]
             result["interpretation_limits"] = ["Symptom score change does not establish remission, restored occupational function, or a causal treatment effect.",
                                                "Reporter/experiencer, negation and planned versus completed actions remain explicit in source claims."]
     elif spec.family == "cohort":

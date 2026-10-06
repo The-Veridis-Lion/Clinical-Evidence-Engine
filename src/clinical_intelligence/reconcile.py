@@ -5,7 +5,7 @@ from datetime import date, timedelta
 import hashlib
 import json
 from .domain import (Assessment, AssessmentClaim, CalculationTrace, ClinicalObservation, Conflict,
-                     CorrectionRelationship, DocumentExtraction, EvidenceKind, PatientAbstraction,
+                     CorrectionRelationship, DocumentExtraction, EvidenceKind, FunctionalAction, PatientAbstraction,
                      PlanClaim, ReconciliationDecision, ServiceClaim, ServiceEvent, State,
                      THERAPY_TYPES, TimeInterval, TreatmentPlan, Uncertainty)
 from .temporal import treatment_minutes
@@ -322,4 +322,5 @@ def reconcile(extractions: list[DocumentExtraction], policy: str = "explicit") -
     assessments.sort(key=lambda a: (a.assessment_date or date.min, a.instrument, a.assessment_id))
     return PatientAbstraction(patient=extractions[0].patient, source_claims=claims, events=events, plans=plans,
                               assessments=assessments, observations=[c for c in claims if isinstance(c, ClinicalObservation)],
+                              functional_actions=[c for c in claims if isinstance(c, FunctionalAction)],
                               relationships=relationships, conflicts=conflicts, uncertainties=uncertainties)

@@ -7,8 +7,8 @@ from typing import Annotated, Literal
 from pydantic import BaseModel, ConfigDict, Field, model_validator
 
 # Extraction contracts and derived facts have separate invalidation versions.
-SCHEMA_VERSION = "1"
-ABSTRACTION_VERSION = "2"
+SCHEMA_VERSION = "2.1"
+ABSTRACTION_VERSION = "3"
 
 
 class Model(BaseModel):
@@ -116,6 +116,8 @@ class ServiceClaim(ClinicalClaim):
     # Keep actual contact, scheduled slots and reported duration separate.
     actual_intervals: list[TimeInterval] = Field(default_factory=list)
     scheduled_intervals: list[TimeInterval] = Field(default_factory=list)
+    # Retain header clocks without promoting them to delivered treatment evidence.
+    unspecified_intervals: list[TimeInterval] = Field(default_factory=list)
     breaks: list[TimeInterval] = Field(default_factory=list)
     reported_minutes: int | None = Field(default=None, ge=0)
     reason: str | None = None
@@ -155,6 +157,18 @@ class ClinicalObservation(ClinicalClaim):
     temporality: Literal["current", "historical", "planned"]
 
 
+class FunctionalAction(ClinicalClaim):
+    """A reported real-world step; completion applies to this action only."""
+    kind: Literal["functional_action"] = "functional_action"
+    report_date: date
+    # A report does not establish when the described action actually occurred.
+    action_date: date | None = None
+    action: str
+    actor: str
+    reporter: str
+    status: Literal["planned", "attempted", "completed"]
+
+
 # A correction identifies a target and field; reconciliation decides its effect.
 class CorrectionRelationship(ClinicalClaim):
     kind: Literal["relationship"] = "relationship"
@@ -171,7 +185,7 @@ class CorrectionRelationship(ClinicalClaim):
     service_date: date | None = None
 
 
-Claim = Annotated[ServiceClaim | PlanClaim | AssessmentClaim | ClinicalObservation | CorrectionRelationship,
+Claim = Annotated[ServiceClaim | PlanClaim | AssessmentClaim | ClinicalObservation | FunctionalAction | CorrectionRelationship,
                   Field(discriminator="kind")]
 
 
@@ -184,6 +198,12 @@ class ExtractionUsage(Model):
     input_tokens: int | None = Field(default=None, ge=0)
     output_tokens: int | None = Field(default=None, ge=0)
     cached_tokens: int | None = Field(default=None, ge=0)
+    input_characters: int | None = Field(default=None, ge=0)
+    # Character allocation is measured; hidden CLI context prevents exact token allocation.
+    call_metrics: list[dict] = Field(default_factory=list)
+    parse_failures: int = Field(default=0, ge=0)
+    retry_count: int = Field(default=0, ge=0)
+    claim_counts: dict[str, int] = Field(default_factory=dict)
     cost_usd: float | None = None
     cost_basis: str | None = None
 
@@ -301,6 +321,7 @@ class PatientAbstraction(Model):
     plans: list[TreatmentPlan]
     assessments: list[Assessment]
     observations: list[ClinicalObservation]
+    functional_actions: list[FunctionalAction] = Field(default_factory=list)
     relationships: list[CorrectionRelationship]
     conflicts: list[Conflict]
     uncertainties: list[Uncertainty]
