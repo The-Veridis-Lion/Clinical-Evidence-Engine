@@ -10,7 +10,7 @@ from .domain import (Assessment, AssessmentClaim, CalculationTrace, ClinicalObse
                      THERAPY_TYPES, TimeInterval, TreatmentPlan, Uncertainty)
 from .temporal import treatment_minutes
 
-POLICY_VERSION = "1"
+POLICY_VERSION = "3"
 
 
 def stable_id(*values) -> str:
@@ -31,6 +31,7 @@ def _groups(claims: list[ServiceClaim]) -> list[list[ServiceClaim]]:
             i = parents[i]
         return i
     refs = {}
+    # Same-day reports are not enough to merge contacts; require an explicit shared ID.
     for i, claim in enumerate(claims):
         for prefix, ref in (("encounter", claim.encounter_ref), ("appointment", claim.appointment_ref)):
             if not ref:
@@ -46,6 +47,7 @@ def _groups(claims: list[ServiceClaim]) -> list[list[ServiceClaim]]:
 
 
 def _corrected_variants(source, corrections, event_id, decisions, conflicts, uncertainties):
+    # Work on copies so the original claim remains available for audit.
     variants = [(list(source.actual_intervals), source.reported_minutes, source.patient_present, [])]
     for field in ("arrival", "departure", "minutes", "presence"):
         choices = [r for r in corrections if r.field == field]
@@ -70,6 +72,7 @@ def _corrected_variants(source, corrections, event_id, decisions, conflicts, unc
                         value["start" if field == "arrival" else "end"] = correction.replacement_time
                         try:
                             replacement[index] = TimeInterval(**value)
+                            # The old reported duration may be stale after a clock correction.
                             duration = None
                             applied = True
                         except ValueError:
@@ -103,6 +106,7 @@ def _event(group: list[ServiceClaim], relationships: list[CorrectionRelationship
 
     applicable_relations = [r for r in relationships if r.target_encounter in encounter_refs
                             or (r.target_document_ref is not None and any(document_refs.get(c.document_id) == r.target_document_ref for c in group))]
+    # Signed care records establish positive authority; later copies add no new authority.
     active = [c for c in group if c.evidence_kind in {EvidenceKind.CLINICAL, EvidenceKind.ATTENDANCE} and c.signed]
     retransmitted_docs = {r.document_id for r in applicable_relations if r.relation == "retransmits"}
     active = [c for c in active if c.document_id not in retransmitted_docs]
@@ -110,7 +114,9 @@ def _event(group: list[ServiceClaim], relationships: list[CorrectionRelationship
     if excluded:
         decisions.append(ReconciliationDecision(rule="evidence_role", claim_ids=excluded,
                                                explanation="Copies, draft templates, billing quantities and scheduled slots are retained but do not independently establish delivered patient treatment."))
-    negative = [c for c in group if c.evidence_kind == EvidenceKind.SCHEDULE and (c.delivered is False or c.patient_present is False)]
+    # Explicit no-show/absence records can establish nondelivery without a signature.
+    negative = [c for c in group if c.evidence_kind in {EvidenceKind.SCHEDULE, EvidenceKind.ATTENDANCE, EvidenceKind.CLINICAL}
+                and (c.delivered is False or c.patient_present is False)]
     if not active:
         active = negative
     if policy == "latest_wins":
@@ -121,6 +127,7 @@ def _event(group: list[ServiceClaim], relationships: list[CorrectionRelationship
         decisions.append(ReconciliationDecision(rule="naive_latest_document", claim_ids=[c.claim_id for c in active],
                                                explanation="Experiment only: latest recorded timestamp wins; correction relationships ignored."))
 
+    # Rejected schedule/copy metadata must not override authoritative dates or types.
     identity_sources = active or group
     dates = sorted({c.service_date for c in identity_sources})
     types = sorted({c.service_type for c in identity_sources})
@@ -150,9 +157,11 @@ def _event(group: list[ServiceClaim], relationships: list[CorrectionRelationship
     break_claim_ids = [c.claim_id for c in group if c.breaks and c.signed and c.evidence_kind == EvidenceKind.CLINICAL]
     options = set()
     presence_values = set()
+    # Each source supplies a candidate duration; competing reports are not added together.
     for source in active:
         corrections = []
         if policy != "latest_wins":
+            # Apply only signed corrections that match this source's target and date.
             corrections = [r for r in applicable_relations if r.relation == "corrects" and r.signed
                            and (r.service_date is None or r.service_date == source.service_date)
                            and (r.target_document_ref is None or r.target_document_ref == document_refs.get(source.document_id))]
@@ -178,15 +187,23 @@ def _event(group: list[ServiceClaim], relationships: list[CorrectionRelationship
         conflicts.append(_conflict(event_id, "patient_present", sorted(presence_values), ids + [r.claim_id for r in applicable_relations],
                                    "Source-specific corrections leave incompatible patient-presence claims."))
 
+    # Eligibility can be certain even when the event's exact duration is conflicted.
     therapy_possible = any(t in THERAPY_TYPES for t in types)
     therapy_certain = bool(types) and all(t in THERAPY_TYPES for t in types)
-    if not therapy_possible or presence is False or delivered is False:
+    prospective_only = not active and all(c.evidence_kind in {EvidenceKind.SCHEDULE, EvidenceKind.DRAFT, EvidenceKind.BILLING} for c in group)
+    if prospective_only:
+        countable = False
+        lower, upper = 0, 0
+        decisions.append(ReconciliationDecision(rule="no_delivered_care_assertion", claim_ids=ids,
+                                               explanation="Scheduling, draft and billing evidence alone contributes no delivered therapy. This is an exclusion from accounting, not a finding that an undocumented clinical contact was absent."))
+    elif not therapy_possible or presence is False or delivered is False:
         countable = False
         lower, upper = 0, 0
         decisions.append(ReconciliationDecision(rule="patient_present_therapy_only", claim_ids=ids,
                                                explanation="Exclude nontherapy, absent-patient contacts, cancelled appointments and no-shows from patient therapy counts/minutes."))
     elif presence is True and delivered is True and therapy_certain:
         countable = True
+        # Missing time leaves an unknown upper bound, not a zero-minute finding.
         lower, upper = (min(options), max(options)) if options else (0, None)
     else:
         countable = None
@@ -194,6 +211,7 @@ def _event(group: list[ServiceClaim], relationships: list[CorrectionRelationship
     if any(u.explanation == "Explicit correction creates an invalid interval." for u in uncertainties):
         lower, upper = 0, None
     if not encounter_refs and not appointment_refs:
+        # Without identity, a positive report may duplicate another documented contact.
         countable = None if countable is True else countable
         lower = 0
         uncertainties.append(Uncertainty(subject_id=event_id, claim_ids=ids, explanation="No explicit encounter or appointment identity; duplicate clinical reporting cannot be ruled out.",
@@ -237,6 +255,7 @@ def reconcile(extractions: list[DocumentExtraction], policy: str = "explicit") -
     conflicts = [c for e in events for c in e.conflicts]
     uncertainties = [u for e in events for u in e.uncertainties]
 
+    # Equivalent signed plan claims share one requirement while retaining every source.
     plan_groups = defaultdict(list)
     for c in claims:
         if isinstance(c, PlanClaim) and c.signed:
@@ -248,6 +267,7 @@ def reconcile(extractions: list[DocumentExtraction], policy: str = "explicit") -
                            service_types=group[0].service_types, claim_ids=[c.claim_id for c in group])
              for key, group in plan_groups.items()]
     plan_claims = {c.claim_id: c for c in claims if isinstance(c, PlanClaim)}
+    # End an older plan only when an explicit signed relationship identifies its successor.
     for relationship in relationships:
         if relationship.relation != "supersedes_plan" or not relationship.signed:
             continue
@@ -287,6 +307,7 @@ def reconcile(extractions: list[DocumentExtraction], policy: str = "explicit") -
         scores = sorted({c.score for c in group})
         dates = sorted({c.assessment_date for c in group})
         aid = stable_id(extractions[0].patient.patient_id, key)
+        # A shared form ID does not resolve incompatible scores or completion dates.
         state = State.CONFLICTED if len(scores) > 1 or len(dates) > 1 else State.RESOLVED
         if state == State.CONFLICTED:
             conflicts.append(_conflict(aid, "assessment", [f"{c.assessment_date}:{c.score}" for c in group], [c.claim_id for c in group],

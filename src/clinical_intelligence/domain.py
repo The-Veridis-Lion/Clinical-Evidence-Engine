@@ -6,8 +6,9 @@ from enum import StrEnum
 from typing import Annotated, Literal
 from pydantic import BaseModel, ConfigDict, Field, model_validator
 
+# Extraction contracts and derived facts have separate invalidation versions.
 SCHEMA_VERSION = "1"
-ABSTRACTION_VERSION = "1"
+ABSTRACTION_VERSION = "2"
 
 
 class Model(BaseModel):
@@ -63,6 +64,7 @@ class RegisteredDocument(Model):
 
 class SourcePassage(Model):
     document_id: str
+    # Character offsets refer to retained Unicode text; end is exclusive.
     start: int = Field(ge=0)
     end: int = Field(gt=0)
     quote: str
@@ -90,6 +92,7 @@ class TimeInterval(Model):
         return self
 
 
+# Source claims preserve a document's statements, including errors or disagreements.
 class ClinicalClaim(Model):
     claim_id: str
     document_id: str
@@ -107,8 +110,10 @@ class ServiceClaim(ClinicalClaim):
     service_type: ServiceType
     evidence_kind: EvidenceKind
     signed: bool = False
+    # None means unknown; patient presence and service delivery are separate claims.
     patient_present: bool | None = None
     delivered: bool | None = None
+    # Keep actual contact, scheduled slots and reported duration separate.
     actual_intervals: list[TimeInterval] = Field(default_factory=list)
     scheduled_intervals: list[TimeInterval] = Field(default_factory=list)
     breaks: list[TimeInterval] = Field(default_factory=list)
@@ -143,12 +148,14 @@ class ClinicalObservation(ClinicalClaim):
     kind: Literal["observation"] = "observation"
     observation_date: date
     category: Literal["symptom", "function", "safety", "treatment_reason", "response"]
+    # A partner may report the patient's symptoms or describe their own experience.
     reporter: str
     experiencer: str
     polarity: Literal["present", "absent", "uncertain"]
     temporality: Literal["current", "historical", "planned"]
 
 
+# A correction identifies a target and field; reconciliation decides its effect.
 class CorrectionRelationship(ClinicalClaim):
     kind: Literal["relationship"] = "relationship"
     relation: Literal["corrects", "retransmits", "duplicates", "supersedes_plan"]
@@ -232,6 +239,7 @@ class CalculationTrace(Model):
     assumptions: list[str] = Field(default_factory=list)
 
 
+# Derived events keep eligibility separate from duration and its supported alternatives.
 class ServiceEvent(Model):
     event_id: str
     patient_id: str
@@ -247,6 +255,7 @@ class ServiceEvent(Model):
     state: State
     minute_options: list[int] = Field(default_factory=list)
     minutes_lower: int = Field(ge=0)
+    # An unknown upper bound must not be interpreted as zero treatment time.
     minutes_upper: int | None = Field(default=None, ge=0)
     claim_ids: list[str]
     decisions: list[ReconciliationDecision]
@@ -255,6 +264,7 @@ class ServiceEvent(Model):
     calculations: list[CalculationTrace] = Field(default_factory=list)
 
 
+# Resolved plan periods may be shortened by an explicit supersession relationship.
 class TreatmentPlan(Model):
     plan_id: str
     patient_id: str
@@ -270,6 +280,7 @@ class Assessment(Model):
     assessment_id: str
     patient_id: str
     instrument: str
+    # Conflicting completion dates remain alternatives instead of choosing the earliest.
     assessment_date: date | None
     date_options: list[date] = Field(default_factory=list)
     form_ref: str | None
@@ -284,6 +295,7 @@ class Assessment(Model):
 class PatientAbstraction(Model):
     abstraction_version: str = ABSTRACTION_VERSION
     patient: Patient
+    # Retain source claims alongside derived entities so every decision stays auditable.
     source_claims: list[Claim]
     events: list[ServiceEvent]
     plans: list[TreatmentPlan]
