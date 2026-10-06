@@ -100,7 +100,7 @@ def main(argv=None):
                 write_result(result, args.output)
                 return 0
             if args.command in {"query", "run-development"}:
-                from .query import QuerySpec, query_collection, query_patient, attach_evidence
+                from .query import QuerySpec, query_collection, query_patient
                 from .pipeline import ensure_complete
                 ensure_complete(store)
                 if args.command == "query":
@@ -111,8 +111,8 @@ def main(argv=None):
                                          "min_sessions": args.min_sessions, "min_minutes": args.min_minutes}.items() if v is not None}
                     spec = QuerySpec.model_validate(payload)
                     patients = [load_patient(store, i) for i in ([spec.patient_id] if spec.patient_id else store.patient_ids())]
-                    result = query_patient(patients[0], spec) if spec.patient_id else query_collection(patients, spec)
-                    write_result(attach_evidence(result, patients, store.documents()), args.output, args.format)
+                    result = query_patient(patients[0], spec, store.documents()) if spec.patient_id else query_collection(patients, spec, store.documents())
+                    write_result(result, args.output, args.format)
                 else:
                     # Development questions supply QuerySpecs, not bespoke clinical logic.
                     questions = json.loads(Path(args.questions).read_text(encoding="utf-8"))
@@ -124,8 +124,8 @@ def main(argv=None):
                     for question in questions:
                         spec = specifications[question["id"]]
                         relevant = [patients[spec.patient_id]] if spec.patient_id else list(patients.values())
-                        answer = query_patient(relevant[0], spec) if spec.patient_id else query_collection(relevant, spec)
-                        results.append({**question, "answer": attach_evidence(answer, relevant, store.documents())})
+                        answer = query_patient(relevant[0], spec, store.documents()) if spec.patient_id else query_collection(relevant, spec, store.documents())
+                        results.append({**question, "answer": answer})
                     write_result(results, args.output, args.format)
                 return 0
             if args.command in {"experiment", "benchmark"}:

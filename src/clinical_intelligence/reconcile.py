@@ -10,7 +10,7 @@ from .domain import (Assessment, AssessmentClaim, CalculationTrace, ClinicalObse
                      THERAPY_TYPES, TimeInterval, TreatmentPlan, Uncertainty)
 from .temporal import treatment_minutes
 
-POLICY_VERSION = "3"
+POLICY_VERSION = "4"
 
 
 def stable_id(*values) -> str:
@@ -46,6 +46,34 @@ def _groups(claims: list[ServiceClaim]) -> list[list[ServiceClaim]]:
     return list(groups.values())
 
 
+def _matches_service_target(relationship, source, document_refs):
+    """Every supplied target constraint must identify the same source claim."""
+    return (bool(relationship.target_encounter or relationship.target_document_ref)
+            and (relationship.target_encounter is None or relationship.target_encounter == source.encounter_ref)
+            and (relationship.target_document_ref is None
+                 or relationship.target_document_ref == document_refs.get(source.document_id))
+            and (relationship.service_date is None or relationship.service_date == source.service_date))
+
+
+def _correct_clock_endpoint(intervals, correction):
+    # Temporal order belongs to the calculation copy, never the stored source.
+    ordered = sorted(intervals, key=lambda interval: (interval.start, interval.end))
+    if not ordered or correction.replacement_time is None:
+        return None
+    endpoint = "start" if correction.field == "arrival" else "end"
+    extreme = min(i.start for i in ordered) if endpoint == "start" else max(i.end for i in ordered)
+    indices = [index for index, interval in enumerate(ordered) if getattr(interval, endpoint) == extreme]
+    if len(indices) != 1:
+        return None
+    index = indices[0]
+    if correction.original_time is not None and getattr(ordered[index], endpoint) != correction.original_time:
+        return None
+    value = ordered[index].model_dump()
+    value[endpoint] = correction.replacement_time
+    ordered[index] = TimeInterval(**value)
+    return ordered
+
+
 def _corrected_variants(source, corrections, event_id, decisions, conflicts, uncertainties):
     # Work on copies so the original claim remains available for audit.
     variants = [(list(source.actual_intervals), source.reported_minutes, source.patient_present, [])]
@@ -64,20 +92,20 @@ def _corrected_variants(source, corrections, event_id, decisions, conflicts, unc
                 replacement = list(intervals)
                 duration, present = reported, presence
                 applied = False
-                if field in {"arrival", "departure"} and intervals and correction.replacement_time is not None:
-                    index = 0 if field == "arrival" else len(intervals) - 1
-                    old_value = intervals[index].start if field == "arrival" else intervals[index].end
-                    if correction.original_time is None or old_value == correction.original_time:
-                        value = intervals[index].model_dump()
-                        value["start" if field == "arrival" else "end"] = correction.replacement_time
-                        try:
-                            replacement[index] = TimeInterval(**value)
-                            # The old reported duration may be stale after a clock correction.
-                            duration = None
-                            applied = True
-                        except ValueError:
+                if field in {"arrival", "departure"} and intervals:
+                    try:
+                        corrected = _correct_clock_endpoint(intervals, correction)
+                        if corrected is not None:
+                            replacement = corrected
+                            # A clock correction can make the original reported duration stale.
+                            duration, applied = None, True
+                        else:
                             uncertainties.append(Uncertainty(subject_id=event_id, claim_ids=[source.claim_id, correction.claim_id],
-                                                               explanation="Explicit correction creates an invalid interval.", needed_evidence="Valid corrected contact interval"))
+                                                               explanation="Explicit correction cannot be applied safely to its target field.",
+                                                               needed_evidence="Matching original endpoint and a valid replacement"))
+                    except ValueError:
+                        uncertainties.append(Uncertainty(subject_id=event_id, claim_ids=[source.claim_id, correction.claim_id],
+                                                           explanation="Explicit correction creates an invalid interval.", needed_evidence="Valid corrected contact interval"))
                 elif field == "minutes" and correction.replacement_minutes is not None:
                     replacement, duration, applied = [], correction.replacement_minutes, True
                 elif field == "presence" and correction.replacement_presence is not None:
@@ -104,8 +132,7 @@ def _event(group: list[ServiceClaim], relationships: list[CorrectionRelationship
                                         explanation="Reports linked by explicit encounter/appointment identity describe one contact, not one contact per document or clinician.")]
     conflicts, uncertainties, calculations = [], [], []
 
-    applicable_relations = [r for r in relationships if r.target_encounter in encounter_refs
-                            or (r.target_document_ref is not None and any(document_refs.get(c.document_id) == r.target_document_ref for c in group))]
+    applicable_relations = [r for r in relationships if any(_matches_service_target(r, c, document_refs) for c in group)]
     # Signed care records establish positive authority; later copies add no new authority.
     active = [c for c in group if c.evidence_kind in {EvidenceKind.CLINICAL, EvidenceKind.ATTENDANCE} and c.signed]
     retransmitted_docs = {r.document_id for r in applicable_relations if r.relation == "retransmits"}
@@ -163,8 +190,7 @@ def _event(group: list[ServiceClaim], relationships: list[CorrectionRelationship
         if policy != "latest_wins":
             # Apply only signed corrections that match this source's target and date.
             corrections = [r for r in applicable_relations if r.relation == "corrects" and r.signed
-                           and (r.service_date is None or r.service_date == source.service_date)
-                           and (r.target_document_ref is None or r.target_document_ref == document_refs.get(source.document_id))]
+                           and _matches_service_target(r, source, document_refs)]
         for intervals, reported, present, correction_ids in _corrected_variants(source, corrections, event_id, decisions, conflicts, uncertainties):
             if present is not None:
                 presence_values.add(present)
@@ -182,6 +208,15 @@ def _event(group: list[ServiceClaim], relationships: list[CorrectionRelationship
                 calculations.append(CalculationTrace(operation="reported_patient_treatment_duration", inputs={"reported_minutes": reported},
                                                      output={"minutes": reported}, claim_ids=[source.claim_id] + correction_ids, event_ids=[event_id]))
 
+    # Encounter-level corrections can coexist with descriptions that contain no clocks.
+    applied_ids = {i for decision in decisions if decision.rule == "explicit_field_correction" for i in decision.claim_ids}
+    uncertain_ids = {i for uncertainty in uncertainties for i in uncertainty.claim_ids}
+    for relationship in applicable_relations:
+        if (policy != "latest_wins" and relationship.relation == "corrects" and relationship.signed
+                and relationship.claim_id not in applied_ids | uncertain_ids):
+            uncertainties.append(Uncertainty(subject_id=event_id, claim_ids=[relationship.claim_id] + ids,
+                                               explanation="Explicit correction cannot be applied safely to its target field.",
+                                               needed_evidence="Matching source field and a valid replacement"))
     presence = next(iter(presence_values)) if len(presence_values) == 1 else None
     if len(presence_values) > 1:
         conflicts.append(_conflict(event_id, "patient_present", sorted(presence_values), ids + [r.claim_id for r in applicable_relations],
@@ -208,7 +243,8 @@ def _event(group: list[ServiceClaim], relationships: list[CorrectionRelationship
     else:
         countable = None
         lower, upper = 0, max(options) if options else None
-    if any(u.explanation == "Explicit correction creates an invalid interval." for u in uncertainties):
+    if any(u.explanation in {"Explicit correction creates an invalid interval.",
+                            "Explicit correction cannot be applied safely to its target field."} for u in uncertainties):
         lower, upper = 0, None
     if not encounter_refs and not appointment_refs:
         # Without identity, a positive report may duplicate another documented contact.
@@ -250,10 +286,18 @@ def reconcile(extractions: list[DocumentExtraction], policy: str = "explicit") -
     claims = [c for x in extractions for c in x.claims]
     relationships = [c for c in claims if isinstance(c, CorrectionRelationship)]
     refs = {x.document_id: x.declared_id for x in extractions}
-    events = [_event(group, relationships, refs, policy) for group in _groups([c for c in claims if isinstance(c, ServiceClaim)])]
+    services = [c for c in claims if isinstance(c, ServiceClaim)]
+    events = [_event(group, relationships, refs, policy) for group in _groups(services)]
     events.sort(key=lambda e: (e.service_date or date.min, e.event_id))
     conflicts = [c for e in events for c in e.conflicts]
     uncertainties = [u for e in events for u in e.uncertainties]
+    # Contradictory target constraints remain visible without redirecting a correction.
+    if policy != "latest_wins":
+        uncertainties += [Uncertainty(subject_id=r.claim_id, claim_ids=[r.claim_id],
+                                      explanation="Correction target constraints do not identify a service source.",
+                                      needed_evidence="Consistent document, encounter and service-date references")
+                          for r in relationships if r.relation == "corrects" and r.signed
+                          and not any(_matches_service_target(r, source, refs) for source in services)]
 
     # Equivalent signed plan claims share one requirement while retaining every source.
     plan_groups = defaultdict(list)

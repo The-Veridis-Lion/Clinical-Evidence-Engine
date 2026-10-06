@@ -4,6 +4,8 @@ import json
 import statistics
 import platform
 import sqlite3
+import subprocess
+import sys
 from time import perf_counter
 from .pipeline import ensure_complete, load_patient
 from .query import QuerySpec, compliance, query_collection, query_patient, utilization
@@ -59,6 +61,21 @@ def benchmark(store, iterations, processing_report):
         return {"iterations": iterations, "median_ms": statistics.median(values), "min_ms": min(values),
                 "max_ms": max(values), "p95_ms": sorted(values)[min(len(values)-1, int(len(values)*0.95))]}
     spec = QuerySpec(family="compliance")
+    documents = store.documents()
+    dates = [d for e in patients[0].events for d in e.date_options]
+    start, end = min(dates), max(dates)
+    public_answer = query_patient(patients[0], spec, documents)
+    def cli_request():
+        # A real child interpreter includes startup, loading, audit assembly and JSON output.
+        completed = subprocess.run([sys.executable, "-m", "clinical_intelligence", "--db", str(store.path.resolve()),
+                                    "query", "--patient", patients[0].patient.patient_id, "--family", "compliance"],
+                                   capture_output=True, encoding="utf-8", timeout=30, check=True)
+        assert json.loads(completed.stdout)["provenance_completeness"] == "complete"
+    cli_samples = []
+    for _ in range(min(iterations, 3)):
+        began = perf_counter()
+        cli_request()
+        cli_samples.append((perf_counter() - began) * 1000)
     initial = json.loads(processing_report.read_text(encoding="utf-8")) if processing_report.exists() else None
     current = [x for pid in store.patient_ids() for x in store.patient_extractions(pid)]
     # Active corpus usage excludes earlier extraction versions and exploratory calls.
@@ -72,10 +89,21 @@ def benchmark(store, iterations, processing_report):
             "initial_processing_report": initial,
             "database_bytes": store.path.stat().st_size,
             "saved_abstraction_json_bytes": sum(len(p.model_dump_json().encode()) for p in patients),
-            "new_process_load_seconds": cold_load,
+            "first_in_process_patient_load_seconds": cold_load,
+            "measurement_boundaries": {
+                "numerical_compliance": "In-memory clinical calculations; excludes evidence/provenance assembly.",
+                "patient_query": "Public query plus final field evidence and provenance; preloaded abstraction/registry, no serialization.",
+                "collection_query": "One public collection request with one final evidence index; preloaded abstractions/registry.",
+                "json_serialization": "Serialize an already assembled public answer.",
+                "new_process_cli_query": "New interpreter, imports, SQLite load, provenance assembly and JSON capture; includes parent JSON validation.",
+            },
             "persisted_patient_load": measure(lambda: load_patient(store, patients[0].patient.patient_id)),
-            "patient_query": measure(lambda: query_patient(patients[0], spec)),
-            "collection_query": measure(lambda: query_collection(patients, spec)),
+            "numerical_compliance": measure(lambda: compliance(patients[0], start, end)),
+            "patient_query": measure(lambda: query_patient(patients[0], spec, documents)),
+            "collection_query": measure(lambda: query_collection(patients, spec, documents)),
+            "json_serialization": measure(lambda: json.dumps(public_answer, default=str)),
+            "new_process_cli_query": {"iterations": len(cli_samples), "median_ms": statistics.median(cli_samples),
+                                      "min_ms": min(cli_samples), "max_ms": max(cli_samples)},
             "query_model_calls": 0,
             "current_extraction_usage": {"models": sorted({u.model for u in usage}), "model_calls": total("model_calls"),
                                          "input_tokens": total("input_tokens"), "output_tokens": total("output_tokens"),

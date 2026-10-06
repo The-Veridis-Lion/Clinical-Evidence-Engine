@@ -114,9 +114,14 @@ class SQLiteStore:
             for passage in claim.passages:
                 if document.text[passage.start:passage.end] != passage.quote:
                     raise ValueError("Ungrounded claim cannot be persisted")
-        # Save the snapshot and activate it in one transaction.
+        # Immutable same-key evidence makes the derived-cache digest trustworthy.
         with self.connection:
-            self.connection.execute("INSERT OR REPLACE INTO extractions VALUES(?,?,?,?)",
+            previous = self.extraction(extraction.document_id, extraction.extraction_key)
+            if previous is not None:
+                if previous != extraction:
+                    raise ValueError("Immutable extraction snapshot already exists with a divergent same-key payload")
+                return
+            self.connection.execute("INSERT INTO extractions VALUES(?,?,?,?)",
                                     (extraction.document_id, extraction.extraction_key, extraction.patient.patient_id,
                                      extraction.model_dump_json()))
             self.connection.execute("UPDATE documents SET status='extracted',extraction_key=?,declared_id=?,error=NULL WHERE id=?",

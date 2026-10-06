@@ -3,7 +3,8 @@ from __future__ import annotations
 
 from itertools import product
 
-from .domain import AssessmentClaim, CorrectionRelationship, ServiceClaim
+from .domain import AssessmentClaim, CorrectionRelationship, PatientAbstraction, ServiceClaim
+from .evidence import quantitative_evidence
 
 
 def completeness(parts):
@@ -21,6 +22,8 @@ class RuntimeProvenance:
         self.events = {e.event_id: e for a in abstractions for e in a.events}
         self.assessments = {a.assessment_id: a for p in abstractions for a in p.assessments}
         self.evidence = evidence
+        # Reuse event field traces within this request, never across mutable snapshots.
+        self._duration_cache = {}
 
     def contribution(self, fact_id, field, value, claim_fields, *, included=True, reason="Source-supported input"):
         refs, gaps = [], []
@@ -72,6 +75,8 @@ class RuntimeProvenance:
                 "alternatives": list(alternatives), "gaps": sorted(set(all_gaps))}
 
     def duration(self, event):
+        if event.event_id in self._duration_cache:
+            return self._duration_cache[event.event_id]
         alternatives = []
         for calculation in event.calculations:
             fields = []
@@ -114,6 +119,7 @@ class RuntimeProvenance:
                                  "calculation_trace": calculation.model_dump(), "contributions": fields,
                                  "completeness": completeness(fields) if fields else "missing"})
         # Equal-duration reports remain evidence alternatives, never additional care.
+        self._duration_cache[event.event_id] = alternatives
         return alternatives
 
     def event_contributions(self, row):
@@ -251,17 +257,62 @@ class RuntimeProvenance:
 def add_runtime_provenance(answer, abstractions):
     runtime = RuntimeProvenance(abstractions, answer["evidence"])
     runtime.decorate(answer.get("result", answer.get("patients", [])))
-    states = []
     def collect(value):
+        states = []
         if isinstance(value, dict):
             if "provenance" in value:
                 states.append(value["provenance"])
             for key, item in value.items():
                 if key not in {"evidence", "provenance"}:
-                    collect(item)
+                    states.extend(collect(item))
         elif isinstance(value, list):
             for item in value:
-                collect(item)
-    collect(answer)
-    answer["provenance_completeness"] = completeness(states)
+                states.extend(collect(item))
+        return states
+    # Embedded patient envelopes share the collection's single evidence index.
+    for patient in answer.get("patients", []):
+        patient["provenance_completeness"] = completeness(collect(patient["result"]))
+        patient["evidence_scope"] = "collection_root"
+    answer["provenance_completeness"] = completeness(collect(answer))
     return answer
+
+
+def attach_evidence(answer: dict, abstractions: list[PatientAbstraction], documents=None) -> dict:
+    # Resolve persisted references at runtime; no semantic citation search occurs.
+    identifiers = set()
+    def visit(value):
+        if isinstance(value, dict):
+            identifiers.update(value.get("claim_ids", []))
+            if "claim_id" in value:
+                identifiers.add(value["claim_id"])
+            for key, item in value.items():
+                if key not in {"evidence", "provenance"}:
+                    visit(item)
+        elif isinstance(value, list):
+            for item in value:
+                visit(item)
+    visit(answer)
+    docs = {d.document_id: d for d in documents or []}
+    claims = {c.claim_id: c for a in abstractions for c in a.source_claims}
+    document_claims = {}
+    for claim in claims.values():
+        document_claims.setdefault(claim.document_id, []).append(claim)
+    if not identifiers <= set(claims):
+        raise ValueError("Audit result references nonexistent source claims")
+    evidence = {}
+    for identifier in sorted(identifiers):
+        claim = claims[identifier]
+        document = docs.get(claim.document_id)
+        evidence[identifier] = {
+            "kind": claim.kind, "statement": claim.statement, "document_id": claim.document_id,
+            "declared_id": document.declared_id if document else None,
+            "source_names": document.source_names if document else [],
+            "passages": [p.model_dump() for p in claim.passages],
+            "quantitative_fields": quantitative_evidence(claim, document, document_claims[claim.document_id]),
+            # Unknown registry availability differs from an explicitly missing source.
+            "retained_source_available": document is not None if documents is not None else None,
+        }
+    answer["evidence"] = evidence
+    answer["document_coverage"] = [{"document_id": d.document_id, "declared_id": d.declared_id,
+                                    "status": d.status, "source_names": d.source_names} for d in docs.values()]
+    return add_runtime_provenance(answer, abstractions)

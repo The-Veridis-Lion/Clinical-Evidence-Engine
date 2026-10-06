@@ -69,8 +69,15 @@ def _trace(trace, answer, lines, indent=""):
     comparison = trace.get("comparison")
     if comparison:
         lines.append(f"{indent}Comparison: {comparison.get('operation', 'unspecified')}")
+        if "thresholds" in comparison:
+            # Query thresholds are parameters, not treatment-plan evidence.
+            thresholds = "; ".join(f"{field}={_value(value)}" for field, value in comparison["thresholds"].items()
+                                   if value is not None)
+            lines.append(f"{indent}  {comparison.get('threshold_source', 'QuerySpec')} input thresholds: {thresholds or 'none requested'}")
         for key in ("actual", "requirement", "status"):
-            value = comparison.get(key)
+            if key not in comparison or comparison[key] is None:
+                continue
+            value = comparison[key]
             details = "; ".join(f"{field}={_value(item)}" for field, item in value.items()) if isinstance(value, dict) else _value(value)
             lines.append(f"{indent}  {key}: {details}")
     for contribution in trace.get("contributions", []):
@@ -110,14 +117,31 @@ def render_audit(answer):
     lines = []
     query = answer.get("query", {})
     lines.append(f"Query: {query.get('family', 'clinical result')}")
+    parameters = {key: query[key] for key in ("start", "end", "dates", "service_types", "change_date",
+                                             "min_sessions", "min_minutes", "consecutive_weeks")
+                  if key in query and query[key] is not None and query[key] != []}
+    if parameters:
+        lines.append("QuerySpec inputs: " + "; ".join(f"{key}={_value(value)}" for key, value in parameters.items()))
     if answer.get("patient"):
         lines.append(f"Patient: {answer['patient'].get('patient_id', 'unknown')}")
+    for key in ("included_patient_ids", "conditional_patient_ids"):
+        if key in answer:
+            lines.append(f"{key}: {_value(answer[key])}")
     nodes = list(_nodes(answer.get("result", answer.get("patients", {}))))
     for path, node in nodes:
         lines.append(f"\n{path}")
+        # Display the computed change already returned by the query layer.
+        if node.get("operation") == "assessment_score_change":
+            lines.append(f"Calculation: {node['operation']}")
+            for key in ("inputs", "output"):
+                if key in node:
+                    lines.append(f"{key}: {_value(node[key])}")
+        if "included" in node and "actual" in node:
+            lines.append("actual: " + "; ".join(f"{key}={_value(value)}" for key, value in node["actual"]["totals"].items()))
         for key in ("week_start", "date", "service_date", "assessment_date", "instrument", "status",
                     "totals", "requirement", "score", "score_options", "minutes", "sessions",
-                    "distinct_service_days", "difference_after_minus_before", "included", "conditional_inclusion"):
+                    "distinct_service_days", "difference_after_minus_before", "included", "conditional_inclusion",
+                    "definite_windows", "conditional_windows"):
             if key in node:
                 if key in {"totals", "requirement"} and isinstance(node[key], dict):
                     lines.append(f"{key}: " + "; ".join(f"{name}={_value(item)}" for name, item in node[key].items()))
