@@ -50,6 +50,7 @@ def _contribution(event: ServiceEvent, start, end, service_types):
     possible_type = any(t in service_types for t in event.type_options)
     if not possible_dates or not possible_type or event.countable is False:
         return None
+    # A guaranteed contribution must be eligible under every supported date/type choice.
     certain = all(start <= d <= end for d in event.date_options) and all(t in service_types for t in event.type_options)
     definite = certain and event.countable is True
     return {"event_id": event.event_id, "encounter_ref": event.encounter_ref,
@@ -68,6 +69,7 @@ def utilization(abstraction: PatientAbstraction, start: date, end: date, service
     contributions = [c for e in abstraction.events if (c := _contribution(e, start, end, service_types)) is not None]
     sessions = bounded(sum(c["sessions"]["lower"] for c in contributions), sum(c["sessions"]["upper"] for c in contributions))
     low = sum(c["minutes"]["lower"] for c in contributions)
+    # One unknown duration leaves the total upper bound unknown too.
     high = None if any(c["minutes"]["upper"] is None for c in contributions) else sum(c["minutes"]["upper"] for c in contributions)
     # Date alternatives are mutually exclusive per contact. Weekly sets have at most
     # 2**7 states; preserve them rather than counting all possible dates as delivered.
@@ -78,6 +80,7 @@ def utilization(abstraction: PatientAbstraction, start: date, end: date, service
             updated |= day_sets
         day_sets = updated
     days = bounded(min(map(len, day_sets)), max(map(len, day_sets)))
+    # Keep discrete supported totals as well as bounds; intermediate values may be impossible.
     options = {0}
     for c in contributions:
         if c["minutes"]["upper"] is None or not c["minute_options"]:
@@ -85,6 +88,7 @@ def utilization(abstraction: PatientAbstraction, start: date, end: date, service
             break
         options = {a + b for a in options for b in c["minute_options"]}
         if len(options) > 4096:
+            # Bound output size without discarding the conservative numerical bounds.
             options = None
             break
     included = {c["event_id"] for c in contributions}
@@ -111,6 +115,7 @@ def weekly_utilization(abstraction, start, end, service_types=None):
     rows = []
     week = monday(start)
     while week <= end:
+        # Utilization respects the requested range; labels still identify full calendar weeks.
         result = utilization(abstraction, max(start, week), min(end, week + timedelta(days=6)), service_types)
         result.update(week_start=week, week_end=week + timedelta(days=6))
         rows.append(result)
@@ -130,8 +135,7 @@ def _plan_for_week(abstraction, week, review_start, review_end):
         return None, plans, "Signed plans overlap without settled precedence; clarification of applicable requirements is needed."
     if len(requirements) > 1 or any(week < p.effective_start <= week + timedelta(days=6) for p in plans):
         return None, plans, "A plan begins/changes during the week; the record does not specify how the weekly goal applies. No prorating is invented."
-    # One explicit Monday-Sunday goal applies to the episode's touched weeks, including
-    # its final Friday. No proportional reduction for a short review period is assumed.
+    # Weekly goals apply to touched weeks; no partial-week prorating is assumed.
     return plans[0], plans, None
 
 
@@ -139,16 +143,31 @@ def compliance(abstraction, start, end):
     rows = []
     week = monday(start)
     while week <= end:
+        # A narrow query window must not hide care from the week being assessed.
         plan, candidates, ambiguity = _plan_for_week(abstraction, week, week, week + timedelta(days=6))
         eligible = plan.service_types if plan else sorted({t for p in candidates for t in p.service_types} or THERAPY_TYPES)
         actual = utilization(abstraction, max(week, plan.effective_start) if plan else week,
                              min(week + timedelta(days=6), plan.effective_end or date.max) if plan else week + timedelta(days=6), eligible)
         totals = actual["totals"]
+        candidate_comparisons = []
         if plan is None:
             status = "cannot_determine"
+            if ambiguity and ambiguity.startswith("Signed plans overlap") and all(p.effective_start <= week for p in candidates):
+                # When precedence is disputed but full-week application is clear, a
+                # common consequence across all candidate plans is still established.
+                for candidate in candidates:
+                    care = utilization(abstraction, week, min(week + timedelta(days=6), candidate.effective_end or date.max), candidate.service_types)
+                    candidate_comparisons.append({"plan_id": candidate.plan_id, "status": threshold_status(care["totals"], candidate),
+                                                  "actual": care, "requirement": {"days": candidate.required_days, "minutes": candidate.required_minutes,
+                                                                                   "service_types": candidate.service_types}})
+                outcomes = {c["status"] for c in candidate_comparisons}
+                if len(outcomes) == 1:
+                    status = next(iter(outcomes))
         elif totals["therapy_days"]["lower"] >= plan.required_days and totals["minutes"]["lower"] >= plan.required_minutes:
+            # Both lower bounds meet the goals, so every supported candidate passes.
             status = "met"
         elif totals["therapy_days"]["upper"] < plan.required_days or (totals["minutes"]["upper"] is not None and totals["minutes"]["upper"] < plan.required_minutes):
+            # Even the best supported value misses a goal, so the outcome is definite.
             status = "not_met"
         else:
             status = "cannot_determine"
@@ -157,14 +176,24 @@ def compliance(abstraction, start, end):
         requirement = {"days": plan.required_days, "minutes": plan.required_minutes, "service_types": plan.service_types} if plan else None
         claim_ids = sorted({i for p in candidates for i in p.claim_ids} | set(actual["calculation"]["claim_ids"]))
         trace = CalculationTrace(operation="compare_days_and_minutes_with_applicable_plan",
-                                 inputs={"requirement": requirement, "actual": totals, "plan_ids": [p.plan_id for p in candidates]},
+                                 inputs={"requirement": requirement, "actual": totals, "plan_ids": [p.plan_id for p in candidates],
+                                         "candidate_comparisons": candidate_comparisons},
                                  output={"status": status}, claim_ids=claim_ids, event_ids=sorted(event_ids),
                                  assumptions=["Both day and minute thresholds must be met.", "Apply comparisons to all supported duration candidates."])
         rows.append({"week_start": week, "week_end": week + timedelta(days=6), "status": status,
                      "requirement": requirement, "candidate_plans": [p.model_dump() for p in candidates], "actual": actual,
+                     "candidate_comparisons": candidate_comparisons,
                      "ambiguity": ambiguity, "conflicts": relevant_conflicts, "calculation": trace.model_dump()})
         week += timedelta(days=7)
     return rows
+
+
+def threshold_status(totals, plan):
+    if totals["therapy_days"]["lower"] >= plan.required_days and totals["minutes"]["lower"] >= plan.required_minutes:
+        return "met"
+    if totals["therapy_days"]["upper"] < plan.required_days or (totals["minutes"]["upper"] is not None and totals["minutes"]["upper"] < plan.required_minutes):
+        return "not_met"
+    return "cannot_determine"
 
 
 def consecutive_under_target(abstraction, start, end, length=2):
@@ -214,6 +243,7 @@ def query_patient(abstraction: PatientAbstraction, spec: QuerySpec) -> dict:
     elif spec.family == "compare_periods":
         change = spec.change_date
         if change is None:
+            # Infer a boundary only from one documented plan change, never from question text.
             changes = sorted({p.effective_start for p in abstraction.plans if start < p.effective_start <= end})
             if len(changes) != 1:
                 result = {"status": "insufficient_evidence", "explanation": "No unique documented plan change in this period; specify an explicit comparison date if desired."}
@@ -224,16 +254,25 @@ def query_patient(abstraction: PatientAbstraction, spec: QuerySpec) -> dict:
         before, after = utilization(abstraction, start, change - timedelta(days=1), spec.service_types), utilization(abstraction, change, end, spec.service_types)
         differences = {}
         for field in ("sessions", "therapy_days", "minutes", "hours"):
+            # Subtract opposite bounds to retain conservative difference estimates.
             a, b = after["totals"][field], before["totals"][field]
             differences[field] = bounded(a["lower"] - b["upper"] if b["upper"] is not None else None,
                                          a["upper"] - b["lower"] if a["upper"] is not None else None)
+        trace = CalculationTrace(operation="subtract_before_from_after",
+                                 inputs={"before": before["totals"], "after": after["totals"], "change_date": str(change)},
+                                 output=differences,
+                                 claim_ids=sorted(set(before["calculation"]["claim_ids"] + after["calculation"]["claim_ids"])),
+                                 event_ids=sorted(set(before["calculation"]["event_ids"] + after["calculation"]["event_ids"])),
+                                 assumptions=["Intervals are disjoint; bounds are conservative when an event has competing dates across the comparison boundary."])
         result = {"change_date": change, "before": before, "after": after, "difference_after_minus_before": differences,
+                  "calculation": trace.model_dump(),
                   "by_service_type": {str(t): {"before": utilization(abstraction, start, change - timedelta(days=1), [t])["totals"],
                                                "after": utilization(abstraction, change, end, [t])["totals"]} for t in spec.service_types},
                   "assumption": "Absolute totals over the stated periods, not a causal or exposure-adjusted effect."}
     elif spec.family in {"assessments", "progress"}:
         assessments = [a for a in abstraction.assessments if any(start <= d <= end for d in a.date_options)]
         result = {"assessments": [a.model_dump() for a in assessments], "score_changes": []}
+        # Compare the same instrument and experiencer; uncertain dates cannot order a trend.
         histories = sorted({(a.instrument.casefold(), a.experiencer.casefold()) for a in assessments})
         for instrument, experiencer in histories:
             sequence = [a for a in assessments if a.instrument.casefold() == instrument and a.experiencer.casefold() == experiencer and a.assessment_date is not None]
@@ -249,6 +288,7 @@ def query_patient(abstraction: PatientAbstraction, spec: QuerySpec) -> dict:
     elif spec.family == "cohort":
         actual = utilization(abstraction, start, end, spec.service_types)
         thresholds = {"sessions": spec.min_sessions, "minutes": spec.min_minutes}
+        # Definite and conditional membership use the same bounds as patient queries.
         met = all(v is None or actual["totals"][k]["lower"] >= v for k, v in thresholds.items())
         excluded = any(v is not None and actual["totals"][k]["upper"] is not None and actual["totals"][k]["upper"] < v for k, v in thresholds.items())
         result = {"included": met, "conditional_inclusion": not met and not excluded, "actual": actual}
@@ -269,6 +309,7 @@ def query_collection(abstractions: list[PatientAbstraction], spec: QuerySpec) ->
 
 
 def attach_evidence(answer: dict, abstractions: list[PatientAbstraction], documents) -> dict:
+    # Collect references from nested decisions and traces, then attach only their evidence.
     identifiers = set()
     def visit(value):
         if isinstance(value, dict):
