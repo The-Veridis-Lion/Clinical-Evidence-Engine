@@ -55,6 +55,10 @@ def main(argv=None):
     query.add_argument("--consecutive-weeks", type=int)
     query.add_argument("--min-sessions", type=int)
     query.add_argument("--min-minutes", type=int)
+    ask = commands.add_parser("ask", help="Translate a question into an existing deterministic query")
+    ask.add_argument("--patient", required=True)
+    ask.add_argument("question")
+    ask.add_argument("--format", choices=["json", "audit"], default="json")
     dev = commands.add_parser("run-development")
     dev.add_argument("--format", choices=["json", "audit"], default="json")
     dev.add_argument("--questions", default="data/questions.json")
@@ -98,6 +102,34 @@ def main(argv=None):
                 else:
                     result = {"patients": store.patient_ids(), "documents": [d.model_dump(exclude={"text"}) for d in store.documents()]}
                 write_result(result, args.output)
+                return 0
+            if args.command == "ask":
+                from time import perf_counter
+                from .natural_language import NaturalLanguageQueryInterpreter, QueryContext
+                from .provider import CodexCLIProvider, ProviderConfig
+                from .query import QuerySpec, _period, query_patient
+                from .pipeline import ensure_complete
+                if args.patient not in store.patient_ids():
+                    raise ValueError("Patient not found in selected database")
+                ensure_complete(store)
+                abstraction = load_patient(store, args.patient)
+                try:
+                    start, end = _period(abstraction, QuerySpec(family="utilization"))
+                    episode_year = start.year if start.year == end.year else None
+                except ValueError:
+                    episode_year = None
+                # Only identity and an unambiguous episode year are sent to Luna.
+                context = QueryContext(patient_id=args.patient, patient_name=abstraction.patient.name,
+                                       episode_year=episode_year)
+                provider = CodexCLIProvider(ProviderConfig())
+                started = perf_counter()
+                interpretation = NaturalLanguageQueryInterpreter(provider).interpret(args.question, context)
+                result = {"question": args.question, "interpretation": interpretation.model_dump(),
+                          "interpretation_usage": provider.usage(perf_counter() - started).model_dump()}
+                if interpretation.status == "ready":
+                    # The unchanged query engine alone supplies answers and clinical evidence.
+                    result["answer"] = query_patient(abstraction, interpretation.query_spec, store.documents())
+                write_result(result, args.output, args.format)
                 return 0
             if args.command in {"query", "run-development"}:
                 from .query import QuerySpec, query_collection, query_patient

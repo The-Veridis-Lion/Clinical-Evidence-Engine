@@ -4,6 +4,7 @@ import json
 import shutil
 import subprocess
 import tempfile
+from datetime import datetime, timezone
 from pathlib import Path
 from time import perf_counter
 from typing import Any, Protocol
@@ -48,7 +49,7 @@ class CodexCLIProvider:
         self.config = config
         self.executable = shutil.which("codex")
         if not self.executable:
-            raise ValueError("Install Codex CLI and run codex login before extracting new documents")
+            raise ValueError("Install Codex CLI and run codex login before using a model")
         self.cli_version = subprocess.run([self.executable, "--version"], capture_output=True, text=True,
                                          encoding="utf-8", timeout=10, check=True).stdout.strip()
         self.reset_usage()
@@ -72,6 +73,64 @@ class CodexCLIProvider:
         return subprocess.run(command, input=request, cwd=folder, capture_output=True,
                               text=True, encoding="utf-8", timeout=self.config.timeout_seconds,
                               check=False)
+
+    def structured_output(self, prompt: str, schema: dict) -> dict:
+        """Separate query interpretation from the unchanged LangExtract adapter."""
+        with tempfile.TemporaryDirectory(prefix="clinical-query-") as directory:
+            folder = Path(directory)
+            schema_path, answer_path = folder / "schema.json", folder / "answer.json"
+            schema_path.write_text(json.dumps(schema), encoding="utf-8")
+            command = [self.executable, "exec", "--ignore-user-config", "--ephemeral",
+                       "--skip-git-repo-check", "--sandbox", "read-only", "--json", "--color", "never",
+                       "--model", self.config.model,
+                       "-c", f'model_reasoning_effort="{self.config.reasoning_effort}"',
+                       "-c", "project_doc_max_bytes=0", "-c", "features.shell_tool=false",
+                       "-c", "features.apply_patch_freeform=false", "-c", "features.multi_agent=false",
+                       "--output-schema", str(schema_path), "--output-last-message", str(answer_path), "-"]
+            self._calls += 1
+            metric = {"purpose": "query_interpretation", "request_prompt_characters": len(prompt),
+                      "output_schema_characters": len(json.dumps(schema)), "status": "started",
+                      "started_at": datetime.now(timezone.utc).isoformat()}
+            self._call_metrics.append(metric)
+            started = perf_counter()
+            try:
+                completed = self.run_cli(command, prompt, folder)
+            except subprocess.TimeoutExpired as error:
+                metric["status"] = "timeout"
+                raise RuntimeError("Codex CLI query interpretation timed out; no retry performed") from error
+            finally:
+                metric["model_call_seconds"] = perf_counter() - started
+                metric["ended_at"] = datetime.now(timezone.utc).isoformat()
+            # Usage is exposed by the CLI; hidden session streams are never persisted.
+            events = []
+            for line in completed.stdout.splitlines():
+                try:
+                    events.append(json.loads(line))
+                except json.JSONDecodeError:
+                    continue
+            usage = next((e.get("usage") for e in reversed(events) if e.get("type") == "turn.completed"), None)
+            self._records.append(usage)
+            metric["tokens"] = usage
+            if completed.returncode != 0 or not answer_path.exists():
+                metric["status"] = "cli_failed"
+                errors = [e.get("message", "") for e in events if e.get("type") == "error"]
+                raise RuntimeError(f"Codex CLI query interpretation failed (exit {completed.returncode}): "
+                                   + ("; ".join(errors) or "check local CLI authentication/network configuration"))
+            for event in events:
+                if event.get("type") in {"item.started", "item.completed"} and event.get("item", {}).get("type") in {
+                    "command_execution", "mcp_tool_call", "web_search", "file_change"}:
+                    metric["status"] = "tool_rejected"
+                    raise RuntimeError("Query interpreter attempted a tool operation")
+            output = answer_path.read_text(encoding="utf-8")
+            metric["response_characters"] = len(output)
+            try:
+                proposal = json.loads(output)
+            except json.JSONDecodeError:
+                self._parse_failures += 1
+                metric["status"] = "parse_failed"
+                raise
+            metric["status"] = "completed"
+            return proposal
 
     def language_model(self, examples, source_text):
         # LangExtract-specific types stay inside this adapter and the extractor.

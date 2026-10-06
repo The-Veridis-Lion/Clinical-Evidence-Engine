@@ -114,6 +114,18 @@ def render_audit(answer):
     if isinstance(answer, list):
         return "\n\n".join(f"{item.get('id', 'Question')}: {item.get('question', '')}\n"
                            f"{render_audit(item.get('answer', item))}" for item in answer)
+    if "interpretation" in answer:
+        interpretation = answer["interpretation"]
+        lines = [f"Question: {answer['question']}",
+                 f"Interpretation: {interpretation['status']} (query translation, not clinical evidence)"]
+        if interpretation.get("query_spec"):
+            lines.append("Interpreted QuerySpec: " + _value(interpretation["query_spec"]))
+        for key in ("clarification_question", "explanation"):
+            if interpretation.get(key):
+                lines.append(f"{key}: {interpretation[key]}")
+        if "answer" in answer:
+            lines.append(render_audit(answer["answer"]))
+        return "\n".join(lines)
     lines = []
     query = answer.get("query", {})
     lines.append(f"Query: {query.get('family', 'clinical result')}")
