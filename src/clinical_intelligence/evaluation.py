@@ -2,6 +2,8 @@
 from __future__ import annotations
 import json
 import statistics
+import platform
+import sqlite3
 from time import perf_counter
 from .pipeline import ensure_complete, load_patient
 from .query import QuerySpec, compliance, query_collection, query_patient, utilization
@@ -13,6 +15,7 @@ def experiment(store):
     patients = []
     for patient_id in store.patient_ids():
         evidence = store.patient_extractions(patient_id)
+        # Hold extracted evidence fixed so differences come from reconciliation policy.
         explicit = reconcile(evidence, "explicit")
         naive = reconcile(evidence, "latest_wins")
         dates = [d for e in explicit.events for d in e.date_options]
@@ -41,8 +44,11 @@ def benchmark(store, iterations, processing_report):
     if iterations < 1:
         raise ValueError("Benchmark iterations must be positive")
     ensure_complete(store)
+    # This timer excludes interpreter startup, CLI setup and opening the database.
     began = perf_counter()
     patients = [load_patient(store, i) for i in store.patient_ids()]
+    if not patients:
+        raise ValueError("No complete patients available for benchmarking")
     cold_load = perf_counter() - began
     def measure(operation):
         values = []
@@ -55,11 +61,13 @@ def benchmark(store, iterations, processing_report):
     spec = QuerySpec(family="compliance")
     initial = json.loads(processing_report.read_text(encoding="utf-8")) if processing_report.exists() else None
     current = [x for pid in store.patient_ids() for x in store.patient_extractions(pid)]
+    # Active corpus usage excludes earlier extraction versions and exploratory calls.
     usage = [e.usage for e in current]
     def total(field):
         values = [getattr(u, field) for u in usage]
         return sum(values) if all(v is not None for v in values) else None
     return {"scope": "MEASURED on the supplied corpus only; collection currently contains one patient.",
+            "environment": {"python": platform.python_version(), "sqlite": sqlite3.sqlite_version, "platform": platform.platform()},
             "documents": len(store.documents()), "patients": len(patients), "claims": sum(len(p.source_claims) for p in patients),
             "initial_processing_report": initial,
             "database_bytes": store.path.stat().st_size,
