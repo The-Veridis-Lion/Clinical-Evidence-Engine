@@ -1,0 +1,27 @@
+[build-system]
+requires = ["setuptools==80.10.2"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "clinical-intelligence-prototype"
+version = "0.1.0"
+description = "Evidence-preserving clinical abstraction and deterministic review"
+requires-python = ">=3.12"
+dependencies = [
+  "pydantic==2.13.5",
+  "langextract==1.7.0",
+  "intervaltree==3.2.1",
+]
+
+[project.optional-dependencies]
+test = ["pytest==9.1.1"]
+
+[project.scripts]
+clinical = "clinical_intelligence.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
