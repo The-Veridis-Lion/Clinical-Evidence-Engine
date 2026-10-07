@@ -80,7 +80,12 @@ def main(argv=None):
                     raise ValueError("No .txt source documents found")
                 def progress(item):
                     print(json.dumps({k: item[k] for k in ("source", "status", "error") if k in item}), file=sys.stderr, flush=True)
-                result = process(store, paths, LangExtractExtractor(CodexCLIProvider(ProviderConfig(model=args.model, reasoning_effort=args.reasoning)), contract=args.contract), progress)
+                def new_extractor():
+                    return LangExtractExtractor(CodexCLIProvider(ProviderConfig(
+                        model=args.model, reasoning_effort=args.reasoning)), contract=args.contract)
+                # Each independent document request owns its provider and usage records.
+                result = process(store, paths, new_extractor(), progress,
+                                 max_workers=10, extractor_factory=new_extractor)
                 write_result(result, args.output)
                 return int(result["failed"] > 0)
             if args.command == "inspect":
