@@ -214,14 +214,20 @@ class LangExtractExtractor:
         declared_id = None
         pending = []
         for extraction in result.extractions or []:
-            # Verify the library's alignment against our retained original text.
-            span = extraction.char_interval
-            passage = locate_passage(document, extraction.extraction_text,
-                                     span.start_pos if span else None, span.end_pos if span else None)
             attributes = extraction.attributes or {}
             if set(attributes) != {"data"} or not isinstance(attributes["data"], str):
                 raise ValueError("Expected exactly one structured JSON data attribute")
             payload = json.loads(attributes["data"])
+            if not isinstance(payload, dict):
+                raise ValueError("Expected structured claim data object")
+            # Explicit source identifiers can distinguish repeated verbatim evidence.
+            context = {key: payload[key] for key in (
+                "encounter_ref", "appointment_ref", "form_ref", "plan_ref",
+                "target_encounter", "target_plan_ref") if isinstance(payload.get(key), str) and payload[key]}
+            span = extraction.char_interval
+            passage = locate_passage(document, extraction.extraction_text,
+                                     span.start_pos if span else None, span.end_pos if span else None,
+                                     context=context)
             if extraction.extraction_class == "patient":
                 declared_id = payload.pop("declared_id", None)
                 candidate = Patient.model_validate(payload)
@@ -253,20 +259,38 @@ class LangExtractExtractor:
                                   usage=usage)
 
 
-def locate_passage(document: RegisteredDocument, quote: str, start: int | None, end: int | None) -> SourcePassage:
+def locate_passage(document: RegisteredDocument, quote: str, start: int | None, end: int | None,
+                   *, context: dict[str, str] | None = None) -> SourcePassage:
     """Exact character verification, independent of library token-match labels.
 
     LangExtract jointly aligns ordered quotes; overlapping/out-of-order exact quotes
     can lose token alignment. A unique verbatim occurrence is still unambiguous evidence.
+    Repeated occurrences require explicit identifiers in one blank-delimited section.
     No approximate match, whitespace normalization or reconstructed quotation is accepted.
     """
     locator = "langextract"
-    if start is None or end is None or document.text[start:end] != quote:
-        first = document.text.find(quote) if quote else -1
-        if first < 0 or document.text.find(quote, first + 1) >= 0:
-            raise ValueError(f"Evidence is absent or ambiguously located in the original document: {quote!r}")
-        start, end = first, first + len(quote)
+    if start is None or end is None or not (0 <= start < end <= len(document.text)) or document.text[start:end] != quote:
+        candidates = []
+        offset = document.text.find(quote) if quote else -1
+        while offset >= 0:
+            candidates.append(offset)
+            offset = document.text.find(quote, offset + 1)
         locator = "unique_exact_substring"
+        if len(candidates) > 1 and context:
+            # Blank-line boundaries prevent context from leaking between source sections.
+            boundaries = list(re.finditer(r"\r?\n[ \t]*\r?\n", document.text))
+            supported = []
+            for candidate in candidates:
+                left = max((b.end() for b in boundaries if b.end() <= candidate), default=0)
+                right = min((b.start() for b in boundaries if b.start() >= candidate + len(quote)), default=len(document.text))
+                section = document.text[left:right]
+                if all(re.search(r"(?<![\w-])" + re.escape(identifier) + r"(?![\w-])", section)
+                       for identifier in context.values()):
+                    supported.append(candidate)
+            candidates = supported
+        if len(candidates) != 1:
+            raise ValueError(f"Evidence is absent or ambiguously located in the original document: {quote!r}")
+        start, end = candidates[0], candidates[0] + len(quote)
     return SourcePassage(document_id=document.document_id, start=start, end=end, quote=quote,
                          line_start=document.text.count("\n", 0, start) + 1,
                          line_end=document.text.count("\n", 0, end - 1) + 1, locator=locator)
