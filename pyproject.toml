@@ -1,0 +1,34 @@
+[build-system]
+requires = ["setuptools==80.10.2"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "clinical-evidence-engine"
+version = "0.1.0"
+license = "LicenseRef-PolyForm-Noncommercial-1.0.0"
+license-files = ["LICENSE.md", "NOTICE", "THIRD_PARTY_NOTICES.md"]
+authors = [{name = "The-Veridis-Lion"}]
+description = "Evidence-preserving clinical abstraction and deterministic review"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+  "pydantic==2.13.5",
+  "langextract==1.7.0",
+  "intervaltree==3.2.1",
+]
+
+[project.optional-dependencies]
+test = ["pytest==9.1.1"]
+
+[project.scripts]
+clinical = "clinical_intelligence.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+clinical_intelligence = ["contracts/*.json", "synthetic.json"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]

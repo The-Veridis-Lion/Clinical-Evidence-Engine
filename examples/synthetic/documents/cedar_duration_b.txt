@@ -1,0 +1,3 @@
+SYNTHETIC ENGINEERING FIXTURE — NOT A REAL PATIENT
+Patient ID: DEMO-CEDAR | Name: Cedar Example | Document ID: DEMO-DURATION-B
+Signed clinician B record: LAB-I8 individual psychotherapy on 2026-04-08 was delivered with Cedar present; patient treatment duration was 49 minutes. No correction relationship is asserted.
