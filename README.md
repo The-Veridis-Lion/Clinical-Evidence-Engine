@@ -70,6 +70,28 @@ and [representative final packet](examples/claims_review/DEV-002-review.json).
 
 ## Original archive evidence demo
 
+The later [frozen reserved-confirmation delivery](docs/confirmation-delivery.md) now
+reports **3/6 automatic case conformance and 16/24 criterion-state matches** on the
+original previously unavailable package. Five cases used real note inference, one
+used structured sources only; seven new Luna calls include two bounded repairs.
+The original ledger is now 13/20. Failures were preserved without holdout tuning.
+See the [one-page portfolio](docs/confirmation-portfolio.md) and
+[versioned result summary](docs/confirmation-validation.json). The earlier phase
+measurements below remain historical, not new confirmation results.
+
+After confirmation, optional original-source verification was added:
+
+```sh
+python -m clinical_intelligence.claims_review run --retrieval artifacts/raw-source/retrieval.json --verify-archive artifacts/raw-source/original.zip --output artifacts/raw-source/verified-review.json
+```
+
+It reopens the supplied archive and checks original clinical row content/identity,
+locators and hashes before inference. Missing/mismatched ZIPs fail explicitly. Without
+the option, lightweight replay is labelled **original archive not reverified**.
+Neither mode certifies original EHR availability, complete retrieval or clinical meaning.
+The post-confirmation fix passed 314 offline tests and installed-wheel checks; it makes
+no new clinical-quality claim and does not change the sealed first-pass scores.
+
 The review now starts from an original unfiltered official Synthea CSV archive plus
 an explicitly constructed target request, rather than a preselected source list.
 Retrieval preserves patient/encounter identities, original field strings, row/file

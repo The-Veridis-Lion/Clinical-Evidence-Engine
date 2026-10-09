@@ -1,0 +1,546 @@
+{
+  "version": "reserved-confirmation-delivery/1",
+  "frozen_runtime_commit": "814b1f81e8a2a174088598549c770e31ab9d6ba6",
+  "frozen_starting_HEAD": "1b2ceac5522f2790e18407f3d02ba60dcbb0a2e9",
+  "post_confirmation_integrity_commit": "edb20fe532dc8a6003df7e56a4c2cb1195bd8c01",
+  "confirmation_archive": {
+    "sha256": "b56d7f767065f59045ef7804222d58125afe58a6d9c6f3a79d16a906d9c58352",
+    "safe_members": true,
+    "all_12_content_hashes_verified": true,
+    "hashes": [
+      {
+        "member": "evidence_review_prep/evaluation/confirmation_sealed/inputs/CONF-001.json",
+        "sha256": "03b53ac7da79bcec315ea3d119c330e741e3c4d6824f96aebcd28702ab86b40a",
+        "operation": "bytes hashed without text decoding"
+      },
+      {
+        "member": "evidence_review_prep/evaluation/confirmation_sealed/expected/CONF-001.expected.json",
+        "sha256": "7976b5f27e6aee3983aefdef316154e7dd326dad56950e825c59d7e593f6bf2a",
+        "operation": "bytes hashed without text decoding"
+      },
+      {
+        "member": "evidence_review_prep/evaluation/confirmation_sealed/inputs/CONF-002.json",
+        "sha256": "7e0351d7fe631a5718ec33636609d1ea8beb4ef257fc69bec822e75c1bfa373d",
+        "operation": "bytes hashed without text decoding"
+      },
+      {
+        "member": "evidence_review_prep/evaluation/confirmation_sealed/expected/CONF-002.expected.json",
+        "sha256": "255518d7980fae2d7583d22e29c02fc3d1c4e593ad8396793962b722b866c87b",
+        "operation": "bytes hashed without text decoding"
+      },
+      {
+        "member": "evidence_review_prep/evaluation/confirmation_sealed/inputs/CONF-003.json",
+        "sha256": "3e7ec7c6df099586b25c9aec165185b1e0d8564afc20be5da2b0491bfd75e1fd",
+        "operation": "bytes hashed without text decoding"
+      },
+      {
+        "member": "evidence_review_prep/evaluation/confirmation_sealed/expected/CONF-003.expected.json",
+        "sha256": "e8364b0eb2b4d24230fae5b421fb7285d872189e3ca6f163b80e1fde2a1e8614",
+        "operation": "bytes hashed without text decoding"
+      },
+      {
+        "member": "evidence_review_prep/evaluation/confirmation_sealed/inputs/CONF-004.json",
+        "sha256": "269564dfac5e9b2d3adc336bb1f91e5e957bb44b8d99202211bbc60f4dba907a",
+        "operation": "bytes hashed without text decoding"
+      },
+      {
+        "member": "evidence_review_prep/evaluation/confirmation_sealed/expected/CONF-004.expected.json",
+        "sha256": "c9465ec59625374af862ff98ecd7d02c490c3308ccd033a528de017ec6f0fe76",
+        "operation": "bytes hashed without text decoding"
+      },
+      {
+        "member": "evidence_review_prep/evaluation/confirmation_sealed/inputs/CONF-005.json",
+        "sha256": "62be0e248d28fc2c5ad54b9ca13c2068b3b8539d704edaeb27d06258e84afadd",
+        "operation": "bytes hashed without text decoding"
+      },
+      {
+        "member": "evidence_review_prep/evaluation/confirmation_sealed/expected/CONF-005.expected.json",
+        "sha256": "ccfda1ee487532779d7685adec832e056529021d689069595b0b9aa696100007",
+        "operation": "bytes hashed without text decoding"
+      },
+      {
+        "member": "evidence_review_prep/evaluation/confirmation_sealed/inputs/CONF-006.json",
+        "sha256": "ad5da9f089aed569b2638dd316609ef603df7d07a1a8312fa9d48c5597e81f0f",
+        "operation": "bytes hashed without text decoding"
+      },
+      {
+        "member": "evidence_review_prep/evaluation/confirmation_sealed/expected/CONF-006.expected.json",
+        "sha256": "9766fbad7210daa2c5755a23cf83f32a168787fe6f4358d8843d1b4aa14bcf18",
+        "operation": "bytes hashed without text decoding"
+      }
+    ]
+  },
+  "freeze_protocol": {
+    "frozen_at": "2026-10-09T15:29:15.513831+00:00",
+    "prediction_sealed_at": "2026-10-09T15:32:57.174633+00:00",
+    "expected_first_decoded_at": "2026-10-09T15:33:25.530873+00:00",
+    "all_predictions_saved_before_expected_values": true,
+    "seal_sha256": "1f7eb625abe99a8e7a2a6d84523afd165cf22ba103865bc06564eed93a6534b4",
+    "method": "Timestamped local operation log plus sealed packet/trace hashes; not independent cryptographic proof of all possible access. Expected bytes were hashed before freeze without decoding values.",
+    "predictions_sha256": {
+      "CONF-001.json": "8a10077ac4ea1f9eef0c9b16fc726a4382f97b6a2d1a9daaae29653f6bb9f5b7",
+      "CONF-002.json": "588a6d39a392c35b9d2b3c3b7b727cdcbf25dbdee159223e700e444fb18ef208",
+      "CONF-003.json": "f27e6bedc34e8def25cd019ae4bd58c2055195709450fa565468195c8bba0259",
+      "CONF-004.json": "245c82ab377785f6ed8d92ce95b09212379141bb035945fbddf4f60c553b8a6e",
+      "CONF-005.json": "153c05422f553ed0a6fea61d7310da897df26ae47142a8760a800e8e0a766779",
+      "CONF-006.json": "7ed41d15dd4a85744f9143a0c78c7db50f275ecc269e9f9af797379f71fad599"
+    },
+    "sealed_packets_and_traces_verified_unchanged_at_delivery": true
+  },
+  "conditions": {
+    "model_requested": "gpt-6-luna",
+    "reasoning": "high",
+    "cli": "codex-cli 0.159.3",
+    "backend_model_snapshot": "unavailable",
+    "application_cache": false,
+    "tools": "disabled",
+    "timeout_seconds": 180,
+    "repair_limit_per_note": 1,
+    "gold": "Original AI-assisted synthetic constraints; not human or clinical expert gold",
+    "evaluation_adapter": "claims-confirmation-evaluation/1; created after prediction seal solely to adapt original format",
+    "criterion_denominator": "24 including 8 scope NOT_EVALUATED expectations; 16 ordinary criterion expectations",
+    "new_quality_claim_for_integrity_fix": "None: no holdout retuning or new clinical-quality measurement",
+    "note_base_prompt_sha256": "c22d7a099ccfbccb4d588609c47a19438791ccddb0476476b812c9df3d636f65",
+    "note_base_schema_sha256": "0af246e1e11d66c52a74c4ead2756337982486b8ce49c1d742b7eff48c65b564",
+    "note_version": "claims-review-note/2",
+    "policy_version": "0.1.0-draft-ai-20261008",
+    "runtime_file_sha256": {
+      "src\\clinical_intelligence\\claims_review\\cli.py": "f5db1988596abe3fb47f5decd08fb2720fe6030e2ecafe5e620312dbd5196203",
+      "src\\clinical_intelligence\\claims_review\\contracts.py": "9daf9df61fecde03f09d1e02f89f30170db61b6a296d3a7bf2d36f254b6e6afb",
+      "src\\clinical_intelligence\\claims_review\\facts.py": "cadf16472f8438e31fbfa1db00b1ec0826190350558738e8ef49e6f82d359657",
+      "src\\clinical_intelligence\\claims_review\\note_extractor.py": "2fe35bce1b69ff7331ac9dd0bc91eb37d25a12b483ce4a1fb665d1d0a54a3f56",
+      "src\\clinical_intelligence\\claims_review\\prepare.py": "8f32389b621d9072aa062de6add17edc12623c9e044d2208da031cac7beabea5",
+      "src\\clinical_intelligence\\claims_review\\retrieval.py": "1452579d8eb1b8a651aca440a6e8e39c4aebf9ae7a98d702956f3d8e1230f050",
+      "src\\clinical_intelligence\\claims_review\\review.py": "465f7580e979fe0d67b9cf670487c831a77d4dac332e152ace9fa0ae7611b859",
+      "src\\clinical_intelligence\\claims_review\\__init__.py": "5d0d6384dbee7aa2bc6490c276811e180ed8f5ee82f2aa0d8c965a33bb2e0bc2",
+      "src\\clinical_intelligence\\claims_review\\__main__.py": "bd045ddd5242d002f692dac452be9afba38deef5cde541a5fc074bfef5987b91",
+      "tools\\analyze_luna.py": "34b29438070358633c27848de2539f4b6390207bb89646679399a2899973674d",
+      "tools\\audit_claims_packet.py": "499b8c9b079b91a67228be9ac9f402d3d915b7b7a35d8e61a292ad7f541a1686",
+      "tools\\benchmark_claims_retrieval.py": "3795e87ec9dcd47c2e1c891e0cadb53f4cff7de7054324864c92c1ffe1afd80d",
+      "tools\\build_luna_dataset.py": "1a36d7250e6a5c7a569d8f6a4aa9dd07a0bb6db591b4f242c8fd177bfb9f59ca",
+      "tools\\evaluate_claims_review.py": "6dfa9320927b2115d3399403086476ec9c9b5045a6333f54d2b089e7ad88dbc7",
+      "tools\\luna_deployed_probe.py": "150131650ff3e3b39953447b41f7c7d0264a611e75eb93ba5bd19170fd1cd78e",
+      "tools\\luna_deployed_verify.py": "19a84d14e2f8f34f95b97f2e7f26223f94634d3806fed038edf75a0f0a2d19eb",
+      "tools\\luna_experiment.py": "a5555da06c1f960f4124d44d5a2daf43c1181ab21a4a5dbf74b3e79adaeffd4d",
+      "tools\\luna_failure_audit.py": "bb068f603f4615a619e2909da2746e1cafb425f977c7b72932e612b665bbc670",
+      "tools\\luna_freeze.py": "4499f059f4e1b569860c555229840b69ef51d0c39eccf43b2481707395068d9e",
+      "tools\\luna_quality.py": "3f823da2edb4eead83ce3d18270d28684c2d85a869a7e181980dcb0ed4f2869c",
+      "tools\\luna_repair_replay.py": "ca6572509c8b8d5e5e273c2646de36b4c13adfaa0d4a21115074566f587839a7",
+      "tools\\replay_claims_review.py": "38f28c131cec1098b485fb38e5026bbcb11e074dab607442f418dce46d512fa0",
+      "tools\\semantic_results.py": "4b98b0b6691e2bcbc2cb22fc99a83592650314f9def85e02a4667b3b2bf53dba",
+      "tools\\uncertainty_results.py": "79a2b6f502a8bcea1d3ae9301f8b64735f640016793c22c231408a2242640555",
+      "tools\\validate_live.py": "afce9532e223a7e310ad33726f83193b18155b4e56736095417d092d1723c722",
+      "tools\\verify_claims_review_synthea.py": "077c0130a566310e9c72242203f7ddffccb89dde93ef654b7bcb2df8f88ee771",
+      "src\\clinical_intelligence\\claims_review\\resources\\policy_registry.json": "a6a33793572ec01ad9b2aa49ff35bfec5098fbc3fc99735d8087eda1ef51df17",
+      "src/clinical_intelligence/provider.py": "0460068119f42988f74ee666317c8c03249dc4817c2ad07457cff748a9dc5e9e"
+    }
+  },
+  "results": {
+    "workflow_cases": 6,
+    "cases_with_real_notes": 5,
+    "structured_only_cases": 1,
+    "complete_conformance": 3,
+    "overall_state_matches": 4,
+    "criterion_matches": 16,
+    "criterion_total": 24,
+    "live_note_case_conformance": "2/5",
+    "structured_case_conformance": "1/1",
+    "false_SUPPORTED": 1,
+    "unnecessary_INSUFFICIENT_EVIDENCE": 2,
+    "citation_occurrences": 612,
+    "positional_binding_failures": 0,
+    "execution_failures": 0,
+    "semantic_citation_precision": null,
+    "exhaustive_fact_precision_recall": null,
+    "cases": [
+      {
+        "case_id": "CONF-001",
+        "passed": false,
+        "criterion_matches": 2,
+        "criterion_total": 4,
+        "actual_overall": "NEEDS_HUMAN_REVIEW",
+        "actual_states": {
+          "MONITORING_CONTEXT": "INSUFFICIENT_EVIDENCE",
+          "TEST_TIMELINE": "SUPPORTED",
+          "SHORT_INTERVAL_RATIONALE": "NOT_APPLICABLE",
+          "ORDER_INTENT": "INSUFFICIENT_EVIDENCE"
+        },
+        "expected_states": {
+          "MONITORING_CONTEXT": "SUPPORTED",
+          "TEST_TIMELINE": "SUPPORTED",
+          "SHORT_INTERVAL_RATIONALE": "NOT_APPLICABLE",
+          "ORDER_INTENT": "SUPPORTED"
+        },
+        "false_supported": [],
+        "unnecessary_insufficient": [
+          "MONITORING_CONTEXT",
+          "ORDER_INTENT"
+        ],
+        "calls": 2,
+        "repairs": 1,
+        "seconds": 28.9792772999499,
+        "input_tokens": 35680,
+        "output_tokens": 2584
+      },
+      {
+        "case_id": "CONF-002",
+        "passed": true,
+        "criterion_matches": 4,
+        "criterion_total": 4,
+        "actual_overall": "NEEDS_HUMAN_REVIEW",
+        "actual_states": {
+          "MONITORING_CONTEXT": "SUPPORTED",
+          "TEST_TIMELINE": "SUPPORTED",
+          "SHORT_INTERVAL_RATIONALE": "INSUFFICIENT_EVIDENCE",
+          "ORDER_INTENT": "SUPPORTED"
+        },
+        "expected_states": {
+          "MONITORING_CONTEXT": "SUPPORTED",
+          "TEST_TIMELINE": "SUPPORTED",
+          "SHORT_INTERVAL_RATIONALE": "INSUFFICIENT_EVIDENCE",
+          "ORDER_INTENT": "SUPPORTED"
+        },
+        "false_supported": [],
+        "unnecessary_insufficient": [],
+        "calls": 2,
+        "repairs": 1,
+        "seconds": 33.635703900130466,
+        "input_tokens": 34453,
+        "output_tokens": 3130
+      },
+      {
+        "case_id": "CONF-003",
+        "passed": false,
+        "criterion_matches": 0,
+        "criterion_total": 4,
+        "actual_overall": "NEEDS_HUMAN_REVIEW",
+        "actual_states": {
+          "MONITORING_CONTEXT": "SUPPORTED",
+          "TEST_TIMELINE": "INSUFFICIENT_EVIDENCE",
+          "SHORT_INTERVAL_RATIONALE": "INSUFFICIENT_EVIDENCE",
+          "ORDER_INTENT": "INSUFFICIENT_EVIDENCE"
+        },
+        "expected_states": {
+          "MONITORING_CONTEXT": "NOT_EVALUATED",
+          "TEST_TIMELINE": "NOT_EVALUATED",
+          "SHORT_INTERVAL_RATIONALE": "NOT_EVALUATED",
+          "ORDER_INTENT": "NOT_EVALUATED"
+        },
+        "false_supported": [
+          "MONITORING_CONTEXT"
+        ],
+        "unnecessary_insufficient": [],
+        "calls": 1,
+        "repairs": 0,
+        "seconds": 16.05144439986907,
+        "input_tokens": 16580,
+        "output_tokens": 1282
+      },
+      {
+        "case_id": "CONF-004",
+        "passed": false,
+        "criterion_matches": 2,
+        "criterion_total": 4,
+        "actual_overall": "NEEDS_HUMAN_REVIEW",
+        "actual_states": {
+          "MONITORING_CONTEXT": "SUPPORTED",
+          "TEST_TIMELINE": "CONFLICTED",
+          "SHORT_INTERVAL_RATIONALE": "CONFLICTED",
+          "ORDER_INTENT": "SUPPORTED"
+        },
+        "expected_states": {
+          "MONITORING_CONTEXT": "SUPPORTED",
+          "TEST_TIMELINE": "SUPPORTED",
+          "SHORT_INTERVAL_RATIONALE": "SUPPORTED",
+          "ORDER_INTENT": "SUPPORTED"
+        },
+        "false_supported": [],
+        "unnecessary_insufficient": [],
+        "calls": 1,
+        "repairs": 0,
+        "seconds": 17.685114699881524,
+        "input_tokens": 16564,
+        "output_tokens": 1771
+      },
+      {
+        "case_id": "CONF-005",
+        "passed": true,
+        "criterion_matches": 4,
+        "criterion_total": 4,
+        "actual_overall": "EVIDENCE_READY_FOR_HUMAN_REVIEW",
+        "actual_states": {
+          "MONITORING_CONTEXT": "SUPPORTED",
+          "TEST_TIMELINE": "SUPPORTED",
+          "SHORT_INTERVAL_RATIONALE": "NOT_APPLICABLE",
+          "ORDER_INTENT": "SUPPORTED"
+        },
+        "expected_states": {
+          "MONITORING_CONTEXT": "SUPPORTED",
+          "TEST_TIMELINE": "SUPPORTED",
+          "SHORT_INTERVAL_RATIONALE": "NOT_APPLICABLE",
+          "ORDER_INTENT": "SUPPORTED"
+        },
+        "false_supported": [],
+        "unnecessary_insufficient": [],
+        "calls": 0,
+        "repairs": 0,
+        "seconds": 0.00287310010753572,
+        "input_tokens": null,
+        "output_tokens": null
+      },
+      {
+        "case_id": "CONF-006",
+        "passed": true,
+        "criterion_matches": 4,
+        "criterion_total": 4,
+        "actual_overall": "UNSUPPORTED_SCOPE",
+        "actual_states": {
+          "MONITORING_CONTEXT": "NOT_EVALUATED",
+          "TEST_TIMELINE": "NOT_EVALUATED",
+          "SHORT_INTERVAL_RATIONALE": "NOT_EVALUATED",
+          "ORDER_INTENT": "NOT_EVALUATED"
+        },
+        "expected_states": {
+          "MONITORING_CONTEXT": "NOT_EVALUATED",
+          "TEST_TIMELINE": "NOT_EVALUATED",
+          "SHORT_INTERVAL_RATIONALE": "NOT_EVALUATED",
+          "ORDER_INTENT": "NOT_EVALUATED"
+        },
+        "false_supported": [],
+        "unnecessary_insufficient": [],
+        "calls": 1,
+        "repairs": 0,
+        "seconds": 20.100461499998346,
+        "input_tokens": 16545,
+        "output_tokens": 1724
+      }
+    ],
+    "wrong_patient_inclusions": 0,
+    "encounter_mismatches_observed": 0,
+    "binding_review": "Automated source hash/pointer ownership plus AI-assisted direct source/claim encounter review; null background encounters remain unknown, not errors."
+  },
+  "resources": {
+    "actual_new_calls": 7,
+    "validation_repairs": 2,
+    "transport_retries": 0,
+    "parse_failures": 0,
+    "timeouts": 0,
+    "ledger_before": 6,
+    "ledger_after": 13,
+    "ceiling": 20,
+    "remaining": 7,
+    "input_tokens": 119822,
+    "output_tokens": 10491,
+    "summed_provider_seconds": 116.45487489993684,
+    "cost_usd": null,
+    "cost_reason": "Actual subscription billing unavailable; no estimated dollar cost substituted.",
+    "old_six_ledger_records_verified_unchanged": true,
+    "actual_ledger_path": "D:\\Codex\\Take Home Excerise\\clinical-evidence-review\\artifacts\\claims-review\\live-budget.json"
+  },
+  "offline": {
+    "baseline": {
+      "passed": 303,
+      "seconds": 4.61
+    },
+    "post_fix": {
+      "passed": 314,
+      "seconds": 5.2
+    },
+    "new_mechanism_tests": 11,
+    "new_model_calls": 0
+  },
+  "integrity": {
+    "version": "claims-review-archive-verification/1",
+    "pre_fix": {
+      "baseline": "814b1f8",
+      "tamper": "Observation VALUE changed from 5.9 to 95.9; self-contained case digest recomputed; archive/locator hashes untouched.",
+      "exit_code": 0,
+      "accepted_values": [
+        "95.9"
+      ],
+      "original_archive_reopened": false,
+      "reproduced": true
+    },
+    "post_fix": [
+      {
+        "kind": "good",
+        "exit_code": 0,
+        "stage": null,
+        "status": "NEEDS_HUMAN_REVIEW",
+        "verification": {
+          "version": "claims-review-archive-verification/1",
+          "mode": "verified_archive",
+          "original_archive_reverified": true,
+          "archive_sha256": "d61417b551e5b0997c33851b339c157421751f0ea68c18ea686ceb1850907c35",
+          "verified_source_count": 60,
+          "scope": "All supplied clinical CSV source content, row bytes, locators, patient/encounter and printed event dates.",
+          "availability_and_event_link_metadata_verified": false,
+          "retrieval_completeness_verified": false,
+          "official_origin_authenticated": false
+        },
+        "stderr": ""
+      },
+      {
+        "kind": "tampered",
+        "exit_code": 1,
+        "stage": "archive_verification",
+        "status": "REVIEW_EXECUTION_FAILED",
+        "verification": null,
+        "stderr": "archive_verification: Original row/content/identity mismatch: SYNTHEA-OBSERVATIONS-8765\n"
+      },
+      {
+        "kind": "missing",
+        "exit_code": 1,
+        "stage": "archive_verification",
+        "status": "REVIEW_EXECUTION_FAILED",
+        "verification": null,
+        "stderr": "archive_verification: Original archive unavailable: original archive not reverified\n"
+      }
+    ],
+    "installed_wheel_passed": true,
+    "wheel_sha256": "8c27a36db2c3fbebe7cb77bb102f6853caf021767ec494c396e5dd30503d239c"
+  },
+  "semantic_review": [
+    {
+      "case_id": "CONF-001",
+      "stage": "validator -> runtime repair",
+      "call_numbers": [
+        7,
+        8
+      ],
+      "finding": "First proposal identified specific glycated hemoglobin. Lexical validator accepts HbA1c/hemoglobin A1c only. Repair changed specificity to null, causing two unnecessary insufficient findings. Intent and monitoring statements were present, not omitted.",
+      "constraints": [
+        {
+          "id": "C1-AUTHENTICATED-INTENT",
+          "status": "FAIL_END_TO_END"
+        }
+      ],
+      "review_method": "AI-assisted direct original-source and visible-response audit",
+      "human_review_completed": false,
+      "semantic_precision_claimed": false
+    },
+    {
+      "case_id": "CONF-002",
+      "stage": "one bounded repair; final extraction and rules",
+      "call_numbers": [
+        9,
+        10
+      ],
+      "finding": "Planned unstarted adjustment preserved as planned, rationale null. Repair added the necessary test context to a citation. Purpose target_date remains null despite an explicit date in the source, a field-level unnecessary unknown not reflected in criterion accuracy.",
+      "constraints": [
+        {
+          "id": "C2-PLANNED-NOT-DONE",
+          "status": "PASS"
+        }
+      ],
+      "review_method": "AI-assisted direct original-source and visible-response audit",
+      "human_review_completed": false,
+      "semantic_precision_claimed": false
+    },
+    {
+      "case_id": "CONF-003",
+      "stage": "policy/rule gating",
+      "call_numbers": [
+        11
+      ],
+      "finding": "Score 8.0, monitoring assertion and null service/specimen dates preserved. Rules still evaluated criteria and supported monitoring despite missing target date; original expectations require policy selection deferred. Clinical meaning is present; the false SUPPORTED is a scope/applicability error.",
+      "constraints": [
+        {
+          "id": "C3-SERVICE-DATE-REMAINS-NULL",
+          "status": "PASS"
+        },
+        {
+          "id": "C3-PRESERVE-KNOWN-RESULT",
+          "status": "PARTIAL: facts retained, policy-deferral requirement fails"
+        }
+      ],
+      "review_method": "AI-assisted direct original-source and visible-response audit",
+      "human_review_completed": false,
+      "semantic_precision_claimed": false
+    },
+    {
+      "case_id": "CONF-004",
+      "stage": "structured reconciliation capability",
+      "call_numbers": [
+        12
+      ],
+      "finding": "Implemented dated change, rationale and order extracted. Raw targeted amendment/retransmission retained, but specialized module does not apply specimen-date supersession; competing dates remain conflicted. This is an unsupported reconciliation capability, not separate missing model facts. No latest-receipt winner was invented.",
+      "constraints": [
+        {
+          "id": "C4-DO-NOT-UNDO-AMENDMENT",
+          "status": "FAIL_RESOLUTION_NOT_IMPLEMENTED"
+        },
+        {
+          "id": "C4-SIGNATURE-SCOPE",
+          "status": "PASS_NO_NEW_SIGNATURE_INVENTED"
+        }
+      ],
+      "review_method": "AI-assisted direct original-source and visible-response audit",
+      "human_review_completed": false,
+      "semantic_precision_claimed": false
+    },
+    {
+      "case_id": "CONF-005",
+      "stage": "deterministic patient isolation",
+      "call_numbers": [],
+      "finding": "Other-patient records with reused encounter token excluded before note extraction. No borrowed treatment change or extra model call.",
+      "constraints": [
+        {
+          "id": "C5-ENCOUNTER-TOKEN-SCOPE",
+          "status": "PASS"
+        }
+      ],
+      "review_method": "AI-assisted direct original-source and visible-response audit",
+      "human_review_completed": false,
+      "semantic_precision_claimed": false
+    },
+    {
+      "case_id": "CONF-006",
+      "stage": "note facts -> out-of-scope rules",
+      "call_numbers": [
+        13
+      ],
+      "finding": "Initial diagnostic purpose retained; no disease diagnosis inferred from numeric result; all criteria NOT_EVALUATED. diabetes_context=false has a statement scoped to absent established diagnosis in supplied history, not proof of absent disease; broad reuse of this boolean remains a semantic ambiguity.",
+      "constraints": [
+        {
+          "id": "C6-PURPOSE-BEFORE-CONVENIENCE",
+          "status": "PASS"
+        },
+        {
+          "id": "C6-NO-DIAGNOSIS-FROM-RESULT",
+          "status": "PASS"
+        },
+        {
+          "id": "C6-SCOPE-NOT-REAL-PAYER-DECISION",
+          "status": "PASS"
+        }
+      ],
+      "review_method": "AI-assisted direct original-source and visible-response audit",
+      "human_review_completed": false,
+      "semantic_precision_claimed": false
+    }
+  ],
+  "policy_status": "draft_ai_reviewed",
+  "human_review_completed": false,
+  "clinical_expert_review_completed": false,
+  "local_results_index": {
+    "freeze": "artifacts/confirmation-round-01/freeze.json",
+    "seal": "artifacts/confirmation-round-01/prediction-seal.json",
+    "predictions": "artifacts/confirmation-round-01/predictions",
+    "evaluation": "artifacts/confirmation-round-01/evaluation/results.json",
+    "semantic_audit": "artifacts/confirmation-round-01/evaluation/semantic-audit.json",
+    "post_fix": "artifacts/integrity-round-01/post-fix-verification.json",
+    "installed": "artifacts/integrity-round-01/installed-check.json"
+  },
+  "ancestry": {
+    "remote_main_at_delivery": "962342103a5387188bcda7a86029014fc8c7c778",
+    "remote_previous_feature_at_delivery": "1b2ceac5522f2790e18407f3d02ba60dcbb0a2e9",
+    "main_is_ancestor": true,
+    "check_stage": "Final delivery; frozen runtime equivalence was checked before predictions."
+  },
+  "demonstration": {
+    "raw_source": "Fresh offline verified-archive run, 60 supplied clinical sources, zero model calls; all four findings insufficient.",
+    "note_case": "DEV-002, SYN-DEV-P002, historical actual final-prompt call 6 rendered again; not new inference or the raw-source patient.",
+    "note_summary_local": "artifacts/integrity-round-01/DEV-002-historical-live-summary.md"
+  }
+}
