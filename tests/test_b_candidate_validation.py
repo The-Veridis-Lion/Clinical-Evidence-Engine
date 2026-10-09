@@ -65,7 +65,7 @@ def test_actual_cli_selector_and_unchanged_default(variant, monkeypatch, tmp_pat
     if variant:
         args += ['--note-prompt', variant]
     assert cli.main(args) == 0
-    assert fake.requests[0][0].startswith(PROMPT_B if variant == 'B' else PROMPT)
+    assert fake.requests[0][0].startswith(PROMPT if variant == 'A' else PROMPT_B)
 
 
 def test_terminal_deadline_guard_never_reopens(tmp_path):

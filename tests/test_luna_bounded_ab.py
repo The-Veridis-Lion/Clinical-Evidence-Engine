@@ -24,7 +24,7 @@ def test_prompt_only_and_default_unchanged():
     text='HbA1c request.'
     source=dict(patient_id='SYN',source_id='NOTE',encounter_id=None,recorded_at=None,available_at=None,
                 line_anchors=line_anchors('NOTE',text))
-    a,sa=note_request(source,{})
+    a,sa=note_request(source,{},prompt_variant='A')
     b,sb=note_request(source,{},prompt_variant='B')
     assert a.startswith(PROMPT) and b.startswith(PROMPT_B) and sa==sb
     assert a[len(PROMPT):]==b[len(PROMPT_B):]

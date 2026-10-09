@@ -184,10 +184,10 @@ flowchart LR
 The eight [synthetic documents](examples/synthetic/documents) describe two independent
 patients in April 2026. They are engineering fixtures, not real clinical records.
 
-For Cedar's `LAB-G7`, attendance states **09:12–10:46**, a separate activity record
-states a **09:41–09:49** pause, and a signed correction replaces departure with **10:31**.
+For Cedar's `LAB-G7`, attendance states **09:12â€“10:46**, a separate activity record
+states a **09:41â€“09:49** pause, and a signed correction replaces departure with **10:31**.
 A subsequent copy repeats the old departure. Grounded claims preserve each statement;
-reconciliation retains the correction; calculation yields **79 − 8 = 71 minutes**;
+reconciliation retains the correction; calculation yields **79 âˆ’ 8 = 71 minutes**;
 the audit links arrival, corrected departure, and pause to their respective source passages.
 
 Cedar's second encounter has unresolved signed **37 / 49 minute** claims, so totals
@@ -259,7 +259,7 @@ misses wording such as "115 patient-present minutes", so compliance provenance r
 partial coverage even though the full plan quote remains available.
 
 The engine assumes one patient per document, explicit encounter identities, same-day
-local intervals, and quantitative Monday–Sunday plans. Missing midweek applicability
+local intervals, and quantitative Mondayâ€“Sunday plans. Missing midweek applicability
 rules remain ambiguous. The baseline live extractor does not emit functional-action
 claims, and neither does the optimized contract; structured stored actions are supported
 by the domain and progress queries. Missing dates and scores are represented explicitly,
@@ -315,3 +315,12 @@ See the [semantic contract](docs/reliability-contract.md),
 [machine summary](docs/reliability-validation.json) for denominators, versions,
 call ledger, preserved failures and reproduction. No human/expert review or payment
 decision is claimed. The original six exposed cases are regression material only.
+
+### Claims-review research default
+
+The ordinary claims-review CLI and public `run_review()` now select the original
+B prompt when `note_prompt` is omitted. Use `--note-prompt A` (Python:
+`note_prompt="A"`) for explicit rollback. This research choice does not change
+historical scores or authorize clinical deployment or payment decisions. The
+packet records the selected base prompt hash; application extraction caching
+remains disabled. Therapy extraction is unchanged.

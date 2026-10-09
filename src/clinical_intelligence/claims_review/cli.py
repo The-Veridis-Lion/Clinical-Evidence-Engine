@@ -6,6 +6,7 @@ import sys
 from pathlib import Path
 from time import perf_counter
 from .contracts import CaseInput, ReviewPacket
+from .config import DEFAULT_NOTE_PROMPT
 from .prepare import prepare_case
 from .review import run_review, load_policy, markdown, concise_markdown
 from .note_extractor import BudgetLedger, BudgetedProvider
@@ -63,7 +64,7 @@ def main(argv=None):
     run.add_argument('--format',choices=['json','markdown','summary'],default='json');run.add_argument('--output',type=Path)
     run.add_argument('--model',default='gpt-6-luna');run.add_argument('--reasoning',default='high',choices=['none','low','medium','high','xhigh','max'])
     run.add_argument('--timeout',type=int,default=180)
-    run.add_argument('--note-prompt',choices=['A','B'],default='A',help='B is an explicit experimental prompt; A remains the default.')
+    run.add_argument('--note-prompt',choices=['A','B'],default=DEFAULT_NOTE_PROMPT,help='Original B is the normal research default; A is an explicit rollback.')
     run.add_argument('--ledger',type=Path,default=Path('artifacts/claims-review/live-budget.json'))
     run.add_argument('--trace-directory',type=Path,default=Path('artifacts/claims-review/live-calls'))
     run.add_argument('--policy-version')

@@ -8,7 +8,9 @@ from pathlib import Path
 from . import __version__
 from .contracts import Citation, CriterionResult, PolicyReference, ReviewPacket
 from .facts import structured_facts, test_timeline
-from .note_extractor import extract_note
+from .note_extractor import extract_note, PROMPT
+from .note_prompt_b import PROMPT_B
+from .config import DEFAULT_NOTE_PROMPT
 from .prepare import prepare_case, digest
 from .applicability import check as check_applicability
 
@@ -188,7 +190,7 @@ def evaluate(case,prepared,facts,notes,policy,mode,usage=None,requested_policy=N
         identity=identity,policy_review_status=policy['review_status'],human_review_completed=policy['human_review_completed'],clinical_expert_review_completed=policy['clinical_expert_review_completed'])
 
 
-def run_review(case,*,mode='structured-only',provider=None,input_label='case.json',usage=None,requested_policy=None,note_prompt='A'):
+def run_review(case,*,mode='structured-only',provider=None,input_label='case.json',usage=None,requested_policy=None,note_prompt=DEFAULT_NOTE_PROMPT):
     if mode not in {'structured-only','live','fixture'}:raise ValueError('Unsupported review mode')
     if mode!='structured-only' and provider is None:raise ValueError('Note mode requires an explicitly injected provider')
     policy=load_policy();prepared=prepare_case(case,policy,input_label=input_label);facts=structured_facts(prepared);notes=[]
@@ -198,7 +200,12 @@ def run_review(case,*,mode='structured-only',provider=None,input_label='case.jso
         extracted,record=extract_note(provider,source,case.claim.model_dump(mode='json'),case.review_context.as_of,prompt_variant=note_prompt)
         facts+=extracted;notes.append(record)
     actual_usage=usage() if callable(usage) else usage
-    return evaluate(case,prepared,facts,notes,policy,mode,actual_usage,requested_policy)
+    packet=evaluate(case,prepared,facts,notes,policy,mode,actual_usage,requested_policy)
+    selection={'note_prompt':note_prompt,'prompt_id':'claims-note-prompt-b/1' if note_prompt=='B' else 'claims-review-note/3',
+        'base_prompt_sha256':hashlib.sha256((PROMPT_B if note_prompt=='B' else PROMPT).encode()).hexdigest()}
+    packet.execution['note_prompt_selection']=selection
+    packet.identity['review_input_sha256']=digest({'prior_review_input_sha256':packet.identity['review_input_sha256'],**selection})
+    return packet
 
 
 def markdown(packet):

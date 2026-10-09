@@ -7,6 +7,7 @@ from datetime import datetime, timezone
 from pydantic import ValidationError
 from .contracts import Citation, EvidenceFact, NoteProposal
 from .prepare import digest
+from .config import DEFAULT_NOTE_PROMPT
 from .facts import source_key
 from .grounding import terminology, supports_monitoring_test, explicit_dates, provider_grounded, authentication
 
@@ -74,7 +75,7 @@ def preserves(original,final):
     return False
 
 
-def note_request(source,claim,*,prompt_variant='A'):
+def note_request(source,claim,*,prompt_variant=DEFAULT_NOTE_PROMPT):
     if prompt_variant not in {'A','B'}:raise ValueError('Unknown note prompt variant')
     from .note_prompt_b import PROMPT_B
     schema=NoteProposal.model_json_schema()
@@ -144,7 +145,7 @@ def adapt(proposal,source):
     return facts
 
 
-def extract_note(provider:NoteProvider,source,claim,as_of,*,prompt_variant='A'):
+def extract_note(provider:NoteProvider,source,claim,as_of,*,prompt_variant=DEFAULT_NOTE_PROMPT):
     prompt,schema=note_request(source,claim,prompt_variant=prompt_variant);raw=None;calls=0;failures=[];protected=[]
     for attempt in range(2):
         request=prompt if attempt==0 else prompt+'\nRUNTIME VALIDATION ERRORS:\n'+'\n'.join(failures)+'\nPREVIOUS PROPOSAL:\n'+json.dumps(raw,ensure_ascii=False)+'\nRepair only source-supported assertions; do not invent values. Preserve independently valid assertions and their known fields. Do not replace them with null to satisfy validation.'
