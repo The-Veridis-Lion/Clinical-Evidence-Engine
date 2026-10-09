@@ -1,0 +1,36 @@
+{
+  "schema_version": "claims-review-prep/0.1",
+  "case_id": "N04",
+  "claim": {
+    "claim_id": "CONSTRUCTED-N04",
+    "patient_id": "SYN-NEW-N04",
+    "encounter_id": "VISIT-N04",
+    "service_date": null,
+    "service_concept": "hba1c_monitoring",
+    "procedure_code": null,
+    "code_system": null,
+    "mapping_status": "constructed_demo",
+    "data_origin": "constructed_synthetic"
+  },
+  "review_context": {
+    "as_of": "2027-06-01",
+    "history_start": "2026-01-01",
+    "history_end": "2027-05-31",
+    "history_completeness": "not_asserted"
+  },
+  "sources": [
+    {
+      "source_id": "N04-NOTE",
+      "patient_id": "SYN-NEW-N04",
+      "encounter_id": "VISIT-N04",
+      "available_at": "2027-05-31",
+      "origin": "constructed_synthetic",
+      "source_kind": "synthetic_note",
+      "recorded_at": "2027-05-30",
+      "event_date": null,
+      "record_type": "note",
+      "event_link_id": null,
+      "content": "Multidisciplinary record conference\nCurrent clinic assessment states that this patient has established diabetes.\nA competing current consultant assessment states that the same patient does not have established diabetes. The conference does not resolve this disagreement.\nCedar request: Dr. Leon Park asks for HbA1c monitoring with collection September 3, 2026.\nWillow request: Dr. Bea Holt asks for a separate HbA1c for initial diagnosis with collection September 24, 2026.\nSigned by Dr. Leon Park on August 21, 2026; this authenticates Cedar only.\nWillow is explicitly unsigned. Cedar and Willow are distinct requests, not copied versions of one request.\nConference purpose\nThe participants met to organize the available outpatient records before the next patient discussion. The conference did not function as a new diagnostic consultation. Its purpose was to identify which assertions were present, which requests were active in the supplied material, and which questions required direct clarification from the responsible clinicians. The team reviewed the two current assessments as competing source statements. Their presence in one conference note does not make either one a historical statement, and the conference date does not automatically choose which assessment has authority.\nHandling the disagreement\nThe participants acknowledged that the records use different diagnostic descriptions for the same patient. They did not record a resolution, an amendment, or a withdrawal of either assertion. The coordinator was asked to contact the authors to clarify what supporting documentation they had reviewed. That future contact has not occurred in this note. A model or reviewer should not replace the disagreement with a single confident diagnosis based on the order purpose, a familiar disease pattern, or whichever line appears last in the document. Both assessments remain visible with their source scope.\nSeparate requests\nThe two request labels were assigned in the clinical paperwork to keep the appointments apart. Each request has its own named clinician, purpose and collection date. Both concern HbA1c, but shared analyte and patient identity do not make them the same event. The conference did not cancel either request or state that one supersedes the other. The staff will ask the clinicians whether both are needed, but an administrative question is not itself a documented cancellation. A common file folder or a single encounter discussion also does not establish that both collections have already happened.\nSignature scope\nThe supplied signature is specifically limited to the named monitoring request. It should not be copied onto the separate diagnostic request. The unsigned status of the latter is explicit. The conference chair's attendance notation merely records participation and is not presented as clinical authentication of all attached paperwork. Neither the chair nor the coordinator is identified as the original reporter of each diagnostic assertion. Their roles in compiling the conference summary are different from the clinicians' roles in producing the assessment and requests.\nPractical arrangements\nThe patient will receive one explanation of which appointments are in the current packet. The scheduling team may offer directions to the two collection visits, but the conference provides no new appointment date beyond those already stated. No specimen was collected during the meeting. A request to send reminder messages is not an actual test result, and the office calendar is not an assay record. The patient has not expressed refusal or cancellation in the material reviewed. No medication adjustment, implemented change, or result number is documented by this conference.\nLimits and next steps\nThe supplied records are incomplete for resolving the competing diagnostic assessments. The conference notes identify the need for clarification without inferring that missing documentation proves absence of disease. They also preserve the distinction between two requests and two completed tests: only requests are established here. The packet contains no insurer approval, frequency-rule determination, billing code, laboratory result or amendment to an original laboratory source. A future clarification may change the derived view, but it must be recorded as a new source with appropriate scope rather than silently rewriting this summary. The current disagreement and the limited signature scope remain part of the record delivered to the next reviewer."
+    }
+  ]
+}

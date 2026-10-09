@@ -1,0 +1,36 @@
+{
+  "schema_version": "claims-review-prep/0.1",
+  "case_id": "N03",
+  "claim": {
+    "claim_id": "CONSTRUCTED-N03",
+    "patient_id": "SYN-NEW-N03",
+    "encounter_id": "VISIT-N03",
+    "service_date": null,
+    "service_concept": "hba1c_monitoring",
+    "procedure_code": null,
+    "code_system": null,
+    "mapping_status": "constructed_demo",
+    "data_origin": "constructed_synthetic"
+  },
+  "review_context": {
+    "as_of": "2027-06-01",
+    "history_start": "2026-01-01",
+    "history_end": "2027-05-31",
+    "history_completeness": "not_asserted"
+  },
+  "sources": [
+    {
+      "source_id": "N03-NOTE",
+      "patient_id": "SYN-NEW-N03",
+      "encounter_id": "VISIT-N03",
+      "available_at": "2027-05-31",
+      "origin": "constructed_synthetic",
+      "source_kind": "synthetic_note",
+      "recorded_at": "2027-05-30",
+      "event_date": null,
+      "record_type": "note",
+      "event_link_id": null,
+      "content": "Laboratory correspondence review\nHistorical HbA1c result: 6.4 percent; specimen collected January 22, 2026.\nA second historical HbA1c result was 7.1 percent; its specimen was collected April 16, 2026.\nCopies of these two reports arrived at the records office May 28, 2026. Receipt did not involve new blood collection.\nDr. Priya Sen requests a repeat HbA1c for monitoring in October 2026; no day is specified.\nThe supplied correspondence does not document the patient diagnosis or a test-specific clinical rationale.\nNo signature status is supplied for Dr. Priya Sen or the repeat request.\nCorrespondence inventory\nThe records office received a small set of laboratory copies and an accompanying request from the outpatient clinic. The two result lines reproduced above are the results present in this correspondence. The package also contains mailing information and a cover sheet with the clinic's return telephone number. The records clerk checked that the patient identifier on the cover sheet and on the copies agreed. The clerk did not draw blood or perform an assay. The date on the incoming-mail stamp describes receipt of papers. It does not replace either specimen date, and it does not show that another clinical test occurred on the receipt day.\nDocument handling\nThe clerk placed the copies in the patient folder without changing the source values. The original issuing laboratories are not named in the supplied text. A handwritten tick beside each page indicates that the page was present when the envelope was opened; it is not a clinical signature. The correspondence contains no explicit correction or amendment to either result. No record asserts that the second specimen belongs to the first event. They remain two separately described historical specimens because the text gives distinct collection dates, not because the result numbers are different.\nRequest clarification\nThe physician's repeat request identifies a month for the next collection but does not assign a day. The clinic has not supplied a collection appointment in this correspondence. The administrative team plans to contact the patient about possible dates, but that intention does not turn the first day, the last day, or any other day of the month into a documented test date. A request for monitoring is retained as its stated purpose without treating it as independent confirmation of a diagnosis. The cover letter gives no explanation of a short interval, altered control, or an implemented medication adjustment.\nSource and reporting limits\nThe historical result numbers are copied as written. The office did not infer disease control from them or produce an assessment of what they mean clinically. The request's clinician is identified in the correspondence; no separate statement identifies the original author of the historical laboratory reports. The name on the incoming envelope belongs to the sending office's administrative contact and should not be substituted for the requesting physician. Likewise, an office stamp cannot authenticate the physician's request when the source does not describe its signature status.\nCommunication tasks\nThe patient was to be told that the receiving clinic had obtained the reports. That message communicates source availability and not a new clinical finding. The records office was asked to preserve the page order so that the clinic could inspect each specimen date. The staff member preparing the notification did not schedule a blood draw during that contact. If the patient later chooses a date, a separate appointment record will be needed. No such record is included here. Neither sending nor receiving the notification changes the clinical facts already printed on the reports.\nCompleteness statement\nThis is a bounded correspondence packet, not a download of all laboratory activity for the patient. Other visits, tests and reports could exist outside it. The records office makes no claim that the two visible results comprise a complete test history. The note also does not describe whether a clinician has reviewed all earlier documents. The requested repeat remains planned, with month-level precision, and the unknown day remains unknown. A later clinical review may add context, but this packet itself supplies no policy judgment, insurance status, procedure code, medical-necessity approval or payment determination."
+    }
+  ]
+}

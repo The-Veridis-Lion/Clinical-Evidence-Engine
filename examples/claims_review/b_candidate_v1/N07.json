@@ -1,0 +1,36 @@
+{
+  "schema_version": "claims-review-prep/0.1",
+  "case_id": "N07",
+  "claim": {
+    "claim_id": "CONSTRUCTED-N07",
+    "patient_id": "SYN-NEW-N07",
+    "encounter_id": "VISIT-N07",
+    "service_date": null,
+    "service_concept": "hba1c_monitoring",
+    "procedure_code": null,
+    "code_system": null,
+    "mapping_status": "constructed_demo",
+    "data_origin": "constructed_synthetic"
+  },
+  "review_context": {
+    "as_of": "2027-06-01",
+    "history_start": "2026-01-01",
+    "history_end": "2027-05-31",
+    "history_completeness": "not_asserted"
+  },
+  "sources": [
+    {
+      "source_id": "N07-NOTE",
+      "patient_id": "SYN-NEW-N07",
+      "encounter_id": "VISIT-N07",
+      "available_at": "2027-05-31",
+      "origin": "constructed_synthetic",
+      "source_kind": "synthetic_note",
+      "recorded_at": "2027-05-30",
+      "event_date": null,
+      "record_type": "note",
+      "event_link_id": null,
+      "content": "Diagnostic consultation letter\nThe current clinical conclusion is that this patient does not have established diabetes.\nDr. Ivo Mercer requests hemoglobin A1c for initial diagnosis, not monitoring.\nCollection is booked for February 18, 2027 for the test requested in the preceding paragraph.\nSigned by Dr. Ivo Mercer on February 1, 2027; this authenticates the consultation conclusion and the HbA1c request.\nThe letter summarizes an initial consultation and provides the collection arrangement to the receiving office. It does not certify that the collection has taken place. The clinician distinguished a current diagnostic conclusion from the purpose of obtaining more information. The patient's questions about finding the collection center were answered using the usual written directions. A separate review appointment will be discussed after the report is available, but no date or result for that visit is included here. The letter contains no historical HbA1c measurement, medication adjustment, or statement that treatment has already been changed. Its signature is scoped to the stated conclusion and request. The date beside the signature is not the specimen date. No insurer, payment outcome or procedure code is assigned in this communication."
+    }
+  ]
+}

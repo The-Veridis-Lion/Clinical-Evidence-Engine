@@ -1,0 +1,1865 @@
+{
+  "version": "b-candidate-source-constraints/1",
+  "reviewer_type": "AI_ASSISTED",
+  "human_review_completed": false,
+  "designer_blind": false,
+  "cases": {
+    "N01": {
+      "facts": [
+        {
+          "constraint_id": "N01:P1",
+          "proposition": "Current assessment: established type 2 diabetes remains an active diagnosis for this patient.",
+          "kind": "diabetes_context",
+          "frame": "diabetes_context",
+          "identity_lines": [
+            2,
+            8
+          ],
+          "fields": {
+            "value": [
+              true
+            ],
+            "temporal_status": [
+              "actual"
+            ]
+          }
+        },
+        {
+          "constraint_id": "N01:P2",
+          "proposition": "Historical HbA1c result: 7.2 percent, specimen collected March 14, 2026.",
+          "kind": "test_mention",
+          "frame": "test_result",
+          "identity_lines": [
+            3
+          ],
+          "fields": {
+            "value": [
+              7.2
+            ],
+            "fact_date": [
+              "2026-03-14"
+            ],
+            "date_role": [
+              "actual_test"
+            ],
+            "temporal_status": [
+              "historical"
+            ]
+          },
+          "numeric_value": true,
+          "bare_numeric_allowed": true
+        },
+        {
+          "constraint_id": "N01:P3",
+          "proposition": "The patient actually began the agreed medication adjustment on June 2, 2026.",
+          "kind": "regimen_change",
+          "frame": "regimen_state",
+          "identity_lines": [
+            4
+          ],
+          "fields": {
+            "value": [
+              true
+            ],
+            "fact_date": [
+              "2026-06-02"
+            ],
+            "date_role": [
+              "adjustment_start"
+            ],
+            "temporal_status": [
+              "actual"
+            ]
+          }
+        },
+        {
+          "constraint_id": "N01:P4",
+          "proposition": "Dr. Mara Kent issued the HbA1c monitoring order on June 6, 2026.",
+          "kind": "order_intent",
+          "frame": "order_intent",
+          "identity_lines": [
+            5,
+            6,
+            8
+          ],
+          "fields": {
+            "value": [
+              true
+            ],
+            "target_date": [
+              "2026-07-09"
+            ],
+            "provider": [
+              "Dr. Mara Kent",
+              "Mara Kent"
+            ],
+            "authenticated": [
+              true
+            ],
+            "temporal_status": [
+              "planned"
+            ]
+          }
+        },
+        {
+          "constraint_id": "N01:P5",
+          "proposition": "Dr. Mara Kent issued the HbA1c monitoring order on June 6, 2026.",
+          "kind": "purpose",
+          "frame": "purpose",
+          "identity_lines": [
+            5,
+            6,
+            7
+          ],
+          "fields": {
+            "value": [
+              "monitoring"
+            ],
+            "target_date": [
+              "2026-07-09"
+            ],
+            "test_specific": [
+              true
+            ]
+          }
+        },
+        {
+          "constraint_id": "N01:P6",
+          "proposition": "The patient actually began the agreed medication adjustment on June 2, 2026.",
+          "kind": "clinical_rationale",
+          "frame": "clinical_rationale",
+          "identity_lines": [
+            4,
+            5,
+            6,
+            7
+          ],
+          "fields": {
+            "value": [
+              "implemented_change"
+            ],
+            "target_date": [
+              "2026-07-09"
+            ],
+            "test_specific": [
+              true
+            ]
+          }
+        }
+      ],
+      "source_sha256": "346b655fcab3e975148bfdd812f942853a0f017cdf0baf4fceb3bc47dd3cfa54",
+      "no_target": false,
+      "correct_fixture": [
+        {
+          "kind": "diabetes_context",
+          "statement": "Current assessment: established type 2 diabetes remains an active diagnosis for this patient.",
+          "value": true,
+          "fact_date": null,
+          "date_role": "unknown",
+          "temporal_status": "actual",
+          "target_date": null,
+          "test_specific": null,
+          "provider": null,
+          "reporter": null,
+          "authenticated": null,
+          "span_ids": [
+            "N01-NOTE:L002",
+            "N01-NOTE:L008"
+          ]
+        },
+        {
+          "kind": "test_mention",
+          "statement": "Historical HbA1c result: 7.2 percent, specimen collected March 14, 2026.",
+          "value": 7.2,
+          "fact_date": "2026-03-14",
+          "date_role": "actual_test",
+          "temporal_status": "historical",
+          "target_date": null,
+          "test_specific": null,
+          "provider": null,
+          "reporter": null,
+          "authenticated": null,
+          "span_ids": [
+            "N01-NOTE:L003"
+          ]
+        },
+        {
+          "kind": "regimen_change",
+          "statement": "The patient actually began the agreed medication adjustment on June 2, 2026.",
+          "value": true,
+          "fact_date": "2026-06-02",
+          "date_role": "adjustment_start",
+          "temporal_status": "actual",
+          "target_date": null,
+          "test_specific": null,
+          "provider": null,
+          "reporter": null,
+          "authenticated": null,
+          "span_ids": [
+            "N01-NOTE:L004"
+          ]
+        },
+        {
+          "kind": "order_intent",
+          "statement": "Dr. Mara Kent issued the HbA1c monitoring order on June 6, 2026.",
+          "value": true,
+          "fact_date": null,
+          "date_role": "unknown",
+          "temporal_status": "planned",
+          "target_date": "2026-07-09",
+          "test_specific": null,
+          "provider": "Dr. Mara Kent",
+          "reporter": null,
+          "authenticated": true,
+          "span_ids": [
+            "N01-NOTE:L005",
+            "N01-NOTE:L006",
+            "N01-NOTE:L008"
+          ]
+        },
+        {
+          "kind": "purpose",
+          "statement": "Dr. Mara Kent issued the HbA1c monitoring order on June 6, 2026.",
+          "value": "monitoring",
+          "fact_date": null,
+          "date_role": "unknown",
+          "temporal_status": "unknown",
+          "target_date": "2026-07-09",
+          "test_specific": true,
+          "provider": null,
+          "reporter": null,
+          "authenticated": null,
+          "span_ids": [
+            "N01-NOTE:L005",
+            "N01-NOTE:L006",
+            "N01-NOTE:L007"
+          ]
+        },
+        {
+          "kind": "clinical_rationale",
+          "statement": "The patient actually began the agreed medication adjustment on June 2, 2026.",
+          "value": "implemented_change",
+          "fact_date": null,
+          "date_role": "unknown",
+          "temporal_status": "unknown",
+          "target_date": "2026-07-09",
+          "test_specific": true,
+          "provider": null,
+          "reporter": null,
+          "authenticated": null,
+          "span_ids": [
+            "N01-NOTE:L004",
+            "N01-NOTE:L005",
+            "N01-NOTE:L006",
+            "N01-NOTE:L007"
+          ]
+        }
+      ],
+      "family": "outpatient_long",
+      "length_stratum": "long"
+    },
+    "N02": {
+      "facts": [
+        {
+          "constraint_id": "N02:P1",
+          "proposition": "The supplied discharge summary does not document whether diabetes is established; it does not state that the patient is disease-free.",
+          "kind": "diabetes_context",
+          "frame": "diabetes_context",
+          "identity_lines": [
+            2
+          ],
+          "fields": {
+            "value": [
+              null
+            ],
+            "temporal_status": [
+              "unknown"
+            ]
+          }
+        },
+        {
+          "constraint_id": "N02:P2",
+          "proposition": "Dr. Tomas Vale requests HbA1c for routine monitoring; collection is to occur August 4, 2026.",
+          "kind": "order_intent",
+          "frame": "order_intent",
+          "identity_lines": [
+            3,
+            6,
+            7
+          ],
+          "fields": {
+            "value": [
+              true
+            ],
+            "target_date": [
+              "2026-08-04"
+            ],
+            "provider": [
+              "Dr. Tomas Vale",
+              "Tomas Vale"
+            ],
+            "authenticated": [
+              false
+            ],
+            "temporal_status": [
+              "planned"
+            ]
+          }
+        },
+        {
+          "constraint_id": "N02:P3",
+          "proposition": "Dr. Tomas Vale requests HbA1c for routine monitoring; collection is to occur August 4, 2026.",
+          "kind": "purpose",
+          "frame": "purpose",
+          "identity_lines": [
+            3
+          ],
+          "fields": {
+            "value": [
+              "monitoring"
+            ],
+            "target_date": [
+              "2026-08-04"
+            ],
+            "test_specific": [
+              true
+            ]
+          }
+        },
+        {
+          "constraint_id": "N02:P4",
+          "proposition": "The suggested medication change has not been started as of this discussion.",
+          "kind": "regimen_change",
+          "frame": "regimen_state",
+          "identity_lines": [
+            4
+          ],
+          "fields": {
+            "value": [
+              false
+            ],
+            "temporal_status": [
+              "actual"
+            ]
+          }
+        }
+      ],
+      "source_sha256": "60cda7358afb0a3ba3346af66ed57f746f9b92515e50032e33289e595a219a02",
+      "no_target": false,
+      "correct_fixture": [
+        {
+          "kind": "diabetes_context",
+          "statement": "The supplied discharge summary does not document whether diabetes is established; it does not state that the patient is disease-free.",
+          "value": null,
+          "fact_date": null,
+          "date_role": "unknown",
+          "temporal_status": "unknown",
+          "target_date": null,
+          "test_specific": null,
+          "provider": null,
+          "reporter": null,
+          "authenticated": null,
+          "span_ids": [
+            "N02-NOTE:L002"
+          ]
+        },
+        {
+          "kind": "order_intent",
+          "statement": "Dr. Tomas Vale requests HbA1c for routine monitoring; collection is to occur August 4, 2026.",
+          "value": true,
+          "fact_date": null,
+          "date_role": "unknown",
+          "temporal_status": "planned",
+          "target_date": "2026-08-04",
+          "test_specific": null,
+          "provider": "Dr. Tomas Vale",
+          "reporter": null,
+          "authenticated": false,
+          "span_ids": [
+            "N02-NOTE:L003",
+            "N02-NOTE:L006",
+            "N02-NOTE:L007"
+          ]
+        },
+        {
+          "kind": "purpose",
+          "statement": "Dr. Tomas Vale requests HbA1c for routine monitoring; collection is to occur August 4, 2026.",
+          "value": "monitoring",
+          "fact_date": null,
+          "date_role": "unknown",
+          "temporal_status": "unknown",
+          "target_date": "2026-08-04",
+          "test_specific": true,
+          "provider": null,
+          "reporter": null,
+          "authenticated": null,
+          "span_ids": [
+            "N02-NOTE:L003"
+          ]
+        },
+        {
+          "kind": "regimen_change",
+          "statement": "The suggested medication change has not been started as of this discussion.",
+          "value": false,
+          "fact_date": null,
+          "date_role": "unknown",
+          "temporal_status": "actual",
+          "target_date": null,
+          "test_specific": null,
+          "provider": null,
+          "reporter": null,
+          "authenticated": null,
+          "span_ids": [
+            "N02-NOTE:L004"
+          ]
+        }
+      ],
+      "family": "discharge_long",
+      "length_stratum": "long"
+    },
+    "N03": {
+      "facts": [
+        {
+          "constraint_id": "N03:P1",
+          "proposition": "Historical HbA1c result: 6.4 percent; specimen collected January 22, 2026.",
+          "kind": "test_mention",
+          "frame": "test_result",
+          "identity_lines": [
+            2
+          ],
+          "fields": {
+            "value": [
+              6.4
+            ],
+            "fact_date": [
+              "2026-01-22"
+            ],
+            "date_role": [
+              "actual_test"
+            ],
+            "temporal_status": [
+              "historical"
+            ]
+          },
+          "event_label": "event-1",
+          "event_primary_lines": [
+            2
+          ],
+          "competing_event_lines": [
+            3
+          ],
+          "competing_labels": [],
+          "numeric_value": true,
+          "bare_numeric_allowed": true
+        },
+        {
+          "constraint_id": "N03:P2",
+          "proposition": "A second historical HbA1c result was 7.1 percent; its specimen was collected April 16, 2026.",
+          "kind": "test_mention",
+          "frame": "test_result",
+          "identity_lines": [
+            3
+          ],
+          "fields": {
+            "value": [
+              7.1
+            ],
+            "fact_date": [
+              "2026-04-16"
+            ],
+            "date_role": [
+              "actual_test"
+            ],
+            "temporal_status": [
+              "historical"
+            ]
+          },
+          "event_label": "event-2",
+          "event_primary_lines": [
+            3
+          ],
+          "competing_event_lines": [
+            2
+          ],
+          "competing_labels": [],
+          "numeric_value": true,
+          "bare_numeric_allowed": true
+        },
+        {
+          "constraint_id": "N03:P3",
+          "proposition": "Dr. Priya Sen requests a repeat HbA1c for monitoring in October 2026; no day is specified.",
+          "kind": "order_intent",
+          "frame": "order_intent",
+          "identity_lines": [
+            5,
+            7
+          ],
+          "fields": {
+            "value": [
+              true
+            ],
+            "target_date": [
+              null
+            ],
+            "provider": [
+              "Dr. Priya Sen",
+              "Priya Sen"
+            ],
+            "authenticated": [
+              null
+            ],
+            "temporal_status": [
+              "planned"
+            ]
+          }
+        },
+        {
+          "constraint_id": "N03:P4",
+          "proposition": "Dr. Priya Sen requests a repeat HbA1c for monitoring in October 2026; no day is specified.",
+          "kind": "purpose",
+          "frame": "purpose",
+          "identity_lines": [
+            5
+          ],
+          "fields": {
+            "value": [
+              "monitoring"
+            ],
+            "target_date": [
+              null
+            ],
+            "test_specific": [
+              true
+            ]
+          }
+        },
+        {
+          "constraint_id": "N03:P5",
+          "proposition": "The supplied correspondence does not document the patient diagnosis or a test-specific clinical rationale.",
+          "kind": "diabetes_context",
+          "frame": "diabetes_context",
+          "identity_lines": [
+            6
+          ],
+          "fields": {
+            "value": [
+              null
+            ]
+          }
+        }
+      ],
+      "source_sha256": "273593f0385b033dd2017b6bac9cd9ccfb980ae94740db33f8a0b8d1b2fccce9",
+      "no_target": false,
+      "correct_fixture": [
+        {
+          "kind": "test_mention",
+          "statement": "Historical HbA1c result: 6.4 percent; specimen collected January 22, 2026.",
+          "value": 6.4,
+          "fact_date": "2026-01-22",
+          "date_role": "actual_test",
+          "temporal_status": "historical",
+          "target_date": null,
+          "test_specific": null,
+          "provider": null,
+          "reporter": null,
+          "authenticated": null,
+          "span_ids": [
+            "N03-NOTE:L002"
+          ]
+        },
+        {
+          "kind": "test_mention",
+          "statement": "A second historical HbA1c result was 7.1 percent; its specimen was collected April 16, 2026.",
+          "value": 7.1,
+          "fact_date": "2026-04-16",
+          "date_role": "actual_test",
+          "temporal_status": "historical",
+          "target_date": null,
+          "test_specific": null,
+          "provider": null,
+          "reporter": null,
+          "authenticated": null,
+          "span_ids": [
+            "N03-NOTE:L003"
+          ]
+        },
+        {
+          "kind": "order_intent",
+          "statement": "Dr. Priya Sen requests a repeat HbA1c for monitoring in October 2026; no day is specified.",
+          "value": true,
+          "fact_date": null,
+          "date_role": "unknown",
+          "temporal_status": "planned",
+          "target_date": null,
+          "test_specific": null,
+          "provider": "Dr. Priya Sen",
+          "reporter": null,
+          "authenticated": null,
+          "span_ids": [
+            "N03-NOTE:L005",
+            "N03-NOTE:L007"
+          ]
+        },
+        {
+          "kind": "purpose",
+          "statement": "Dr. Priya Sen requests a repeat HbA1c for monitoring in October 2026; no day is specified.",
+          "value": "monitoring",
+          "fact_date": null,
+          "date_role": "unknown",
+          "temporal_status": "unknown",
+          "target_date": null,
+          "test_specific": true,
+          "provider": null,
+          "reporter": null,
+          "authenticated": null,
+          "span_ids": [
+            "N03-NOTE:L005"
+          ]
+        },
+        {
+          "kind": "diabetes_context",
+          "statement": "The supplied correspondence does not document the patient diagnosis or a test-specific clinical rationale.",
+          "value": null,
+          "fact_date": null,
+          "date_role": "unknown",
+          "temporal_status": "unknown",
+          "target_date": null,
+          "test_specific": null,
+          "provider": null,
+          "reporter": null,
+          "authenticated": null,
+          "span_ids": [
+            "N03-NOTE:L006"
+          ]
+        }
+      ],
+      "family": "lab_receipt_long",
+      "length_stratum": "long"
+    },
+    "N04": {
+      "facts": [
+        {
+          "constraint_id": "N04:P1",
+          "proposition": "Current clinic assessment states that this patient has established diabetes.",
+          "kind": "diabetes_context",
+          "frame": "diabetes_context",
+          "identity_lines": [
+            2
+          ],
+          "fields": {
+            "value": [
+              true
+            ],
+            "temporal_status": [
+              "actual"
+            ]
+          },
+          "event_label": "event-1",
+          "event_primary_lines": [
+            2
+          ],
+          "competing_event_lines": [
+            3
+          ],
+          "competing_labels": []
+        },
+        {
+          "constraint_id": "N04:P2",
+          "proposition": "A competing current consultant assessment states that the same patient does not have established diabetes. The conference does not resolve this disagreement.",
+          "kind": "diabetes_context",
+          "frame": "diabetes_context",
+          "identity_lines": [
+            3
+          ],
+          "fields": {
+            "value": [
+              false
+            ],
+            "temporal_status": [
+              "actual"
+            ]
+          },
+          "event_label": "event-2",
+          "event_primary_lines": [
+            3
+          ],
+          "competing_event_lines": [
+            2
+          ],
+          "competing_labels": []
+        },
+        {
+          "constraint_id": "N04:P3",
+          "proposition": "Cedar request: Dr. Leon Park asks for HbA1c monitoring with collection September 3, 2026.",
+          "kind": "order_intent",
+          "frame": "order_intent",
+          "identity_lines": [
+            4
+          ],
+          "fields": {
+            "value": [
+              true
+            ],
+            "target_date": [
+              "2026-09-03"
+            ],
+            "provider": [
+              "Dr. Leon Park",
+              "Leon Park"
+            ],
+            "authenticated": [
+              true
+            ],
+            "temporal_status": [
+              "planned"
+            ]
+          },
+          "event_label": "Cedar request",
+          "event_primary_lines": [
+            4
+          ],
+          "competing_event_lines": [
+            5
+          ],
+          "competing_labels": [
+            "Willow request"
+          ]
+        },
+        {
+          "constraint_id": "N04:P4",
+          "proposition": "Cedar request: Dr. Leon Park asks for HbA1c monitoring with collection September 3, 2026.",
+          "kind": "purpose",
+          "frame": "purpose",
+          "identity_lines": [
+            4
+          ],
+          "fields": {
+            "value": [
+              "monitoring"
+            ],
+            "target_date": [
+              "2026-09-03"
+            ]
+          },
+          "event_label": "Cedar request",
+          "event_primary_lines": [
+            4
+          ],
+          "competing_event_lines": [
+            5
+          ],
+          "competing_labels": [
+            "Willow request"
+          ]
+        },
+        {
+          "constraint_id": "N04:P5",
+          "proposition": "Willow request: Dr. Bea Holt asks for a separate HbA1c for initial diagnosis with collection September 24, 2026.",
+          "kind": "order_intent",
+          "frame": "order_intent",
+          "identity_lines": [
+            5
+          ],
+          "fields": {
+            "value": [
+              true
+            ],
+            "target_date": [
+              "2026-09-24"
+            ],
+            "provider": [
+              "Dr. Bea Holt",
+              "Bea Holt"
+            ],
+            "authenticated": [
+              false
+            ],
+            "temporal_status": [
+              "planned"
+            ]
+          },
+          "event_label": "Willow request",
+          "event_primary_lines": [
+            5
+          ],
+          "competing_event_lines": [
+            4
+          ],
+          "competing_labels": [
+            "Cedar request"
+          ]
+        },
+        {
+          "constraint_id": "N04:P6",
+          "proposition": "Willow request: Dr. Bea Holt asks for a separate HbA1c for initial diagnosis with collection September 24, 2026.",
+          "kind": "purpose",
+          "frame": "purpose",
+          "identity_lines": [
+            5
+          ],
+          "fields": {
+            "value": [
+              "initial_diagnosis"
+            ],
+            "target_date": [
+              "2026-09-24"
+            ]
+          },
+          "event_label": "Willow request",
+          "event_primary_lines": [
+            5
+          ],
+          "competing_event_lines": [
+            4
+          ],
+          "competing_labels": [
+            "Cedar request"
+          ]
+        }
+      ],
+      "source_sha256": "6b6e1739a684e8e9926ca1803c0916a0e1623e79709b2b98582bbe28ea3186b3",
+      "no_target": false,
+      "correct_fixture": [
+        {
+          "kind": "diabetes_context",
+          "statement": "Current clinic assessment states that this patient has established diabetes.",
+          "value": true,
+          "fact_date": null,
+          "date_role": "unknown",
+          "temporal_status": "actual",
+          "target_date": null,
+          "test_specific": null,
+          "provider": null,
+          "reporter": null,
+          "authenticated": null,
+          "span_ids": [
+            "N04-NOTE:L002"
+          ]
+        },
+        {
+          "kind": "diabetes_context",
+          "statement": "A competing current consultant assessment states that the same patient does not have established diabetes. The conference does not resolve this disagreement.",
+          "value": false,
+          "fact_date": null,
+          "date_role": "unknown",
+          "temporal_status": "actual",
+          "target_date": null,
+          "test_specific": null,
+          "provider": null,
+          "reporter": null,
+          "authenticated": null,
+          "span_ids": [
+            "N04-NOTE:L003"
+          ]
+        },
+        {
+          "kind": "order_intent",
+          "statement": "Cedar request: Dr. Leon Park asks for HbA1c monitoring with collection September 3, 2026.",
+          "value": true,
+          "fact_date": null,
+          "date_role": "unknown",
+          "temporal_status": "planned",
+          "target_date": "2026-09-03",
+          "test_specific": null,
+          "provider": "Dr. Leon Park",
+          "reporter": null,
+          "authenticated": true,
+          "span_ids": [
+            "N04-NOTE:L004",
+            "N04-NOTE:L006"
+          ]
+        },
+        {
+          "kind": "purpose",
+          "statement": "Cedar request: Dr. Leon Park asks for HbA1c monitoring with collection September 3, 2026.",
+          "value": "monitoring",
+          "fact_date": null,
+          "date_role": "unknown",
+          "temporal_status": "unknown",
+          "target_date": "2026-09-03",
+          "test_specific": null,
+          "provider": null,
+          "reporter": null,
+          "authenticated": null,
+          "span_ids": [
+            "N04-NOTE:L004"
+          ]
+        },
+        {
+          "kind": "order_intent",
+          "statement": "Willow request: Dr. Bea Holt asks for a separate HbA1c for initial diagnosis with collection September 24, 2026.",
+          "value": true,
+          "fact_date": null,
+          "date_role": "unknown",
+          "temporal_status": "planned",
+          "target_date": "2026-09-24",
+          "test_specific": null,
+          "provider": "Dr. Bea Holt",
+          "reporter": null,
+          "authenticated": false,
+          "span_ids": [
+            "N04-NOTE:L005",
+            "N04-NOTE:L007"
+          ]
+        },
+        {
+          "kind": "purpose",
+          "statement": "Willow request: Dr. Bea Holt asks for a separate HbA1c for initial diagnosis with collection September 24, 2026.",
+          "value": "initial_diagnosis",
+          "fact_date": null,
+          "date_role": "unknown",
+          "temporal_status": "unknown",
+          "target_date": "2026-09-24",
+          "test_specific": null,
+          "provider": null,
+          "reporter": null,
+          "authenticated": null,
+          "span_ids": [
+            "N04-NOTE:L005"
+          ]
+        }
+      ],
+      "family": "conference_long",
+      "length_stratum": "long"
+    },
+    "N05": {
+      "facts": [
+        {
+          "constraint_id": "N05:P1",
+          "proposition": "This patient currently has established diabetes, as assessed in clinic.",
+          "kind": "diabetes_context",
+          "frame": "diabetes_context",
+          "identity_lines": [
+            2
+          ],
+          "fields": {
+            "value": [
+              true
+            ],
+            "temporal_status": [
+              "actual"
+            ]
+          }
+        },
+        {
+          "constraint_id": "N05:P2",
+          "proposition": "Clinician: Dr. Hugo Ames. HbA1c is ordered for monitoring, specimen collection November 6, 2026.",
+          "kind": "purpose",
+          "frame": "purpose",
+          "identity_lines": [
+            3
+          ],
+          "fields": {
+            "value": [
+              "monitoring"
+            ],
+            "target_date": [
+              "2026-11-06"
+            ]
+          }
+        },
+        {
+          "constraint_id": "N05:P3",
+          "proposition": "Clinician: Dr. Hugo Ames. HbA1c is ordered for monitoring, specimen collection November 6, 2026.",
+          "kind": "order_intent",
+          "frame": "order_intent",
+          "identity_lines": [
+            3,
+            5
+          ],
+          "fields": {
+            "value": [
+              true
+            ],
+            "target_date": [
+              "2026-11-06"
+            ],
+            "provider": [
+              "Dr. Hugo Ames",
+              "Hugo Ames"
+            ],
+            "authenticated": [
+              false
+            ],
+            "temporal_status": [
+              "planned"
+            ]
+          }
+        },
+        {
+          "constraint_id": "N05:P4",
+          "proposition": "Clinician: Dr. Hugo Ames. HbA1c is ordered for monitoring, specimen collection November 6, 2026.",
+          "kind": "clinical_rationale",
+          "frame": "clinical_rationale",
+          "identity_lines": [
+            3,
+            4
+          ],
+          "fields": {
+            "value": [
+              "uncontrolled_diabetes"
+            ],
+            "target_date": [
+              "2026-11-06"
+            ],
+            "test_specific": [
+              true
+            ]
+          }
+        }
+      ],
+      "source_sha256": "f556853ed9cfe70adde8fc24db6f5d2d1034fb64e6d91da66150d9f3f5d663d5",
+      "no_target": false,
+      "correct_fixture": [
+        {
+          "kind": "diabetes_context",
+          "statement": "This patient currently has established diabetes, as assessed in clinic.",
+          "value": true,
+          "fact_date": null,
+          "date_role": "unknown",
+          "temporal_status": "actual",
+          "target_date": null,
+          "test_specific": null,
+          "provider": null,
+          "reporter": null,
+          "authenticated": null,
+          "span_ids": [
+            "N05-NOTE:L002"
+          ]
+        },
+        {
+          "kind": "purpose",
+          "statement": "Clinician: Dr. Hugo Ames. HbA1c is ordered for monitoring, specimen collection November 6, 2026.",
+          "value": "monitoring",
+          "fact_date": null,
+          "date_role": "unknown",
+          "temporal_status": "unknown",
+          "target_date": "2026-11-06",
+          "test_specific": null,
+          "provider": null,
+          "reporter": null,
+          "authenticated": null,
+          "span_ids": [
+            "N05-NOTE:L003"
+          ]
+        },
+        {
+          "kind": "order_intent",
+          "statement": "Clinician: Dr. Hugo Ames. HbA1c is ordered for monitoring, specimen collection November 6, 2026.",
+          "value": true,
+          "fact_date": null,
+          "date_role": "unknown",
+          "temporal_status": "planned",
+          "target_date": "2026-11-06",
+          "test_specific": null,
+          "provider": "Dr. Hugo Ames",
+          "reporter": null,
+          "authenticated": false,
+          "span_ids": [
+            "N05-NOTE:L003",
+            "N05-NOTE:L005"
+          ]
+        },
+        {
+          "kind": "clinical_rationale",
+          "statement": "Clinician: Dr. Hugo Ames. HbA1c is ordered for monitoring, specimen collection November 6, 2026.",
+          "value": "uncontrolled_diabetes",
+          "fact_date": null,
+          "date_role": "unknown",
+          "temporal_status": "unknown",
+          "target_date": "2026-11-06",
+          "test_specific": true,
+          "provider": null,
+          "reporter": null,
+          "authenticated": null,
+          "span_ids": [
+            "N05-NOTE:L003",
+            "N05-NOTE:L004"
+          ]
+        }
+      ],
+      "family": "unsigned_order",
+      "length_stratum": "short"
+    },
+    "N06": {
+      "facts": [
+        {
+          "constraint_id": "N06:P1",
+          "proposition": "The patient reports: \"Dr. Celia Reed told me to have HbA1c collected December 2, 2026, to monitor my established diabetes.\"",
+          "kind": "diabetes_context",
+          "frame": "diabetes_context",
+          "identity_lines": [
+            2,
+            3
+          ],
+          "fields": {
+            "value": [
+              true
+            ],
+            "reporter": [
+              "patient",
+              "Patient",
+              "the patient",
+              "The patient"
+            ],
+            "temporal_status": [
+              "actual"
+            ]
+          }
+        },
+        {
+          "constraint_id": "N06:P2",
+          "proposition": "The patient reports: \"Dr. Celia Reed told me to have HbA1c collected December 2, 2026, to monitor my established diabetes.\"",
+          "kind": "order_intent",
+          "frame": "order_intent",
+          "identity_lines": [
+            2,
+            4,
+            5
+          ],
+          "fields": {
+            "value": [
+              true
+            ],
+            "target_date": [
+              "2026-12-02"
+            ],
+            "provider": [
+              "Dr. Celia Reed",
+              "Celia Reed"
+            ],
+            "reporter": [
+              "patient",
+              "Patient",
+              "the patient",
+              "The patient"
+            ],
+            "authenticated": [
+              null
+            ],
+            "temporal_status": [
+              "planned"
+            ]
+          }
+        },
+        {
+          "constraint_id": "N06:P3",
+          "proposition": "The patient reports: \"Dr. Celia Reed told me to have HbA1c collected December 2, 2026, to monitor my established diabetes.\"",
+          "kind": "purpose",
+          "frame": "purpose",
+          "identity_lines": [
+            2
+          ],
+          "fields": {
+            "value": [
+              "monitoring"
+            ],
+            "target_date": [
+              "2026-12-02"
+            ]
+          }
+        }
+      ],
+      "source_sha256": "6b5cdd1311cb9cc19fffdfa8e1feeef9a3f610ef68797ce3f68ec114ef50bedf",
+      "no_target": false,
+      "correct_fixture": [
+        {
+          "kind": "diabetes_context",
+          "statement": "The patient reports: \"Dr. Celia Reed told me to have HbA1c collected December 2, 2026, to monitor my established diabetes.\"",
+          "value": true,
+          "fact_date": null,
+          "date_role": "unknown",
+          "temporal_status": "actual",
+          "target_date": null,
+          "test_specific": null,
+          "provider": null,
+          "reporter": "patient",
+          "authenticated": null,
+          "span_ids": [
+            "N06-NOTE:L002",
+            "N06-NOTE:L003"
+          ]
+        },
+        {
+          "kind": "order_intent",
+          "statement": "The patient reports: \"Dr. Celia Reed told me to have HbA1c collected December 2, 2026, to monitor my established diabetes.\"",
+          "value": true,
+          "fact_date": null,
+          "date_role": "unknown",
+          "temporal_status": "planned",
+          "target_date": "2026-12-02",
+          "test_specific": null,
+          "provider": "Dr. Celia Reed",
+          "reporter": "patient",
+          "authenticated": null,
+          "span_ids": [
+            "N06-NOTE:L002",
+            "N06-NOTE:L004",
+            "N06-NOTE:L005"
+          ]
+        },
+        {
+          "kind": "purpose",
+          "statement": "The patient reports: \"Dr. Celia Reed told me to have HbA1c collected December 2, 2026, to monitor my established diabetes.\"",
+          "value": "monitoring",
+          "fact_date": null,
+          "date_role": "unknown",
+          "temporal_status": "unknown",
+          "target_date": "2026-12-02",
+          "test_specific": null,
+          "provider": null,
+          "reporter": null,
+          "authenticated": null,
+          "span_ids": [
+            "N06-NOTE:L002"
+          ]
+        }
+      ],
+      "family": "patient_report",
+      "length_stratum": "short"
+    },
+    "N07": {
+      "facts": [
+        {
+          "constraint_id": "N07:P1",
+          "proposition": "The current clinical conclusion is that this patient does not have established diabetes.",
+          "kind": "diabetes_context",
+          "frame": "diabetes_context",
+          "identity_lines": [
+            2,
+            5
+          ],
+          "fields": {
+            "value": [
+              false
+            ],
+            "temporal_status": [
+              "actual"
+            ]
+          }
+        },
+        {
+          "constraint_id": "N07:P2",
+          "proposition": "Dr. Ivo Mercer requests hemoglobin A1c for initial diagnosis, not monitoring.",
+          "kind": "purpose",
+          "frame": "purpose",
+          "identity_lines": [
+            3,
+            4
+          ],
+          "fields": {
+            "value": [
+              "initial_diagnosis"
+            ],
+            "target_date": [
+              "2027-02-18"
+            ]
+          }
+        },
+        {
+          "constraint_id": "N07:P3",
+          "proposition": "Dr. Ivo Mercer requests hemoglobin A1c for initial diagnosis, not monitoring.",
+          "kind": "order_intent",
+          "frame": "order_intent",
+          "identity_lines": [
+            3,
+            4,
+            5
+          ],
+          "fields": {
+            "value": [
+              true
+            ],
+            "target_date": [
+              "2027-02-18"
+            ],
+            "provider": [
+              "Dr. Ivo Mercer",
+              "Ivo Mercer"
+            ],
+            "authenticated": [
+              true
+            ],
+            "temporal_status": [
+              "planned"
+            ]
+          }
+        }
+      ],
+      "source_sha256": "9f23d294f02e183530bea76152d916089409baafb211f4063fedafb121e45c47",
+      "no_target": false,
+      "correct_fixture": [
+        {
+          "kind": "diabetes_context",
+          "statement": "The current clinical conclusion is that this patient does not have established diabetes.",
+          "value": false,
+          "fact_date": null,
+          "date_role": "unknown",
+          "temporal_status": "actual",
+          "target_date": null,
+          "test_specific": null,
+          "provider": null,
+          "reporter": null,
+          "authenticated": null,
+          "span_ids": [
+            "N07-NOTE:L002",
+            "N07-NOTE:L005"
+          ]
+        },
+        {
+          "kind": "purpose",
+          "statement": "Dr. Ivo Mercer requests hemoglobin A1c for initial diagnosis, not monitoring.",
+          "value": "initial_diagnosis",
+          "fact_date": null,
+          "date_role": "unknown",
+          "temporal_status": "unknown",
+          "target_date": "2027-02-18",
+          "test_specific": null,
+          "provider": null,
+          "reporter": null,
+          "authenticated": null,
+          "span_ids": [
+            "N07-NOTE:L003",
+            "N07-NOTE:L004"
+          ]
+        },
+        {
+          "kind": "order_intent",
+          "statement": "Dr. Ivo Mercer requests hemoglobin A1c for initial diagnosis, not monitoring.",
+          "value": true,
+          "fact_date": null,
+          "date_role": "unknown",
+          "temporal_status": "planned",
+          "target_date": "2027-02-18",
+          "test_specific": null,
+          "provider": "Dr. Ivo Mercer",
+          "reporter": null,
+          "authenticated": true,
+          "span_ids": [
+            "N07-NOTE:L003",
+            "N07-NOTE:L004",
+            "N07-NOTE:L005"
+          ]
+        }
+      ],
+      "family": "diagnostic_plain",
+      "length_stratum": "short"
+    },
+    "N08": {
+      "facts": [
+        {
+          "constraint_id": "N08:P1",
+          "proposition": "Lantern: Dr. Dina Frost explicitly withdrew the HbA1c request intended for March 5, 2027. The withdrawal is actual as of this log.",
+          "kind": "order_intent",
+          "frame": "order_intent",
+          "identity_lines": [
+            2
+          ],
+          "fields": {
+            "value": [
+              false
+            ],
+            "target_date": [
+              "2027-03-05"
+            ],
+            "provider": [
+              "Dr. Dina Frost",
+              "Dina Frost"
+            ],
+            "authenticated": [
+              null
+            ],
+            "temporal_status": [
+              "actual"
+            ]
+          },
+          "event_label": "Lantern",
+          "event_primary_lines": [
+            2
+          ],
+          "competing_event_lines": [
+            3
+          ],
+          "competing_labels": [
+            "Harbor"
+          ]
+        },
+        {
+          "constraint_id": "N08:P2",
+          "proposition": "Harbor: Dr. Eli Crane issued a separate HbA1c request for collection March 19, 2027, for routine monitoring.",
+          "kind": "order_intent",
+          "frame": "order_intent",
+          "identity_lines": [
+            3
+          ],
+          "fields": {
+            "value": [
+              true
+            ],
+            "target_date": [
+              "2027-03-19"
+            ],
+            "provider": [
+              "Dr. Eli Crane",
+              "Eli Crane"
+            ],
+            "authenticated": [
+              null
+            ],
+            "temporal_status": [
+              "planned"
+            ]
+          },
+          "event_label": "Harbor",
+          "event_primary_lines": [
+            3
+          ],
+          "competing_event_lines": [
+            2
+          ],
+          "competing_labels": [
+            "Lantern"
+          ]
+        },
+        {
+          "constraint_id": "N08:P3",
+          "proposition": "Harbor: Dr. Eli Crane issued a separate HbA1c request for collection March 19, 2027, for routine monitoring.",
+          "kind": "purpose",
+          "frame": "purpose",
+          "identity_lines": [
+            3
+          ],
+          "fields": {
+            "value": [
+              "monitoring"
+            ],
+            "target_date": [
+              "2027-03-19"
+            ]
+          }
+        },
+        {
+          "constraint_id": "N08:P4",
+          "proposition": "No signature information is supplied for either clinician. The log does not document the patient diagnosis.",
+          "kind": "diabetes_context",
+          "frame": "diabetes_context",
+          "identity_lines": [
+            4
+          ],
+          "fields": {
+            "value": [
+              null
+            ]
+          }
+        }
+      ],
+      "source_sha256": "ed3162661c8bb9c9be2eb2635bfa8e862a58b01754a3c73fbd526c66838fe37c",
+      "no_target": false,
+      "correct_fixture": [
+        {
+          "kind": "order_intent",
+          "statement": "Lantern: Dr. Dina Frost explicitly withdrew the HbA1c request intended for March 5, 2027. The withdrawal is actual as of this log.",
+          "value": false,
+          "fact_date": null,
+          "date_role": "unknown",
+          "temporal_status": "actual",
+          "target_date": "2027-03-05",
+          "test_specific": null,
+          "provider": "Dr. Dina Frost",
+          "reporter": null,
+          "authenticated": null,
+          "span_ids": [
+            "N08-NOTE:L002",
+            "N08-NOTE:L004"
+          ]
+        },
+        {
+          "kind": "order_intent",
+          "statement": "Harbor: Dr. Eli Crane issued a separate HbA1c request for collection March 19, 2027, for routine monitoring.",
+          "value": true,
+          "fact_date": null,
+          "date_role": "unknown",
+          "temporal_status": "planned",
+          "target_date": "2027-03-19",
+          "test_specific": null,
+          "provider": "Dr. Eli Crane",
+          "reporter": null,
+          "authenticated": null,
+          "span_ids": [
+            "N08-NOTE:L003",
+            "N08-NOTE:L004"
+          ]
+        },
+        {
+          "kind": "purpose",
+          "statement": "Harbor: Dr. Eli Crane issued a separate HbA1c request for collection March 19, 2027, for routine monitoring.",
+          "value": "monitoring",
+          "fact_date": null,
+          "date_role": "unknown",
+          "temporal_status": "unknown",
+          "target_date": "2027-03-19",
+          "test_specific": null,
+          "provider": null,
+          "reporter": null,
+          "authenticated": null,
+          "span_ids": [
+            "N08-NOTE:L003"
+          ]
+        },
+        {
+          "kind": "diabetes_context",
+          "statement": "No signature information is supplied for either clinician. The log does not document the patient diagnosis.",
+          "value": null,
+          "fact_date": null,
+          "date_role": "unknown",
+          "temporal_status": "unknown",
+          "target_date": null,
+          "test_specific": null,
+          "provider": null,
+          "reporter": null,
+          "authenticated": null,
+          "span_ids": [
+            "N08-NOTE:L004"
+          ]
+        }
+      ],
+      "family": "two_intents",
+      "length_stratum": "short"
+    },
+    "N09": {
+      "facts": [
+        {
+          "constraint_id": "N09:P1",
+          "proposition": "This patient has established diabetes, currently active.",
+          "kind": "diabetes_context",
+          "frame": "diabetes_context",
+          "identity_lines": [
+            2
+          ],
+          "fields": {
+            "value": [
+              true
+            ],
+            "temporal_status": [
+              "actual"
+            ]
+          }
+        },
+        {
+          "constraint_id": "N09:P2",
+          "proposition": "The patient has not begun the proposed medication adjustment; current nonimplementation is explicitly documented.",
+          "kind": "regimen_change",
+          "frame": "regimen_state",
+          "identity_lines": [
+            3
+          ],
+          "fields": {
+            "value": [
+              false
+            ],
+            "temporal_status": [
+              "actual"
+            ]
+          }
+        },
+        {
+          "constraint_id": "N09:P3",
+          "proposition": "Dr. Nia Stone requests HbA1c monitoring with collection April 7, 2027.",
+          "kind": "purpose",
+          "frame": "purpose",
+          "identity_lines": [
+            4
+          ],
+          "fields": {
+            "value": [
+              "monitoring"
+            ],
+            "target_date": [
+              "2027-04-07"
+            ]
+          }
+        },
+        {
+          "constraint_id": "N09:P4",
+          "proposition": "Dr. Nia Stone requests HbA1c monitoring with collection April 7, 2027.",
+          "kind": "order_intent",
+          "frame": "order_intent",
+          "identity_lines": [
+            4,
+            6
+          ],
+          "fields": {
+            "value": [
+              true
+            ],
+            "target_date": [
+              "2027-04-07"
+            ],
+            "provider": [
+              "Dr. Nia Stone",
+              "Nia Stone"
+            ],
+            "authenticated": [
+              null
+            ],
+            "temporal_status": [
+              "planned"
+            ]
+          }
+        },
+        {
+          "constraint_id": "N09:P5",
+          "proposition": "Dr. Nia Stone requests HbA1c monitoring with collection April 7, 2027.",
+          "kind": "clinical_rationale",
+          "frame": "clinical_rationale",
+          "identity_lines": [
+            4,
+            5
+          ],
+          "fields": {
+            "value": [
+              null
+            ],
+            "target_date": [
+              "2027-04-07"
+            ]
+          }
+        }
+      ],
+      "source_sha256": "223af4fbec8ec71e4454a0651e3ac1fcd18301fbcccddf28492c1b006bb8d648",
+      "no_target": false,
+      "correct_fixture": [
+        {
+          "kind": "diabetes_context",
+          "statement": "This patient has established diabetes, currently active.",
+          "value": true,
+          "fact_date": null,
+          "date_role": "unknown",
+          "temporal_status": "actual",
+          "target_date": null,
+          "test_specific": null,
+          "provider": null,
+          "reporter": null,
+          "authenticated": null,
+          "span_ids": [
+            "N09-NOTE:L002"
+          ]
+        },
+        {
+          "kind": "regimen_change",
+          "statement": "The patient has not begun the proposed medication adjustment; current nonimplementation is explicitly documented.",
+          "value": false,
+          "fact_date": null,
+          "date_role": "unknown",
+          "temporal_status": "actual",
+          "target_date": null,
+          "test_specific": null,
+          "provider": null,
+          "reporter": null,
+          "authenticated": null,
+          "span_ids": [
+            "N09-NOTE:L003"
+          ]
+        },
+        {
+          "kind": "purpose",
+          "statement": "Dr. Nia Stone requests HbA1c monitoring with collection April 7, 2027.",
+          "value": "monitoring",
+          "fact_date": null,
+          "date_role": "unknown",
+          "temporal_status": "unknown",
+          "target_date": "2027-04-07",
+          "test_specific": null,
+          "provider": null,
+          "reporter": null,
+          "authenticated": null,
+          "span_ids": [
+            "N09-NOTE:L004"
+          ]
+        },
+        {
+          "kind": "order_intent",
+          "statement": "Dr. Nia Stone requests HbA1c monitoring with collection April 7, 2027.",
+          "value": true,
+          "fact_date": null,
+          "date_role": "unknown",
+          "temporal_status": "planned",
+          "target_date": "2027-04-07",
+          "test_specific": null,
+          "provider": "Dr. Nia Stone",
+          "reporter": null,
+          "authenticated": null,
+          "span_ids": [
+            "N09-NOTE:L004",
+            "N09-NOTE:L006"
+          ]
+        },
+        {
+          "kind": "clinical_rationale",
+          "statement": "Dr. Nia Stone requests HbA1c monitoring with collection April 7, 2027.",
+          "value": null,
+          "fact_date": null,
+          "date_role": "unknown",
+          "temporal_status": "unknown",
+          "target_date": "2027-04-07",
+          "test_specific": null,
+          "provider": null,
+          "reporter": null,
+          "authenticated": null,
+          "span_ids": [
+            "N09-NOTE:L004",
+            "N09-NOTE:L005"
+          ]
+        }
+      ],
+      "family": "planned_vs_current",
+      "length_stratum": "short"
+    },
+    "N10": {
+      "facts": [
+        {
+          "constraint_id": "N10:P1",
+          "proposition": "Dr. Remy Wells orders Hgb A1c on May 11, 2027 for monitoring.",
+          "kind": "purpose",
+          "frame": "purpose",
+          "identity_lines": [
+            2,
+            3
+          ],
+          "fields": {
+            "value": [
+              "monitoring"
+            ],
+            "target_date": [
+              null
+            ]
+          },
+          "unresolved_fields": {
+            "target_date": "AMBIGUOUS_SOURCE"
+          },
+          "ambiguous_date": "2027-05-11"
+        },
+        {
+          "constraint_id": "N10:P2",
+          "proposition": "Dr. Remy Wells orders Hgb A1c on May 11, 2027 for monitoring.",
+          "kind": "order_intent",
+          "frame": "order_intent",
+          "identity_lines": [
+            2,
+            3,
+            5
+          ],
+          "fields": {
+            "value": [
+              true
+            ],
+            "target_date": [
+              null
+            ],
+            "provider": [
+              "Dr. Remy Wells",
+              "Remy Wells"
+            ],
+            "authenticated": [
+              null
+            ],
+            "temporal_status": [
+              "planned"
+            ]
+          },
+          "unresolved_fields": {
+            "target_date": "AMBIGUOUS_SOURCE"
+          },
+          "ambiguous_date": "2027-05-11"
+        },
+        {
+          "constraint_id": "N10:P3",
+          "proposition": "The attached diagnosis section is incomplete, not an explicit negative diabetes assessment.",
+          "kind": "diabetes_context",
+          "frame": "diabetes_context",
+          "identity_lines": [
+            4
+          ],
+          "fields": {
+            "value": [
+              null
+            ]
+          }
+        }
+      ],
+      "source_sha256": "b4e6dfae6fcc317a7cffe2cc4a59a9159a17acd563cd99a0671c46317be70149",
+      "no_target": false,
+      "correct_fixture": [
+        {
+          "kind": "purpose",
+          "statement": "Dr. Remy Wells orders Hgb A1c on May 11, 2027 for monitoring.",
+          "value": "monitoring",
+          "fact_date": "2027-05-11",
+          "date_role": "order_issued",
+          "temporal_status": "unknown",
+          "target_date": null,
+          "test_specific": null,
+          "provider": null,
+          "reporter": null,
+          "authenticated": null,
+          "span_ids": [
+            "N10-NOTE:L002",
+            "N10-NOTE:L003"
+          ]
+        },
+        {
+          "kind": "order_intent",
+          "statement": "Dr. Remy Wells orders Hgb A1c on May 11, 2027 for monitoring.",
+          "value": true,
+          "fact_date": "2027-05-11",
+          "date_role": "order_issued",
+          "temporal_status": "planned",
+          "target_date": null,
+          "test_specific": null,
+          "provider": "Dr. Remy Wells",
+          "reporter": null,
+          "authenticated": null,
+          "span_ids": [
+            "N10-NOTE:L002",
+            "N10-NOTE:L003",
+            "N10-NOTE:L005"
+          ]
+        },
+        {
+          "kind": "diabetes_context",
+          "statement": "The attached diagnosis section is incomplete, not an explicit negative diabetes assessment.",
+          "value": null,
+          "fact_date": null,
+          "date_role": "unknown",
+          "temporal_status": "unknown",
+          "target_date": null,
+          "test_specific": null,
+          "provider": null,
+          "reporter": null,
+          "authenticated": null,
+          "span_ids": [
+            "N10-NOTE:L004"
+          ]
+        }
+      ],
+      "family": "ambiguous_issue_date",
+      "length_stratum": "short"
+    },
+    "N11": {
+      "facts": [],
+      "source_sha256": "4dc6275c005ba65a79693a537efbefea925097bf975d76550de5c9633551f808",
+      "no_target": true,
+      "correct_fixture": [],
+      "family": "administrative_control",
+      "length_stratum": "short"
+    },
+    "N12": {
+      "facts": [],
+      "source_sha256": "704cc2f56cb2081795a7cf0ba4fa8fa0e29cc66591d27785dcff62f5fb3fcbfa",
+      "no_target": true,
+      "correct_fixture": [],
+      "family": "other_subject_analyte",
+      "length_stratum": "short"
+    }
+  }
+}

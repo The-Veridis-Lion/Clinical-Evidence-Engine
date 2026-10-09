@@ -1,0 +1,36 @@
+{
+  "schema_version": "claims-review-prep/0.1",
+  "case_id": "N08",
+  "claim": {
+    "claim_id": "CONSTRUCTED-N08",
+    "patient_id": "SYN-NEW-N08",
+    "encounter_id": "VISIT-N08",
+    "service_date": null,
+    "service_concept": "hba1c_monitoring",
+    "procedure_code": null,
+    "code_system": null,
+    "mapping_status": "constructed_demo",
+    "data_origin": "constructed_synthetic"
+  },
+  "review_context": {
+    "as_of": "2027-06-01",
+    "history_start": "2026-01-01",
+    "history_end": "2027-05-31",
+    "history_completeness": "not_asserted"
+  },
+  "sources": [
+    {
+      "source_id": "N08-NOTE",
+      "patient_id": "SYN-NEW-N08",
+      "encounter_id": "VISIT-N08",
+      "available_at": "2027-05-31",
+      "origin": "constructed_synthetic",
+      "source_kind": "synthetic_note",
+      "recorded_at": "2027-05-30",
+      "event_date": null,
+      "record_type": "note",
+      "event_link_id": null,
+      "content": "Order withdrawal and new request log\nLantern: Dr. Dina Frost explicitly withdrew the HbA1c request intended for March 5, 2027. The withdrawal is actual as of this log.\nHarbor: Dr. Eli Crane issued a separate HbA1c request for collection March 19, 2027, for routine monitoring.\nNo signature information is supplied for either clinician. The log does not document the patient diagnosis.\nThe new Harbor request does not mean the withdrawn Lantern collection occurred.\nThis office log records the disposition of two requests rather than two test results. The labels are used in the clinical paperwork to identify the requests and are not patient identifiers. The scheduling clerk separated the withdrawal entry from the new request so that a cancellation message would not be applied to the wrong collection. Neither entry is an assay report. The patient was to receive updated directions for the new collection through the usual office channel. The log does not document why the first request was withdrawn, who will attend the collection, or whether any prior testing occurred. Receipt order of the messages does not create a supersession relationship between independent requests. No clinical signature status is inferred from the presence of the two physician names."
+    }
+  ]
+}

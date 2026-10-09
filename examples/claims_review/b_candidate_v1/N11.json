@@ -1,0 +1,36 @@
+{
+  "schema_version": "claims-review-prep/0.1",
+  "case_id": "N11",
+  "claim": {
+    "claim_id": "CONSTRUCTED-N11",
+    "patient_id": "SYN-NEW-N11",
+    "encounter_id": "VISIT-N11",
+    "service_date": null,
+    "service_concept": "hba1c_monitoring",
+    "procedure_code": null,
+    "code_system": null,
+    "mapping_status": "constructed_demo",
+    "data_origin": "constructed_synthetic"
+  },
+  "review_context": {
+    "as_of": "2027-06-01",
+    "history_start": "2026-01-01",
+    "history_end": "2027-05-31",
+    "history_completeness": "not_asserted"
+  },
+  "sources": [
+    {
+      "source_id": "N11-NOTE",
+      "patient_id": "SYN-NEW-N11",
+      "encounter_id": "VISIT-N11",
+      "available_at": "2027-05-31",
+      "origin": "constructed_synthetic",
+      "source_kind": "synthetic_note",
+      "recorded_at": "2027-05-30",
+      "event_date": null,
+      "record_type": "note",
+      "event_link_id": null,
+      "content": "Office access and address update\nAdministrative communication: the patient supplied a new postal address and asked for directions to the records office.\nThis message contains no clinical assessment, laboratory request, laboratory result or treatment statement.\nThe receptionist read back the mailing address and asked whether the patient wanted future appointment notices sent by post or collected in person. The patient chose post. The office explained when its records window was open and how an authorized representative could request copies using the ordinary administrative process. The message does not identify a physician, make a diagnosis, or specify a test. It does not record patient attendance at a clinical visit. A telephone contact and an address correction are the only activities described. No insurer eligibility question was answered, and no clinical paperwork was authenticated. The source gives no clinical date, result, score or future collection plan. These absent clinical contents are not false diagnoses or zero-valued tests."
+    }
+  ]
+}

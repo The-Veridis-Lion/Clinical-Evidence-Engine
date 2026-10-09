@@ -1,0 +1,36 @@
+{
+  "schema_version": "claims-review-prep/0.1",
+  "case_id": "N05",
+  "claim": {
+    "claim_id": "CONSTRUCTED-N05",
+    "patient_id": "SYN-NEW-N05",
+    "encounter_id": "VISIT-N05",
+    "service_date": null,
+    "service_concept": "hba1c_monitoring",
+    "procedure_code": null,
+    "code_system": null,
+    "mapping_status": "constructed_demo",
+    "data_origin": "constructed_synthetic"
+  },
+  "review_context": {
+    "as_of": "2027-06-01",
+    "history_start": "2026-01-01",
+    "history_end": "2027-05-31",
+    "history_completeness": "not_asserted"
+  },
+  "sources": [
+    {
+      "source_id": "N05-NOTE",
+      "patient_id": "SYN-NEW-N05",
+      "encounter_id": "VISIT-N05",
+      "available_at": "2027-05-31",
+      "origin": "constructed_synthetic",
+      "source_kind": "synthetic_note",
+      "recorded_at": "2027-05-30",
+      "event_date": null,
+      "record_type": "note",
+      "event_link_id": null,
+      "content": "Clinic order form with rationale\nThis patient currently has established diabetes, as assessed in clinic.\nClinician: Dr. Hugo Ames. HbA1c is ordered for monitoring, specimen collection November 6, 2026.\nThe clinician explicitly documents uncontrolled diabetes as the reason for this HbA1c reassessment; no numeric result is supplied.\nOrder status: unsigned. The printed clinician name is attribution and is not a signature.\nThe form was prepared during an ordinary clinic review. The patient asked how the collection appointment differed from the next office consultation. The clinician explained the distinction and the staff member wrote the collection instructions in the section reserved for laboratory requests. No blood was collected while the form was prepared. An office appointment will be arranged separately; the form gives no date for it. The patient's preferred contact method is telephone, and staff were asked to confirm collection-center opening hours using the number already held by the office. The form is not an assay report. It contains no prior specimen date, score, measured response to therapy, or implemented medication change. Its explicit unsigned status is preserved even though the attributed clinician's name is readable. No policy review or payment decision is documented."
+    }
+  ]
+}
