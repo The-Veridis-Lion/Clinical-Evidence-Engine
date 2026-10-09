@@ -1,0 +1,179 @@
+[
+  {
+    "id": "SEM-D31",
+    "declared_id": "SEM-D31",
+    "patient": {
+      "patient_id": "SEM-P31",
+      "name": "Test Person",
+      "dob": null
+    },
+    "group": "SEM-P31",
+    "source": "synthetic_semantic_mechanism",
+    "split": "confirmation",
+    "facts": [
+      {
+        "kind": "service",
+        "encounter_ref": "SEM-E31",
+        "appointment_ref": "SEM-E31",
+        "service_date": "2026-09-16",
+        "service_type": "individual",
+        "evidence_kind": "schedule",
+        "signed": false,
+        "patient_present": false,
+        "delivered": false,
+        "actual_intervals": [],
+        "scheduled_intervals": [
+          {
+            "start": "09:00",
+            "end": "09:35"
+          }
+        ],
+        "unspecified_intervals": [],
+        "breaks": [],
+        "reported_minutes": null
+      }
+    ],
+    "exhaustive": false,
+    "mechanism": "event ledger disposition versus locally scoped absence",
+    "semantic_constraints": [
+      {
+        "encounter": "SEM-E31",
+        "current_signed": false
+      }
+    ],
+    "text": "Document ID: SEM-D31\nPatient: Test Person | MRN: SEM-P31\nEvent ledger for 2026-09-16; no clinical signatures accompany these entries.\nEncounter | category | reserved slot | disposition\nSEM-E31 | Individual | 09:00-09:35 | Completed\nEvent detail: Appointment SEM-E31 was marked Completed after a desk check. Patient never joined this slot; no patient treatment delivered.\n"
+  },
+  {
+    "id": "SEM-D32",
+    "declared_id": "SEM-D32",
+    "patient": {
+      "patient_id": "SEM-P32",
+      "name": "Test Person",
+      "dob": null
+    },
+    "group": "SEM-P32",
+    "source": "synthetic_semantic_mechanism",
+    "split": "confirmation",
+    "facts": [
+      {
+        "kind": "service",
+        "encounter_ref": "SEM-E32",
+        "appointment_ref": null,
+        "service_date": "2026-09-16",
+        "service_type": "individual",
+        "evidence_kind": "retransmission",
+        "signed": true,
+        "patient_present": true,
+        "delivered": true,
+        "actual_intervals": [
+          {
+            "start": "10:00",
+            "end": "10:12"
+          }
+        ],
+        "scheduled_intervals": [],
+        "unspecified_intervals": [],
+        "breaks": [],
+        "reported_minutes": null
+      },
+      {
+        "kind": "relationship",
+        "relation": "retransmits",
+        "signed": false,
+        "target_encounter": "SEM-E32",
+        "target_document_ref": null,
+        "target_plan_ref": null,
+        "field": "record",
+        "replacement_time": null,
+        "replacement_minutes": null,
+        "replacement_presence": null,
+        "original_time": null,
+        "service_date": "2026-09-16"
+      },
+      {
+        "kind": "service",
+        "encounter_ref": "SEM-E32",
+        "appointment_ref": null,
+        "service_date": "2026-09-16",
+        "service_type": "individual",
+        "evidence_kind": "clinical",
+        "signed": true,
+        "patient_present": true,
+        "delivered": true,
+        "actual_intervals": [
+          {
+            "start": "10:12",
+            "end": "10:29"
+          }
+        ],
+        "scheduled_intervals": [],
+        "unspecified_intervals": [],
+        "breaks": [],
+        "reported_minutes": null
+      }
+    ],
+    "exhaustive": false,
+    "mechanism": "nursing packet map old section and new addendum same encounter",
+    "semantic_constraints": [],
+    "text": "Document ID: SEM-D32\nPatient: Test Person | MRN: SEM-P32\nNursing packet map: A=received attachment; B=newly authored contact addendum. Received 2026-09-20 18:15.\nA: Retransmits Encounter SEM-E32 for 2026-09-16. Individual attendance patient contact 10:00-10:12, original signature Noor 2026-09-16 10:15; no new signature in A.\nB: Encounter SEM-E32 on 2026-09-16. Additional individual patient contact 10:12-10:29 with treatment delivered. Signed Noor 2026-09-16 10:40. B is new original content.\n"
+  },
+  {
+    "id": "SEM-D33",
+    "declared_id": "SEM-D33",
+    "patient": {
+      "patient_id": "SEM-P33",
+      "name": "Test Person",
+      "dob": null
+    },
+    "group": "SEM-P33",
+    "source": "synthetic_semantic_mechanism",
+    "split": "confirmation",
+    "facts": [
+      {
+        "kind": "assessment",
+        "instrument": "PHQ-9",
+        "assessment_date": "2026-09-16",
+        "form_ref": "SEM-F33",
+        "score": 9,
+        "reporter": [
+          "patient",
+          "Test Person"
+        ],
+        "experiencer": [
+          "patient",
+          "Test Person"
+        ],
+        "copied": false,
+        "recorded_at": "2026-09-18T16:00:00",
+        "reviewed_at": "2026-09-19T09:30:00"
+      }
+    ],
+    "exhaustive": false,
+    "mechanism": "outcome card with separated completion entry and review",
+    "semantic_constraints": [
+      {
+        "historical_score": 16,
+        "completion_date": null,
+        "reference_date": "2026-08-03"
+      }
+    ],
+    "text": "Document ID: SEM-D33\nPatient: Test Person | MRN: SEM-P33\nOutcome card\nCURRENT: PHQ-9 Form SEM-F33, score 9, completed 2026-09-16. Patient self-report.\nENTRY: recorded 2026-09-18 16:00.\nARCHIVE reference: historical intake score 16 recorded 2026-08-03; original form identifier and completion date are not supplied.\nREVIEW: clinician read the current original card at 2026-09-19 09:30.\n"
+  },
+  {
+    "id": "SEM-D34",
+    "declared_id": "SEM-D34",
+    "patient": {
+      "patient_id": "SEM-P34",
+      "name": "Test Person",
+      "dob": null
+    },
+    "group": "SEM-P34",
+    "source": "synthetic_semantic_mechanism",
+    "split": "confirmation",
+    "facts": [],
+    "exhaustive": false,
+    "mechanism": "transport metadata contains no target facts",
+    "semantic_constraints": [],
+    "text": "Document ID: SEM-D34\nPatient: Test Person | MRN: SEM-P34\nShipping receipt 2026-09-16. Envelope received; barcode checked, sealed and stored. No encounter, treatment or assessment information was included.\n"
+  }
+]

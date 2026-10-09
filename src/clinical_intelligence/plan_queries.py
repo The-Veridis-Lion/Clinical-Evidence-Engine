@@ -2,12 +2,19 @@
 from __future__ import annotations
 from datetime import date, timedelta
 from itertools import product
-from .domain import CalculationTrace, THERAPY_TYPES
+from .domain import CalculationTrace, THERAPY_TYPES, PlanClaim, CorrectionRelationship
 from .utilization import monday, utilization
 
 
 def _plan_for_week(abstraction, week, review_start, review_end):
     begin, finish = max(week, review_start), min(week + timedelta(days=6), review_end)
+    incomplete = [c for c in abstraction.source_claims if isinstance(c, PlanClaim) and c.signed is not False
+        and (c.effective_start is None or c.effective_start <= finish) and (c.effective_end is None or c.effective_end >= begin)
+        and not any(c.claim_id in p.claim_ids for p in abstraction.plans)]
+    if incomplete:
+        return None, [], 'Quantitative plan facts are retained but signature, applicability or requirements are incomplete; no zero threshold is imputed.'
+    if any(isinstance(r,CorrectionRelationship) and (r.relation=='supersedes_plan' and r.signed is None or r.relation is None and (r.field=='plan' or r.target_plan_ref)) for r in abstraction.relationships):
+        return None, [], 'Possible plan revision has unknown authority or scope; existing plan facts remain retained.'
     plans = [p for p in abstraction.plans if p.effective_start <= finish and (p.effective_end or date.max) >= begin]
     if not plans:
         return None, [], "No signed quantitative treatment plan establishes a requirement for this period."

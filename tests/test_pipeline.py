@@ -110,7 +110,7 @@ def test_failed_extraction_is_explicit_and_blocks_zero_care_answer(evidence, ser
 
 
 def test_new_cli_process_reloads_abstraction_without_provider(evidence, service, tmp_path):
-    path = source(tmp_path, text="Synthetic evidence — café 中文")
+    path = source(tmp_path, text="Synthetic evidence — café \u4e2d\u6587")
     database = tmp_path / "clinical.sqlite"
     with SQLiteStore(database) as store:
         process(store, [path], RecordingExtractor(evidence, service))

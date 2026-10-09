@@ -10,7 +10,7 @@ import re
 from pathlib import Path
 from time import perf_counter
 from types import SimpleNamespace
-from .domain import Patient, ServiceClaim, PlanClaim, AssessmentClaim, ClinicalObservation, CorrectionRelationship, RegisteredDocument
+from .domain import Patient, ServiceClaim, PlanClaim, AssessmentClaim, ClinicalObservation, CorrectionRelationship, RegisteredDocument, ServiceSource
 from .extraction import LangExtractExtractor, locate_passage
 
 KINDS = {"patient": Patient, "service": ServiceClaim, "plan": PlanClaim,
@@ -31,12 +31,26 @@ def inline_schema(node, definitions):
     return value
 
 
-def payload_schema(kind):
+def payload_schema(kind, semantic=False, uncertainty=False):
+    if not uncertainty and not semantic:
+        # Immutable previous generation contract: new nullable domain fields must
+        # not silently change comparator A's actual requests.
+        return copy.deepcopy(json.loads((Path(__file__).parent / 'contracts' / 'luna_previous_schema.json').read_text())[kind])
     raw = KINDS[kind].model_json_schema()
     properties = raw["properties"]
+    if not uncertainty:
+        properties.pop('uncertainty_notes', None)
     for name in ("claim_id", "document_id", "patient_id", "passages", "kind"):
         if name != "patient_id" or kind != "patient":
             properties.pop(name, None)
+    if kind == 'service':
+        if semantic:
+            properties.pop('evidence_kind'); properties.pop('signed')
+            properties['source']={'$ref':'#/$defs/ServiceSource'}
+        else:
+            properties.pop('source')
+    if kind == 'assessment' and not semantic:
+        properties.pop('source_role'); properties.pop('reference_date')
     if kind == "patient":
         properties["declared_id"] = {"type": ["string", "null"]}
     elif "recorded_at" in properties:
@@ -47,7 +61,7 @@ def payload_schema(kind):
     if kind == "service":
         for field in ("actual_intervals", "scheduled_intervals", "unspecified_intervals", "breaks"):
             properties[field] = {"type": "array", "items": {"type": "object", "additionalProperties": False,
-                "properties": {n: {"type": "string", "pattern": r"^(?:[01]\d|2[0-3]):[0-5]\d$"} for n in ("start", "end")}, "required": ["start", "end"]}}
+                "properties": {n: {"type": ["string", "null"] if uncertainty else "string", "pattern": r"^(?:[01]\d|2[0-3]):[0-5]\d$"} for n in ("start", "end")}, "required": ["start", "end"]}}
     if kind == "relationship":
         for field in ("replacement_time", "original_time"):
             properties[field] = {"type": ["string", "null"], "pattern": r"^(?:[01]\d|2[0-3]):[0-5]\d$"}
@@ -64,15 +78,19 @@ def source_lines(text):
     return lines
 
 
-def typed_schema(text, evidence="quote", kinds=None):
+def typed_schema(text, evidence="quote", kinds=None, semantic=False, uncertainty=False):
     lines = source_lines(text)
     variants = []
     for kind in kinds or KINDS:
         variants.append({"type": "object", "additionalProperties": False,
             "properties": {"kind": {"type": "string", "enum": [kind]},
-                           "data": payload_schema(kind),
+                           "data": payload_schema(kind,semantic,uncertainty),
                            evidence: {"type": "string", "enum": list(lines) if evidence == "span_id" else sorted({v[0] for v in lines.values()})}},
             "required": ["kind", "data", evidence]})
+    if semantic:
+        for variant in variants:
+            variant['properties']['context_span_ids']={'type':'array','items':{'type':'string','enum':list(lines)},'maxItems':16}
+            variant['required'].append('context_span_ids')
     return {"type": "object", "additionalProperties": False,
         "properties": {"extractions": {"type": "array", "items": {"anyOf": variants}}}, "required": ["extractions"]}
 
@@ -211,13 +229,17 @@ class CandidateExtractor(LangExtractExtractor):
     def __init__(self, provider, configuration):
         allowed={'schema','prompt','examples','evidence','reasoning','flow','semantic_rules','precise_rules',
                  'expanded_examples','clinical_examples','aligned_examples','identity_object','identifier_inventory',
-                 'scope_rules','clinical_rules','observation_scope'}
+                 'scope_rules','clinical_rules','observation_scope','semantic_contract','uncertainty_contract'}
         if set(configuration)-allowed:
             raise ValueError(f'Unsupported extraction configuration: {sorted(set(configuration)-allowed)}')
         for field,values in {'schema':{'string','typed'},'prompt':{'long','concise'},
             'examples':{'fragments','documents'},'evidence':{'quote','span_id'},'flow':{'resample_repair','clinical_partition'}}.items():
             if field in configuration and configuration[field] not in values:
                 raise ValueError(f'Unsupported {field}: {configuration[field]}')
+        if configuration.get("semantic_contract") not in {None, "v1"}:
+            raise ValueError("Unsupported semantic contract")
+        if configuration.get("uncertainty_contract") not in {None, "v1", "nullable_v1"}:
+            raise ValueError("Unsupported uncertainty contract")
         super().__init__(provider)
         self.configuration = dict(configuration)
         self.provider.config.reasoning_effort = self.configuration.get("reasoning", "high")
@@ -244,6 +266,12 @@ class CandidateExtractor(LangExtractExtractor):
             prompt += SCOPE_RULES
         if cfg.get('clinical_rules'):
             prompt += CLINICAL_RULES
+        if cfg.get('semantic_contract'):
+            from .semantic_contract import semantic_prompt
+            prompt=semantic_prompt(prompt)
+        if cfg.get('uncertainty_contract'):
+            from .uncertainty_contract import uncertainty_prompt, nullable_prompt
+            prompt=(nullable_prompt if cfg['uncertainty_contract']=='nullable_v1' else uncertainty_prompt)(prompt)
         if cfg.get("examples") == "documents":
             examples = json.loads((Path(__file__).parent / "contracts" / "luna_documents.json").read_text(encoding="utf-8"))
             if cfg.get('expanded_examples'):
@@ -257,14 +285,20 @@ class CandidateExtractor(LangExtractExtractor):
         # are absent; clocks remain literal strings.
         for example in examples:
             for row in example["extractions"]:
-                fields = payload_schema(row["kind"])["properties"]
+                fields = payload_schema(row["kind"], uncertainty=bool(cfg.get('uncertainty_contract')))["properties"]
                 raw = KINDS[row["kind"]].model_fields
                 for field in fields:
                     if field not in row["data"]:
                         info = raw.get(field)
                         row["data"][field] = info.get_default(call_default_factory=True) if info and not info.is_required() else None
+        if cfg.get('semantic_contract'):
+            from .semantic_contract import semantic_examples
+            examples=semantic_examples(examples)
+        if cfg.get('uncertainty_contract'):
+            from .uncertainty_contract import uncertainty_examples
+            examples=uncertainty_examples(examples)
         evidence = cfg.get("evidence", "quote")
-        schema = typed_schema(document.text, evidence,kinds=kinds)
+        schema = typed_schema(document.text, evidence,kinds=kinds,semantic=bool(cfg.get("semantic_contract")), uncertainty=bool(cfg.get('uncertainty_contract')))
         identity_object=cfg.get('identity_object') and (kinds is None or 'patient' in kinds)
         if kinds is not None:
             for example in examples:
@@ -322,8 +356,17 @@ class CandidateExtractor(LangExtractExtractor):
                 interval = SimpleNamespace(start_pos=start, end_pos=end)
             else:
                 quote = row["quote"]
-            rows.append(SimpleNamespace(extraction_class=row["kind"], extraction_text=quote,
-                attributes={"data": row['data'] if isinstance(row['data'],str) else json.dumps(row["data"])}, char_interval=interval))
+            payload = row['data']
+            context_passages=[]
+            if self.configuration.get('semantic_contract'):
+                from .semantic_contract import project_payload
+                payload=project_payload(row['kind'],payload)
+                for identifier in dict.fromkeys(row.get('context_span_ids',[])):
+                    if evidence=='span_id' and identifier==row['span_id']:continue
+                    support, left, right=lines[identifier]
+                    context_passages.append(locate_passage(document,support,left,right))
+            rows.append(SimpleNamespace(context_passages=context_passages, extraction_class=row["kind"], extraction_text=quote,
+                attributes={"data": payload if isinstance(payload,str) else json.dumps(payload)}, char_interval=interval))
         return SimpleNamespace(extractions=rows)
 
     def _extract(self, document):

@@ -10,7 +10,7 @@ from .domain import (Assessment, AssessmentClaim, CalculationTrace, ClinicalObse
                      THERAPY_TYPES, TimeInterval, TreatmentPlan, Uncertainty)
 from .temporal import treatment_minutes
 
-POLICY_VERSION = "8"
+POLICY_VERSION = "11"
 
 
 def stable_id(*values) -> str:
@@ -56,6 +56,8 @@ def _matches_service_target(relationship, source, document_refs):
 
 
 def _correct_clock_endpoint(intervals, correction):
+    if any(i.start is None or i.end is None for i in intervals):
+        return None
     # Temporal order belongs to the calculation copy, never the stored source.
     ordered = sorted(intervals, key=lambda interval: (interval.start, interval.end))
     if not ordered or correction.replacement_time is None:
@@ -136,7 +138,17 @@ def _event(group: list[ServiceClaim], relationships: list[CorrectionRelationship
     # Signed care records establish positive authority; later copies add no new authority.
     active = [c for c in group if c.evidence_kind in {EvidenceKind.CLINICAL, EvidenceKind.ATTENDANCE} and c.signed]
     retransmitted_docs = {r.document_id for r in applicable_relations if r.relation == "retransmits"}
-    active = [c for c in active if c.document_id not in retransmitted_docs]
+    active = [c for c in active if (c.source is not None and c.source.transmission_status == "original")
+              or c.document_id not in retransmitted_docs]
+    pending_authority = [c for c in group if (c.signed is None or c.evidence_kind is None and c.signed is not False)
+        and c.evidence_kind in {None, EvidenceKind.CLINICAL, EvidenceKind.ATTENDANCE}
+        and (c.document_id not in retransmitted_docs or c.source is not None and c.source.transmission_status == 'original')]
+    authority_unknown = not active and bool(pending_authority)
+    if authority_unknown:
+        active = pending_authority
+        uncertainties.append(Uncertainty(subject_id=event_id, claim_ids=[c.claim_id for c in active],
+            explanation='Clinical signature or evidence authority is not established; supported contact facts remain retained.',
+            needed_evidence='Applicable signature and source role'))
     excluded = [c.claim_id for c in group if c not in active]
     if excluded:
         decisions.append(ReconciliationDecision(rule="evidence_role", claim_ids=excluded,
@@ -176,11 +188,12 @@ def _event(group: list[ServiceClaim], relationships: list[CorrectionRelationship
             conflicts.append(_conflict(event_id, field, sorted(values), [c.claim_id for c in active], "Authoritative sources disagree; no timestamp-based arbitration."))
 
     # Break lists are sets per source, not a union of incompatible accounts.
-    break_sets = {tuple(sorted((i.start, i.end) for i in c.breaks)) for c in active if c.breaks}
+    complete = lambda i: i.start is not None and i.end is not None
+    break_sets = {tuple(sorted((i.start, i.end) for i in c.breaks if complete(i))) for c in active if any(complete(i) for i in c.breaks)}
     if not break_sets:
         # Clinical group description still contributes breaks if the experiment picked a roster.
-        break_sets = {tuple(sorted((i.start, i.end) for i in c.breaks)) for c in group
-                      if c.breaks and c.evidence_kind == EvidenceKind.CLINICAL and c.signed}
+        break_sets = {tuple(sorted((i.start, i.end) for i in c.breaks if complete(i))) for c in group
+                      if any(complete(i) for i in c.breaks) and c.evidence_kind == EvidenceKind.CLINICAL and c.signed}
     break_sets = break_sets or {()}
     if len(break_sets) > 1:
         conflicts.append(_conflict(event_id, "breaks", sorted(break_sets), [c.claim_id for c in group if c.breaks],
@@ -198,12 +211,13 @@ def _event(group: list[ServiceClaim], relationships: list[CorrectionRelationship
         for intervals, reported, present, correction_ids in _corrected_variants(source, corrections, event_id, decisions, conflicts, uncertainties):
             if present is not None:
                 presence_values.add(present)
-            if intervals:
+            complete_intervals = [i for i in intervals if complete(i)]
+            if complete_intervals:
                 for breaks in sorted(break_sets):
-                    value = treatment_minutes(intervals, [TimeInterval(start=a, end=b) for a, b in breaks])
+                    value = treatment_minutes(complete_intervals, [TimeInterval(start=a, end=b) for a, b in breaks])
                     options.add(value)
                     calculations.append(CalculationTrace(operation="interval_union_minus_nontherapeutic_time",
-                                                         inputs={"actual_intervals": [i.model_dump() for i in intervals],
+                                                         inputs={"actual_intervals": [i.model_dump() for i in complete_intervals],
                                                                  "breaks": [{"start": a, "end": b} for a, b in breaks]},
                                                          output={"minutes": value}, claim_ids=[source.claim_id] + correction_ids + break_claim_ids,
                                                          event_ids=[event_id], assumptions=["Local same-day half-open intervals; overlapping intervals counted once."]))
@@ -240,13 +254,28 @@ def _event(group: list[ServiceClaim], relationships: list[CorrectionRelationship
         lower, upper = 0, 0
         decisions.append(ReconciliationDecision(rule="patient_present_therapy_only", claim_ids=ids,
                                                explanation="Exclude nontherapy, absent-patient contacts, cancelled appointments and no-shows from patient therapy counts/minutes."))
-    elif presence is True and delivered is True and therapy_certain:
+    elif presence is True and delivered is True and therapy_certain and not authority_unknown:
         countable = True
         # Missing time leaves an unknown upper bound, not a zero-minute finding.
         lower, upper = (min(options), max(options)) if options else (0, None)
     else:
         countable = None
         lower, upper = 0, max(options) if options else None
+    partial_contact = any(any(not complete(i) for i in c.actual_intervals) and c.reported_minutes is None for c in active)
+    partial_break = any(any(not complete(i) for i in c.breaks) and c.reported_minutes is None for c in active)
+    if countable is not False and (partial_contact or partial_break):
+        if partial_contact: upper = None
+        if partial_break: lower = 0
+        uncertainties.append(Uncertainty(subject_id=event_id, claim_ids=[c.claim_id for c in active],
+            explanation='Incomplete patient contact or nontherapeutic interval endpoints remain unknown.', needed_evidence='Missing literal clock endpoint'))
+    pending_corrections = [r for r in applicable_relations if (r.relation == 'corrects' and r.signed is None or r.relation is None and r.signed is not False) and r.field != 'plan']
+    if pending_corrections:
+        lower, upper = 0, None
+        if any(r.field in {None, 'presence', 'record'} for r in pending_corrections):
+            countable = None
+        uncertainties.append(Uncertainty(subject_id=event_id,claim_ids=[r.claim_id for r in pending_corrections],
+            explanation='A source relationship has unknown correction authority or scope; original supported facts are retained.',
+            needed_evidence='Applicable correction signature and identified relation/field'))
     if any(u.explanation in {"Explicit correction creates an invalid interval.",
                             "Explicit correction cannot be applied safely to its target field."} for u in uncertainties):
         lower, upper = 0, None
@@ -287,6 +316,8 @@ def reconcile(extractions: list[DocumentExtraction], policy: str = "explicit") -
         raise ValueError("No extracted patient evidence")
     if len({x.patient.patient_id for x in extractions}) != 1:
         raise ValueError("Reconciliation accepts one patient at a time")
+    if extractions[0].patient.patient_id is None and len({x.document_id for x in extractions}) > 1:
+        raise ValueError('Unlinked documents cannot be merged as one unknown patient')
     claims = [c for x in extractions for c in x.claims]
     relationships = [c for c in claims if isinstance(c, CorrectionRelationship)]
     refs = {x.document_id: x.declared_id for x in extractions}
@@ -303,11 +334,17 @@ def reconcile(extractions: list[DocumentExtraction], policy: str = "explicit") -
                           for r in relationships if r.relation == "corrects" and r.signed
                           and r.field != 'plan'
                           and not any(_matches_service_target(r, source, refs) for source in services)]
+        uncertainties += [Uncertainty(subject_id=r.claim_id,claim_ids=[r.claim_id],
+            explanation='Possible service correction has unknown authority/scope and no matched target.',
+            needed_evidence='Signed relationship type and identified service target')
+            for r in relationships if (r.relation == 'corrects' and r.signed is None or r.relation is None and r.signed is not False)
+            and r.field != 'plan' and not (r.target_plan_ref and not r.target_encounter and not r.target_document_ref)
+            and not any(_matches_service_target(r,source,refs) for source in services)]
 
     # Equivalent signed plan claims share one requirement while retaining every source.
     plan_groups = defaultdict(list)
     for c in claims:
-        if isinstance(c, PlanClaim) and c.signed:
+        if isinstance(c, PlanClaim) and c.signed is True and c.effective_start is not None and c.required_days is not None and c.required_minutes is not None and c.service_types and c.week_basis == 'monday_sunday':
             key = (c.plan_ref, c.effective_start, c.effective_end, c.required_days, c.required_minutes, tuple(sorted(c.service_types)))
             plan_groups[key].append(c)
     plans = [TreatmentPlan(plan_id=stable_id(extractions[0].patient.patient_id, key), patient_id=group[0].patient_id,
@@ -316,6 +353,11 @@ def reconcile(extractions: list[DocumentExtraction], policy: str = "explicit") -
                            service_types=group[0].service_types, claim_ids=[c.claim_id for c in group])
              for key, group in plan_groups.items()]
     plan_claims = {c.claim_id: c for c in claims if isinstance(c, PlanClaim)}
+    for c in plan_claims.values():
+        if c.signed is not False and not any(c.claim_id in p.claim_ids for p in plans):
+            uncertainties.append(Uncertainty(subject_id=c.claim_id, claim_ids=[c.claim_id],
+                explanation='Quantitative plan has undocumented or ambiguous applicability/requirements.',
+                needed_evidence='Signature, effective start, weekly basis, eligible types and both numeric thresholds'))
     # End an older plan only when an explicit signed relationship identifies its successor.
     for relationship in relationships:
         if relationship.relation != "supersedes_plan" or not relationship.signed:
@@ -342,16 +384,18 @@ def reconcile(extractions: list[DocumentExtraction], policy: str = "explicit") -
     # or clinician roles into the patient.
     patient=extractions[0].patient
     def experiencer_identity(value):
-        return patient.patient_id if value.casefold() in {'patient','the patient',patient.patient_id.casefold(),(patient.name or '').casefold()} else value.casefold()
+        return patient.patient_id or 'patient' if value.casefold() in {'patient','the patient',(patient.patient_id or '').casefold(),(patient.name or '').casefold()} else value.casefold()
     # Explicit form reference links copied summaries to their original completion date.
-    assessment_claims = [c for c in claims if isinstance(c, AssessmentClaim)]
+    assessment_claims = [c for c in claims if isinstance(c, AssessmentClaim) and c.source_role == "result"]
     form_dates = defaultdict(set)
     for c in assessment_claims:
-        if c.form_ref and c.assessment_date is not None:
+        if c.instrument is not None and c.form_ref and c.assessment_date is not None:
             form_dates[(c.instrument.casefold(), c.form_ref, experiencer_identity(c.experiencer))].add(c.assessment_date)
     by_identity = defaultdict(list)
     for c in assessment_claims:
-        key = (c.instrument.casefold(), c.form_ref or (str(c.assessment_date) if c.assessment_date else c.claim_id), experiencer_identity(c.experiencer))
+        key = ((c.instrument or '').casefold(), c.form_ref or (str(c.assessment_date) if c.assessment_date else c.claim_id), experiencer_identity(c.experiencer))
+        if c.instrument is None or c.experiencer == 'not specified':
+            key = (*key, c.claim_id)
         if not c.form_ref and c.assessment_date is not None:
             matching = [k for k, dates in form_dates.items() if k[0] == key[0] and k[2] == key[2] and c.assessment_date in dates]
             if len(matching) == 1:
@@ -364,19 +408,19 @@ def reconcile(extractions: list[DocumentExtraction], policy: str = "explicit") -
         aid = stable_id(extractions[0].patient.patient_id, key)
         # A shared form ID does not resolve incompatible scores or completion dates.
         state = (State.CONFLICTED if len(scores) > 1 or len(dates) > 1 else
-                 State.INSUFFICIENT if not scores or not dates else State.RESOLVED)
+                 State.INSUFFICIENT if not scores or not dates or group[0].instrument is None or group[0].experiencer == 'not specified' else State.RESOLVED)
         if state == State.CONFLICTED:
             conflicts.append(_conflict(aid, "assessment", [f"{c.assessment_date}:{c.score}" for c in group], [c.claim_id for c in group],
                                        "One assessment identity has incompatible score/completion-date claims."))
         assessments.append(Assessment(assessment_id=aid, patient_id=group[0].patient_id, instrument=group[0].instrument,
                                       assessment_date=dates[0] if len(dates) == 1 else None, date_options=dates,
                                       form_ref=next((c.form_ref for c in group if c.form_ref), None),
-                                      experiencer=(patient.name or patient.patient_id) if key[2]==patient.patient_id else group[0].experiencer, reporters=sorted({c.reporter for c in group}),
+                                      experiencer=(patient.name or patient.patient_id or 'patient') if key[2]==patient.patient_id else group[0].experiencer, reporters=sorted({c.reporter for c in group}),
                                       score_options=scores, state=state, claim_ids=[c.claim_id for c in group],
                                       decisions=[ReconciliationDecision(rule="assessment_identity", claim_ids=[c.claim_id for c in group],
                                                                        explanation="Group by explicit form identity, or patient/instrument/completion date when form ID is absent; receipt/review is not a new questionnaire.")]))
-    assessments.sort(key=lambda a: (a.assessment_date or date.min, a.instrument, a.assessment_id))
+    assessments.sort(key=lambda a: (a.assessment_date or date.min, a.instrument or '', a.assessment_id))
     return PatientAbstraction(patient=extractions[0].patient, source_claims=claims, events=events, plans=plans,
-                              assessments=assessments, observations=[c for c in claims if isinstance(c, ClinicalObservation)],
+                              assessments=assessments, historical_assessments=[c for c in claims if isinstance(c, AssessmentClaim) and c.source_role == "historical_mention"], observations=[c for c in claims if isinstance(c, ClinicalObservation)],
                               functional_actions=[c for c in claims if isinstance(c, FunctionalAction)],
                               relationships=relationships, conflicts=conflicts, uncertainties=uncertainties)

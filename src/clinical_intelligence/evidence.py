@@ -23,10 +23,15 @@ def _number(value: int | float) -> str:
 
 
 def _contains_clock(text: str, value: int) -> bool:
+    if value is None:
+        return False
     return re.search(r"(?<!\d)" + re.escape(_clock(value)) + r"(?!\d)", text) is not None
 
 
 def _interval_match(text: str, value: dict) -> bool:
+    if value['start'] is None or value['end'] is None:
+        endpoint = value['start'] if value['start'] is not None else value['end']
+        return endpoint is not None and _contains_clock(text, endpoint)
     # Both endpoints must appear in order in the same local evidence unit.
     return re.search(r"(?<!\d)" + re.escape(_clock(value["start"]))
                      + r"(?!\d)[^\n]{0,180}?(?<!\d)"
@@ -68,7 +73,7 @@ def _matches(claim: ClinicalClaim, field: str, value, text: str, *, existing: bo
     if field == "score":
         score = r"(?<![\d.])" + _number(value) + r"(?!\d|\.\d)"
         total = re.search(r"(?:total(?:\s+score)?|score)\s*[:=]?\s*" + score, text, re.I)
-        table = re.search(re.escape(claim.instrument) + r"\s*\|\s*" + score, text, re.I)
+        table = claim.instrument is not None and re.search(re.escape(claim.instrument) + r"\s*\|\s*" + score, text, re.I)
         return bool(total or table)
     return False
 

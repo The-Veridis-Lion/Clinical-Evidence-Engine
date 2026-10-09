@@ -122,7 +122,7 @@ class SQLiteStore:
                     raise ValueError("Immutable extraction snapshot already exists with a divergent same-key payload")
                 return
             self.connection.execute("INSERT INTO extractions VALUES(?,?,?,?)",
-                                    (extraction.document_id, extraction.extraction_key, extraction.patient.patient_id,
+                                    (extraction.document_id, extraction.extraction_key, extraction.patient.patient_id or 'unlinked:' + extraction.document_id,
                                      extraction.model_dump_json()))
             self.connection.execute("UPDATE documents SET status='extracted',extraction_key=?,declared_id=?,error=NULL WHERE id=?",
                                     (extraction.extraction_key, extraction.declared_id, extraction.document_id))
@@ -167,6 +167,8 @@ class SQLiteStore:
         return PatientAbstraction.model_validate_json(row[0]) if row else None
 
     def save_abstraction(self, abstraction: PatientAbstraction, input_key: str):
+        if abstraction.patient.patient_id is None:
+            return  # Unlinked source facts persist; no shared unknown-patient cache.
         with self.connection:
             self.connection.execute("INSERT OR REPLACE INTO abstractions VALUES(?,?,?)",
                                     (abstraction.patient.patient_id, input_key, abstraction.model_dump_json()))

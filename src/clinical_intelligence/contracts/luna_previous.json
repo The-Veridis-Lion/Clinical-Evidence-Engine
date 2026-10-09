@@ -14,6 +14,5 @@
   "scope_rules": true,
   "clinical_rules": true,
   "flow": "clinical_partition",
-  "observation_scope": true,
-  "uncertainty_contract": "nullable_v1"
+  "observation_scope": true
 }

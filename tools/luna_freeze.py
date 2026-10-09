@@ -8,9 +8,12 @@ if __name__=='__main__':
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--candidates',nargs='+',required=True,choices=CANDIDATES)
     parser.add_argument('--output',required=True)
+    parser.add_argument('--dataset',help='Reviewed external confirmation dataset; otherwise uses existing sealed fixtures')
     args=parser.parse_args()
     target=Path(args.output)
     if target.exists():raise ValueError('Freeze files are immutable; use a new filename')
+    rows=datasets(['original'],args.dataset) if args.dataset else datasets(['sealed'])
+    field='dataset_sha256' if args.dataset else 'sealed_dataset_sha256'
     dump(target,dict(created=datetime.now(timezone.utc).isoformat(),code=code_identity(),
-        candidates={c:CANDIDATES[c] for c in args.candidates},sealed_dataset_sha256=digest(datasets(['sealed']))))
+        candidates={c:CANDIDATES[c] for c in args.candidates},**{field:digest(rows)}))
     print(str(target.resolve()))

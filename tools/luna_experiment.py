@@ -27,11 +27,14 @@ from clinical_intelligence.reconcile import reconcile
 from clinical_intelligence.query import query_patient, QuerySpec
 
 ROOT = Path(__file__).resolve().parents[1]
-SCORER_VERSION = "critical-fields-9"
+SCORER_VERSION = "critical-fields-11-role"  # Same labels; symmetric known patient person/role aliases.
 CANDIDATES = {
     "baseline": dict(schema="string", reasoning="high"),
-    "clinical_partition": json.loads((ROOT/'src/clinical_intelligence/contracts/luna_best.json').read_text(encoding='utf-8')),
+    "clinical_partition": json.loads((ROOT/'src/clinical_intelligence/contracts/luna_previous.json').read_text(encoding='utf-8')),
 }
+CANDIDATES['semantic_v1'] = dict(CANDIDATES['clinical_partition'], semantic_contract='v1')
+CANDIDATES['uncertainty_v1'] = dict(CANDIDATES['clinical_partition'], uncertainty_contract='v1')
+CANDIDATES['nullable_v1'] = dict(CANDIDATES['clinical_partition'], uncertainty_contract='nullable_v1')
 CANDIDATES['semantic_resample'] = {
     **{k:v for k,v in CANDIDATES['clinical_partition'].items() if k != 'observation_scope'},
     'flow': 'resample_repair',
@@ -51,18 +54,20 @@ def digest(value):
 
 def code_identity():
     paths=list((ROOT/'src/clinical_intelligence').glob('*.py'))+list((ROOT/'src/clinical_intelligence/contracts').glob('*.json'))
-    paths += [ROOT/'tools'/name for name in ('luna_experiment.py','analyze_luna.py','luna_quality.py','luna_freeze.py')]
+    paths += [ROOT/'tools'/name for name in ('luna_experiment.py','analyze_luna.py','luna_quality.py','luna_freeze.py','semantic_results.py','luna_failure_audit.py','uncertainty_results.py','luna_repair_replay.py')]
     return dict(commit=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip(),
         files={str(p.relative_to(ROOT)):hashlib.sha256(p.read_bytes()).hexdigest() for p in paths},
         packages={name:importlib.metadata.version(name) for name in ('langextract','pydantic','intervaltree')},
         cli_version=subprocess.check_output([__import__('shutil').which('codex'),'--version'],text=True,encoding='utf-8').strip())
 
 
-def verify_freeze(path,candidates,code):
+def verify_freeze(path,candidates,code,rows=None):
     frozen=json.loads(Path(path).read_text(encoding='utf-8'))
     for field in ('files','packages','cli_version'):
         if frozen['code'][field]!=code[field]:raise ValueError(f'Candidate freeze mismatch: {field}')
-    if frozen['sealed_dataset_sha256']!=digest(datasets(['sealed'])):raise ValueError('Sealed data changed after freeze')
+    if frozen.get('dataset_sha256') is not None:
+        if rows is None or frozen['dataset_sha256']!=digest(rows):raise ValueError('Confirmation data changed after freeze')
+    elif frozen['sealed_dataset_sha256']!=digest(datasets(['sealed'])):raise ValueError('Sealed data changed after freeze')
     if any(frozen['candidates'].get(c)!=CANDIDATES[c] for c in candidates):raise ValueError('Candidate not frozen')
     return digest(frozen)
 
@@ -162,6 +167,8 @@ def score(row, extraction):
             value=fact.get(field)
             if value==row['patient']['name']:
                 fact[field]=[value,'patient',"the patient"]
+            elif value in ('patient','the patient') and row['patient']['name']:
+                fact[field]=['patient','the patient',row['patient']['name']]
             elif value=='partner':
                 fact[field]=['partner',"patient's partner",'the partner']
     mismatches = []
@@ -237,7 +244,7 @@ def fact_view(claims):
         merged=dict(values[0])
         for field in ('actual_intervals','scheduled_intervals','unspecified_intervals','breaks'):
             intervals={json.dumps(v,sort_keys=True):v for c in values for v in c.get(field,[])}
-            merged[field]=sorted(intervals.values(),key=lambda v:(v['start'],v['end']))
+            merged[field]=sorted(intervals.values(),key=lambda v:(v['start'] if v['start'] is not None else -1,v['end'] if v['end'] is not None else -1))
         for field in ('signed','patient_present','delivered','reported_minutes','recorded_at'):
             distinct={json.dumps(c.get(field),sort_keys=True):c.get(field) for c in values if c.get(field) is not None}
             merged[field]=next(iter(distinct.values())) if len(distinct)==1 else {'conflicting_values':list(distinct.values())} if distinct else None
@@ -353,7 +360,7 @@ def main():
     rows=datasets(args.splits,args.private)
     if args.samples:rows=[r for r in rows if r['id'] in args.samples]
     code=code_identity()
-    freeze_sha256=verify_freeze(args.freeze,args.candidates,code) if 'sealed' in args.splits else None
+    freeze_sha256=verify_freeze(args.freeze,args.candidates,code,rows) if args.freeze else None
     manifest=dict(experiment=args.run,arguments=vars(args),dataset_sha256=digest(rows),samples=[{k:r[k] for k in ('id','source','group','split')} for r in rows],
                   code=code,scorer=SCORER_VERSION,candidates={c:CANDIDATES[c] for c in args.candidates},model='gpt-6-luna',application_cache='disabled',backend='unavailable',freeze_sha256=freeze_sha256)
     if (run/'manifest.json').exists():

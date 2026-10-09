@@ -98,9 +98,10 @@ def utilization(abstraction: PatientAbstraction, start: date, end: date, service
     # that this corpus cannot establish final utilization. No missing base visit
     # is invented and no unresolved correction is silently treated as zero.
     unresolved_ids={u.subject_id for u in abstraction.uncertainties
-                    if u.explanation=='Correction target constraints do not identify a service source.'}
+                    if u.explanation in {'Correction target constraints do not identify a service source.',
+                        'Possible service correction has unknown authority/scope and no matched target.'}}
     unresolved=[r for r in abstraction.relationships if r.claim_id in unresolved_ids
-                and r.field in {'arrival','departure','minutes','presence','record'}
+                and r.field in {None,'arrival','departure','minutes','presence','record'}
                 and (r.service_date is None or start<=r.service_date<=end)] if service_types else []
     if unresolved:
         totals={key:bounded(0,None) for key in ('sessions','distinct_service_days','therapy_days','minutes','hours')}

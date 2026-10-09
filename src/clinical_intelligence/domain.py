@@ -4,10 +4,11 @@ from __future__ import annotations
 from datetime import date, datetime
 from enum import StrEnum
 from typing import Annotated, Literal
-from pydantic import BaseModel, ConfigDict, Field, model_validator
+import re
+from pydantic import BaseModel, ConfigDict, Field, StrictBool, model_validator
 
 # Extraction contracts and derived facts have separate invalidation versions.
-ABSTRACTION_VERSION = "4"
+ABSTRACTION_VERSION = "6"
 
 
 class Model(BaseModel):
@@ -45,8 +46,8 @@ class EvidenceKind(StrEnum):
 
 
 class Patient(Model):
-    patient_id: str  # MRN when explicitly supplied; never inferred from a name alone
-    name: str
+    patient_id: str | None = Field(default=None, min_length=1)  # Unlinked identities stay isolated by document in storage.
+    name: str | None = Field(default=None, min_length=1)
     dob: date | None = None
 
 
@@ -81,79 +82,121 @@ class SourcePassage(Model):
 
 class TimeInterval(Model):
     """Half-open interval of local calendar-day minutes. No implied overnight wrap."""
-    start: int = Field(ge=0, lt=1440)
-    end: int = Field(gt=0, le=1440)
+    start: int | None = Field(default=None, ge=0, lt=1440, strict=True)
+    end: int | None = Field(default=None, gt=0, le=1440, strict=True)
 
     @model_validator(mode="after")
     def forward(self):
-        if self.end <= self.start:
+        if self.start is None and self.end is None:
+            raise ValueError('An interval needs at least one source-supported endpoint')
+        if self.start is not None and self.end is not None and self.end <= self.start:
             raise ValueError("Interval end must follow start on the same local date")
         return self
 
 
 # Source claims preserve a document's statements, including errors or disagreements.
+class FieldUncertainty(Model):
+    field: str
+    state: Literal["not_documented", "ambiguous", "not_applicable"]
+    explanation: str
+
+
 class ClinicalClaim(Model):
     claim_id: str
     document_id: str
-    patient_id: str
+    patient_id: str | None
     passages: list[SourcePassage] = Field(min_length=1)
     statement: str
     recorded_at: datetime | None = None
+    uncertainty_notes: list[FieldUncertainty] = Field(default_factory=list)
+
+    @model_validator(mode="after")
+    def uncertainty_scope(self):
+        if any(isinstance(getattr(self, field), str) and not getattr(self, field).strip() for field in type(self).model_fields):
+            raise ValueError('Empty text is not an unknown value; use null or the canonical not specified role')
+        for note in self.uncertainty_notes:
+            match = re.fullmatch(r'(actual_intervals|scheduled_intervals|unspecified_intervals|breaks)\[(\d+)\]\.(start|end)', note.field)
+            if match:
+                intervals = getattr(self, match[1], [])
+                if int(match[2]) >= len(intervals):
+                    raise ValueError('Uncertainty note interval index is outside this claim')
+                value = getattr(intervals[int(match[2])], match[3])
+            elif note.field in type(self).model_fields and note.field != 'uncertainty_notes':
+                value = getattr(self, note.field)
+                if isinstance(value, list) and any(isinstance(i, TimeInterval) and (i.start is None or i.end is None) for i in value):
+                    value = None  # Annotation describes a missing component, not loss of known endpoints.
+            else:
+                raise ValueError('Uncertainty note must identify a field of this claim')
+            if value not in (None, []):
+                raise ValueError('Uncertainty note must describe a null value or an empty evidence list')
+        return self
+
+
+class ServiceSource(Model):
+    """Source metadata for this record, not a document-wide authority label."""
+    content_kind: Literal["clinical", "attendance", "schedule", "draft", "billing", "correction"] | None
+    transmission_status: Literal["original", "retransmitted", "unknown"]
+    original_signed: bool | None
+    current_signed: bool | None
+    source_disposition: str | None
 
 
 class ServiceClaim(ClinicalClaim):
     kind: Literal["service"] = "service"
+    source: ServiceSource | None = None
     encounter_ref: str | None = None
     appointment_ref: str | None = None
     service_date: date | None = None
     service_type: ServiceType | None = None
-    evidence_kind: EvidenceKind
-    signed: bool = False
+    evidence_kind: EvidenceKind | None = None
+    signed: StrictBool | None = None
     # None means unknown; patient presence and service delivery are separate claims.
-    patient_present: bool | None = None
-    delivered: bool | None = None
+    patient_present: StrictBool | None = None
+    delivered: StrictBool | None = None
     # Keep actual contact, scheduled slots and reported duration separate.
     actual_intervals: list[TimeInterval] = Field(default_factory=list)
     scheduled_intervals: list[TimeInterval] = Field(default_factory=list)
     # Retain header clocks without promoting them to delivered treatment evidence.
     unspecified_intervals: list[TimeInterval] = Field(default_factory=list)
     breaks: list[TimeInterval] = Field(default_factory=list)
-    reported_minutes: int | None = Field(default=None, ge=0)
+    reported_minutes: int | None = Field(default=None, ge=0, strict=True)
     reason: str | None = None
 
 
 class PlanClaim(ClinicalClaim):
     kind: Literal["plan"] = "plan"
     plan_ref: str | None = None
-    effective_start: date
+    effective_start: date | None = None
     effective_end: date | None = None
-    required_days: int = Field(ge=0, le=7)
-    required_minutes: int = Field(ge=0)
-    service_types: list[ServiceType] = Field(min_length=1)
-    week_basis: Literal["monday_sunday"] = "monday_sunday"
-    signed: bool
+    required_days: int | None = Field(default=None, ge=0, le=7, strict=True)
+    required_minutes: int | None = Field(default=None, ge=0, strict=True)
+    service_types: list[ServiceType] = Field(default_factory=list)
+    week_basis: Literal["monday_sunday"] | None = None
+    signed: StrictBool | None = None
 
 
 class AssessmentClaim(ClinicalClaim):
     kind: Literal["assessment"] = "assessment"
-    instrument: str
+    source_role: Literal["result", "historical_mention"] = "result"
+    reference_date: date | None = None
+    instrument: str | None = None
     assessment_date: date | None = None
     form_ref: str | None = None
-    score: float | None = None
+    score: float | None = Field(default=None, strict=True)
     reporter: str
     experiencer: str
-    copied: bool = False
+    copied: StrictBool | None = None
 
 
 class ClinicalObservation(ClinicalClaim):
     kind: Literal["observation"] = "observation"
     observation_date: date | None = None
-    category: Literal["symptom", "function", "safety", "treatment_reason", "response"]
+    category: Literal["symptom", "function", "safety", "treatment_reason", "response"] | None = None
     # A partner may report the patient's symptoms or describe their own experience.
     reporter: str
     experiencer: str
-    polarity: Literal["present", "absent", "uncertain"]
-    temporality: Literal["current", "historical", "planned"]
+    polarity: Literal["present", "absent", "uncertain"] | None = None
+    temporality: Literal["current", "historical", "planned"] | None = None
 
 
 class FunctionalAction(ClinicalClaim):
@@ -171,14 +214,14 @@ class FunctionalAction(ClinicalClaim):
 # A correction identifies a target and field; reconciliation decides its effect.
 class CorrectionRelationship(ClinicalClaim):
     kind: Literal["relationship"] = "relationship"
-    relation: Literal["corrects", "retransmits", "duplicates", "supersedes_plan"]
-    signed: bool = False
+    relation: Literal["corrects", "retransmits", "duplicates", "supersedes_plan"] | None = None
+    signed: StrictBool | None = None
     target_encounter: str | None = None
     target_document_ref: str | None = None
     target_plan_ref: str | None = None
-    field: Literal["arrival", "departure", "minutes", "presence", "plan", "record"]
+    field: Literal["arrival", "departure", "minutes", "presence", "plan", "record"] | None = None
     replacement_time: int | None = Field(default=None, ge=0, le=1440)
-    replacement_minutes: int | None = Field(default=None, ge=0)
+    replacement_minutes: int | None = Field(default=None, ge=0, strict=True)
     replacement_presence: bool | None = None
     original_time: int | None = Field(default=None, ge=0, le=1440)
     service_date: date | None = None
@@ -261,7 +304,7 @@ class CalculationTrace(Model):
 # Derived events keep eligibility separate from duration and its supported alternatives.
 class ServiceEvent(Model):
     event_id: str
-    patient_id: str
+    patient_id: str | None
     encounter_ref: str | None
     appointment_refs: list[str]
     service_date: date | None
@@ -286,7 +329,7 @@ class ServiceEvent(Model):
 # Resolved plan periods may be shortened by an explicit supersession relationship.
 class TreatmentPlan(Model):
     plan_id: str
-    patient_id: str
+    patient_id: str | None
     effective_start: date
     effective_end: date | None
     required_days: int
@@ -297,8 +340,8 @@ class TreatmentPlan(Model):
 
 class Assessment(Model):
     assessment_id: str
-    patient_id: str
-    instrument: str
+    patient_id: str | None
+    instrument: str | None
     # Conflicting completion dates remain alternatives instead of choosing the earliest.
     assessment_date: date | None
     date_options: list[date] = Field(default_factory=list)
@@ -319,6 +362,7 @@ class PatientAbstraction(Model):
     events: list[ServiceEvent]
     plans: list[TreatmentPlan]
     assessments: list[Assessment]
+    historical_assessments: list[AssessmentClaim] = Field(default_factory=list)
     observations: list[ClinicalObservation]
     functional_actions: list[FunctionalAction] = Field(default_factory=list)
     relationships: list[CorrectionRelationship]

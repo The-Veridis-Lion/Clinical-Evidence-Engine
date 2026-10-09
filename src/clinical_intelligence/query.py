@@ -78,11 +78,12 @@ def _clinical_progress(abstraction, spec, start, end):
     assessments = [a for a in abstraction.assessments if any(start <= d <= end for d in a.date_options)]
     result = {"assessments": [a.model_dump() for a in assessments],
               "undated_assessments": [a.model_dump() for a in abstraction.assessments if not a.date_options],
-              "score_changes": []}
+              "score_changes": [],
+              "historical_assessment_mentions": [a.model_dump() for a in abstraction.historical_assessments]}
     # Compare the same instrument and experiencer; uncertain dates cannot order a trend.
-    histories = sorted({(a.instrument.casefold(), a.experiencer.casefold()) for a in assessments})
+    histories = sorted({(a.instrument.casefold(), a.experiencer.casefold()) for a in assessments if a.instrument is not None and a.experiencer != 'not specified'})
     for instrument, experiencer in histories:
-        sequence = [a for a in assessments if a.instrument.casefold() == instrument and a.experiencer.casefold() == experiencer and a.assessment_date is not None]
+        sequence = [a for a in assessments if a.instrument is not None and a.instrument.casefold() == instrument and a.experiencer.casefold() == experiencer and a.assessment_date is not None]
         for a, b in zip(sequence, sequence[1:]):
             if not a.score_options or not b.score_options:
                 continue

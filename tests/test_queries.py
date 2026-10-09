@@ -13,7 +13,7 @@ MONDAY = date(2026, 2, 2)
 
 def plan(ref="PLAN-A", start=MONDAY, end=MONDAY + timedelta(days=6), minutes=150, days=3):
     return {"factory": PlanClaim, "plan_ref": ref, "effective_start": start, "effective_end": end,
-            "required_days": days, "required_minutes": minutes,
+            "required_days": days, "required_minutes": minutes, "week_basis": "monday_sunday",
             "service_types": ["individual", "group", "family"], "signed": True}
 
 

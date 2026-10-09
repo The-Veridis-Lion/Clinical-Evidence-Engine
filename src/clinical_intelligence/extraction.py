@@ -41,7 +41,7 @@ class LangExtractExtractor:
                        pydantic=importlib.metadata.version("pydantic"),
                        cli_version=getattr(self.provider, "cli_version", "unavailable"),
                        runtime={name: hashlib.sha256((Path(__file__).parent / name).read_bytes()).hexdigest()
-                                for name in ("provider.py", "extraction.py", "domain.py", "extraction_validation.py")})
+                                for name in ("provider.py", "extraction.py", "domain.py", "extraction_validation.py", "semantic_contract.py", "uncertainty_contract.py")})
         return hashlib.sha256(json.dumps(payload, sort_keys=True).encode()).hexdigest()
 
     def extract(self, document):
@@ -100,18 +100,21 @@ class LangExtractExtractor:
             else:
                 if extraction.extraction_class not in classes:
                     raise ValueError(f"Unsupported claim class {extraction.extraction_class}")
-                pending.append((extraction.extraction_class, payload, passage))
+                pending.append((extraction.extraction_class, payload, [passage] + list(getattr(extraction, "context_passages", []))))
         if patient is None:
             raise ValueError("No grounded patient identity extracted")
         claims = {}
-        for kind, payload, passage in pending:
+        for kind, payload, passages in pending:
+            passage = passages[0]
             # Convert literal clock text in code; the model never calculates minutes.
             payload = normalize_clock_fields(kind, payload)
             # Identical payloads at the same source span share one claim identity.
             digest = hashlib.sha256((document.document_id + kind + json.dumps(payload, sort_keys=True)
                                      + str(passage.start) + str(passage.end)).encode()).hexdigest()[:24]
+            if len(passages) > 1:
+                digest = hashlib.sha256((digest + json.dumps([(p.start, p.end) for p in passages])).encode()).hexdigest()[:24]
             claim = classes[kind](claim_id=digest, document_id=document.document_id, patient_id=patient.patient_id,
-                                  passages=[passage], **payload)
+                                  passages=passages, **payload)
             claims[digest] = claim
         usage = self.provider.usage(perf_counter() - start)
         usage.input_characters = len(document.text)
@@ -191,7 +194,7 @@ def normalize_clock_fields(kind: str, payload: dict) -> dict:
     payload = dict(payload)
     if kind == "service":
         for name in ("actual_intervals", "scheduled_intervals", "unspecified_intervals", "breaks"):
-            payload[name] = [{"start": clock_minutes(i["start"]), "end": clock_minutes(i["end"])}
+            payload[name] = [{endpoint: clock_minutes(i[endpoint]) if i.get(endpoint) is not None else None for endpoint in ('start','end')}
                              for i in payload.get(name, [])]
     elif kind == "relationship":
         for name in ("replacement_time", "original_time"):

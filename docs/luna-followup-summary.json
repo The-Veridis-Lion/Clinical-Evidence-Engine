@@ -1,0 +1,930 @@
+{
+  "version": "nullable-delivery-1",
+  "scope": "AI-assisted engineering evaluation; not clinical validation",
+  "starting_commit": "861f2607b9aa8559fd860159439463d4d0229e4d",
+  "default_configuration": {
+    "schema": "typed",
+    "prompt": "concise",
+    "examples": "documents",
+    "evidence": "span_id",
+    "semantic_rules": true,
+    "expanded_examples": true,
+    "aligned_examples": true,
+    "reasoning": "high",
+    "precise_rules": true,
+    "identifier_inventory": true,
+    "identity_object": true,
+    "clinical_examples": true,
+    "scope_rules": true,
+    "clinical_rules": true,
+    "flow": "clinical_partition",
+    "observation_scope": true,
+    "uncertainty_contract": "nullable_v1"
+  },
+  "configuration_sha256": "7f006a866c55453633ca6b7ee71365f1945d35d86238571938607912a61baa6f",
+  "model": "gpt-6-luna",
+  "reasoning": "high",
+  "cli_version": "codex-cli 0.159.3",
+  "backend_snapshot": "unavailable",
+  "final_offline_regression": {
+    "passed": 238,
+    "model_calls": 0
+  },
+  "comparisons": {
+    "uncertainty-dev-v1": {
+      "scorer": "critical-fields-11-role",
+      "replay_new_model_calls": 0,
+      "evaluation_sha256": "70be33bab595f347294b096030aaaff7faa1fc4a41e3a1ebc5e238465ff39c93",
+      "summary": {
+        "clinical_partition/synthetic_uncertainty": {
+          "documents": 24,
+          "correct": 12,
+          "accepted": 24,
+          "misleading": 12,
+          "calls": 49,
+          "tp": 306,
+          "fp": 14,
+          "fn": 30,
+          "seconds": 308.7165323002264,
+          "input_tokens": 1003822,
+          "output_tokens": 11099,
+          "tokens_unknown": 0,
+          "groups": {
+            "identity": [
+              96,
+              0,
+              0
+            ],
+            "binding": [
+              34,
+              0,
+              2
+            ],
+            "time": [
+              88,
+              2,
+              2
+            ],
+            "semantics": [
+              88,
+              12,
+              26
+            ],
+            "relationships": [
+              0,
+              0,
+              0
+            ],
+            "grounding": [
+              20,
+              0,
+              0
+            ]
+          },
+          "precision": 0.95625,
+          "recall": 0.9107142857142857
+        },
+        "uncertainty_v1/synthetic_uncertainty": {
+          "documents": 24,
+          "correct": 23,
+          "accepted": 23,
+          "misleading": 0,
+          "calls": 52,
+          "tp": 319,
+          "fp": 0,
+          "fn": 17,
+          "seconds": 324.3444032999687,
+          "input_tokens": 1128885,
+          "output_tokens": 12012,
+          "tokens_unknown": 0,
+          "groups": {
+            "identity": [
+              92,
+              0,
+              4
+            ],
+            "binding": [
+              34,
+              0,
+              2
+            ],
+            "time": [
+              84,
+              0,
+              6
+            ],
+            "semantics": [
+              109,
+              0,
+              5
+            ],
+            "relationships": [
+              0,
+              0,
+              0
+            ],
+            "grounding": [
+              21,
+              0,
+              0
+            ]
+          },
+          "precision": 1.0,
+          "recall": 0.9494047619047619
+        }
+      },
+      "latency": {
+        "clinical_partition": {
+          "median": 11.99160229996778,
+          "max": 22.264686400070786,
+          "total": 308.7165323002264
+        },
+        "uncertainty_v1": {
+          "median": 12.093069099937566,
+          "max": 29.095236599911004,
+          "total": 324.3444032999687
+        }
+      },
+      "query_checks": [],
+      "assessment_query_checks": [],
+      "clinical_coverage": {}
+    },
+    "uncertainty-original-v1": {
+      "scorer": "critical-fields-11-role",
+      "replay_new_model_calls": 0,
+      "evaluation_sha256": "c2f799fc5a5bfe55c15bd7ba50f96508d6fc2ba1bcfaaa492295eb8724df25c6",
+      "summary": {
+        "clinical_partition/original_task": {
+          "documents": 31,
+          "correct": 31,
+          "accepted": 31,
+          "misleading": 0,
+          "calls": 64,
+          "tp": 703,
+          "fp": 0,
+          "fn": 0,
+          "seconds": 1178.2796360998182,
+          "input_tokens": 1336401,
+          "output_tokens": 103812,
+          "tokens_unknown": 0,
+          "groups": {
+            "identity": [
+              124,
+              0,
+              0
+            ],
+            "binding": [
+              89,
+              0,
+              0
+            ],
+            "time": [
+              242,
+              0,
+              0
+            ],
+            "semantics": [
+              234,
+              0,
+              0
+            ],
+            "relationships": [
+              14,
+              0,
+              0
+            ],
+            "grounding": [
+              296,
+              0,
+              0
+            ]
+          },
+          "precision": 1.0,
+          "recall": 1.0
+        },
+        "uncertainty_v1/original_task": {
+          "documents": 31,
+          "correct": 22,
+          "accepted": 31,
+          "misleading": 9,
+          "calls": 67,
+          "tp": 674,
+          "fp": 1,
+          "fn": 29,
+          "seconds": 1264.0881202997407,
+          "input_tokens": 1496613,
+          "output_tokens": 115628,
+          "tokens_unknown": 0,
+          "groups": {
+            "identity": [
+              124,
+              0,
+              0
+            ],
+            "binding": [
+              89,
+              0,
+              0
+            ],
+            "time": [
+              242,
+              0,
+              0
+            ],
+            "semantics": [
+              207,
+              1,
+              27
+            ],
+            "relationships": [
+              12,
+              0,
+              2
+            ],
+            "grounding": [
+              295,
+              0,
+              0
+            ]
+          },
+          "precision": 0.9985185185185185,
+          "recall": 0.9587482219061166
+        }
+      },
+      "latency": {
+        "clinical_partition": {
+          "median": 39.96257870004047,
+          "max": 61.50319310009945,
+          "total": 1178.2796360998182
+        },
+        "uncertainty_v1": {
+          "median": 41.940565099939704,
+          "max": 74.44886599993333,
+          "total": 1264.0881202997407
+        }
+      },
+      "query_checks": [
+        {
+          "candidate": "clinical_partition",
+          "repeat": 1,
+          "correct": true,
+          "unnecessary_unknown": false,
+          "misleading_zero": false,
+          "false_definite": false,
+          "provenance_complete": false
+        },
+        {
+          "candidate": "uncertainty_v1",
+          "repeat": 1,
+          "correct": true,
+          "unnecessary_unknown": false,
+          "misleading_zero": false,
+          "false_definite": false,
+          "provenance_complete": false
+        }
+      ],
+      "assessment_query_checks": [
+        {
+          "candidate": "clinical_partition",
+          "repeat": 1,
+          "correct": true
+        },
+        {
+          "candidate": "uncertainty_v1",
+          "repeat": 1,
+          "correct": true
+        }
+      ],
+      "clinical_coverage": {
+        "clinical_partition": {
+          "covered": 24,
+          "required": 27
+        },
+        "uncertainty_v1": {
+          "covered": 22,
+          "required": 27
+        }
+      }
+    },
+    "nullable-dev-final": {
+      "scorer": "critical-fields-11-role",
+      "replay_new_model_calls": 0,
+      "evaluation_sha256": "70be33bab595f347294b096030aaaff7faa1fc4a41e3a1ebc5e238465ff39c93",
+      "summary": {
+        "nullable_v1/synthetic_uncertainty": {
+          "documents": 24,
+          "correct": 24,
+          "accepted": 24,
+          "misleading": 0,
+          "calls": 48,
+          "tp": 336,
+          "fp": 0,
+          "fn": 0,
+          "seconds": 309.1880364998942,
+          "input_tokens": 1023545,
+          "output_tokens": 10839,
+          "tokens_unknown": 0,
+          "groups": {
+            "identity": [
+              96,
+              0,
+              0
+            ],
+            "binding": [
+              36,
+              0,
+              0
+            ],
+            "time": [
+              90,
+              0,
+              0
+            ],
+            "semantics": [
+              114,
+              0,
+              0
+            ],
+            "relationships": [
+              0,
+              0,
+              0
+            ],
+            "grounding": [
+              22,
+              0,
+              0
+            ]
+          },
+          "precision": 1.0,
+          "recall": 1.0
+        }
+      },
+      "latency": {
+        "nullable_v1": {
+          "median": 12.143060950038489,
+          "max": 20.059405299951322,
+          "total": 309.1880364998942
+        }
+      },
+      "query_checks": [],
+      "assessment_query_checks": [],
+      "clinical_coverage": {}
+    },
+    "nullable-original-final": {
+      "scorer": "critical-fields-11-role",
+      "replay_new_model_calls": 0,
+      "evaluation_sha256": "c2f799fc5a5bfe55c15bd7ba50f96508d6fc2ba1bcfaaa492295eb8724df25c6",
+      "summary": {
+        "nullable_v1/original_task": {
+          "documents": 31,
+          "correct": 23,
+          "accepted": 31,
+          "misleading": 8,
+          "calls": 65,
+          "tp": 677,
+          "fp": 1,
+          "fn": 26,
+          "seconds": 1194.8392727005994,
+          "input_tokens": 1428243,
+          "output_tokens": 107687,
+          "tokens_unknown": 0,
+          "groups": {
+            "identity": [
+              124,
+              0,
+              0
+            ],
+            "binding": [
+              89,
+              0,
+              0
+            ],
+            "time": [
+              242,
+              0,
+              0
+            ],
+            "semantics": [
+              209,
+              1,
+              25
+            ],
+            "relationships": [
+              13,
+              0,
+              1
+            ],
+            "grounding": [
+              292,
+              0,
+              0
+            ]
+          },
+          "precision": 0.9985250737463127,
+          "recall": 0.9630156472261735
+        }
+      },
+      "latency": {
+        "nullable_v1": {
+          "median": 36.852384399971925,
+          "max": 74.94316480006091,
+          "total": 1194.8392727005994
+        }
+      },
+      "query_checks": [
+        {
+          "candidate": "nullable_v1",
+          "repeat": 1,
+          "correct": true,
+          "unnecessary_unknown": false,
+          "misleading_zero": false,
+          "false_definite": false,
+          "provenance_complete": false
+        }
+      ],
+      "assessment_query_checks": [
+        {
+          "candidate": "nullable_v1",
+          "repeat": 1,
+          "correct": true
+        }
+      ],
+      "clinical_coverage": {
+        "nullable_v1": {
+          "covered": 24,
+          "required": 27
+        }
+      }
+    },
+    "nullable-confirmation-final": {
+      "scorer": "critical-fields-11-role",
+      "replay_new_model_calls": 0,
+      "evaluation_sha256": "d488b6fd7b77a43c968b4e1db1836fb8f3920be7a3aa21b974bb955a89744651",
+      "summary": {
+        "clinical_partition/synthetic_uncertainty": {
+          "documents": 9,
+          "correct": 3,
+          "accepted": 9,
+          "misleading": 6,
+          "calls": 18,
+          "tp": 129,
+          "fp": 6,
+          "fn": 6,
+          "seconds": 111.28486440016422,
+          "input_tokens": 366436,
+          "output_tokens": 5145,
+          "tokens_unknown": 0,
+          "groups": {
+            "identity": [
+              36,
+              0,
+              0
+            ],
+            "binding": [
+              15,
+              0,
+              0
+            ],
+            "time": [
+              39,
+              0,
+              0
+            ],
+            "semantics": [
+              39,
+              6,
+              6
+            ],
+            "relationships": [
+              0,
+              0,
+              0
+            ],
+            "grounding": [
+              12,
+              0,
+              0
+            ]
+          },
+          "precision": 0.9555555555555556,
+          "recall": 0.9555555555555556
+        },
+        "nullable_v1/synthetic_uncertainty": {
+          "documents": 9,
+          "correct": 9,
+          "accepted": 9,
+          "misleading": 0,
+          "calls": 19,
+          "tp": 135,
+          "fp": 0,
+          "fn": 0,
+          "seconds": 151.1314095996786,
+          "input_tokens": 407378,
+          "output_tokens": 6050,
+          "tokens_unknown": 0,
+          "groups": {
+            "identity": [
+              36,
+              0,
+              0
+            ],
+            "binding": [
+              15,
+              0,
+              0
+            ],
+            "time": [
+              39,
+              0,
+              0
+            ],
+            "semantics": [
+              45,
+              0,
+              0
+            ],
+            "relationships": [
+              0,
+              0,
+              0
+            ],
+            "grounding": [
+              12,
+              0,
+              0
+            ]
+          },
+          "precision": 1.0,
+          "recall": 1.0
+        }
+      },
+      "latency": {
+        "clinical_partition": {
+          "median": 11.758195400005206,
+          "max": 14.869192500016652,
+          "total": 111.28486440016422
+        },
+        "nullable_v1": {
+          "median": 14.216538200038485,
+          "max": 28.021630399976857,
+          "total": 151.1314095996786
+        }
+      },
+      "query_checks": [],
+      "assessment_query_checks": [],
+      "clinical_coverage": {}
+    }
+  },
+  "uncertainty_checks": {
+    "uncertainty-dev-v1": {
+      "clinical_partition": {
+        "documents": 24,
+        "strict_correct": 10,
+        "validation_blocks": 0,
+        "checked_fields": 48,
+        "correct_fields": 32,
+        "omissions": 4,
+        "false_certainty": 12,
+        "unnecessary_abstention": 0,
+        "wrong_known": 0,
+        "calls": 49
+      },
+      "uncertainty_v1": {
+        "documents": 24,
+        "strict_correct": 20,
+        "validation_blocks": 1,
+        "checked_fields": 48,
+        "correct_fields": 46,
+        "omissions": 2,
+        "false_certainty": 0,
+        "unnecessary_abstention": 0,
+        "wrong_known": 0,
+        "calls": 52
+      }
+    },
+    "nullable-dev-final": {
+      "nullable_v1": {
+        "documents": 24,
+        "strict_correct": 20,
+        "validation_blocks": 0,
+        "checked_fields": 48,
+        "correct_fields": 48,
+        "omissions": 0,
+        "false_certainty": 0,
+        "unnecessary_abstention": 0,
+        "wrong_known": 0,
+        "calls": 48
+      }
+    },
+    "nullable-confirmation-final": {
+      "clinical_partition": {
+        "documents": 9,
+        "strict_correct": 3,
+        "validation_blocks": 0,
+        "checked_fields": 24,
+        "correct_fields": 18,
+        "omissions": 0,
+        "false_certainty": 6,
+        "unnecessary_abstention": 0,
+        "wrong_known": 0,
+        "calls": 18
+      },
+      "nullable_v1": {
+        "documents": 9,
+        "strict_correct": 9,
+        "validation_blocks": 0,
+        "checked_fields": 24,
+        "correct_fields": 24,
+        "omissions": 0,
+        "false_certainty": 0,
+        "unnecessary_abstention": 0,
+        "wrong_known": 0,
+        "calls": 19
+      }
+    }
+  },
+  "historical_failure_audit": {
+    "records": 21,
+    "raw_calls": 48,
+    "missing_raw_files": 0
+  },
+  "experiments": [
+    {
+      "run": "nullable-confirmation-final",
+      "manifest": "artifacts\\luna-20261008\\nullable-confirmation-final\\manifest.json",
+      "manifest_sha256": "49e4a7a243132fb35490ad066174019b00139e02686ff1e7181762bc095ae88f",
+      "dataset_sha256": "55e89de5e93b2813f0ed9afc27f1b7b9e78d526e6e454ba4309cb45c22f93557",
+      "scorer": "critical-fields-10-null",
+      "configuration_ids": {
+        "clinical_partition": "5e928396e80e8aeb86e1d9a843ed58b0146ff6d524b30d70910a9b50d6fb1be1",
+        "nullable_v1": "893793506fa5311731a78a32aff8ac7ef5749809e50cbbf02635cd070d853891"
+      },
+      "counts": {
+        "documents": 18,
+        "calls": 37,
+        "input_tokens": 773814,
+        "output_tokens": 11195,
+        "cached_tokens": 390400,
+        "parse_failures": 0,
+        "retries": 1,
+        "application_cache_hits": 0
+      }
+    },
+    {
+      "run": "nullable-dev-final",
+      "manifest": "artifacts\\luna-20261008\\nullable-dev-final\\manifest.json",
+      "manifest_sha256": "a84bb3ae2a7ffa316341daec39c300184dd708d45e132d407bc875c14b4dda5a",
+      "dataset_sha256": "02423406c68c74803b1fdd04bd91bc1cee6164c926f21af2226adc0c6732f796",
+      "scorer": "critical-fields-10-null",
+      "configuration_ids": {
+        "nullable_v1": "893793506fa5311731a78a32aff8ac7ef5749809e50cbbf02635cd070d853891"
+      },
+      "counts": {
+        "documents": 24,
+        "calls": 48,
+        "input_tokens": 1023545,
+        "output_tokens": 10839,
+        "cached_tokens": 618752,
+        "parse_failures": 0,
+        "retries": 0,
+        "application_cache_hits": 0
+      }
+    },
+    {
+      "run": "nullable-original-final",
+      "manifest": "artifacts\\luna-20261008\\nullable-original-final\\manifest.json",
+      "manifest_sha256": "43f5cca22dfe9c80d411c802376bda95d2fb2ad6d48d947bff37a0e07fbd452c",
+      "dataset_sha256": "5442ccb5bee18de7fa97e7fcfd5ecfa5580c797ddb67b2425cc5505f1fb94717",
+      "scorer": "critical-fields-10-null",
+      "configuration_ids": {
+        "nullable_v1": "893793506fa5311731a78a32aff8ac7ef5749809e50cbbf02635cd070d853891"
+      },
+      "counts": {
+        "documents": 31,
+        "calls": 65,
+        "input_tokens": 1428243,
+        "output_tokens": 107687,
+        "cached_tokens": 82432,
+        "parse_failures": 0,
+        "retries": 3,
+        "application_cache_hits": 0
+      }
+    },
+    {
+      "run": "semantic-confirmation-v1",
+      "manifest": "artifacts\\luna-20261008\\semantic-confirmation-v1\\manifest.json",
+      "manifest_sha256": "3e11ef01e5da1e2bf9049a72b094945cfe79eb3dd8192eabf77186889714e9eb",
+      "dataset_sha256": "a7535747757b4b8d9d0d4a59e09609bc52368b94dc4dff73daca8ff29441f7d0",
+      "scorer": "critical-fields-9",
+      "configuration_ids": {
+        "clinical_partition": "5e928396e80e8aeb86e1d9a843ed58b0146ff6d524b30d70910a9b50d6fb1be1",
+        "semantic_v1": "73701f77107214561c693c75c8a2fe8ccf96be74d2e83711215ceae1ee71054f"
+      },
+      "counts": {
+        "documents": 36,
+        "calls": 73,
+        "input_tokens": 1534518,
+        "output_tokens": 25032,
+        "cached_tokens": 508160,
+        "parse_failures": 0,
+        "retries": 0,
+        "application_cache_hits": 0
+      }
+    },
+    {
+      "run": "semantic-full-original-v1",
+      "manifest": "artifacts\\luna-20261008\\semantic-full-original-v1\\manifest.json",
+      "manifest_sha256": "81c3e40e08f2c877b36358ca73e32ecc4a06758f0f49337d1b9ca591f6468bfc",
+      "dataset_sha256": "5442ccb5bee18de7fa97e7fcfd5ecfa5580c797ddb67b2425cc5505f1fb94717",
+      "scorer": "critical-fields-9",
+      "configuration_ids": {
+        "clinical_partition": "5e928396e80e8aeb86e1d9a843ed58b0146ff6d524b30d70910a9b50d6fb1be1",
+        "semantic_v1": "73701f77107214561c693c75c8a2fe8ccf96be74d2e83711215ceae1ee71054f"
+      },
+      "counts": {
+        "documents": 62,
+        "calls": 127,
+        "input_tokens": 2737430,
+        "output_tokens": 211681,
+        "cached_tokens": 474112,
+        "parse_failures": 0,
+        "retries": 3,
+        "application_cache_hits": 0
+      }
+    },
+    {
+      "run": "semantic-screen-01",
+      "manifest": "artifacts\\luna-20261008\\semantic-screen-01\\manifest.json",
+      "manifest_sha256": "797197a1eeec36cbc43ea9876d4f8a65b7cd7afa1143416aaadbebd2100aaa44",
+      "dataset_sha256": "cdb5e68b189f1e2531732bcee83ddd2b58a963b02c168fbaf4f66d16be2414d6",
+      "scorer": "critical-fields-9",
+      "configuration_ids": {
+        "clinical_partition": "5e928396e80e8aeb86e1d9a843ed58b0146ff6d524b30d70910a9b50d6fb1be1",
+        "semantic_v1": "73701f77107214561c693c75c8a2fe8ccf96be74d2e83711215ceae1ee71054f"
+      },
+      "counts": {
+        "documents": 24,
+        "calls": 53,
+        "input_tokens": 1147534,
+        "output_tokens": 43935,
+        "cached_tokens": 57344,
+        "parse_failures": 0,
+        "retries": 5,
+        "application_cache_hits": 0
+      }
+    },
+    {
+      "run": "semantic-stability-v1",
+      "manifest": "artifacts\\luna-20261008\\semantic-stability-v1\\manifest.json",
+      "manifest_sha256": "75701f769a1d986ea1c39c837b33031721680f4f51dd24a3c98ea86041804036",
+      "dataset_sha256": "88e9eaa8cc3c05935c74648d8361d37ed5c8032a9a0d874ed70b1fda2c025d53",
+      "scorer": "critical-fields-9",
+      "configuration_ids": {
+        "clinical_partition": "5e928396e80e8aeb86e1d9a843ed58b0146ff6d524b30d70910a9b50d6fb1be1",
+        "semantic_v1": "73701f77107214561c693c75c8a2fe8ccf96be74d2e83711215ceae1ee71054f"
+      },
+      "counts": {
+        "documents": 160,
+        "calls": 346,
+        "input_tokens": 7527877,
+        "output_tokens": 518641,
+        "cached_tokens": 1698560,
+        "parse_failures": 0,
+        "retries": 24,
+        "application_cache_hits": 0
+      }
+    },
+    {
+      "run": "semantic-variants-v1",
+      "manifest": "artifacts\\luna-20261008\\semantic-variants-v1\\manifest.json",
+      "manifest_sha256": "099eeffadb88fb53973c78360e041f01b54e2233addbb72ff33050b5206d1d13",
+      "dataset_sha256": "e320ac2c82c3b9f77feb7e4e577fd6abb8b72a5b3147c920dc721e11f4054be0",
+      "scorer": "critical-fields-9",
+      "configuration_ids": {
+        "clinical_partition": "5e928396e80e8aeb86e1d9a843ed58b0146ff6d524b30d70910a9b50d6fb1be1",
+        "semantic_v1": "73701f77107214561c693c75c8a2fe8ccf96be74d2e83711215ceae1ee71054f"
+      },
+      "counts": {
+        "documents": 48,
+        "calls": 100,
+        "input_tokens": 2104852,
+        "output_tokens": 37290,
+        "cached_tokens": 420608,
+        "parse_failures": 0,
+        "retries": 4,
+        "application_cache_hits": 0
+      }
+    },
+    {
+      "run": "uncertainty-confirmation-v1",
+      "manifest": "artifacts\\luna-20261008\\uncertainty-confirmation-v1\\manifest.json",
+      "manifest_sha256": "389494990d577337e9ca1f49703bf590b293a44196db43d40a8489b4ca391c55",
+      "dataset_sha256": "d4fc70754356fc18059e9abb070a3ce6d931f600fef8c23807528028f6883a9f",
+      "scorer": "critical-fields-10-null",
+      "configuration_ids": {
+        "clinical_partition": "5e928396e80e8aeb86e1d9a843ed58b0146ff6d524b30d70910a9b50d6fb1be1",
+        "uncertainty_v1": "cbe49ff8441d3d8c7f529addab77d5bbf812c12d54e1594d835fcb1fa6732b6e"
+      },
+      "counts": {
+        "documents": 24,
+        "calls": 49,
+        "input_tokens": 1038375,
+        "output_tokens": 19380,
+        "cached_tokens": 71424,
+        "parse_failures": 0,
+        "retries": 1,
+        "application_cache_hits": 0
+      }
+    },
+    {
+      "run": "uncertainty-dev-v1",
+      "manifest": "artifacts\\luna-20261008\\uncertainty-dev-v1\\manifest.json",
+      "manifest_sha256": "7d7cabe746cfef0d8cd15da4c651d84b1e63ada767e735cb3bb0552ab0665f0d",
+      "dataset_sha256": "02423406c68c74803b1fdd04bd91bc1cee6164c926f21af2226adc0c6732f796",
+      "scorer": "critical-fields-10-null",
+      "configuration_ids": {
+        "clinical_partition": "5e928396e80e8aeb86e1d9a843ed58b0146ff6d524b30d70910a9b50d6fb1be1",
+        "uncertainty_v1": "cbe49ff8441d3d8c7f529addab77d5bbf812c12d54e1594d835fcb1fa6732b6e"
+      },
+      "counts": {
+        "documents": 48,
+        "calls": 101,
+        "input_tokens": 2132707,
+        "output_tokens": 23111,
+        "cached_tokens": 935936,
+        "parse_failures": 0,
+        "retries": 4,
+        "application_cache_hits": 0
+      }
+    },
+    {
+      "run": "uncertainty-original-v1",
+      "manifest": "artifacts\\luna-20261008\\uncertainty-original-v1\\manifest.json",
+      "manifest_sha256": "744c3c404d7d3df5016daca478c9b7b2ed31060cb294601dc745a7b97637ecc1",
+      "dataset_sha256": "5442ccb5bee18de7fa97e7fcfd5ecfa5580c797ddb67b2425cc5505f1fb94717",
+      "scorer": "critical-fields-10-null",
+      "configuration_ids": {
+        "clinical_partition": "5e928396e80e8aeb86e1d9a843ed58b0146ff6d524b30d70910a9b50d6fb1be1",
+        "uncertainty_v1": "cbe49ff8441d3d8c7f529addab77d5bbf812c12d54e1594d835fcb1fa6732b6e"
+      },
+      "counts": {
+        "documents": 62,
+        "calls": 131,
+        "input_tokens": 2833014,
+        "output_tokens": 219440,
+        "cached_tokens": 352256,
+        "parse_failures": 0,
+        "retries": 7,
+        "application_cache_hits": 0
+      }
+    }
+  ],
+  "call_accounting": {
+    "experiment_documents": 537,
+    "experiment_cli_attempts": 1130,
+    "actual_cli_deployment_calls": 16,
+    "saved_proposal_repair_calls": 2,
+    "all_real_cli_attempts": 1148,
+    "input_tokens": 24685271,
+    "output_tokens": 1235029,
+    "server_cached_input_tokens": 5852416,
+    "application_cache_hits": 0,
+    "cost_usd": null,
+    "cost_basis": "Authenticated Codex subscription; billed cost unavailable"
+  },
+  "deployment": {
+    "inputs": 8,
+    "registered": 8,
+    "cache_hits": 0,
+    "extracted": 8,
+    "failed": 0,
+    "model_calls": 16,
+    "extraction_key": "486ed6907ec56eac8d4e37095bf522bdf7dd3a3035ceb79dd665c473a71537f0",
+    "elapsed_seconds": 15.686784000019543
+  },
+  "saved_proposal_repairs": [
+    {
+      "run": "aggregate-repair-real-r07",
+      "validation": "accepted",
+      "calls": 1,
+      "scope": "Saved extraction plus at most one real runtime repair; not independent extraction",
+      "seconds": 13.824407799984328
+    },
+    {
+      "run": "aggregate-repair-real-r08",
+      "validation": "accepted",
+      "calls": 1,
+      "scope": "Saved extraction plus at most one real runtime repair; not independent extraction",
+      "seconds": 12.78324519994203
+    }
+  ],
+  "not_verified": [
+    "Final nullable candidate was not rerun for eight difficult documents ten times each.",
+    "Final nullable candidate has one new extraction of the full original 31-document group.",
+    "Late null-safe sorting and unknown correction propagation fixes have offline validation only.",
+    "Medical Necessity Evidence Review is outside this delivery."
+  ],
+  "scorer_note": "Historical critical-fields-9/10 scores remain unchanged. Version 10 supports partial clocks; version 11 makes existing patient-name/role equality symmetric for every candidate. No frozen gold changes.",
+  "private_index": "artifacts/semantic-followup/final-delivery/experiment-index.json"
+}

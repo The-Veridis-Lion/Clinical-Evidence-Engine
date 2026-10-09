@@ -4,6 +4,8 @@ from .domain import TimeInterval
 
 
 def treatment_minutes(intervals: list[TimeInterval], breaks: list[TimeInterval]) -> int:
+    if any(i.start is None or i.end is None for i in [*intervals, *breaks]):
+        raise ValueError('Incomplete source intervals cannot supply a duration')
     tree = IntervalTree.from_tuples((i.start, i.end) for i in intervals)
     # Union overlapping or adjacent contact segments before counting their lengths.
     tree.merge_overlaps(strict=False)

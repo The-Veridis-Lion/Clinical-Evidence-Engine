@@ -13,7 +13,7 @@ def test_omission_is_not_certified_as_successful_zero(omission):
         text += "Patient contact: 14:00 to 14:30.\n"
     document = RegisteredDocument(document_id="hash", fingerprint="hash", source_names=["test"], text=text)
     value = DocumentExtraction(document_id="hash", extraction_key="test", declared_id=None if omission == "document" else "D-1",
-        patient=Patient(patient_id="" if omission == "patient" else "P-1", name="Test Person"), claims=[],
+        patient=Patient(patient_id=None if omission == "patient" else "P-1", name="Test Person"), claims=[],
         usage=ExtractionUsage(provider="fixed", model="none", settings={}, latency_seconds=0, model_calls=0))
     with pytest.raises(ValueError):
         validate_source_contract(document, value)

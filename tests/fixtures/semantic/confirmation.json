@@ -1,0 +1,271 @@
+[
+  {
+    "id": "SEM-D21",
+    "declared_id": "SEM-D21",
+    "patient": {
+      "patient_id": "SEM-P21",
+      "name": "Test Person",
+      "dob": null
+    },
+    "group": "SEM-P21",
+    "source": "synthetic_semantic_mechanism",
+    "split": "confirmation",
+    "text": "Document ID: SEM-D21\nPatient: Test Person | MRN: SEM-P21\nFile packet indexed 2026-09-09 17:00.\nAttachment I — old individual attendance for Encounter SEM-E21 on 2026-09-02, patient contact 08:00-08:25; original signature Grey 2026-09-02 09:00. This retransmits Encounter SEM-E21 for 2026-09-02; no new signature.\nAddendum II — NEW individual patient contact for Encounter SEM-E21 on 2026-09-02, 08:25-08:43; treatment delivered, signed Grey 2026-09-02 09:15. Addendum II is newly authored, not transmitted old text.\n",
+    "facts": [
+      {
+        "kind": "service",
+        "encounter_ref": "SEM-E21",
+        "appointment_ref": null,
+        "service_date": "2026-09-02",
+        "service_type": "individual",
+        "evidence_kind": "retransmission",
+        "signed": true,
+        "patient_present": true,
+        "delivered": true,
+        "actual_intervals": [
+          {
+            "start": "08:00",
+            "end": "08:25"
+          }
+        ],
+        "scheduled_intervals": [],
+        "unspecified_intervals": [],
+        "breaks": [],
+        "reported_minutes": null
+      },
+      {
+        "kind": "relationship",
+        "relation": "retransmits",
+        "signed": false,
+        "target_encounter": "SEM-E21",
+        "target_document_ref": null,
+        "target_plan_ref": null,
+        "field": "record",
+        "replacement_time": null,
+        "replacement_minutes": null,
+        "replacement_presence": null,
+        "original_time": null,
+        "service_date": "2026-09-02"
+      },
+      {
+        "kind": "service",
+        "encounter_ref": "SEM-E21",
+        "appointment_ref": null,
+        "service_date": "2026-09-02",
+        "service_type": "individual",
+        "evidence_kind": "clinical",
+        "signed": true,
+        "patient_present": true,
+        "delivered": true,
+        "actual_intervals": [
+          {
+            "start": "08:25",
+            "end": "08:43"
+          }
+        ],
+        "scheduled_intervals": [],
+        "unspecified_intervals": [],
+        "breaks": [],
+        "reported_minutes": null
+      }
+    ],
+    "exhaustive": false,
+    "mechanism": "nested attachment and new contact",
+    "semantic_constraints": []
+  },
+  {
+    "id": "SEM-D22",
+    "declared_id": "SEM-D22",
+    "patient": {
+      "patient_id": "SEM-P22",
+      "name": "Test Person",
+      "dob": null
+    },
+    "group": "SEM-P22",
+    "source": "synthetic_semantic_mechanism",
+    "split": "confirmation",
+    "text": "Document ID: SEM-D22\nPatient: Test Person | MRN: SEM-P22\nAppointment export 2026-09-02.\nEncounter SEM-E22A — Group 09:00-09:40 — Completed. No clinical signature.\nEncounter SEM-E22B — Family collateral 14:00-14:30 — Completed.\nAdditional detail for Appointment SEM-E22B: patient could not join; only partner attended. Entries checked Final by records assistant.\n",
+    "facts": [
+      {
+        "kind": "service",
+        "encounter_ref": "SEM-E22A",
+        "appointment_ref": null,
+        "service_date": "2026-09-02",
+        "service_type": "group",
+        "evidence_kind": "schedule",
+        "signed": false,
+        "patient_present": true,
+        "delivered": true,
+        "actual_intervals": [],
+        "scheduled_intervals": [
+          {
+            "start": "09:00",
+            "end": "09:40"
+          }
+        ],
+        "unspecified_intervals": [],
+        "breaks": [],
+        "reported_minutes": null
+      },
+      {
+        "kind": "service",
+        "encounter_ref": "SEM-E22B",
+        "appointment_ref": "SEM-E22B",
+        "service_date": "2026-09-02",
+        "service_type": "collateral",
+        "evidence_kind": "schedule",
+        "signed": false,
+        "patient_present": false,
+        "delivered": false,
+        "actual_intervals": [],
+        "scheduled_intervals": [
+          {
+            "start": "14:00",
+            "end": "14:30"
+          }
+        ],
+        "unspecified_intervals": [],
+        "breaks": [],
+        "reported_minutes": null
+      }
+    ],
+    "exhaustive": false,
+    "mechanism": "final administrative register with local absence",
+    "semantic_constraints": []
+  },
+  {
+    "id": "SEM-D23",
+    "declared_id": "SEM-D23",
+    "patient": {
+      "patient_id": "SEM-P23",
+      "name": "Test Person",
+      "dob": null
+    },
+    "group": "SEM-P23",
+    "source": "synthetic_semantic_mechanism",
+    "split": "confirmation",
+    "text": "Document ID: SEM-D23\nPatient: Test Person | MRN: SEM-P23\nMeasurement tab\nPrevious PHQ-9 score: 18, recorded 2026-08-05; completion date unknown.\nCurrent original PHQ-9 form SEM-Q23: completed by patient 2026-09-02 07:45; total 12.\nClinician review date: 2026-09-04 10:15. Form is attached as original, no duplicate completion.\n",
+    "facts": [
+      {
+        "kind": "assessment",
+        "instrument": "PHQ-9",
+        "assessment_date": "2026-09-02",
+        "form_ref": "SEM-Q23",
+        "score": 12,
+        "reporter": [
+          "patient",
+          "Test Person"
+        ],
+        "experiencer": [
+          "patient",
+          "Test Person"
+        ],
+        "copied": false
+      }
+    ],
+    "exhaustive": false,
+    "mechanism": "reordered history/current/review",
+    "semantic_constraints": [
+      {
+        "historical_score": 18,
+        "reference_date": "2026-08-05",
+        "completion_date": null
+      }
+    ]
+  },
+  {
+    "id": "SEM-D24",
+    "declared_id": "SEM-D24",
+    "patient": {
+      "patient_id": "SEM-P24",
+      "name": "Test Person",
+      "dob": null
+    },
+    "group": "SEM-P24",
+    "source": "synthetic_semantic_mechanism",
+    "split": "confirmation",
+    "text": "Document ID: SEM-D24\nPatient: Test Person | MRN: SEM-P24\nSigned attendance card 2026-09-02. Booking Appointment SEM-A24 corresponds to individual Encounter SEM-E24. Scheduled 13:00-13:40. Patient connected 13:05-13:35; psychotherapy delivered. Clinician Grey signed 14:00.\n",
+    "facts": [
+      {
+        "kind": "service",
+        "encounter_ref": "SEM-E24",
+        "appointment_ref": "SEM-A24",
+        "service_date": "2026-09-02",
+        "service_type": "individual",
+        "evidence_kind": "attendance",
+        "signed": true,
+        "patient_present": true,
+        "delivered": true,
+        "actual_intervals": [
+          {
+            "start": "13:05",
+            "end": "13:35"
+          }
+        ],
+        "scheduled_intervals": [
+          {
+            "start": "13:00",
+            "end": "13:40"
+          }
+        ],
+        "unspecified_intervals": [],
+        "breaks": [],
+        "reported_minutes": null
+      }
+    ],
+    "exhaustive": false,
+    "mechanism": "booking and encounter on separate sentences",
+    "semantic_constraints": []
+  },
+  {
+    "id": "SEM-D25",
+    "declared_id": "SEM-D25",
+    "patient": {
+      "patient_id": "SEM-P25",
+      "name": "Test Person",
+      "dob": null
+    },
+    "group": "SEM-P25",
+    "source": "synthetic_semantic_mechanism",
+    "split": "confirmation",
+    "text": "Document ID: SEM-D25\nPatient: Test Person | MRN: SEM-P25\nPHQ-9 original patient-completed form SEM-Q25. Completion date not supplied; total score blank. Received 2026-09-02 10:00, clinician reviewed 2026-09-03 11:00. No appointment was conducted during review.\n",
+    "facts": [
+      {
+        "kind": "assessment",
+        "instrument": "PHQ-9",
+        "assessment_date": null,
+        "form_ref": "SEM-Q25",
+        "score": null,
+        "reporter": [
+          "patient",
+          "Test Person"
+        ],
+        "experiencer": [
+          "patient",
+          "Test Person"
+        ],
+        "copied": false
+      }
+    ],
+    "exhaustive": false,
+    "mechanism": "actual form with missing score and completion",
+    "semantic_constraints": []
+  },
+  {
+    "id": "SEM-D26",
+    "declared_id": "SEM-D26",
+    "patient": {
+      "patient_id": "SEM-P26",
+      "name": "Test Person",
+      "dob": null
+    },
+    "group": "SEM-P26",
+    "source": "synthetic_semantic_mechanism",
+    "split": "confirmation",
+    "text": "Document ID: SEM-D26\nPatient: Test Person | MRN: SEM-P26\nRecords office indexing note: spelling corrected in address. This note contains no clinical findings, no service record and no patient treatment contact. Author records clerk, 2026-09-02 10:20.\n",
+    "facts": [],
+    "exhaustive": false,
+    "mechanism": "different empty-target template",
+    "semantic_constraints": []
+  }
+]

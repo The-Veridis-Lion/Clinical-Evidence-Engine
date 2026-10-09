@@ -36,7 +36,7 @@ def main(argv=None):
     ingest.add_argument("--input", default="examples/synthetic/documents")
     ingest.add_argument("--model", default="gpt-6-luna")
     ingest.add_argument("--reasoning", choices=["none","low","medium","high","xhigh","max"])
-    ingest.add_argument("--extractor", choices=["optimized","baseline"], default="optimized")
+    ingest.add_argument("--extractor", choices=["optimized","baseline","previous","semantic","uncertainty","nullable"], default="optimized")
     ingest.add_argument("--workers", type=int, default=8)
     ingest.add_argument("--timeout", type=int, default=180)
     inspect = commands.add_parser("inspect")
@@ -76,7 +76,8 @@ def main(argv=None):
                 from .provider import CodexCLIProvider, ProviderConfig
                 from .extraction import LangExtractExtractor
                 from .luna_candidates import CandidateExtractor
-                configuration=json.loads((Path(__file__).parent/'contracts/luna_best.json').read_text(encoding='utf-8'))
+                contract={'previous':'luna_previous.json','semantic':'luna_semantic.json','uncertainty':'luna_uncertainty.json','nullable':'luna_nullable.json'}.get(args.extractor,'luna_best.json')
+                configuration=json.loads((Path(__file__).parent/'contracts'/contract).read_text(encoding='utf-8'))
                 if args.reasoning:
                     configuration['reasoning']=args.reasoning
                 path = Path(args.input)

@@ -95,7 +95,7 @@ failure. Fixture/replay success is not a measure of live model accuracy.
 ## Live model workflow
 
 Install and authenticate Codex CLI separately and put it on PATH. The provider uses
-`gpt-6-luna` with high reasoning and the tested `clinical_partition` configuration;
+`gpt-6-luna` with high reasoning and `clinical_partition + nullable_v1`;
 typed extraction is followed by a dedicated clinical-observation pass, with at most
 one repair triggered by runtime validation. Live commands
 require the operator's account and network. No credentials or model weights are included.
@@ -107,8 +107,14 @@ python tools/validate_live.py artifacts/live.sqlite
 clinical --db artifacts/demo.sqlite ask --patient DEMO-CEDAR "How many therapy minutes were delivered from April 6 through April 12, 2026?"
 ```
 
-`process --extractor baseline` retains the historical string-payload prompt for
-comparison and rollback. Use a separate database. [The Luna optimization report](docs/luna-optimization-report.md)
+`process --extractor previous` selects the previous final `clinical_partition`
+prompt/schema; use a separate database. `--extractor baseline` retains the older
+string-payload historical comparator. [The nullable follow-up report](docs/luna-followup-report.md),
+[field uncertainty contract](docs/uncertainty-contract-v1.md), and
+[machine-readable summary](docs/luna-followup-summary.json) record this delivery,
+including the unchanged 23/31 original strict score and its limitations. The larger
+`semantic` and `uncertainty` profiles remain explicit experimental options.
+[The Luna optimization report](docs/luna-optimization-report.md)
 documents 42 tested configurations, real independent repetitions, a frozen holdout,
 residual failures, and exact reproduction commands. [The aggregate summary](docs/luna-results-summary.json)
 records final comparisons, call accounting and holdout limitations. Full experiment

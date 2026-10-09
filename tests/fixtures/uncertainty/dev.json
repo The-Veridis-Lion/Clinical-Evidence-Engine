@@ -1,0 +1,586 @@
+[
+  {
+    "id": "UNC-D01",
+    "declared_id": "UNC-D01",
+    "patient": {
+      "patient_id": "UNC-P01",
+      "name": "Test Person",
+      "dob": null
+    },
+    "group": "UNC-P01",
+    "source": "synthetic_uncertainty",
+    "split": "dev",
+    "facts": [
+      {
+        "kind": "service",
+        "encounter_ref": "UNC-E01",
+        "appointment_ref": null,
+        "service_date": "2026-09-16",
+        "service_type": "individual",
+        "evidence_kind": "clinical",
+        "signed": true,
+        "patient_present": true,
+        "delivered": true,
+        "actual_intervals": [
+          {
+            "start": "10:00",
+            "end": "10:30"
+          }
+        ],
+        "scheduled_intervals": [],
+        "unspecified_intervals": [],
+        "breaks": [],
+        "reported_minutes": null
+      }
+    ],
+    "exhaustive": false,
+    "uncertainty_checks": [
+      {
+        "selector": {
+          "kind": "service",
+          "encounter_ref": "UNC-E01"
+        },
+        "field": "signed",
+        "value": true
+      },
+      {
+        "selector": {
+          "kind": "service",
+          "encounter_ref": "UNC-E01"
+        },
+        "field": "patient_present",
+        "value": true
+      },
+      {
+        "selector": {
+          "kind": "service",
+          "encounter_ref": "UNC-E01"
+        },
+        "field": "delivered",
+        "value": true
+      }
+    ],
+    "text": "Document ID: UNC-D01\nPatient: Test Person | MRN: UNC-P01\nSigned clinical Encounter UNC-E01 on 2026-09-16: individual psychotherapy delivered with patient present, patient contact 10:00-10:30. Signed Vale 2026-09-16 10:35.\n"
+  },
+  {
+    "id": "UNC-D02",
+    "declared_id": "UNC-D02",
+    "patient": {
+      "patient_id": "UNC-P02",
+      "name": "Test Person",
+      "dob": null
+    },
+    "group": "UNC-P02",
+    "source": "synthetic_uncertainty",
+    "split": "dev",
+    "facts": [
+      {
+        "kind": "service",
+        "encounter_ref": "UNC-E02",
+        "appointment_ref": null,
+        "service_date": "2026-09-16",
+        "service_type": "individual",
+        "evidence_kind": "schedule",
+        "signed": false,
+        "patient_present": false,
+        "delivered": false,
+        "actual_intervals": [],
+        "scheduled_intervals": [
+          {
+            "start": "10:00",
+            "end": "10:30"
+          }
+        ],
+        "unspecified_intervals": [],
+        "breaks": [],
+        "reported_minutes": null
+      }
+    ],
+    "exhaustive": false,
+    "uncertainty_checks": [
+      {
+        "selector": {
+          "kind": "service",
+          "encounter_ref": "UNC-E02"
+        },
+        "field": "signed",
+        "value": false
+      },
+      {
+        "selector": {
+          "kind": "service",
+          "encounter_ref": "UNC-E02"
+        },
+        "field": "patient_present",
+        "value": false
+      },
+      {
+        "selector": {
+          "kind": "service",
+          "encounter_ref": "UNC-E02"
+        },
+        "field": "delivered",
+        "value": false
+      }
+    ],
+    "text": "Document ID: UNC-D02\nPatient: Test Person | MRN: UNC-P02\nExplicitly unsigned schedule: Encounter UNC-E02 on 2026-09-16 individual 10:00-10:30. No-show, patient explicitly absent; no treatment delivered.\n"
+  },
+  {
+    "id": "UNC-D03",
+    "declared_id": "UNC-D03",
+    "patient": {
+      "patient_id": "UNC-P03",
+      "name": "Test Person",
+      "dob": null
+    },
+    "group": "UNC-P03",
+    "source": "synthetic_uncertainty",
+    "split": "dev",
+    "facts": [
+      {
+        "kind": "service",
+        "encounter_ref": "UNC-E03",
+        "appointment_ref": null,
+        "service_date": "2026-09-16",
+        "service_type": "individual",
+        "evidence_kind": "clinical",
+        "signed": null,
+        "patient_present": true,
+        "delivered": true,
+        "actual_intervals": [
+          {
+            "start": "10:00",
+            "end": "10:30"
+          }
+        ],
+        "scheduled_intervals": [],
+        "unspecified_intervals": [],
+        "breaks": [],
+        "reported_minutes": null
+      }
+    ],
+    "exhaustive": false,
+    "uncertainty_checks": [
+      {
+        "selector": {
+          "kind": "service",
+          "encounter_ref": "UNC-E03"
+        },
+        "field": "signed",
+        "value": null
+      },
+      {
+        "selector": {
+          "kind": "service",
+          "encounter_ref": "UNC-E03"
+        },
+        "field": "delivered",
+        "value": true
+      }
+    ],
+    "text": "Document ID: UNC-D03\nPatient: Test Person | MRN: UNC-P03\nClinical Encounter UNC-E03 on 2026-09-16: individual psychotherapy delivered with patient present, patient contact 10:00-10:30. The supplied record contains no signature information.\n"
+  },
+  {
+    "id": "UNC-D04",
+    "declared_id": "UNC-D04",
+    "patient": {
+      "patient_id": "UNC-P04",
+      "name": "Test Person",
+      "dob": null
+    },
+    "group": "UNC-P04",
+    "source": "synthetic_uncertainty",
+    "split": "dev",
+    "facts": [
+      {
+        "kind": "service",
+        "encounter_ref": "UNC-E04",
+        "appointment_ref": null,
+        "service_date": "2026-09-16",
+        "service_type": "individual",
+        "evidence_kind": "schedule",
+        "signed": null,
+        "patient_present": null,
+        "delivered": null,
+        "actual_intervals": [],
+        "scheduled_intervals": [
+          {
+            "start": "10:00",
+            "end": "10:30"
+          }
+        ],
+        "unspecified_intervals": [],
+        "breaks": [],
+        "reported_minutes": null
+      }
+    ],
+    "exhaustive": false,
+    "uncertainty_checks": [
+      {
+        "selector": {
+          "kind": "service",
+          "encounter_ref": "UNC-E04"
+        },
+        "field": "signed",
+        "value": null
+      },
+      {
+        "selector": {
+          "kind": "service",
+          "encounter_ref": "UNC-E04"
+        },
+        "field": "patient_present",
+        "value": null
+      },
+      {
+        "selector": {
+          "kind": "service",
+          "encounter_ref": "UNC-E04"
+        },
+        "field": "delivered",
+        "value": null
+      }
+    ],
+    "text": "Document ID: UNC-D04\nPatient: Test Person | MRN: UNC-P04\nAppointment export: Encounter UNC-E04 on 2026-09-16 Individual reserved 10:00-10:30, status Completed. No attendance, clinical delivery or signature information supplied.\n"
+  },
+  {
+    "id": "UNC-D05",
+    "declared_id": "UNC-D05",
+    "patient": {
+      "patient_id": "UNC-P05",
+      "name": "Test Person",
+      "dob": null
+    },
+    "group": "UNC-P05",
+    "source": "synthetic_uncertainty",
+    "split": "dev",
+    "facts": [
+      {
+        "kind": "assessment",
+        "instrument": "PHQ-9",
+        "form_ref": "UNC-F05",
+        "assessment_date": null,
+        "score": null,
+        "reporter": "not specified",
+        "experiencer": "not specified",
+        "copied": null
+      }
+    ],
+    "exhaustive": false,
+    "uncertainty_checks": [
+      {
+        "selector": {
+          "kind": "assessment",
+          "form_ref": "UNC-F05"
+        },
+        "field": "score",
+        "value": null
+      },
+      {
+        "selector": {
+          "kind": "assessment",
+          "form_ref": "UNC-F05"
+        },
+        "field": "assessment_date",
+        "value": null
+      },
+      {
+        "selector": {
+          "kind": "assessment",
+          "form_ref": "UNC-F05"
+        },
+        "field": "copied",
+        "value": null
+      }
+    ],
+    "text": "Document ID: UNC-D05\nPatient: Test Person | MRN: UNC-P05\nPHQ-9 Form UNC-F05. Score left blank. Completion date, respondent, experiencer and original/copy status not supplied. No clinical encounter information.\n"
+  },
+  {
+    "id": "UNC-D06",
+    "declared_id": "UNC-D06",
+    "patient": {
+      "patient_id": "UNC-P06",
+      "name": "Test Person",
+      "dob": null
+    },
+    "group": "UNC-P06",
+    "source": "synthetic_uncertainty",
+    "split": "dev",
+    "facts": [
+      {
+        "kind": "service",
+        "encounter_ref": "UNC-E06",
+        "appointment_ref": null,
+        "service_date": null,
+        "service_type": "individual",
+        "evidence_kind": "clinical",
+        "signed": true,
+        "patient_present": true,
+        "delivered": true,
+        "actual_intervals": [
+          {
+            "start": "10:00",
+            "end": null
+          }
+        ],
+        "scheduled_intervals": [],
+        "unspecified_intervals": [],
+        "breaks": [],
+        "reported_minutes": null
+      }
+    ],
+    "exhaustive": false,
+    "uncertainty_checks": [
+      {
+        "selector": {
+          "kind": "service",
+          "encounter_ref": "UNC-E06"
+        },
+        "field": "service_date",
+        "value": null
+      },
+      {
+        "selector": {
+          "kind": "service",
+          "encounter_ref": "UNC-E06"
+        },
+        "field": "delivered",
+        "value": true
+      }
+    ],
+    "text": "Document ID: UNC-D06\nPatient: Test Person | MRN: UNC-P06\nClinical Encounter UNC-E06: individual psychotherapy delivered with patient present. Patient contact began 10:00; end not documented. Service date is not recorded. Signed Vale at intake of this entry on 2026-09-20 11:00; that is the record signature date, not the service date.\n"
+  },
+  {
+    "id": "UNC-D07",
+    "declared_id": "UNC-D07",
+    "patient": {
+      "patient_id": "UNC-P07",
+      "name": "Test Person",
+      "dob": null
+    },
+    "group": "UNC-P07",
+    "source": "synthetic_uncertainty",
+    "split": "dev",
+    "facts": [
+      {
+        "kind": "plan",
+        "plan_ref": "UNC-PLAN07",
+        "effective_start": "2026-09-14",
+        "effective_end": null,
+        "required_days": 2,
+        "required_minutes": null,
+        "service_types": [
+          "individual"
+        ],
+        "week_basis": "monday_sunday",
+        "signed": true
+      }
+    ],
+    "exhaustive": false,
+    "uncertainty_checks": [
+      {
+        "selector": {
+          "kind": "plan",
+          "plan_ref": "UNC-PLAN07"
+        },
+        "field": "required_minutes",
+        "value": null
+      },
+      {
+        "selector": {
+          "kind": "plan",
+          "plan_ref": "UNC-PLAN07"
+        },
+        "field": "required_days",
+        "value": 2
+      }
+    ],
+    "text": "Document ID: UNC-D07\nPatient: Test Person | MRN: UNC-P07\nSigned quantitative Plan UNC-PLAN07 effective 2026-09-14: individual psychotherapy at least 2 patient-present treatment days per Monday-Sunday week. Patient-present minute target was not supplied. Signed Vale.\n"
+  },
+  {
+    "id": "UNC-D08",
+    "declared_id": "UNC-D08",
+    "patient": {
+      "patient_id": "UNC-P08",
+      "name": "Test Person",
+      "dob": null
+    },
+    "group": "UNC-P08",
+    "source": "synthetic_uncertainty",
+    "split": "dev",
+    "facts": [
+      {
+        "kind": "assessment",
+        "instrument": "PHQ-9",
+        "form_ref": "UNC-F08",
+        "assessment_date": "2026-09-16",
+        "score": 5,
+        "reporter": "patient",
+        "experiencer": "patient",
+        "copied": null
+      }
+    ],
+    "exhaustive": false,
+    "uncertainty_checks": [
+      {
+        "selector": {
+          "kind": "assessment",
+          "form_ref": "UNC-F08"
+        },
+        "field": "copied",
+        "value": null
+      },
+      {
+        "selector": {
+          "kind": "assessment",
+          "form_ref": "UNC-F08"
+        },
+        "field": "score",
+        "value": 5
+      }
+    ],
+    "text": "Document ID: UNC-D08\nPatient: Test Person | MRN: UNC-P08\nPatient self-report PHQ-9 Form UNC-F08: completed 2026-09-16, score 5. This sheet may be a copy or the original; supplied evidence does not determine which.\n"
+  },
+  {
+    "id": "UNC-D09",
+    "declared_id": "UNC-D09",
+    "patient": {
+      "patient_id": "UNC-P09",
+      "name": "Test Person",
+      "dob": null
+    },
+    "group": "UNC-P09",
+    "source": "synthetic_uncertainty",
+    "split": "dev",
+    "facts": [],
+    "exhaustive": false,
+    "uncertainty_checks": [],
+    "text": "Document ID: UNC-D09\nPatient: Test Person | MRN: UNC-P09\nClerical transfer receipt: envelope checked and moved to cabinet. No visit, assessment or clinical facts in this receipt.\n"
+  },
+  {
+    "id": "UNC-D10",
+    "declared_id": "UNC-D10",
+    "patient": {
+      "patient_id": "UNC-PCONFLICT",
+      "name": "Test Person",
+      "dob": null
+    },
+    "group": "UNC-PCONFLICT",
+    "source": "synthetic_uncertainty",
+    "split": "dev",
+    "facts": [
+      {
+        "kind": "service",
+        "encounter_ref": "UNC-ECONFLICT",
+        "appointment_ref": null,
+        "service_date": "2026-09-16",
+        "service_type": "individual",
+        "evidence_kind": "clinical",
+        "signed": true,
+        "patient_present": true,
+        "delivered": true,
+        "actual_intervals": [],
+        "scheduled_intervals": [],
+        "unspecified_intervals": [],
+        "breaks": [],
+        "reported_minutes": 40
+      }
+    ],
+    "exhaustive": false,
+    "uncertainty_checks": [
+      {
+        "selector": {
+          "kind": "service",
+          "encounter_ref": "UNC-ECONFLICT"
+        },
+        "field": "reported_minutes",
+        "value": 40
+      }
+    ],
+    "text": "Document ID: UNC-D10\nPatient: Test Person | MRN: UNC-PCONFLICT\nSigned individual therapy Encounter UNC-ECONFLICT on 2026-09-16: patient present and treatment delivered for 40 patient-treatment minutes. Signed Vale. No correction relation is asserted.\n"
+  },
+  {
+    "id": "UNC-D11",
+    "declared_id": "UNC-D11",
+    "patient": {
+      "patient_id": "UNC-PCONFLICT",
+      "name": "Test Person",
+      "dob": null
+    },
+    "group": "UNC-PCONFLICT",
+    "source": "synthetic_uncertainty",
+    "split": "dev",
+    "facts": [
+      {
+        "kind": "service",
+        "encounter_ref": "UNC-ECONFLICT",
+        "appointment_ref": null,
+        "service_date": "2026-09-16",
+        "service_type": "individual",
+        "evidence_kind": "clinical",
+        "signed": true,
+        "patient_present": true,
+        "delivered": true,
+        "actual_intervals": [],
+        "scheduled_intervals": [],
+        "unspecified_intervals": [],
+        "breaks": [],
+        "reported_minutes": 50
+      }
+    ],
+    "exhaustive": false,
+    "uncertainty_checks": [
+      {
+        "selector": {
+          "kind": "service",
+          "encounter_ref": "UNC-ECONFLICT"
+        },
+        "field": "reported_minutes",
+        "value": 50
+      }
+    ],
+    "text": "Document ID: UNC-D11\nPatient: Test Person | MRN: UNC-PCONFLICT\nSigned individual therapy Encounter UNC-ECONFLICT on 2026-09-16: patient present and treatment delivered for 50 patient-treatment minutes. Signed Vale. No correction relation is asserted.\n"
+  },
+  {
+    "id": "UNC-D12",
+    "declared_id": "UNC-D12",
+    "patient": {
+      "patient_id": "UNC-P12",
+      "name": "Test Person",
+      "dob": null
+    },
+    "group": "UNC-P12",
+    "source": "synthetic_uncertainty",
+    "split": "dev",
+    "facts": [
+      {
+        "kind": "assessment",
+        "instrument": "PHQ-9",
+        "form_ref": null,
+        "assessment_date": "2026-09-16",
+        "score": 7,
+        "reporter": "patient",
+        "experiencer": "patient",
+        "copied": false
+      }
+    ],
+    "exhaustive": false,
+    "uncertainty_checks": [
+      {
+        "selector": {
+          "kind": "assessment"
+        },
+        "field": "form_ref",
+        "value": null
+      },
+      {
+        "selector": {
+          "kind": "assessment"
+        },
+        "field": "copied",
+        "value": false
+      }
+    ],
+    "text": "Document ID: UNC-D12\nPatient: Test Person | MRN: UNC-P12\nOriginal oral PHQ-9 self-report by patient, completed 2026-09-16, total score 7. No paper or portal form was used, so no form identifier applies. This is not a copied result.\n"
+  }
+]

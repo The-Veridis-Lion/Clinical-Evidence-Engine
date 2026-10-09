@@ -1,0 +1,615 @@
+{
+  "patient": {
+    "additionalProperties": false,
+    "properties": {
+      "patient_id": {
+        "type": "string"
+      },
+      "name": {
+        "type": "string"
+      },
+      "dob": {
+        "anyOf": [
+          {
+            "format": "date",
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "declared_id": {
+        "type": [
+          "string",
+          "null"
+        ]
+      }
+    },
+    "required": [
+      "patient_id",
+      "name",
+      "dob",
+      "declared_id"
+    ],
+    "type": "object"
+  },
+  "service": {
+    "additionalProperties": false,
+    "properties": {
+      "statement": {
+        "type": "string"
+      },
+      "recorded_at": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}(?::\\d{2})?$"
+      },
+      "encounter_ref": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "appointment_ref": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "service_date": {
+        "anyOf": [
+          {
+            "format": "date",
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "service_type": {
+        "anyOf": [
+          {
+            "enum": [
+              "individual",
+              "group",
+              "family",
+              "medication",
+              "collateral",
+              "coordination",
+              "administrative"
+            ],
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "evidence_kind": {
+        "enum": [
+          "clinical",
+          "attendance",
+          "schedule",
+          "draft",
+          "billing",
+          "correction",
+          "retransmission"
+        ],
+        "type": "string"
+      },
+      "signed": {
+        "type": "boolean"
+      },
+      "patient_present": {
+        "anyOf": [
+          {
+            "type": "boolean"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "delivered": {
+        "anyOf": [
+          {
+            "type": "boolean"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "actual_intervals": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "start": {
+              "type": "string",
+              "pattern": "^(?:[01]\\d|2[0-3]):[0-5]\\d$"
+            },
+            "end": {
+              "type": "string",
+              "pattern": "^(?:[01]\\d|2[0-3]):[0-5]\\d$"
+            }
+          },
+          "required": [
+            "start",
+            "end"
+          ]
+        }
+      },
+      "scheduled_intervals": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "start": {
+              "type": "string",
+              "pattern": "^(?:[01]\\d|2[0-3]):[0-5]\\d$"
+            },
+            "end": {
+              "type": "string",
+              "pattern": "^(?:[01]\\d|2[0-3]):[0-5]\\d$"
+            }
+          },
+          "required": [
+            "start",
+            "end"
+          ]
+        }
+      },
+      "unspecified_intervals": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "start": {
+              "type": "string",
+              "pattern": "^(?:[01]\\d|2[0-3]):[0-5]\\d$"
+            },
+            "end": {
+              "type": "string",
+              "pattern": "^(?:[01]\\d|2[0-3]):[0-5]\\d$"
+            }
+          },
+          "required": [
+            "start",
+            "end"
+          ]
+        }
+      },
+      "breaks": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "start": {
+              "type": "string",
+              "pattern": "^(?:[01]\\d|2[0-3]):[0-5]\\d$"
+            },
+            "end": {
+              "type": "string",
+              "pattern": "^(?:[01]\\d|2[0-3]):[0-5]\\d$"
+            }
+          },
+          "required": [
+            "start",
+            "end"
+          ]
+        }
+      },
+      "reported_minutes": {
+        "anyOf": [
+          {
+            "minimum": 0,
+            "type": "integer"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "reason": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "statement",
+      "recorded_at",
+      "encounter_ref",
+      "appointment_ref",
+      "service_date",
+      "service_type",
+      "evidence_kind",
+      "signed",
+      "patient_present",
+      "delivered",
+      "actual_intervals",
+      "scheduled_intervals",
+      "unspecified_intervals",
+      "breaks",
+      "reported_minutes",
+      "reason"
+    ],
+    "type": "object"
+  },
+  "plan": {
+    "additionalProperties": false,
+    "properties": {
+      "statement": {
+        "type": "string"
+      },
+      "recorded_at": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}(?::\\d{2})?$"
+      },
+      "plan_ref": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "effective_start": {
+        "format": "date",
+        "type": "string"
+      },
+      "effective_end": {
+        "anyOf": [
+          {
+            "format": "date",
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "required_days": {
+        "maximum": 7,
+        "minimum": 0,
+        "type": "integer"
+      },
+      "required_minutes": {
+        "minimum": 0,
+        "type": "integer"
+      },
+      "service_types": {
+        "items": {
+          "enum": [
+            "individual",
+            "group",
+            "family",
+            "medication",
+            "collateral",
+            "coordination",
+            "administrative"
+          ],
+          "type": "string"
+        },
+        "minItems": 1,
+        "type": "array"
+      },
+      "week_basis": {
+        "const": "monday_sunday",
+        "type": "string"
+      },
+      "signed": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "statement",
+      "recorded_at",
+      "plan_ref",
+      "effective_start",
+      "effective_end",
+      "required_days",
+      "required_minutes",
+      "service_types",
+      "week_basis",
+      "signed"
+    ],
+    "type": "object"
+  },
+  "assessment": {
+    "additionalProperties": false,
+    "properties": {
+      "statement": {
+        "type": "string"
+      },
+      "recorded_at": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}(?::\\d{2})?$"
+      },
+      "instrument": {
+        "type": "string"
+      },
+      "assessment_date": {
+        "anyOf": [
+          {
+            "format": "date",
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "form_ref": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "score": {
+        "anyOf": [
+          {
+            "type": "number"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "reporter": {
+        "type": "string"
+      },
+      "experiencer": {
+        "type": "string"
+      },
+      "copied": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "statement",
+      "recorded_at",
+      "instrument",
+      "assessment_date",
+      "form_ref",
+      "score",
+      "reporter",
+      "experiencer",
+      "copied"
+    ],
+    "type": "object"
+  },
+  "observation": {
+    "additionalProperties": false,
+    "properties": {
+      "statement": {
+        "type": "string"
+      },
+      "recorded_at": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}(?::\\d{2})?$"
+      },
+      "observation_date": {
+        "anyOf": [
+          {
+            "format": "date",
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "category": {
+        "enum": [
+          "symptom",
+          "function",
+          "safety",
+          "treatment_reason",
+          "response"
+        ],
+        "type": "string"
+      },
+      "reporter": {
+        "type": "string"
+      },
+      "experiencer": {
+        "type": "string"
+      },
+      "polarity": {
+        "enum": [
+          "present",
+          "absent",
+          "uncertain"
+        ],
+        "type": "string"
+      },
+      "temporality": {
+        "enum": [
+          "current",
+          "historical",
+          "planned"
+        ],
+        "type": "string"
+      }
+    },
+    "required": [
+      "statement",
+      "recorded_at",
+      "observation_date",
+      "category",
+      "reporter",
+      "experiencer",
+      "polarity",
+      "temporality"
+    ],
+    "type": "object"
+  },
+  "relationship": {
+    "additionalProperties": false,
+    "properties": {
+      "statement": {
+        "type": "string"
+      },
+      "recorded_at": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}(?::\\d{2})?$"
+      },
+      "relation": {
+        "enum": [
+          "corrects",
+          "retransmits",
+          "duplicates",
+          "supersedes_plan"
+        ],
+        "type": "string"
+      },
+      "signed": {
+        "type": "boolean"
+      },
+      "target_encounter": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "target_document_ref": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "target_plan_ref": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "field": {
+        "enum": [
+          "arrival",
+          "departure",
+          "minutes",
+          "presence",
+          "plan",
+          "record"
+        ],
+        "type": "string"
+      },
+      "replacement_time": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "pattern": "^(?:[01]\\d|2[0-3]):[0-5]\\d$"
+      },
+      "replacement_minutes": {
+        "anyOf": [
+          {
+            "minimum": 0,
+            "type": "integer"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "replacement_presence": {
+        "anyOf": [
+          {
+            "type": "boolean"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "original_time": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "pattern": "^(?:[01]\\d|2[0-3]):[0-5]\\d$"
+      },
+      "service_date": {
+        "anyOf": [
+          {
+            "format": "date",
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "statement",
+      "recorded_at",
+      "relation",
+      "signed",
+      "target_encounter",
+      "target_document_ref",
+      "target_plan_ref",
+      "field",
+      "replacement_time",
+      "replacement_minutes",
+      "replacement_presence",
+      "original_time",
+      "service_date"
+    ],
+    "type": "object"
+  }
+}

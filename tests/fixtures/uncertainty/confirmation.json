@@ -1,0 +1,172 @@
+[
+  {
+    "id": "UNC-D41",
+    "declared_id": "UNC-D41",
+    "patient": {
+      "patient_id": "UNC-P41",
+      "name": "Test Person",
+      "dob": null
+    },
+    "group": "UNC-P41",
+    "source": "synthetic_uncertainty",
+    "split": "confirmation",
+    "facts": [
+      {
+        "kind": "service",
+        "encounter_ref": "UNC-E41",
+        "appointment_ref": null,
+        "service_date": "2026-09-16",
+        "service_type": "individual",
+        "evidence_kind": "clinical",
+        "signed": true,
+        "patient_present": true,
+        "delivered": true,
+        "actual_intervals": [
+          {
+            "start": "10:00",
+            "end": "10:30"
+          }
+        ],
+        "scheduled_intervals": [],
+        "unspecified_intervals": [],
+        "breaks": [],
+        "reported_minutes": null
+      }
+    ],
+    "exhaustive": false,
+    "uncertainty_checks": [
+      {
+        "selector": {
+          "kind": "service",
+          "encounter_ref": "UNC-E41"
+        },
+        "field": "signed",
+        "value": true
+      },
+      {
+        "selector": {
+          "kind": "service",
+          "encounter_ref": "UNC-E41"
+        },
+        "field": "patient_present",
+        "value": true
+      },
+      {
+        "selector": {
+          "kind": "service",
+          "encounter_ref": "UNC-E41"
+        },
+        "field": "delivered",
+        "value": true
+      }
+    ],
+    "text": "Document ID: UNC-D41\nPatient: Test Person | MRN: UNC-P41\nS/O/A/P individual clinical session, Encounter UNC-E41, 2026-09-16. Patient actively participated in exposure practice and clinician-guided grounding during patient contact 10:00-10:30. Clinician Vale signed this treatment entry.\n"
+  },
+  {
+    "id": "UNC-D42",
+    "declared_id": "UNC-D42",
+    "patient": {
+      "patient_id": "UNC-P42",
+      "name": "Test Person",
+      "dob": null
+    },
+    "group": "UNC-P42",
+    "source": "synthetic_uncertainty",
+    "split": "confirmation",
+    "facts": [
+      {
+        "kind": "service",
+        "encounter_ref": "UNC-E42",
+        "appointment_ref": null,
+        "service_date": "2026-09-16",
+        "service_type": "individual",
+        "evidence_kind": "clinical",
+        "signed": null,
+        "patient_present": true,
+        "delivered": true,
+        "actual_intervals": [
+          {
+            "start": "10:00",
+            "end": "10:30"
+          }
+        ],
+        "scheduled_intervals": [],
+        "unspecified_intervals": [],
+        "breaks": [],
+        "reported_minutes": null
+      }
+    ],
+    "exhaustive": false,
+    "uncertainty_checks": [
+      {
+        "selector": {
+          "kind": "service",
+          "encounter_ref": "UNC-E42"
+        },
+        "field": "signed",
+        "value": null
+      },
+      {
+        "selector": {
+          "kind": "service",
+          "encounter_ref": "UNC-E42"
+        },
+        "field": "delivered",
+        "value": true
+      }
+    ],
+    "text": "Document ID: UNC-D42\nPatient: Test Person | MRN: UNC-P42\nTelephone contact ledger\nEncounter UNC-E42 | 2026-09-16 | Individual psychotherapy\nPatient participated and actual patient treatment was provided 10:00-10:30. Signature status: undetermined from the supplied record.\n"
+  },
+  {
+    "id": "UNC-D43",
+    "declared_id": "UNC-D43",
+    "patient": {
+      "patient_id": "UNC-P43",
+      "name": "Test Person",
+      "dob": null
+    },
+    "group": "UNC-P43",
+    "source": "synthetic_uncertainty",
+    "split": "confirmation",
+    "facts": [
+      {
+        "kind": "assessment",
+        "instrument": "PHQ-9",
+        "form_ref": "UNC-F43",
+        "assessment_date": null,
+        "score": null,
+        "reporter": "not specified",
+        "experiencer": "not specified",
+        "copied": null
+      }
+    ],
+    "exhaustive": false,
+    "uncertainty_checks": [
+      {
+        "selector": {
+          "kind": "assessment",
+          "form_ref": "UNC-F43"
+        },
+        "field": "score",
+        "value": null
+      },
+      {
+        "selector": {
+          "kind": "assessment",
+          "form_ref": "UNC-F43"
+        },
+        "field": "assessment_date",
+        "value": null
+      },
+      {
+        "selector": {
+          "kind": "assessment",
+          "form_ref": "UNC-F43"
+        },
+        "field": "copied",
+        "value": null
+      }
+    ],
+    "text": "Document ID: UNC-D43\nPatient: Test Person | MRN: UNC-P43\nInstrument register entry UNC-F43, PHQ-9. Numeric score not entered. Neither original completion date nor respondent/experiencer nor provenance as an original or copy is supplied. No encounter or service information accompanies this register entry.\n"
+  }
+]

@@ -234,7 +234,7 @@ def test_same_form_reference_for_different_experiencers_does_not_merge_their_sco
 
 def plan(ref, start=date(2026, 2, 2), end=date(2026, 2, 27), minutes=150):
     return {"factory": PlanClaim, "plan_ref": ref, "effective_start": start, "effective_end": end,
-            "required_days": 3, "required_minutes": minutes,
+            "required_days": 3, "required_minutes": minutes, "week_basis": "monday_sunday",
             "service_types": ["individual", "group", "family"], "signed": True}
 
 
