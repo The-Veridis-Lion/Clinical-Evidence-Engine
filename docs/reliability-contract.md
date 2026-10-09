@@ -106,3 +106,14 @@ known-value projection precision/recall, false certainty, unnecessary unknown an
 execution failures are separate. Neither selected constraints nor exact offset checks
 are exhaustive clinical semantic accuracy. Citation semantic review is AI-assisted;
 full semantic precision remains unavailable without independent exhaustive labels.
+
+## Separate post-confirmation program correction
+
+After the first-pass confirmation, an independently constructed offline partial-result
+counterexample exposed a derived-metadata defect: `[known_result, null]` was marked
+as a conflict. `claims-review-structured/3` keeps the unknown flag but requires two
+distinct non-null values for result conflict. Neither note extraction nor criterion
+rules change. Actual Luna measurements belong to frozen `171c08f`; the final code
+adds this separately versioned fix, verified offline and by saved-response replay.
+There are no new live calls for this metadata correction. Do not describe the final
+post-confirmation runtime as a freshly tested unseen candidate.

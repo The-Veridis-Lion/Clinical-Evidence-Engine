@@ -3,7 +3,7 @@ from datetime import date
 from .contracts import Citation, EvidenceFact
 from .prepare import digest
 
-VERSION = 'claims-review-structured/2'
+VERSION = 'claims-review-structured/3'
 PURPOSES = {
     'routine monitoring of established type 2 diabetes': 'monitoring',
     'monitor response after the treatment change': 'monitoring',
@@ -147,7 +147,8 @@ def test_timeline(case,prepared,facts):
         g['dates']=sorted(set(derived_dates));g['date_unknown']=unknown
         g['conflicted']=len(g['dates'])>1
         g['result_values']=list({digest(v):v for v in results}.values())
-        g['result_conflicted']=len(g['result_values'])>1
+        g['result_unknown']=any(v is None for v in g['result_values'])
+        g['result_conflicted']=len([v for v in g['result_values'] if v is not None])>1
         g['relationship_unresolved']=relationship_unresolved
         g['reconciliation']={**reconciliation,'derived':{s:reconciliation['derived'][s] for s in g['source_ids']}}
         g['counted_as_tests']=1 if g['identity_explicit'] and not g['conflicted'] and not g['date_unknown'] and not relationship_unresolved else None

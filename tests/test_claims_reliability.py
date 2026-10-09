@@ -162,3 +162,15 @@ def test_nonrequired_unknowns_do_not_globally_block_policy():
 def test_relationship_schema_rejects_untyped_authority():
     rows=records();rows[1]['content']['source_relationship']['authenticated']='true'
     with pytest.raises(ValueError):reconcile(rows)
+
+
+def test_unknown_result_is_not_a_conflicting_known_value():
+    def append_partial(b):
+        original=next(s for s in b['sources'] if s['record_type']=='observation')
+        partial=copy.deepcopy(original);partial['source_id']='PARTIAL-RESULT';partial['content']['value']=None
+        b['sources'].append(partial)
+    r=run_review(changed(case(1),append_partial))
+    group=next(e for e in r.timeline if 'PARTIAL-RESULT' in e['source_ids'])
+    assert group['result_unknown'] and not group['result_conflicted']
+    assert any(v is not None for v in group['result_values'])
+    assert group['counted_as_tests']==1

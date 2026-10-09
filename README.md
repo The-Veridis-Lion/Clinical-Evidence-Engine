@@ -291,3 +291,21 @@ For project inquiries or commercial licensing:
 [theveridislion@duck.com](mailto:theveridislion@duck.com)
 
 The-Veridis-Lion
+## Generalizable review reliability
+
+The [reliability delivery](docs/reliability-delivery.md) separates terminology
+grounding, policy applicability and field-scoped amendment reconciliation while
+preserving original facts and all failure traces. Frozen new-material confirmation
+used four real Luna calls: 28/28 criterion states matched, but only 5/7 complete
+field/event constraints matched. Three live-note cases achieved only 1/3 complete
+conformance; unnecessary nulls, temporal-role ambiguity and an unlabelled background
+inference remain. This is an engineering prototype, not validated clinical accuracy.
+
+Final offline regression: 350 tests passed. A separately versioned post-confirmation
+fix distinguishes a missing result from a conflicting known result; it has offline
+and saved-response verification, not a fresh full-workflow live confirmation.
+See the [semantic contract](docs/reliability-contract.md),
+[pre-change audit](docs/reliability-audit.md) and
+[machine summary](docs/reliability-validation.json) for denominators, versions,
+call ledger, preserved failures and reproduction. No human/expert review or payment
+decision is claimed. The original six exposed cases are regression material only.
