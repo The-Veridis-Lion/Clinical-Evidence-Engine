@@ -10,8 +10,9 @@ from .contracts import Citation, CriterionResult, PolicyReference, ReviewPacket
 from .facts import structured_facts, test_timeline
 from .note_extractor import extract_note
 from .prepare import prepare_case, digest
+from .applicability import check as check_applicability
 
-RULE_VERSION='claims-review-rules/2'
+RULE_VERSION='claims-review-rules/3'
 BASELINE='54553dd36095d4d2047f30d66747031a75ecafa5'
 
 
@@ -33,6 +34,7 @@ def citations(facts):
 
 def bound_to_target(f,case,sources):
     if f.test_specific is not True:return False
+    if f.details.get('extraction')=='note' and f.details.get('test_mapping_supported') is not True:return False
     if f.target_date is not None:return f.target_date==case.claim.service_date
     s=sources[f.source_id]
     return case.claim.encounter_id is not None and s.encounter_id==case.claim.encounter_id
@@ -76,9 +78,10 @@ def evaluate(case,prepared,facts,notes,policy,mode,usage=None,requested_policy=N
     target=candidates[0] if len(candidates)==1 and not candidates[0]['conflicted'] and not candidates[0]['date_unknown'] else None
     target_date=case.claim.service_date if target else None
     conflicts=[e for e in timeline if e['conflicted']]
-    ambiguous=any(not e['identity_explicit'] or e['date_unknown'] for e in timeline) or len(candidates)>1
+    ambiguous=any(not e['identity_explicit'] or e['date_unknown'] or e['relationship_unresolved'] for e in timeline) or len(candidates)>1
     coverage=case.review_context.history_completeness=='complete_within_constructed_case' and target_date is not None and case.review_context.history_end>=target_date
-    unresolved=prepared['unresolved_source_metadata']
+    resolved_groups={e['event_key'] for e in timeline if not e['conflicted'] and not e['relationship_unresolved'] and not e['date_unknown']}
+    unresolved=[u for u in prepared['unresolved_source_metadata'] if not (u.get('reason')=='explicit_event_date_disagreement' and u.get('event_link_id') in resolved_groups)]
     timeline_refs=citations(actual)
     for event in timeline:
         for c in event['citations']:
@@ -153,6 +156,15 @@ def evaluate(case,prepared,facts,notes,policy,mode,usage=None,requested_policy=N
         for r in findings.values():
             r.status='NOT_EVALUATED';r.evidence_complete=False
             r.reason='Requested purpose, mapping or policy version is outside this monitoring demonstration; no coverage denial is issued.'
+    for rule in policy['criteria']:
+        finding=findings[rule['criterion_id']]
+        applicability=check_applicability(case,policy,rule,requested_policy)
+        finding.derivation['clinical_evidence_status']=finding.status
+        finding.derivation['applicability']=applicability
+        if not unsupported and applicability['status']=='UNRESOLVED':
+            finding.status='NOT_EVALUATED';finding.evidence_complete=False
+            finding.reason='Policy applicability unresolved; supported clinical facts remain in the packet.'
+            finding.gaps+=applicability['reasons']
     missing_target=target is None
     if missing_target:gaps.append('Actual target date/performance is not established by the constructed request.')
     if values!={'monitoring'} and not unsupported:gaps.append('Target monitoring purpose is missing, ambiguous or conflicted.')
@@ -163,7 +175,7 @@ def evaluate(case,prepared,facts,notes,policy,mode,usage=None,requested_policy=N
         gaps.append('Notes were not extracted in structured-only mode; this is not a full live review.')
     status='UNSUPPORTED_SCOPE' if unsupported else 'NEEDS_HUMAN_REVIEW' if (
         missing_target or failed or mode=='structured-only' and notes or
-        any(r.status in {'INSUFFICIENT_EVIDENCE','CONFLICTED','NOT_SUPPORTED'} for r in findings.values())) else 'EVIDENCE_READY_FOR_HUMAN_REVIEW'
+        any(r.status in {'INSUFFICIENT_EVIDENCE','CONFLICTED','NOT_SUPPORTED','NOT_EVALUATED'} for r in findings.values())) else 'EVIDENCE_READY_FOR_HUMAN_REVIEW'
     runtime={p.name:hashlib.sha256(p.read_bytes()).hexdigest() for p in Path(__file__).parent.glob('*.py')}
     runtime['provider.py']=hashlib.sha256((Path(__file__).parent.parent/'provider.py').read_bytes()).hexdigest()
     identity=dict(baseline_commit=BASELINE,rule_version=RULE_VERSION,policy_version=policy['registry_version'],policy_sha256=digest(policy),runtime_sha256=runtime,
@@ -171,7 +183,7 @@ def evaluate(case,prepared,facts,notes,policy,mode,usage=None,requested_policy=N
     return ReviewPacket(version=__version__,case_id=case.case_id,status=status,target=case.claim,review_context=case.review_context,
         preparation=prepared,facts=facts,criteria=[findings[r['criterion_id']] for r in policy['criteria']],timeline=timeline,gaps=gaps,
         execution={'preparation':'completed','structured_facts':'completed','note_extraction':'failed' if failed else 'not_run' if mode=='structured-only' else 'completed',
-            'note_sources':notes,'policy_evaluation':'not_evaluated_scope' if unsupported else 'completed','execution_failed':failed,
+            'note_sources':notes,'policy_evaluation':'not_evaluated_scope' if unsupported else 'applicability_unresolved' if any(r.status=='NOT_EVALUATED' for r in findings.values()) else 'completed','execution_failed':failed,
             'actual_provider_calls':(usage or {}).get('model_calls',0),'usage':usage,'cache_enabled':False,'application_cache_hit':False,'backend_model_snapshot':'unavailable','uses_expected':False},
         identity=identity,policy_review_status=policy['review_status'],human_review_completed=policy['human_review_completed'],clinical_expert_review_completed=policy['clinical_expert_review_completed'])
 

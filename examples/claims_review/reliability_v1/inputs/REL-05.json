@@ -1,0 +1,144 @@
+{
+  "schema_version": "claims-review-prep/0.1",
+  "case_id": "REL-05",
+  "claim": {
+    "claim_id": "REQUEST-REL-05",
+    "patient_id": "SYN-REL-REL-05",
+    "encounter_id": "VISIT-REL-05",
+    "service_date": "2026-09-26",
+    "service_concept": "hba1c_monitoring",
+    "procedure_code": null,
+    "code_system": null,
+    "mapping_status": "constructed_demo",
+    "data_origin": "constructed_synthetic"
+  },
+  "review_context": {
+    "as_of": "2026-10-08",
+    "history_start": "2026-01-01",
+    "history_end": "2026-09-26",
+    "history_completeness": "complete_within_constructed_case"
+  },
+  "sources": [
+    {
+      "source_id": "REL-05-BG",
+      "patient_id": "SYN-REL-REL-05",
+      "encounter_id": null,
+      "available_at": "2026-10-07",
+      "origin": "constructed_synthetic",
+      "source_kind": "structured_record",
+      "recorded_at": "2026-10-06",
+      "event_date": "2026-01-03",
+      "record_type": "condition",
+      "event_link_id": null,
+      "content": {
+        "description": "Established type 2 diabetes mellitus",
+        "status": "active"
+      }
+    },
+    {
+      "source_id": "REL-05-PRIOR",
+      "patient_id": "SYN-REL-REL-05",
+      "encounter_id": null,
+      "available_at": "2026-10-07",
+      "origin": "constructed_synthetic",
+      "source_kind": "structured_record",
+      "recorded_at": "2026-10-06",
+      "event_date": "2026-06-06",
+      "record_type": "observation",
+      "event_link_id": "EVENT-REL-05-PRIOR",
+      "content": {
+        "service_concept": "hba1c",
+        "description": "Hemoglobin A1c",
+        "status": "final",
+        "value": 7.8,
+        "unit": "%"
+      }
+    },
+    {
+      "source_id": "REL-05-TARGET",
+      "patient_id": "SYN-REL-REL-05",
+      "encounter_id": "VISIT-REL-05",
+      "available_at": "2026-10-07",
+      "origin": "constructed_synthetic",
+      "source_kind": "structured_record",
+      "recorded_at": "2026-10-06",
+      "event_date": "2026-09-26",
+      "record_type": "observation",
+      "event_link_id": "EVENT-REL-05-TARGET",
+      "content": {
+        "service_concept": "hba1c",
+        "description": "Hemoglobin A1c",
+        "status": "final",
+        "value": 7.1,
+        "unit": "%"
+      }
+    },
+    {
+      "source_id": "REL-05-ORDER",
+      "patient_id": "SYN-REL-REL-05",
+      "encounter_id": "VISIT-REL-05",
+      "available_at": "2026-10-07",
+      "origin": "constructed_synthetic",
+      "source_kind": "structured_record",
+      "recorded_at": "2026-10-06",
+      "event_date": "2026-09-21",
+      "record_type": "order",
+      "event_link_id": null,
+      "content": {
+        "service_concept": "hba1c",
+        "requested_service_date": "2026-09-26",
+        "purpose": "Routine monitoring of established type 2 diabetes",
+        "order_status": "issued",
+        "authentication_status": "signed",
+        "ordering_provider": "Dr. Rowan Lake"
+      }
+    },
+    {
+      "source_id": "REL-05-AMENDMENT",
+      "patient_id": "SYN-REL-REL-05",
+      "encounter_id": null,
+      "available_at": "2026-10-07",
+      "origin": "constructed_synthetic",
+      "source_kind": "structured_record",
+      "recorded_at": "2026-10-06",
+      "event_date": "2026-08-06",
+      "record_type": "observation",
+      "event_link_id": "EVENT-REL-05-PRIOR",
+      "content": {
+        "service_concept": "hba1c",
+        "description": "Hemoglobin A1c",
+        "status": "final",
+        "value": 7.8,
+        "unit": "%",
+        "source_relationship": {
+          "relation": "amends",
+          "target_source_id": "REL-05-PRIOR",
+          "field": "event_date",
+          "replacement": "2026-08-06",
+          "authenticated": null,
+          "authority_scope": "event_date"
+        }
+      }
+    },
+    {
+      "source_id": "REL-05-LATE-COPY",
+      "patient_id": "SYN-REL-REL-05",
+      "encounter_id": null,
+      "available_at": "2026-10-08",
+      "origin": "constructed_synthetic",
+      "source_kind": "structured_record",
+      "recorded_at": "2026-07-01",
+      "event_date": "2026-06-06",
+      "record_type": "observation",
+      "event_link_id": "EVENT-REL-05-PRIOR",
+      "content": {
+        "service_concept": "hba1c",
+        "description": "Hemoglobin A1c",
+        "status": "final",
+        "value": 7.8,
+        "unit": "%",
+        "retransmission_of_source_id": "REL-05-PRIOR"
+      }
+    }
+  ]
+}

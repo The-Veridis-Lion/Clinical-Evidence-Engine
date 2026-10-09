@@ -1,0 +1,90 @@
+{
+  "schema_version": "claims-review-prep/0.1",
+  "case_id": "REL-01",
+  "claim": {
+    "claim_id": "REQUEST-REL-01",
+    "patient_id": "SYN-REL-REL-01",
+    "encounter_id": "VISIT-REL-01",
+    "service_date": "2026-07-16",
+    "service_concept": "hba1c_monitoring",
+    "procedure_code": null,
+    "code_system": null,
+    "mapping_status": "constructed_demo",
+    "data_origin": "constructed_synthetic"
+  },
+  "review_context": {
+    "as_of": "2026-10-08",
+    "history_start": "2026-01-01",
+    "history_end": "2026-07-16",
+    "history_completeness": "complete_within_constructed_case"
+  },
+  "sources": [
+    {
+      "source_id": "REL-01-BG",
+      "patient_id": "SYN-REL-REL-01",
+      "encounter_id": null,
+      "available_at": "2026-10-07",
+      "origin": "constructed_synthetic",
+      "source_kind": "structured_record",
+      "recorded_at": "2026-10-06",
+      "event_date": "2026-01-03",
+      "record_type": "condition",
+      "event_link_id": null,
+      "content": {
+        "description": "Established type 2 diabetes mellitus",
+        "status": "active"
+      }
+    },
+    {
+      "source_id": "REL-01-PRIOR",
+      "patient_id": "SYN-REL-REL-01",
+      "encounter_id": null,
+      "available_at": "2026-10-07",
+      "origin": "constructed_synthetic",
+      "source_kind": "structured_record",
+      "recorded_at": "2026-10-06",
+      "event_date": "2026-04-14",
+      "record_type": "observation",
+      "event_link_id": "EVENT-REL-01-PRIOR",
+      "content": {
+        "service_concept": "hba1c",
+        "description": "Hemoglobin A1c",
+        "status": "final",
+        "value": 7.8,
+        "unit": "%"
+      }
+    },
+    {
+      "source_id": "REL-01-TARGET",
+      "patient_id": "SYN-REL-REL-01",
+      "encounter_id": "VISIT-REL-01",
+      "available_at": "2026-10-07",
+      "origin": "constructed_synthetic",
+      "source_kind": "structured_record",
+      "recorded_at": "2026-10-06",
+      "event_date": "2026-07-16",
+      "record_type": "observation",
+      "event_link_id": "EVENT-REL-01-TARGET",
+      "content": {
+        "service_concept": "hba1c",
+        "description": "Hemoglobin A1c",
+        "status": "final",
+        "value": 7.1,
+        "unit": "%"
+      }
+    },
+    {
+      "source_id": "REL-01-LETTER",
+      "patient_id": "SYN-REL-REL-01",
+      "encounter_id": "VISIT-REL-01",
+      "available_at": "2026-10-07",
+      "origin": "constructed_synthetic",
+      "source_kind": "synthetic_note",
+      "recorded_at": "2026-10-06",
+      "event_date": null,
+      "record_type": "note",
+      "event_link_id": null,
+      "content": "To the collection team\nFor ongoing management of established type 2 diabetes, I request glycated hemoglobin on July 16, 2026. This is routine monitoring; the regimen is unchanged.\nDigital signature: Dr. Mira Aster, July 9, 2026."
+    }
+  ]
+}

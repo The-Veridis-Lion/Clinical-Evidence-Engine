@@ -1,0 +1,90 @@
+{
+  "schema_version": "claims-review-prep/0.1",
+  "case_id": "REL-02",
+  "claim": {
+    "claim_id": "REQUEST-REL-02",
+    "patient_id": "SYN-REL-REL-02",
+    "encounter_id": "VISIT-REL-02",
+    "service_date": "2026-09-27",
+    "service_concept": "hba1c_monitoring",
+    "procedure_code": null,
+    "code_system": null,
+    "mapping_status": "constructed_demo",
+    "data_origin": "constructed_synthetic"
+  },
+  "review_context": {
+    "as_of": "2026-10-08",
+    "history_start": "2026-01-01",
+    "history_end": "2026-09-27",
+    "history_completeness": "complete_within_constructed_case"
+  },
+  "sources": [
+    {
+      "source_id": "REL-02-BG",
+      "patient_id": "SYN-REL-REL-02",
+      "encounter_id": null,
+      "available_at": "2026-10-07",
+      "origin": "constructed_synthetic",
+      "source_kind": "structured_record",
+      "recorded_at": "2026-10-06",
+      "event_date": "2026-01-03",
+      "record_type": "condition",
+      "event_link_id": null,
+      "content": {
+        "description": "Established type 2 diabetes mellitus",
+        "status": "active"
+      }
+    },
+    {
+      "source_id": "REL-02-PRIOR",
+      "patient_id": "SYN-REL-REL-02",
+      "encounter_id": null,
+      "available_at": "2026-10-07",
+      "origin": "constructed_synthetic",
+      "source_kind": "structured_record",
+      "recorded_at": "2026-10-06",
+      "event_date": "2026-08-02",
+      "record_type": "observation",
+      "event_link_id": "EVENT-REL-02-PRIOR",
+      "content": {
+        "service_concept": "hba1c",
+        "description": "Hemoglobin A1c",
+        "status": "final",
+        "value": 7.8,
+        "unit": "%"
+      }
+    },
+    {
+      "source_id": "REL-02-TARGET",
+      "patient_id": "SYN-REL-REL-02",
+      "encounter_id": "VISIT-REL-02",
+      "available_at": "2026-10-07",
+      "origin": "constructed_synthetic",
+      "source_kind": "structured_record",
+      "recorded_at": "2026-10-06",
+      "event_date": "2026-09-27",
+      "record_type": "observation",
+      "event_link_id": "EVENT-REL-02-TARGET",
+      "content": {
+        "service_concept": "hba1c",
+        "description": "Hemoglobin A1c",
+        "status": "final",
+        "value": 7.1,
+        "unit": "%"
+      }
+    },
+    {
+      "source_id": "REL-02-TABLE",
+      "patient_id": "SYN-REL-REL-02",
+      "encounter_id": "VISIT-REL-02",
+      "available_at": "2026-10-07",
+      "origin": "constructed_synthetic",
+      "source_kind": "synthetic_note",
+      "recorded_at": "2026-10-06",
+      "event_date": null,
+      "record_type": "note",
+      "event_link_id": null,
+      "content": "Medication and laboratory plan\nItem | Status\nHgb A1c | requested for 27 Sep 2026 for routine diabetes monitoring\nRegimen adjustment | not started; discussion only planned for 20 October 2026\nShort-interval explanation | not documented\nOrdering clinician | Dr. Celia Fern; order unsigned\nAdministrative attachment only: signed by Dr. Robin Vale."
+    }
+  ]
+}

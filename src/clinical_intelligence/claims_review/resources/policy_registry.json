@@ -1,10 +1,10 @@
 {
   "registry_id": "cms_190_21_monitoring_evidence_review",
-  "registry_version": "0.1.0-draft-ai-20261008",
+  "registry_version": "0.2.0-draft-ai-20261009",
   "review_status": "draft_ai_reviewed",
   "human_review_completed": false,
   "clinical_expert_review_completed": false,
-  "artifact_role": "Non-executable policy preparation and evidence-review contract; not a coverage adjudicator.",
+  "artifact_role": "Draft policy scope/prerequisites and evidence-reference registry; not a coverage adjudicator.",
   "review_as_of": "2026-10-08",
   "review_timezone": "America/New_York",
   "source_retrieval_timezone": "UTC",
@@ -89,14 +89,19 @@
       "guard_id": "SCREENING_OUT_OF_SCOPE",
       "trigger": "The target service is explicitly for diabetes screening.",
       "overall_status": "UNSUPPORTED_SCOPE",
-      "source_ids": ["CMS_CR13487_T12694"],
+      "source_ids": [
+        "CMS_CR13487_T12694"
+      ],
       "reason": "Only monitoring evidence review is implemented. Do not infer that Medicare does not cover HbA1c screening."
     },
     {
       "guard_id": "INITIAL_DIAGNOSIS_OUT_OF_SCOPE",
       "trigger": "The target service is explicitly for establishing an initial diabetes diagnosis rather than monitoring an established condition.",
       "overall_status": "UNSUPPORTED_SCOPE",
-      "source_ids": ["CMS_NCD_190_21_V1", "CMS_CR13487_T12694"],
+      "source_ids": [
+        "CMS_NCD_190_21_V1",
+        "CMS_CR13487_T12694"
+      ],
       "reason": "Route to an unimplemented policy/clinical-purpose review. Do not equate initial diagnosis with screening or issue a general coverage conclusion."
     },
     {
@@ -143,7 +148,13 @@
       "supported_when": "Both purpose and relevant patient background have sufficient source support.",
       "insufficient_when": "The result, diagnosis or purpose is absent, unclear or unbound; an HbA1c value alone does not establish a diagnosis or the test's purpose.",
       "conflicted_when": "Relevant source statements disagree about the patient's condition or purpose and no valid correction resolves them.",
-      "scope_note": "Do not require all possible NCD indications. Hyper/hypoglycemia assessments outside established diabetes monitoring are not implemented here."
+      "scope_note": "Do not require all possible NCD indications. Hyper/hypoglycemia assessments outside established diabetes monitoring are not implemented here.",
+      "prerequisites": [
+        "service_date",
+        "monitoring_concept",
+        "policy_version",
+        "patient_identity"
+      ]
     },
     {
       "criterion_id": "TEST_TIMELINE",
@@ -164,7 +175,13 @@
       "supported_when": "The relevant test events, dates and stated observation scope can be traced; a bounded, explicit absence is preserved as such.",
       "insufficient_when": "Required history, date roles, event identity or retrieval coverage cannot be established.",
       "conflicted_when": "Unresolved dates or event identities materially change the comparison.",
-      "scope_note": "SUPPORTED means the timeline is usable within its stated scope. It does not mean the frequency is normal, medically necessary or within every claims edit."
+      "scope_note": "SUPPORTED means the timeline is usable within its stated scope. It does not mean the frequency is normal, medically necessary or within every claims edit.",
+      "prerequisites": [
+        "service_date",
+        "monitoring_concept",
+        "policy_version",
+        "patient_identity"
+      ]
     },
     {
       "criterion_id": "SHORT_INTERVAL_RATIONALE",
@@ -192,7 +209,13 @@
       "insufficient_when": "Applicability cannot be established, or a short interval is known but its rationale is unavailable or inadequately linked.",
       "not_supported_when": "Affirmative evidence contradicts a specifically asserted rationale. Do not infer no rationale merely because none was retrieved.",
       "conflicted_when": "Unresolved credible statements disagree about the relevant adjustment, control/event context or interval.",
-      "scope_note": "No self-invented HbA1c thresholds, default controlled-diabetes classification, fixed annual cap, or generic 'any medication change means necessary' rule. Full exception adjudication and pregnancy/alternative-assay pathways are not implemented."
+      "scope_note": "No self-invented HbA1c thresholds, default controlled-diabetes classification, fixed annual cap, or generic 'any medication change means necessary' rule. Full exception adjudication and pregnancy/alternative-assay pathways are not implemented.",
+      "prerequisites": [
+        "service_date",
+        "monitoring_concept",
+        "policy_version",
+        "patient_identity"
+      ]
     },
     {
       "criterion_id": "ORDER_INTENT",
@@ -218,7 +241,13 @@
       "supported_when": "One supported evidence pattern is documented and linked; this is a demonstration-level evidence finding, not provider credential or signature-authenticity certification.",
       "insufficient_when": "Only an unsupported unsigned order, nonspecific lab request, test result without order intent, missing authentication evidence or unbound record is available.",
       "conflicted_when": "Unresolved order, cancellation or correction statements could change whether the target test was intended.",
-      "scope_note": "A plan/order can establish intent but does not establish test performance. Do not copy a document-wide signature flag onto an unrelated order or require every order to have its own signature."
+      "scope_note": "A plan/order can establish intent but does not establish test performance. Do not copy a document-wide signature flag onto an unrelated order or require every order to have its own signature.",
+      "prerequisites": [
+        "service_date",
+        "monitoring_concept",
+        "policy_version",
+        "patient_identity"
+      ]
     }
   ],
   "time_conventions": {
