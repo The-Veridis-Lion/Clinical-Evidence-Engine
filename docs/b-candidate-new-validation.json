@@ -1,0 +1,986 @@
+{
+  "version": "b-candidate-new-validation/1",
+  "analysis": "PROSPECTIVE_CONSTRUCTED_NOTE_COMPARISON",
+  "benchmark_valid": false,
+  "terminal_status": "INCONCLUSIVE_SCORER",
+  "adoption": "B_NOT_READY",
+  "default_prompt": "A",
+  "candidate_entry_default": "B (explicit isolated wrapper only)",
+  "frozen_commit": "d2d03f951ff50a6bff99c3c2b80fce94cc295ade",
+  "starting_commit": "65d2eb2b66862bb4245e373fcd77c9b2622c7ac6",
+  "data": {
+    "notes": 12,
+    "constructed": 12,
+    "original_full_text": 0,
+    "AI_ASSISTED": true,
+    "author_blind": false,
+    "long_notes": 4,
+    "word_range_long": [
+      647,
+      707
+    ],
+    "word_range_short": [
+      155,
+      215
+    ]
+  },
+  "offline_tests": 38,
+  "preflight_passed_before_live": true,
+  "planned_executions": 48,
+  "saved_executions": 48,
+  "workflow_execution_failures": 0,
+  "actual_provider_requests": 59,
+  "max_provider_requests": 96,
+  "score_passes": 1,
+  "frozen_groups": {
+    "A": {
+      "executions": 24,
+      "execution_failures": 0,
+      "first": {
+        "metrics": {
+          "candidate_fields": 268,
+          "scored_fields": 264,
+          "correct_fields": 251,
+          "unresolved_fields": 4,
+          "wrong_definite": 5,
+          "unnecessary_null": 5,
+          "missing_fields": 3,
+          "missing_propositions": 3,
+          "binding_errors": 5,
+          "required_propositions": 86,
+          "complete_propositions": 70,
+          "duplicate_propositions": 0,
+          "contradictory_propositions": 0,
+          "date_bundle_errors": 0,
+          "grounding_identity_errors": 0
+        },
+        "extra_categories": {
+          "SUPPORTED_IN_SCOPE": 26,
+          "UNRESOLVED": 11,
+          "UNSUPPORTED": 6,
+          "SUPPORTED_OUT_OF_SCOPE": 8
+        }
+      },
+      "final": {
+        "metrics": {
+          "candidate_fields": 268,
+          "scored_fields": 264,
+          "correct_fields": 251,
+          "unresolved_fields": 4,
+          "wrong_definite": 5,
+          "unnecessary_null": 5,
+          "missing_fields": 3,
+          "missing_propositions": 3,
+          "binding_errors": 5,
+          "required_propositions": 86,
+          "complete_propositions": 70,
+          "duplicate_propositions": 0,
+          "contradictory_propositions": 0,
+          "date_bundle_errors": 0,
+          "grounding_identity_errors": 0
+        },
+        "extra_categories": {
+          "SUPPORTED_IN_SCOPE": 26,
+          "UNRESOLVED": 11,
+          "UNSUPPORTED": 6,
+          "SUPPORTED_OUT_OF_SCOPE": 8
+        }
+      }
+    },
+    "B": {
+      "executions": 24,
+      "execution_failures": 0,
+      "first": {
+        "metrics": {
+          "candidate_fields": 268,
+          "scored_fields": 263,
+          "correct_fields": 260,
+          "unresolved_fields": 5,
+          "wrong_definite": 3,
+          "unnecessary_null": 0,
+          "missing_fields": 0,
+          "missing_propositions": 0,
+          "binding_errors": 3,
+          "required_propositions": 86,
+          "complete_propositions": 78,
+          "duplicate_propositions": 0,
+          "contradictory_propositions": 0,
+          "date_bundle_errors": 0,
+          "grounding_identity_errors": 0
+        },
+        "extra_categories": {
+          "SUPPORTED_IN_SCOPE": 29,
+          "UNRESOLVED": 9,
+          "UNSUPPORTED": 9,
+          "SUPPORTED_OUT_OF_SCOPE": 11
+        }
+      },
+      "final": {
+        "metrics": {
+          "candidate_fields": 268,
+          "scored_fields": 263,
+          "correct_fields": 260,
+          "unresolved_fields": 5,
+          "wrong_definite": 3,
+          "unnecessary_null": 0,
+          "missing_fields": 0,
+          "missing_propositions": 0,
+          "binding_errors": 3,
+          "required_propositions": 86,
+          "complete_propositions": 78,
+          "duplicate_propositions": 0,
+          "contradictory_propositions": 0,
+          "date_bundle_errors": 0,
+          "grounding_identity_errors": 0
+        },
+        "extra_categories": {
+          "SUPPORTED_IN_SCOPE": 29,
+          "UNRESOLVED": 9,
+          "UNSUPPORTED": 9,
+          "SUPPORTED_OUT_OF_SCOPE": 11
+        }
+      }
+    }
+  },
+  "paired_common_fields": 263,
+  "paired_repeats": {
+    "1": {
+      "common_fields": 132,
+      "A_errors": 5,
+      "B_errors": 2
+    },
+    "2": {
+      "common_fields": 131,
+      "A_errors": 8,
+      "B_errors": 1
+    }
+  },
+  "length_strata": {
+    "long": {
+      "common_fields": 135,
+      "A_errors": 3,
+      "B_errors": 1
+    },
+    "short": {
+      "common_fields": 128,
+      "A_errors": 10,
+      "B_errors": 2
+    }
+  },
+  "candidate_usage": {
+    "A": {
+      "executions": 24,
+      "requests": 31,
+      "repairs": 7,
+      "execution_seconds_sum": 580.5522767007351,
+      "tokens": {
+        "input_tokens": 550627,
+        "cached_input_tokens": 39168,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 46305,
+        "reasoning_output_tokens": 27234
+      },
+      "billed_cost": "UNAVAILABLE: Codex subscription",
+      "backend_model_snapshot": "UNAVAILABLE",
+      "model": "gpt-6-luna",
+      "reasoning": "high"
+    },
+    "B": {
+      "executions": 24,
+      "requests": 28,
+      "repairs": 4,
+      "execution_seconds_sum": 483.5609477001708,
+      "tokens": {
+        "input_tokens": 498270,
+        "cached_input_tokens": 11008,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 44704,
+        "reasoning_output_tokens": 25768
+      },
+      "billed_cost": "UNAVAILABLE: Codex subscription",
+      "backend_model_snapshot": "UNAVAILABLE",
+      "model": "gpt-6-luna",
+      "reasoning": "high"
+    }
+  },
+  "pairs": [
+    {
+      "case_id": "N01",
+      "repeat": 1,
+      "family": "outpatient_long",
+      "length_stratum": "long",
+      "first": {
+        "common_fields": 21,
+        "A_errors": 2,
+        "B_errors": 1,
+        "changes": [
+          {
+            "constraint_id": "N01:P4",
+            "field": "target_date",
+            "A": "UNNECESSARY_NULL",
+            "B": "CORRECT"
+          }
+        ],
+        "unresolved": []
+      },
+      "final": {
+        "common_fields": 21,
+        "A_errors": 2,
+        "B_errors": 1,
+        "changes": [
+          {
+            "constraint_id": "N01:P4",
+            "field": "target_date",
+            "A": "UNNECESSARY_NULL",
+            "B": "CORRECT"
+          }
+        ],
+        "unresolved": []
+      }
+    },
+    {
+      "case_id": "N01",
+      "repeat": 2,
+      "family": "outpatient_long",
+      "length_stratum": "long",
+      "first": {
+        "common_fields": 20,
+        "A_errors": 1,
+        "B_errors": 0,
+        "changes": [
+          {
+            "constraint_id": "N01:P4",
+            "field": "temporal_status",
+            "A": "WRONG_DEFINITE",
+            "B": "CORRECT"
+          }
+        ],
+        "unresolved": [
+          [
+            "N01:P2",
+            "value"
+          ]
+        ]
+      },
+      "final": {
+        "common_fields": 20,
+        "A_errors": 1,
+        "B_errors": 0,
+        "changes": [
+          {
+            "constraint_id": "N01:P4",
+            "field": "temporal_status",
+            "A": "WRONG_DEFINITE",
+            "B": "CORRECT"
+          }
+        ],
+        "unresolved": [
+          [
+            "N01:P2",
+            "value"
+          ]
+        ]
+      }
+    },
+    {
+      "case_id": "N02",
+      "repeat": 1,
+      "family": "discharge_long",
+      "length_stratum": "long",
+      "first": {
+        "common_fields": 12,
+        "A_errors": 0,
+        "B_errors": 0,
+        "changes": [],
+        "unresolved": []
+      },
+      "final": {
+        "common_fields": 12,
+        "A_errors": 0,
+        "B_errors": 0,
+        "changes": [],
+        "unresolved": []
+      }
+    },
+    {
+      "case_id": "N02",
+      "repeat": 2,
+      "family": "discharge_long",
+      "length_stratum": "long",
+      "first": {
+        "common_fields": 12,
+        "A_errors": 0,
+        "B_errors": 0,
+        "changes": [],
+        "unresolved": []
+      },
+      "final": {
+        "common_fields": 12,
+        "A_errors": 0,
+        "B_errors": 0,
+        "changes": [],
+        "unresolved": []
+      }
+    },
+    {
+      "case_id": "N03",
+      "repeat": 1,
+      "family": "lab_receipt_long",
+      "length_stratum": "long",
+      "first": {
+        "common_fields": 17,
+        "A_errors": 0,
+        "B_errors": 0,
+        "changes": [],
+        "unresolved": []
+      },
+      "final": {
+        "common_fields": 17,
+        "A_errors": 0,
+        "B_errors": 0,
+        "changes": [],
+        "unresolved": []
+      }
+    },
+    {
+      "case_id": "N03",
+      "repeat": 2,
+      "family": "lab_receipt_long",
+      "length_stratum": "long",
+      "first": {
+        "common_fields": 17,
+        "A_errors": 0,
+        "B_errors": 0,
+        "changes": [],
+        "unresolved": []
+      },
+      "final": {
+        "common_fields": 17,
+        "A_errors": 0,
+        "B_errors": 0,
+        "changes": [],
+        "unresolved": []
+      }
+    },
+    {
+      "case_id": "N04",
+      "repeat": 1,
+      "family": "conference_long",
+      "length_stratum": "long",
+      "first": {
+        "common_fields": 18,
+        "A_errors": 0,
+        "B_errors": 0,
+        "changes": [],
+        "unresolved": []
+      },
+      "final": {
+        "common_fields": 18,
+        "A_errors": 0,
+        "B_errors": 0,
+        "changes": [],
+        "unresolved": []
+      }
+    },
+    {
+      "case_id": "N04",
+      "repeat": 2,
+      "family": "conference_long",
+      "length_stratum": "long",
+      "first": {
+        "common_fields": 18,
+        "A_errors": 0,
+        "B_errors": 0,
+        "changes": [],
+        "unresolved": []
+      },
+      "final": {
+        "common_fields": 18,
+        "A_errors": 0,
+        "B_errors": 0,
+        "changes": [],
+        "unresolved": []
+      }
+    },
+    {
+      "case_id": "N05",
+      "repeat": 1,
+      "family": "unsigned_order",
+      "length_stratum": "short",
+      "first": {
+        "common_fields": 12,
+        "A_errors": 1,
+        "B_errors": 0,
+        "changes": [
+          {
+            "constraint_id": "N05:P2",
+            "field": "target_date",
+            "A": "UNNECESSARY_NULL",
+            "B": "CORRECT"
+          }
+        ],
+        "unresolved": []
+      },
+      "final": {
+        "common_fields": 12,
+        "A_errors": 1,
+        "B_errors": 0,
+        "changes": [
+          {
+            "constraint_id": "N05:P2",
+            "field": "target_date",
+            "A": "UNNECESSARY_NULL",
+            "B": "CORRECT"
+          }
+        ],
+        "unresolved": []
+      }
+    },
+    {
+      "case_id": "N05",
+      "repeat": 2,
+      "family": "unsigned_order",
+      "length_stratum": "short",
+      "first": {
+        "common_fields": 12,
+        "A_errors": 0,
+        "B_errors": 0,
+        "changes": [],
+        "unresolved": []
+      },
+      "final": {
+        "common_fields": 12,
+        "A_errors": 0,
+        "B_errors": 0,
+        "changes": [],
+        "unresolved": []
+      }
+    },
+    {
+      "case_id": "N06",
+      "repeat": 1,
+      "family": "patient_report",
+      "length_stratum": "short",
+      "first": {
+        "common_fields": 11,
+        "A_errors": 1,
+        "B_errors": 0,
+        "changes": [
+          {
+            "constraint_id": "N06:P2",
+            "field": "authenticated",
+            "A": "WRONG_DEFINITE",
+            "B": "CORRECT"
+          }
+        ],
+        "unresolved": []
+      },
+      "final": {
+        "common_fields": 11,
+        "A_errors": 1,
+        "B_errors": 0,
+        "changes": [
+          {
+            "constraint_id": "N06:P2",
+            "field": "authenticated",
+            "A": "WRONG_DEFINITE",
+            "B": "CORRECT"
+          }
+        ],
+        "unresolved": []
+      }
+    },
+    {
+      "case_id": "N06",
+      "repeat": 2,
+      "family": "patient_report",
+      "length_stratum": "short",
+      "first": {
+        "common_fields": 11,
+        "A_errors": 1,
+        "B_errors": 0,
+        "changes": [
+          {
+            "constraint_id": "N06:P2",
+            "field": "authenticated",
+            "A": "WRONG_DEFINITE",
+            "B": "CORRECT"
+          }
+        ],
+        "unresolved": []
+      },
+      "final": {
+        "common_fields": 11,
+        "A_errors": 1,
+        "B_errors": 0,
+        "changes": [
+          {
+            "constraint_id": "N06:P2",
+            "field": "authenticated",
+            "A": "WRONG_DEFINITE",
+            "B": "CORRECT"
+          }
+        ],
+        "unresolved": []
+      }
+    },
+    {
+      "case_id": "N07",
+      "repeat": 1,
+      "family": "diagnostic_plain",
+      "length_stratum": "short",
+      "first": {
+        "common_fields": 9,
+        "A_errors": 0,
+        "B_errors": 0,
+        "changes": [],
+        "unresolved": []
+      },
+      "final": {
+        "common_fields": 9,
+        "A_errors": 0,
+        "B_errors": 0,
+        "changes": [],
+        "unresolved": []
+      }
+    },
+    {
+      "case_id": "N07",
+      "repeat": 2,
+      "family": "diagnostic_plain",
+      "length_stratum": "short",
+      "first": {
+        "common_fields": 9,
+        "A_errors": 1,
+        "B_errors": 0,
+        "changes": [
+          {
+            "constraint_id": "N07:P2",
+            "field": "target_date",
+            "A": "UNNECESSARY_NULL",
+            "B": "CORRECT"
+          }
+        ],
+        "unresolved": []
+      },
+      "final": {
+        "common_fields": 9,
+        "A_errors": 1,
+        "B_errors": 0,
+        "changes": [
+          {
+            "constraint_id": "N07:P2",
+            "field": "target_date",
+            "A": "UNNECESSARY_NULL",
+            "B": "CORRECT"
+          }
+        ],
+        "unresolved": []
+      }
+    },
+    {
+      "case_id": "N08",
+      "repeat": 1,
+      "family": "two_intents",
+      "length_stratum": "short",
+      "first": {
+        "common_fields": 13,
+        "A_errors": 0,
+        "B_errors": 1,
+        "changes": [
+          {
+            "constraint_id": "N08:P2",
+            "field": "temporal_status",
+            "A": "CORRECT",
+            "B": "WRONG_DEFINITE"
+          }
+        ],
+        "unresolved": []
+      },
+      "final": {
+        "common_fields": 13,
+        "A_errors": 0,
+        "B_errors": 1,
+        "changes": [
+          {
+            "constraint_id": "N08:P2",
+            "field": "temporal_status",
+            "A": "CORRECT",
+            "B": "WRONG_DEFINITE"
+          }
+        ],
+        "unresolved": []
+      }
+    },
+    {
+      "case_id": "N08",
+      "repeat": 2,
+      "family": "two_intents",
+      "length_stratum": "short",
+      "first": {
+        "common_fields": 13,
+        "A_errors": 2,
+        "B_errors": 1,
+        "changes": [
+          {
+            "constraint_id": "N08:P4",
+            "field": "value",
+            "A": "MISSING",
+            "B": "CORRECT"
+          }
+        ],
+        "unresolved": []
+      },
+      "final": {
+        "common_fields": 13,
+        "A_errors": 2,
+        "B_errors": 1,
+        "changes": [
+          {
+            "constraint_id": "N08:P4",
+            "field": "value",
+            "A": "MISSING",
+            "B": "CORRECT"
+          }
+        ],
+        "unresolved": []
+      }
+    },
+    {
+      "case_id": "N09",
+      "repeat": 1,
+      "family": "planned_vs_current",
+      "length_stratum": "short",
+      "first": {
+        "common_fields": 13,
+        "A_errors": 0,
+        "B_errors": 0,
+        "changes": [],
+        "unresolved": []
+      },
+      "final": {
+        "common_fields": 13,
+        "A_errors": 0,
+        "B_errors": 0,
+        "changes": [],
+        "unresolved": []
+      }
+    },
+    {
+      "case_id": "N09",
+      "repeat": 2,
+      "family": "planned_vs_current",
+      "length_stratum": "short",
+      "first": {
+        "common_fields": 13,
+        "A_errors": 2,
+        "B_errors": 0,
+        "changes": [
+          {
+            "constraint_id": "N09:P3",
+            "field": "target_date",
+            "A": "UNNECESSARY_NULL",
+            "B": "CORRECT"
+          },
+          {
+            "constraint_id": "N09:P5",
+            "field": "target_date",
+            "A": "UNNECESSARY_NULL",
+            "B": "CORRECT"
+          }
+        ],
+        "unresolved": []
+      },
+      "final": {
+        "common_fields": 13,
+        "A_errors": 2,
+        "B_errors": 0,
+        "changes": [
+          {
+            "constraint_id": "N09:P3",
+            "field": "target_date",
+            "A": "UNNECESSARY_NULL",
+            "B": "CORRECT"
+          },
+          {
+            "constraint_id": "N09:P5",
+            "field": "target_date",
+            "A": "UNNECESSARY_NULL",
+            "B": "CORRECT"
+          }
+        ],
+        "unresolved": []
+      }
+    },
+    {
+      "case_id": "N10",
+      "repeat": 1,
+      "family": "ambiguous_issue_date",
+      "length_stratum": "short",
+      "first": {
+        "common_fields": 6,
+        "A_errors": 1,
+        "B_errors": 0,
+        "changes": [
+          {
+            "constraint_id": "N10:P3",
+            "field": "value",
+            "A": "MISSING",
+            "B": "CORRECT"
+          }
+        ],
+        "unresolved": [
+          [
+            "N10:P1",
+            "target_date"
+          ],
+          [
+            "N10:P2",
+            "target_date"
+          ]
+        ]
+      },
+      "final": {
+        "common_fields": 6,
+        "A_errors": 1,
+        "B_errors": 0,
+        "changes": [
+          {
+            "constraint_id": "N10:P3",
+            "field": "value",
+            "A": "MISSING",
+            "B": "CORRECT"
+          }
+        ],
+        "unresolved": [
+          [
+            "N10:P1",
+            "target_date"
+          ],
+          [
+            "N10:P2",
+            "target_date"
+          ]
+        ]
+      }
+    },
+    {
+      "case_id": "N10",
+      "repeat": 2,
+      "family": "ambiguous_issue_date",
+      "length_stratum": "short",
+      "first": {
+        "common_fields": 6,
+        "A_errors": 1,
+        "B_errors": 0,
+        "changes": [
+          {
+            "constraint_id": "N10:P3",
+            "field": "value",
+            "A": "MISSING",
+            "B": "CORRECT"
+          }
+        ],
+        "unresolved": [
+          [
+            "N10:P1",
+            "target_date"
+          ],
+          [
+            "N10:P2",
+            "target_date"
+          ]
+        ]
+      },
+      "final": {
+        "common_fields": 6,
+        "A_errors": 1,
+        "B_errors": 0,
+        "changes": [
+          {
+            "constraint_id": "N10:P3",
+            "field": "value",
+            "A": "MISSING",
+            "B": "CORRECT"
+          }
+        ],
+        "unresolved": [
+          [
+            "N10:P1",
+            "target_date"
+          ],
+          [
+            "N10:P2",
+            "target_date"
+          ]
+        ]
+      }
+    },
+    {
+      "case_id": "N11",
+      "repeat": 1,
+      "family": "administrative_control",
+      "length_stratum": "short",
+      "first": {
+        "common_fields": 0,
+        "A_errors": 0,
+        "B_errors": 0,
+        "changes": [],
+        "unresolved": []
+      },
+      "final": {
+        "common_fields": 0,
+        "A_errors": 0,
+        "B_errors": 0,
+        "changes": [],
+        "unresolved": []
+      }
+    },
+    {
+      "case_id": "N11",
+      "repeat": 2,
+      "family": "administrative_control",
+      "length_stratum": "short",
+      "first": {
+        "common_fields": 0,
+        "A_errors": 0,
+        "B_errors": 0,
+        "changes": [],
+        "unresolved": []
+      },
+      "final": {
+        "common_fields": 0,
+        "A_errors": 0,
+        "B_errors": 0,
+        "changes": [],
+        "unresolved": []
+      }
+    },
+    {
+      "case_id": "N12",
+      "repeat": 1,
+      "family": "other_subject_analyte",
+      "length_stratum": "short",
+      "first": {
+        "common_fields": 0,
+        "A_errors": 0,
+        "B_errors": 0,
+        "changes": [],
+        "unresolved": []
+      },
+      "final": {
+        "common_fields": 0,
+        "A_errors": 0,
+        "B_errors": 0,
+        "changes": [],
+        "unresolved": []
+      }
+    },
+    {
+      "case_id": "N12",
+      "repeat": 2,
+      "family": "other_subject_analyte",
+      "length_stratum": "short",
+      "first": {
+        "common_fields": 0,
+        "A_errors": 0,
+        "B_errors": 0,
+        "changes": [],
+        "unresolved": []
+      },
+      "final": {
+        "common_fields": 0,
+        "A_errors": 0,
+        "B_errors": 0,
+        "changes": [],
+        "unresolved": []
+      }
+    }
+  ],
+  "scorer_gaps": [
+    "Issued-order actual vs future collection planned was not sufficiently separated in labels",
+    "No-target extra rule over-rejects grounded scope controls",
+    "One equivalent numeric narrative cannot be projected by finite parser"
+  ],
+  "critical_source_review_failures": [
+    {
+      "execution_id": "n08-B-r1",
+      "stage": "first",
+      "mechanism": "unestablished_performance_promoted_to_definite_nonoccurrence",
+      "call": 28
+    },
+    {
+      "execution_id": "n08-B-r1",
+      "stage": "final",
+      "mechanism": "unestablished_performance_promoted_to_definite_nonoccurrence",
+      "call": 28
+    },
+    {
+      "execution_id": "n08-B-r2",
+      "stage": "first",
+      "mechanism": "unestablished_performance_promoted_to_definite_nonoccurrence",
+      "call": 55
+    },
+    {
+      "execution_id": "n08-B-r2",
+      "stage": "final",
+      "mechanism": "unestablished_performance_promoted_to_definite_nonoccurrence",
+      "call": 55
+    }
+  ],
+  "shared_runtime_risks": [
+    "EvidenceFact uses source patient ID without assertion experiencer; correctly quoted sibling diabetes can enter patient-level condition scan",
+    "Grounding validators do not prove statement semantics or prevent nonoccurrence inference",
+    "Repair depends on limited signature/context guards; unchanged in this round"
+  ],
+  "semantic_citation_precision": "UNAVAILABLE",
+  "overall_fact_precision_recall": "UNAVAILABLE",
+  "frozen_scores_rewritten": false,
+  "notes": "Frozen scores are descriptive results from an imperfect evaluator, not a corrected independent accuracy claim; no revised gold or rerun",
+  "gate_review": [
+    {
+      "gate": 1,
+      "status": "FAIL",
+      "reason": "Unresolved scorer scope defect invalidates complete comparative interpretation"
+    },
+    {
+      "gate": 2,
+      "status": "DESCRIPTIVE_ONLY",
+      "reason": "Frozen common-cell B errors 3 vs A13; both repeats favorable, >=2 sources improve, but labels are imperfect"
+    },
+    {
+      "gate": 3,
+      "status": "NOT_CERTIFIED",
+      "reason": "No planned-as-performed finding established from actual order issuance. Shared subject-scope risk and unsupported nonoccurrence require rejection of safe-adoption claim"
+    },
+    {
+      "gate": 4,
+      "status": "DESCRIPTIVE_PASS",
+      "reason": "B first selected nulls0/missing0 vs A5/3; no final failure; same first/final counts. Not exhaustive coverage"
+    },
+    {
+      "gate": 5,
+      "status": "FAIL",
+      "reason": "Critical extras include definite unestablished nonoccurrence; extra scope/machine semantics remain unresolved"
+    }
+  ],
+  "protected_files_checked": 639,
+  "protected_files_unchanged": true,
+  "frozen_files_unchanged": true,
+  "historical_ledgers_unchanged": true,
+  "actual_cli_version": "codex-cli 0.159.3",
+  "negative_controls_passed": 220,
+  "policy_status_counts": {
+    "NOT_EVALUATED": 192
+  },
+  "underlying_clinical_evidence_status_counts": {
+    "INSUFFICIENT_EVIDENCE": 181,
+    "CONFLICTED": 4,
+    "SUPPORTED": 3,
+    "NOT_EVALUATED": 4
+  },
+  "query_accuracy": "NOT VERIFIED: no independently labelled target-performance cases; unknown claim date blocks policy evaluation",
+  "extra_stage_review_records": 218,
+  "raw_responses_preserved": true,
+  "actual_cli_offline_exit_code": 0
+}
