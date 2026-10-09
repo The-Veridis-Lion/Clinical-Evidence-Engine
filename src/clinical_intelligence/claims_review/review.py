@@ -206,3 +206,36 @@ def markdown(packet):
     lines += ['\n## Facts',json.dumps(p['facts'],ensure_ascii=False,indent=2),'\n## Timeline',json.dumps(p['timeline'],ensure_ascii=False,indent=2),
         '\n## Gaps']+['- '+g for g in p['gaps']]+['\n## Execution',json.dumps(p['execution'],indent=2),'\n## Version identity',json.dumps(p['identity'],indent=2)]
     return '\n'.join(lines)+'\n'
+
+
+def concise_markdown(packet):
+    """Human packet summary; the complete JSON retains every source and field."""
+    lines=[f'# HbA1c evidence review: {packet.case_id}',f'\n**{packet.status}**',packet.decision_boundary,
+           f'\nPatient: {packet.target.patient_id}; constructed request: {packet.target.service_date}.',
+           f'As of: {packet.review_context.as_of}; history: {packet.review_context.history_start} to {packet.review_context.history_end}; completeness: {packet.review_context.history_completeness}.',
+           '\n## Four evidence criteria']
+    for r in packet.criteria:
+        lines += [f'\n### {r.criterion_id}: {r.status}',r.reason]
+        refs={}
+        for c in r.clinical_refs:
+            refs.setdefault(c.source_id,c)
+            if c.locator.endswith('/event_date'):refs[c.source_id]=c
+        for c in list(refs.values())[:4]:
+            loc=c.original_locator or {}
+            origin=f"{loc.get('source_file','')} data row {loc.get('data_record_number','')}; " if loc.get('source_file') else ''
+            evidence=c.quote if c.quote is not None else json.dumps(c.raw_value)
+            lines.append(f'- Clinical: {c.source_id}; {origin}{c.locator}: {evidence}')
+        if len(refs)>4:lines.append(f'- {len(refs)-4} additional source references retained in the full JSON.')
+        for p in r.policy_refs:lines.append(f'- Policy: [{p.source_id}]({p.official_url}), {p.source_version}; {p.locator}.')
+        for gap in r.gaps:lines.append('- Gap: '+gap)
+        if r.conflicts:lines.append('- Unresolved conflict: see the competing source dates below and full JSON.')
+    lines += ['\n## Actual result records (not independently proved event counts)', '| Source | Date | Original value |', '|---|---|---|']
+    for f in packet.facts:
+        if f.kind=='test_event':lines.append(f'| {f.source_id} | {f.fact_date} | {f.value} |')
+    if not any(f.kind=='test_event' for f in packet.facts):lines.append('| No actual result source established | unknown | unknown |')
+    lines += ['\n## Missing information and execution']+['- '+g for g in packet.gaps]
+    lines += [f'- Note extraction: {packet.execution["note_extraction"]}; real calls: {packet.execution["actual_provider_calls"]}; application cache: disabled.',
+              f'- Execution failure: {packet.execution["execution_failed"]}; human/clinical review: false.',
+              f'- Policy: {packet.identity["policy_version"]}; rules: {packet.identity["rule_version"]}.',
+              '- Full JSON retains raw fields, offsets, all source references, conflicts and execution provenance.']
+    return '\n'.join(lines)+'\n'
