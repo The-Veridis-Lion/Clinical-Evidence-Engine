@@ -1,0 +1,4 @@
+START,STOP,PATIENT,ENCOUNTER,SYSTEM,CODE,DESCRIPTION
+2000-11-14,,7af6b271-f16d-21e1-882a-7bff71005a7b,7af6b271-f16d-21e1-fbf0-a1ae80800ac0,http://snomed.info/sct,44054006,Diabetes mellitus type 2 (disorder)
+2005-05-31,,7af6b271-f16d-21e1-882a-7bff71005a7b,7af6b271-f16d-21e1-ad6b-df71202db81e,http://snomed.info/sct,368581000119106,Neuropathy due to type 2 diabetes mellitus (disorder)
+2007-08-29,,7af6b271-f16d-21e1-882a-7bff71005a7b,7af6b271-f16d-21e1-3082-4d25791611cf,http://snomed.info/sct,1551000119108,Nonproliferative diabetic retinopathy due to type II diabetes mellitus

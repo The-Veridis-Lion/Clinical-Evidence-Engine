@@ -31,6 +31,43 @@ python -m pytest -q
 `--output` precede subcommands. Running `demo` again reuses persisted evidence.
 Generated databases and expanded outputs stay local under ignored `artifacts/`.
 
+## HbA1c monitoring evidence review
+
+The independent `claims_review` module prepares sources, preserves structured facts,
+extracts limited note evidence, and evaluates four scoped criteria into one JSON/Markdown
+packet. It retains unknown values and competing sources and makes no approval, denial,
+payment or final medical-necessity decision. It does not use the therapy database.
+Its policy registry remains `draft_ai_reviewed`, without human or clinical expert review.
+
+After installation, these commands need no credentials or model:
+
+```sh
+python -m clinical_intelligence.claims_review prepare --case examples/claims_review/development/DEV-002.json --output artifacts/claims-review/prepared.json
+python -m clinical_intelligence.claims_review run --case examples/claims_review/development/DEV-002.json --mode structured-only --format json --output artifacts/claims-review/review.json
+python -m clinical_intelligence.claims_review render --packet artifacts/claims-review/review.json --format markdown --output artifacts/claims-review/review.md
+python tools/verify_claims_review_synthea.py --output artifacts/claims-review/synthea-verification.json
+```
+
+Structured-only execution explicitly leaves notes unprocessed. To include the note,
+use the separately installed, authenticated Codex CLI:
+
+```sh
+python -m clinical_intelligence.claims_review run --case examples/claims_review/development/DEV-002.json --mode live --model gpt-6-luna --reasoning high --format markdown --output artifacts/claims-review/live.md
+```
+
+Live commands must share `artifacts/claims-review/live-budget.json` (or the same
+explicit `--ledger` path) and trace directory across restarts/retests. The feature-round
+ceiling is 20 calls, reserved before each request, including failures and at most one
+validation repair per note. From another working directory, pass explicit paths to
+the same ledger and trace directory. Application caching is disabled; raw responses
+remain local and ignored.
+
+The [integration report](docs/claims-review-integration.md) separates original preparation,
+offline fixtures/replay, and six real Luna calls. Five development cases and a limited
+Synthea slice are engineering examples. The six independent confirmation candidates
+were not opened or used. See the [semantic contract](docs/claims-review-contract.md)
+and [representative final packet](examples/claims_review/DEV-002-review.json).
+
 ## Architecture
 
 ```mermaid

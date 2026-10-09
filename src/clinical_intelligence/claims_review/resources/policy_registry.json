@@ -1,0 +1,245 @@
+{
+  "registry_id": "cms_190_21_monitoring_evidence_review",
+  "registry_version": "0.1.0-draft-ai-20261008",
+  "review_status": "draft_ai_reviewed",
+  "human_review_completed": false,
+  "clinical_expert_review_completed": false,
+  "artifact_role": "Non-executable policy preparation and evidence-review contract; not a coverage adjudicator.",
+  "review_as_of": "2026-10-08",
+  "review_timezone": "America/New_York",
+  "source_retrieval_timezone": "UTC",
+  "prepared_at": "2026-10-09T02:02:42Z",
+  "supported_service_concept": "hba1c_monitoring",
+  "supported_use": "Synthetic demonstrations of assembling monitoring evidence for human review.",
+  "sources": [
+    {
+      "source_id": "CMS_NCD_190_21_V1",
+      "title": "Glycated Hemoglobin/Glycated Protein (NCD 190.21)",
+      "official_url": "https://www.cms.gov/medicare-coverage-database/view/ncd.aspx?NCDid=100",
+      "retrieved_on": "2026-10-09",
+      "source_version": "1",
+      "effective_from": "2002-11-25",
+      "implementation_date": "2003-01-01",
+      "effective_to": null,
+      "date_role": "The listed effective date belongs to this NCD narrative version. It is not the date of service and does not establish the applicability of all billing code files.",
+      "locators_used": [
+        "Description: paragraph beginning 'Glycated hemoglobin in whole blood'",
+        "Description: paragraph beginning 'More frequent assessments'",
+        "Indications and Limitations of Coverage > Indications",
+        "Indications and Limitations of Coverage > Limitations"
+      ],
+      "source_role": "Clinical monitoring indications and conditional frequency guidance.",
+      "snapshot_limit": "Official page inspected; this preparation does not archive the full page, reproduce code lists, or certify all historical coding applicability."
+    },
+    {
+      "source_id": "CMS_CR13487_T12694",
+      "title": "Expand Diabetes Screening and Diabetes Definitions Policy Update; Transmittal 12694, CR 13487",
+      "official_url": "https://www.cms.gov/files/document/r12694cp.pdf",
+      "retrieved_on": "2026-10-09",
+      "publication_date": "2024-06-21",
+      "effective_from": "2024-01-01",
+      "implementation_date": "2024-10-07",
+      "effective_to": null,
+      "date_role": "Effective date is tied to dates of service; operational implementation date is distinct.",
+      "locators_used": [
+        "PDF page 1: effective and implementation dates",
+        "PDF page 4: B. Policy, diabetes screening update"
+      ],
+      "source_role": "Boundary check only: HbA1c screening has a separate current Medicare policy path; exclusion from this demo is not a finding of noncoverage.",
+      "implemented": false
+    },
+    {
+      "source_id": "CMS_MLN909221_2026_05",
+      "title": "Complying With Documentation Requirements for Lab Services",
+      "official_url": "https://www.cms.gov/files/document/mln909221-complying-documentation-requirements-lab-services.pdf",
+      "retrieved_on": "2026-10-09",
+      "publication_month": "2026-05",
+      "effective_from": null,
+      "effective_to": null,
+      "date_role": "Educational document publication month, not the enactment or effective date of a new legal requirement. Historical applicability is not inferred from publication alone.",
+      "locators_used": [
+        "PDF page 2: Documentation & Signature Requirements; diagnostic lab test order alternatives",
+        "PDF page 3: Note on documented intent to do the test"
+      ],
+      "source_role": "General laboratory documentation and order-intent guidance, distinct from the HbA1c-specific clinical indications.",
+      "snapshot_limit": "AI-assisted interpretation only; attestation disputes, provider qualification verification and full documentation-compliance review are outside this draft."
+    }
+  ],
+  "global_semantics": {
+    "criterion_statuses": {
+      "SUPPORTED": "The narrowly named evidence condition has traceable support within the stated scope; this does not establish medical necessity or payment eligibility.",
+      "NOT_SUPPORTED": "Traceable affirmative contrary evidence establishes that the narrowly named condition is not met. Absence of a record alone is insufficient.",
+      "INSUFFICIENT_EVIDENCE": "Required content, binding, date, coverage or provenance is unavailable or too ambiguous to establish the condition.",
+      "CONFLICTED": "Unresolved, relevant sources support incompatible facts that could change this condition.",
+      "NOT_APPLICABLE": "The condition's trigger is demonstrably false within the stated project scope; unavailable evidence is not a false trigger."
+    },
+    "overall_review_states": {
+      "EVIDENCE_READY_FOR_HUMAN_REVIEW": "Available evidence and limitations have been assembled for a human. This is not approval or a statement that every Medicare requirement is met.",
+      "NEEDS_HUMAN_REVIEW": "A material uncertainty, contradiction, failed extraction or unresolved binding must be highlighted; retain other valid evidence.",
+      "UNSUPPORTED_SCOPE": "A declared service purpose, source version, concept or mapping is outside the implemented demonstration. This is not denial."
+    },
+    "aggregation_rule": "Do not AND these criteria into a coverage, medical-necessity, APPROVED or DENIED conclusion. Expose each evidence result and any unresolved issue independently.",
+    "unknown_rule": "null is neither false nor zero. Do not use empty strings, guessed dates, guessed codes or discarded conflicts to satisfy a required field.",
+    "conflict_rule": "Preserve competing statements and sources. A valid targeted correction may supersede its identified target; timestamps alone do not establish precedence.",
+    "absence_rule": "No retrieved history is not proof of no previous testing or a normal frequency. Distinguish missing data from an explicitly evidenced absence within a declared complete synthetic time window.",
+    "source_rule": "Every factual or policy assertion retains its source locator and role. A valid quote proves source presence, not semantic correctness. Model judgment is not human review."
+  },
+  "scope_guards": [
+    {
+      "guard_id": "SCREENING_OUT_OF_SCOPE",
+      "trigger": "The target service is explicitly for diabetes screening.",
+      "overall_status": "UNSUPPORTED_SCOPE",
+      "source_ids": ["CMS_CR13487_T12694"],
+      "reason": "Only monitoring evidence review is implemented. Do not infer that Medicare does not cover HbA1c screening."
+    },
+    {
+      "guard_id": "INITIAL_DIAGNOSIS_OUT_OF_SCOPE",
+      "trigger": "The target service is explicitly for establishing an initial diabetes diagnosis rather than monitoring an established condition.",
+      "overall_status": "UNSUPPORTED_SCOPE",
+      "source_ids": ["CMS_NCD_190_21_V1", "CMS_CR13487_T12694"],
+      "reason": "Route to an unimplemented policy/clinical-purpose review. Do not equate initial diagnosis with screening or issue a general coverage conclusion."
+    },
+    {
+      "guard_id": "PURPOSE_UNRESOLVED",
+      "trigger": "The target purpose is missing, ambiguous or materially conflicted.",
+      "overall_status": "NEEDS_HUMAN_REVIEW",
+      "reason": "Do not infer monitoring from an HbA1c result alone or discard relevant facts because routing is unresolved."
+    },
+    {
+      "guard_id": "POLICY_VERSION_UNMAPPED",
+      "trigger": "Requested registry version or declared policy/date context cannot be matched to the source versions inspected for this draft.",
+      "overall_status": "UNSUPPORTED_SCOPE",
+      "reason": "Do not substitute a current webpage for a verified historical policy/code-file version. NCD narrative dates do not verify all other applicable Medicare rules."
+    },
+    {
+      "guard_id": "BILLING_MAPPING_UNVERIFIED",
+      "trigger": "An input requires a real billing-code coverage determination or relies on an unverified code-to-service mapping.",
+      "overall_status": "UNSUPPORTED_SCOPE",
+      "reason": "No automatic SNOMED/LOINC to ICD-10-CM/CPT/HCPCS mapping is implemented. Explicit constructed_demo service concepts remain usable as labeled evidence demonstrations."
+    },
+    {
+      "guard_id": "TARGET_EVENT_DATE_UNRESOLVED",
+      "trigger": "The actual target test date is missing, ambiguous or conflicted.",
+      "overall_status": "NEEDS_HUMAN_REVIEW",
+      "reason": "Do not replace event date with review_as_of, document date, signature date or an intended future date."
+    }
+  ],
+  "criteria": [
+    {
+      "criterion_id": "MONITORING_CONTEXT",
+      "title": "Monitoring purpose and linked diabetes background",
+      "criterion_role": "CMS clinical indication, deliberately narrowed to the demo monitoring scope",
+      "source_refs": [
+        {
+          "source_id": "CMS_NCD_190_21_V1",
+          "locator": "Indications and Limitations of Coverage > Indications"
+        }
+      ],
+      "paraphrase": "The NCD supports use in diabetes management and also discusses other glucose-related contexts. This demo implements only the former.",
+      "required_evidence": [
+        "Target service purpose explicitly linked to monitoring/management",
+        "Traceable diabetes background for the same patient in the relevant temporal context"
+      ],
+      "supported_when": "Both purpose and relevant patient background have sufficient source support.",
+      "insufficient_when": "The result, diagnosis or purpose is absent, unclear or unbound; an HbA1c value alone does not establish a diagnosis or the test's purpose.",
+      "conflicted_when": "Relevant source statements disagree about the patient's condition or purpose and no valid correction resolves them.",
+      "scope_note": "Do not require all possible NCD indications. Hyper/hypoglycemia assessments outside established diabetes monitoring are not implemented here."
+    },
+    {
+      "criterion_id": "TEST_TIMELINE",
+      "title": "Traceable actual test timeline and declared retrieval coverage",
+      "criterion_role": "Project evidence-completeness check supporting date calculations; not an independent CMS coverage prerequisite",
+      "source_refs": [
+        {
+          "source_id": "CMS_NCD_190_21_V1",
+          "locator": "Description and Limitations: frequency discussion"
+        }
+      ],
+      "paraphrase": "Frequency review needs dated evidence. The project checks whether the available timeline can support a scoped comparison.",
+      "required_evidence": [
+        "Target actual test date and source",
+        "Relevant prior actual test dates, source identities and duplicate-event handling",
+        "Retrieval window and explicit completeness/limitations; do not silently assume this is the patient's full history"
+      ],
+      "supported_when": "The relevant test events, dates and stated observation scope can be traced; a bounded, explicit absence is preserved as such.",
+      "insufficient_when": "Required history, date roles, event identity or retrieval coverage cannot be established.",
+      "conflicted_when": "Unresolved dates or event identities materially change the comparison.",
+      "scope_note": "SUPPORTED means the timeline is usable within its stated scope. It does not mean the frequency is normal, medically necessary or within every claims edit."
+    },
+    {
+      "criterion_id": "SHORT_INTERVAL_RATIONALE",
+      "title": "Clinical context associated with a short-interval monitoring test",
+      "criterion_role": "Conditional CMS clinical context plus a declared project review trigger",
+      "source_refs": [
+        {
+          "source_id": "CMS_NCD_190_21_V1",
+          "locator": "Description: more frequent assessment paragraph; Limitations: controlled/uncontrolled diabetes and supporting documentation"
+        }
+      ],
+      "paraphrase": "More frequent monitoring can have a documented clinical rationale; relevant context is not a blanket authorization.",
+      "project_trigger": "A known prior actual HbA1c event is less than three calendar months before the target event. Incomplete history does not negate an observed trigger. Unresolved dates or unavailable comparison coverage leave applicability uncertain.",
+      "relevant_context_examples": [
+        "A documented treatment-regimen change relevant to improving control",
+        "A documented event that may have altered control",
+        "An explicit clinically relevant statement of uncontrolled diabetes"
+      ],
+      "required_evidence": [
+        "Actual target/prior dates for the project trigger",
+        "Source-supported clinical context linked to the patient, relevant period and test reason"
+      ],
+      "supported_when": "The short-interval trigger and relevant rationale are supported. The status affirms rationale evidence only, not that an exception has been clinically or legally adjudicated.",
+      "not_applicable_when": "The known, declared-complete comparison scope establishes no short interval. This does not evaluate all annual-frequency rules or remove other medical-necessity questions.",
+      "insufficient_when": "Applicability cannot be established, or a short interval is known but its rationale is unavailable or inadequately linked.",
+      "not_supported_when": "Affirmative evidence contradicts a specifically asserted rationale. Do not infer no rationale merely because none was retrieved.",
+      "conflicted_when": "Unresolved credible statements disagree about the relevant adjustment, control/event context or interval.",
+      "scope_note": "No self-invented HbA1c thresholds, default controlled-diabetes classification, fixed annual cap, or generic 'any medication change means necessary' rule. Full exception adjudication and pregnancy/alternative-assay pathways are not implemented."
+    },
+    {
+      "criterion_id": "ORDER_INTENT",
+      "title": "Traceable order or documented intent for the specific test",
+      "criterion_role": "General CMS lab documentation evidence; separate from the NCD-specific clinical indication",
+      "source_refs": [
+        {
+          "source_id": "CMS_MLN909221_2026_05",
+          "locator": "PDF page 2: order documentation alternatives; page 3: documented intent"
+        }
+      ],
+      "paraphrase": "Specific-test order intent may be supported through an authenticated clinical record; a standalone signed order is not the sole route.",
+      "supported_evidence_patterns": [
+        "Signed order or prescription naming the specific test",
+        "Unsigned specific-test order plus an authenticated record supporting the treating provider's intent",
+        "Authenticated medical record supporting the treating provider's intent to order the specific test"
+      ],
+      "required_evidence": [
+        "Specific test and patient binding",
+        "Ordering/treating-provider attribution and traceable order-intent record",
+        "Authentication evidence appropriate to the asserted documentation pattern, with source scope preserved"
+      ],
+      "supported_when": "One supported evidence pattern is documented and linked; this is a demonstration-level evidence finding, not provider credential or signature-authenticity certification.",
+      "insufficient_when": "Only an unsupported unsigned order, nonspecific lab request, test result without order intent, missing authentication evidence or unbound record is available.",
+      "conflicted_when": "Unresolved order, cancellation or correction statements could change whether the target test was intended.",
+      "scope_note": "A plan/order can establish intent but does not establish test performance. Do not copy a document-wide signature flag onto an unrelated order or require every order to have its own signature."
+    }
+  ],
+  "time_conventions": {
+    "event_date": "Date on which the target or prior actual test occurred; preserve documented precision and role.",
+    "review_as_of": "Evidence-availability cutoff for the review. It must be supplied independently of event dates; later corrections can inform a retrospective review without changing the service date.",
+    "available_at": "When a source became available to this review; if unknown, retain availability as unresolved and withhold time-bounded as-of support rather than asserting unavailability or inventing a receipt timestamp.",
+    "calendar_month_comparison": "For the demo trigger, add three calendar months to the prior date, preserving day where possible and clamping to the destination month's final day otherwise. Target earlier than that date is a short interval; equality is not. This declared project convention is not a claim that CMS specifies this exact boundary algorithm.",
+    "unknown_precision": "Do not fabricate a day for a month-only date. If admissible dates fall on both sides of the boundary, interval applicability is insufficient evidence.",
+    "duplicate_rule": "Count only traceably distinct actual test events. Multiple records or claims for one event are not automatically separate tests; linkage ambiguity remains visible.",
+    "history_rule": "Record the requested lookback window, data returned and coverage limitations. Missing history is not zero prior tests. No general annual-frequency adjudication is implemented.",
+    "version_rule": "The service date, inspected source versions and review cutoff have different roles. A draft source collection does not prove applicability of all Medicare coverage/coding rules to all dates."
+  },
+  "not_implemented": [
+    "Clinical or payer approval, denial, reimbursement, prior authorization or medical-necessity adjudication",
+    "Screening or initial-diagnosis policy evaluation",
+    "All indications, exclusions, alternative assays, pregnancy cases or full frequency exceptions under NCD 190.21",
+    "Automatic medical diagnosis, control classification or new numerical clinical thresholds",
+    "Automatic billing-code translation or complete ICD/CPT/HCPCS code-list validation",
+    "LCD/MAC rules, benefit eligibility, complete claims edits, provider qualification or signature authenticity verification",
+    "General legal applicability of the complete source bundle to every historical or future service date",
+    "Model runtime, engine implementation, independent human gold or clinical validation"
+  ],
+  "release_requirement": "A person must review the named scope, source interpretations and selected examples before they are represented as human-verified policy or gold. Until then, retain draft_ai_reviewed and human_review_completed=false."
+}

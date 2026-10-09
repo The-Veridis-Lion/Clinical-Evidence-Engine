@@ -1,0 +1,6 @@
+DATE,PATIENT,ENCOUNTER,CATEGORY,CODE,DESCRIPTION,VALUE,UNITS,TYPE
+2023-03-28T22:51:41Z,7af6b271-f16d-21e1-882a-7bff71005a7b,7af6b271-f16d-21e1-8a53-65fe43a98be3,laboratory,4548-4,Hemoglobin A1c/Hemoglobin.total in Blood,5.3,%,numeric
+2023-05-13T22:03:07Z,7af6b271-f16d-21e1-882a-7bff71005a7b,7af6b271-f16d-21e1-ba0c-7b1e1de8eef9,laboratory,4548-4,Hemoglobin A1c/Hemoglobin.total in Blood,5.3,%,numeric
+2024-04-02T22:51:41Z,7af6b271-f16d-21e1-882a-7bff71005a7b,7af6b271-f16d-21e1-7a2c-eb7bed181b58,laboratory,4548-4,Hemoglobin A1c/Hemoglobin.total in Blood,5.5,%,numeric
+2025-04-08T22:51:41Z,7af6b271-f16d-21e1-882a-7bff71005a7b,7af6b271-f16d-21e1-88a8-e60228cfb046,laboratory,4548-4,Hemoglobin A1c/Hemoglobin.total in Blood,5.7,%,numeric
+2026-04-14T22:51:41Z,7af6b271-f16d-21e1-882a-7bff71005a7b,7af6b271-f16d-21e1-ef7e-4920d39bbcd3,laboratory,4548-4,Hemoglobin A1c/Hemoglobin.total in Blood,5.9,%,numeric

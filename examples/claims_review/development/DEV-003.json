@@ -1,0 +1,134 @@
+{
+  "schema_version": "claims-review-prep/0.1",
+  "case_id": "DEV-003",
+  "claim": {
+    "claim_id": "DEV-003-CLAIM",
+    "patient_id": "SYN-DEV-P003",
+    "encounter_id": "SYN-DEV-E003",
+    "service_date": "2026-09-25",
+    "service_concept": "hba1c_monitoring",
+    "procedure_code": null,
+    "code_system": null,
+    "mapping_status": "constructed_demo",
+    "data_origin": "constructed_synthetic"
+  },
+  "review_context": {
+    "as_of": "2026-10-08",
+    "history_start": "2026-05-01",
+    "history_end": "2026-09-25",
+    "history_completeness": "not_asserted"
+  },
+  "sources": [
+    {
+      "source_id": "DEV-003-S001",
+      "patient_id": "SYN-DEV-P003",
+      "encounter_id": null,
+      "available_at": "2026-05-02",
+      "origin": "constructed_synthetic",
+      "source_kind": "structured_record",
+      "recorded_at": "2026-05-02",
+      "event_date": "2026-05-02",
+      "record_type": "condition",
+      "event_link_id": null,
+      "content": {
+        "description": "Established type 2 diabetes mellitus",
+        "status": "active",
+        "date_role": "active_problem_review",
+        "diagnosis_previously_established": true
+      }
+    },
+    {
+      "source_id": "DEV-003-S002",
+      "patient_id": "SYN-DEV-P003",
+      "encounter_id": "SYN-DEV-E003",
+      "available_at": "2026-09-25",
+      "origin": "constructed_synthetic",
+      "source_kind": "structured_record",
+      "recorded_at": "2026-09-25",
+      "event_date": "2026-09-25",
+      "record_type": "observation",
+      "event_link_id": "SYN-D3-HBA1C-CURRENT",
+      "content": {
+        "service_concept": "hba1c",
+        "description": "Hemoglobin A1c",
+        "value": 7.1,
+        "unit": "%",
+        "status": "final"
+      }
+    },
+    {
+      "source_id": "DEV-003-S003",
+      "patient_id": "SYN-DEV-P003",
+      "encounter_id": null,
+      "available_at": "2026-10-02",
+      "origin": "constructed_synthetic",
+      "source_kind": "structured_record",
+      "recorded_at": "2026-10-01",
+      "event_date": null,
+      "record_type": "observation",
+      "event_link_id": "SYN-D3-HBA1C-UNDATED",
+      "content": {
+        "service_concept": "hba1c",
+        "description": "Imported historical HbA1c result; original specimen date absent",
+        "value": 6.9,
+        "unit": "%",
+        "status": "final",
+        "collection_date": null,
+        "result_date": null
+      }
+    },
+    {
+      "source_id": "DEV-003-S004",
+      "patient_id": "SYN-DEV-P003",
+      "encounter_id": null,
+      "available_at": "2026-10-02",
+      "origin": "constructed_synthetic",
+      "source_kind": "synthetic_note",
+      "recorded_at": "2026-10-02",
+      "event_date": null,
+      "record_type": "note",
+      "event_link_id": null,
+      "content": "Records intake inventory prepared by records staff\nThe supplied documents include an active problem entry for established type 2 diabetes, a completed HbA1c report with specimen date 2026-09-25, and an older HbA1c result without a specimen date. The supplied documents do not state the purpose of the 2026-09-25 test and do not include the treating provider order. The document received on 2026-10-02 is an inventory, not a clinical order."
+    },
+    {
+      "source_id": "DEV-003-S005",
+      "patient_id": "SYN-DEV-P003",
+      "encounter_id": "SYN-DEV-E003",
+      "available_at": "2026-10-09",
+      "origin": "constructed_synthetic",
+      "source_kind": "structured_record",
+      "recorded_at": "2026-09-20",
+      "event_date": "2026-09-20",
+      "record_type": "order",
+      "event_link_id": null,
+      "content": {
+        "service_concept": "hba1c",
+        "requested_service_date": "2026-09-25",
+        "purpose": "Monitoring established type 2 diabetes",
+        "order_status": "issued",
+        "date_role": "order_issued",
+        "authentication_status": "electronically_signed",
+        "ordering_provider": "Dr. Simulated Provider",
+        "signed_at": "2026-09-20"
+      }
+    },
+    {
+      "source_id": "DEV-003-S006",
+      "patient_id": "SYN-DEV-P003",
+      "encounter_id": null,
+      "available_at": "2026-10-01",
+      "origin": "constructed_synthetic",
+      "source_kind": "structured_record",
+      "recorded_at": "2026-10-01",
+      "event_date": "2026-11-02",
+      "record_type": "procedure",
+      "event_link_id": "SYN-D3-HBA1C-FUTURE",
+      "content": {
+        "service_concept": "hba1c",
+        "description": "Future HbA1c appointment; not performed",
+        "status": "scheduled",
+        "date_role": "scheduled_service_date"
+      }
+    }
+  ]
+}

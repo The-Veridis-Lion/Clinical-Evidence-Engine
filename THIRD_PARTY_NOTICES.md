@@ -13,6 +13,25 @@ intervaltree (Apache-2.0). pytest and setuptools are MIT. Python uses PSF and co
 licenses; SQLite core is public domain. Codex CLI is independently installed under
 Apache-2.0; hosted inference has separate service terms and operator authentication.
 
+## Claims review example sources
+
+The five claims-review development cases are AI-assisted fact-first synthetic engineering
+fixtures supplied in the preparation package; no human or clinical validation is claimed.
+The small unmodified CSV slice comes from the official Synthea/SyntheticMass sample at
+https://synthetichealth.github.io/downloads.html. Archive and original-row provenance
+are preserved in examples/claims_review/synthea/source_manifest.json. The wrapper request
+is separately labeled constructed_synthetic and does not alter original clinical values.
+This attribution does not invent a data-license grant or relicense upstream material.
+
+Suggested source citation: Jason Walonoski et al., "Synthea: An approach, method, and
+software mechanism for generating synthetic patients and the synthetic electronic health
+care record," Journal of the American Medical Informatics Association 25(3), 2018,
+230–238, https://doi.org/10.1093/jamia/ocx079.
+
+The preparation package was AI-assisted user-requested engineering material. Original
+package reports and manifest remain local. CMS full documents, code tables and CPT
+descriptions are not bundled; the draft registry retains links and limited paraphrases.
+
 ## LangExtract health-use notice
 
 HAI-DEF is provided under and subject to the Health AI Developer Foundations Terms of Use found at https://developers.google.com/health-ai-developer-foundations/terms

@@ -1,0 +1,94 @@
+{
+  "schema_version": "claims-review-prep/0.1",
+  "case_id": "DEV-005",
+  "claim": {
+    "claim_id": "DEV-005-CLAIM",
+    "patient_id": "SYN-DEV-P005",
+    "encounter_id": "SYN-DEV-E005",
+    "service_date": "2026-09-10",
+    "service_concept": "hba1c_screening",
+    "procedure_code": null,
+    "code_system": null,
+    "mapping_status": "constructed_demo",
+    "data_origin": "constructed_synthetic"
+  },
+  "review_context": {
+    "as_of": "2026-10-08",
+    "history_start": "2026-03-01",
+    "history_end": "2026-09-10",
+    "history_completeness": "complete_within_constructed_case"
+  },
+  "sources": [
+    {
+      "source_id": "DEV-005-S001",
+      "patient_id": "SYN-DEV-P005",
+      "encounter_id": "SYN-DEV-E005",
+      "available_at": "2026-09-07",
+      "origin": "constructed_synthetic",
+      "source_kind": "structured_record",
+      "recorded_at": "2026-09-07",
+      "event_date": "2026-09-07",
+      "record_type": "encounter",
+      "event_link_id": null,
+      "content": {
+        "description": "Preventive wellness visit",
+        "status": "completed",
+        "visit_purpose": "screening"
+      }
+    },
+    {
+      "source_id": "DEV-005-S002",
+      "patient_id": "SYN-DEV-P005",
+      "encounter_id": "SYN-DEV-E005",
+      "available_at": "2026-09-07",
+      "origin": "constructed_synthetic",
+      "source_kind": "synthetic_note",
+      "recorded_at": "2026-09-07",
+      "event_date": null,
+      "record_type": "note",
+      "event_link_id": null,
+      "content": "Preventive visit\nAsymptomatic adult attending a wellness visit. No established diagnosis of diabetes is documented. I am ordering HbA1c for diabetes screening; this is not follow-up monitoring of known diabetes. A family history is the reason for the screening discussion.\nElectronically signed by Dr. Simulated Provider, 2026-09-07."
+    },
+    {
+      "source_id": "DEV-005-S003",
+      "patient_id": "SYN-DEV-P005",
+      "encounter_id": "SYN-DEV-E005",
+      "available_at": "2026-09-07",
+      "origin": "constructed_synthetic",
+      "source_kind": "structured_record",
+      "recorded_at": "2026-09-07",
+      "event_date": "2026-09-07",
+      "record_type": "order",
+      "event_link_id": null,
+      "content": {
+        "service_concept": "hba1c",
+        "requested_service_date": "2026-09-10",
+        "purpose": "Diabetes screening during preventive care",
+        "order_status": "issued",
+        "date_role": "order_issued",
+        "authentication_status": "electronically_signed",
+        "ordering_provider": "Dr. Simulated Provider",
+        "signed_at": "2026-09-07"
+      }
+    },
+    {
+      "source_id": "DEV-005-S004",
+      "patient_id": "SYN-DEV-P005",
+      "encounter_id": "SYN-DEV-E005",
+      "available_at": "2026-09-10",
+      "origin": "constructed_synthetic",
+      "source_kind": "structured_record",
+      "recorded_at": "2026-09-10",
+      "event_date": "2026-09-10",
+      "record_type": "observation",
+      "event_link_id": "SYN-D5-HBA1C-SCREEN",
+      "content": {
+        "service_concept": "hba1c",
+        "description": "Hemoglobin A1c",
+        "value": 5.4,
+        "unit": "%",
+        "status": "final"
+      }
+    }
+  ]
+}

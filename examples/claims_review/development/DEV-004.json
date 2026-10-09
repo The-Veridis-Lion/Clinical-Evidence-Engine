@@ -1,0 +1,143 @@
+{
+  "schema_version": "claims-review-prep/0.1",
+  "case_id": "DEV-004",
+  "claim": {
+    "claim_id": "DEV-004-CLAIM",
+    "patient_id": "SYN-DEV-P004",
+    "encounter_id": "SYN-DEV-E004",
+    "service_date": "2026-09-20",
+    "service_concept": "hba1c_monitoring",
+    "procedure_code": null,
+    "code_system": null,
+    "mapping_status": "constructed_demo",
+    "data_origin": "constructed_synthetic"
+  },
+  "review_context": {
+    "as_of": "2026-10-08",
+    "history_start": "2026-03-01",
+    "history_end": "2026-09-20",
+    "history_completeness": "complete_within_constructed_case"
+  },
+  "sources": [
+    {
+      "source_id": "DEV-004-S001",
+      "patient_id": "SYN-DEV-P004",
+      "encounter_id": null,
+      "available_at": "2026-03-05",
+      "origin": "constructed_synthetic",
+      "source_kind": "structured_record",
+      "recorded_at": "2026-03-05",
+      "event_date": "2026-03-05",
+      "record_type": "condition",
+      "event_link_id": null,
+      "content": {
+        "description": "Established type 2 diabetes mellitus",
+        "status": "active",
+        "date_role": "active_problem_review",
+        "diagnosis_previously_established": true
+      }
+    },
+    {
+      "source_id": "DEV-004-S002",
+      "patient_id": "SYN-DEV-P004",
+      "encounter_id": null,
+      "available_at": "2026-09-10",
+      "origin": "constructed_synthetic",
+      "source_kind": "structured_record",
+      "recorded_at": "2026-05-21",
+      "event_date": "2026-05-20",
+      "record_type": "observation",
+      "event_link_id": "SYN-D4-ACCESSION-001",
+      "content": {
+        "service_concept": "hba1c",
+        "description": "Hemoglobin A1c",
+        "value": 7.3,
+        "unit": "%",
+        "status": "final",
+        "accession_id": "SYN-D4-ACCESSION-001",
+        "document_status": "final",
+        "authentication_status": "electronically_signed",
+        "signed_at": "2026-05-21",
+        "supersedes_source_id": null
+      }
+    },
+    {
+      "source_id": "DEV-004-S003",
+      "patient_id": "SYN-DEV-P004",
+      "encounter_id": null,
+      "available_at": "2026-09-12",
+      "origin": "constructed_synthetic",
+      "source_kind": "structured_record",
+      "recorded_at": "2026-08-21",
+      "event_date": "2026-08-20",
+      "record_type": "observation",
+      "event_link_id": "SYN-D4-ACCESSION-001",
+      "content": {
+        "service_concept": "hba1c",
+        "description": "Hemoglobin A1c",
+        "value": 7.3,
+        "unit": "%",
+        "status": "final",
+        "accession_id": "SYN-D4-ACCESSION-001",
+        "document_status": "final",
+        "authentication_status": "electronically_signed",
+        "signed_at": "2026-08-21",
+        "supersedes_source_id": null
+      }
+    },
+    {
+      "source_id": "DEV-004-S004",
+      "patient_id": "SYN-DEV-P004",
+      "encounter_id": null,
+      "available_at": "2026-09-13",
+      "origin": "constructed_synthetic",
+      "source_kind": "synthetic_note",
+      "recorded_at": "2026-09-13",
+      "event_date": null,
+      "record_type": "note",
+      "event_link_id": null,
+      "content": "Outside laboratory document register\nBoth final reports identify accession SYN-D4-ACCESSION-001 for the same single HbA1c testing event and this patient. One report gives specimen date 2026-05-20; the other gives specimen date 2026-08-20. Neither supplied report is marked amended or withdrawn, and neither identifies the other as corrected. The later receipt timestamp records document arrival only."
+    },
+    {
+      "source_id": "DEV-004-S005",
+      "patient_id": "SYN-DEV-P004",
+      "encounter_id": "SYN-DEV-E004",
+      "available_at": "2026-09-18",
+      "origin": "constructed_synthetic",
+      "source_kind": "structured_record",
+      "recorded_at": "2026-09-18",
+      "event_date": "2026-09-18",
+      "record_type": "order",
+      "event_link_id": null,
+      "content": {
+        "service_concept": "hba1c",
+        "requested_service_date": "2026-09-20",
+        "purpose": "Routine monitoring of established type 2 diabetes",
+        "order_status": "issued",
+        "date_role": "order_issued",
+        "authentication_status": "electronically_signed",
+        "ordering_provider": "Dr. Simulated Provider",
+        "signed_at": "2026-09-18"
+      }
+    },
+    {
+      "source_id": "DEV-004-S006",
+      "patient_id": "SYN-DEV-P004",
+      "encounter_id": "SYN-DEV-E004",
+      "available_at": "2026-09-20",
+      "origin": "constructed_synthetic",
+      "source_kind": "structured_record",
+      "recorded_at": "2026-09-20",
+      "event_date": "2026-09-20",
+      "record_type": "observation",
+      "event_link_id": "SYN-D4-HBA1C-CURRENT",
+      "content": {
+        "service_concept": "hba1c",
+        "description": "Hemoglobin A1c",
+        "value": 7.0,
+        "unit": "%",
+        "status": "final"
+      }
+    }
+  ]
+}

@@ -28,7 +28,8 @@ where = ["src"]
 
 [tool.setuptools.package-data]
 clinical_intelligence = ["contracts/*.json", "synthetic.json"]
+"clinical_intelligence.claims_review" = ["resources/*.json"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
-pythonpath = ["src"]
+pythonpath = ["src", "tools"]

@@ -1,0 +1,259 @@
+{
+  "manifest_version": "claims-review-synthea-slice/0.1",
+  "archive": {
+    "source_url": "https://synthetichealth.github.io/synthea-sample-data/downloads/latest/synthea_sample_data_csv_latest.zip",
+    "sha256": "d61417b551e5b0997c33851b339c157421751f0ea68c18ea686ceb1850907c35",
+    "bytes": 5960866,
+    "retrieved_at": "2026-10-09T02:02:32.001994+00:00",
+    "download_metadata": {
+      "retrieved_at": "2026-10-09T02:02:32.001994+00:00",
+      "source_url": "https://synthetichealth.github.io/synthea-sample-data/downloads/latest/synthea_sample_data_csv_latest.zip",
+      "http_last_modified": "Tue, 18 Aug 2026 16:21:35 GMT",
+      "http_etag": "\"6a84868f-5af4a2\""
+    },
+    "members": [
+      {
+        "path": "encounters.csv",
+        "bytes": 1857081
+      },
+      {
+        "path": "conditions.csv",
+        "bytes": 552897
+      },
+      {
+        "path": "claims.csv",
+        "bytes": 3605269
+      },
+      {
+        "path": "imaging_studies.csv",
+        "bytes": 187543
+      },
+      {
+        "path": "providers.csv",
+        "bytes": 55141
+      },
+      {
+        "path": "payers.csv",
+        "bytes": 1770
+      },
+      {
+        "path": "medications.csv",
+        "bytes": 1009699
+      },
+      {
+        "path": "allergies.csv",
+        "bytes": 18989
+      },
+      {
+        "path": "careplans.csv",
+        "bytes": 69430
+      },
+      {
+        "path": "patients.csv",
+        "bytes": 32471
+      },
+      {
+        "path": "devices.csv",
+        "bytes": 117807
+      },
+      {
+        "path": "organizations.csv",
+        "bytes": 46563
+      },
+      {
+        "path": "supplies.csv",
+        "bytes": 307090
+      },
+      {
+        "path": "observations.csv",
+        "bytes": 12025080
+      },
+      {
+        "path": "immunizations.csv",
+        "bytes": 216050
+      },
+      {
+        "path": "claims_transactions.csv",
+        "bytes": 38557508
+      },
+      {
+        "path": "payer_transitions.csv",
+        "bytes": 631702
+      },
+      {
+        "path": "procedures.csv",
+        "bytes": 3570625
+      }
+    ]
+  },
+  "source_type": "official publicly distributed synthetic sample",
+  "row_locator_convention": "1-based data record number excludes header; physical lines are 1-based in original CSV including header",
+  "selected_slice": {
+    "patient_id": "7af6b271-f16d-21e1-882a-7bff71005a7b",
+    "source_observation_count_for_patient": 19,
+    "exported_observation_count": 5,
+    "target_observation": {
+      "DATE": "2026-04-14T22:51:41Z",
+      "PATIENT": "7af6b271-f16d-21e1-882a-7bff71005a7b",
+      "ENCOUNTER": "7af6b271-f16d-21e1-ef7e-4920d39bbcd3",
+      "CATEGORY": "laboratory",
+      "CODE": "4548-4",
+      "DESCRIPTION": "Hemoglobin A1c/Hemoglobin.total in Blood",
+      "VALUE": "5.9",
+      "UNITS": "%",
+      "TYPE": "numeric"
+    },
+    "target_observation_locator": {
+      "source_file": "observations.csv",
+      "source_file_sha256": "9517c23df9ebddee59961bcbcb82bd6b2b885ebc8136507ef8a2ccdc7ddae9d1",
+      "data_record_number": 10058,
+      "physical_line_start": 10059,
+      "physical_line_end": 10059,
+      "original_row_sha256": "e10acbe02b240ebd6f3b32297fbff53c604e8613df083217501ef44c637c110e"
+    },
+    "target_encounter_id": "7af6b271-f16d-21e1-ef7e-4920d39bbcd3",
+    "related_source_claim_ids": [
+      "7af6b271-f16d-21e1-7914-8d2cf01ca362",
+      "7af6b271-f16d-21e1-a1cf-c0cb249ba6c4",
+      "7af6b271-f16d-21e1-bf4c-6960e33c2454"
+    ],
+    "related_claim_role": "same-patient same-encounter source claims; no verified HbA1c billing identity",
+    "exported_history_from": "2023-03-28T22:51:41Z",
+    "exported_history_through": "2026-04-14T22:51:41Z",
+    "history_completeness": "LIMITED_SOURCE_SLICE; outside-slice records must not be treated as absent",
+    "clinical_available_at": null,
+    "clinical_availability_status": "UNKNOWN: source event dates and archive receipt do not establish first EHR availability",
+    "retrospective_review_status": "Needs a separate availability contract; this preparation does not claim as-of-service-time completeness",
+    "missing_referenced_encounters_in_archive": [],
+    "recommendation": "Use this untouched clinical source slice with a separately labelled constructed_demo HbA1c service concept; do not relabel source claims or invent CPT mappings.",
+    "all_source_values_unchanged": true,
+    "synthetic_augmentation_created_by_this_script": false
+  },
+  "exported_original_rows": [
+    {
+      "table": "conditions",
+      "path": "conditions.csv",
+      "sha256": "4832ae9fe153833dd46e972c0ead0b7e1111cb55eef05f33c169ce9c390efde4",
+      "bytes": 580,
+      "data_rows": 3,
+      "rows": [
+        {
+          "source_file": "conditions.csv",
+          "source_file_sha256": "a3141544140b626c9ae941043ad1afe4a0c201749b2e332c98f4cb2e2b7ec4cd",
+          "data_record_number": 712,
+          "physical_line_start": 713,
+          "physical_line_end": 713,
+          "original_row_sha256": "01d0bd257b48ca45cf94bbdd10524b17a60c4506fcd67deca21ad28926ac9cc7",
+          "subset_data_record_number": 1,
+          "source_record_id": null,
+          "selected_because": [
+            "source description includes diabetes mellitus; pre-existing source start date"
+          ]
+        },
+        {
+          "source_file": "conditions.csv",
+          "source_file_sha256": "a3141544140b626c9ae941043ad1afe4a0c201749b2e332c98f4cb2e2b7ec4cd",
+          "data_record_number": 716,
+          "physical_line_start": 717,
+          "physical_line_end": 717,
+          "original_row_sha256": "60a34a8a72297f149d4461c902f08e9e251990a7a50f358393d12d60e1226aa3",
+          "subset_data_record_number": 2,
+          "source_record_id": null,
+          "selected_because": [
+            "source description includes diabetes mellitus; pre-existing source start date"
+          ]
+        },
+        {
+          "source_file": "conditions.csv",
+          "source_file_sha256": "a3141544140b626c9ae941043ad1afe4a0c201749b2e332c98f4cb2e2b7ec4cd",
+          "data_record_number": 717,
+          "physical_line_start": 718,
+          "physical_line_end": 718,
+          "original_row_sha256": "4c69c95b30af15d8487d9d76e6140afcfffe163d8143fd8f5b148adbe82e7865",
+          "subset_data_record_number": 3,
+          "source_record_id": null,
+          "selected_because": [
+            "source description includes diabetes mellitus; pre-existing source start date"
+          ]
+        }
+      ]
+    },
+    {
+      "table": "observations",
+      "path": "observations.csv",
+      "sha256": "213124f01cda9d10367e7fd6123a3f251b1cec31dd20da9b2f97acb85944705b",
+      "bytes": 906,
+      "data_rows": 5,
+      "rows": [
+        {
+          "source_file": "observations.csv",
+          "source_file_sha256": "9517c23df9ebddee59961bcbcb82bd6b2b885ebc8136507ef8a2ccdc7ddae9d1",
+          "data_record_number": 9363,
+          "physical_line_start": 9364,
+          "physical_line_end": 9364,
+          "original_row_sha256": "db10220612de537a7300903482b0d1f7cf3a2c83f5ead52cbd199e070cb6fc84",
+          "subset_data_record_number": 1,
+          "source_record_id": null,
+          "selected_because": [
+            "last 5 source-description-matched HbA1c observations; history deliberately bounded"
+          ]
+        },
+        {
+          "source_file": "observations.csv",
+          "source_file_sha256": "9517c23df9ebddee59961bcbcb82bd6b2b885ebc8136507ef8a2ccdc7ddae9d1",
+          "data_record_number": 9452,
+          "physical_line_start": 9453,
+          "physical_line_end": 9453,
+          "original_row_sha256": "989baa80c026b55fd438aa035a03b19a4fd5e8e79a903e5417f3fceec1b7380e",
+          "subset_data_record_number": 2,
+          "source_record_id": null,
+          "selected_because": [
+            "last 5 source-description-matched HbA1c observations; history deliberately bounded"
+          ]
+        },
+        {
+          "source_file": "observations.csv",
+          "source_file_sha256": "9517c23df9ebddee59961bcbcb82bd6b2b885ebc8136507ef8a2ccdc7ddae9d1",
+          "data_record_number": 9941,
+          "physical_line_start": 9942,
+          "physical_line_end": 9942,
+          "original_row_sha256": "3369d63a5bedf33b617d7ea09c1b415a81204e00263a79b7a8f76575994c9d67",
+          "subset_data_record_number": 3,
+          "source_record_id": null,
+          "selected_because": [
+            "last 5 source-description-matched HbA1c observations; history deliberately bounded"
+          ]
+        },
+        {
+          "source_file": "observations.csv",
+          "source_file_sha256": "9517c23df9ebddee59961bcbcb82bd6b2b885ebc8136507ef8a2ccdc7ddae9d1",
+          "data_record_number": 10003,
+          "physical_line_start": 10004,
+          "physical_line_end": 10004,
+          "original_row_sha256": "6a681599a59f36224f4ba003f8075ee056a91eaf38b10de1123312f1268eeb44",
+          "subset_data_record_number": 4,
+          "source_record_id": null,
+          "selected_because": [
+            "last 5 source-description-matched HbA1c observations; history deliberately bounded"
+          ]
+        },
+        {
+          "source_file": "observations.csv",
+          "source_file_sha256": "9517c23df9ebddee59961bcbcb82bd6b2b885ebc8136507ef8a2ccdc7ddae9d1",
+          "data_record_number": 10058,
+          "physical_line_start": 10059,
+          "physical_line_end": 10059,
+          "original_row_sha256": "e10acbe02b240ebd6f3b32297fbff53c604e8613df083217501ef44c637c110e",
+          "subset_data_record_number": 5,
+          "source_record_id": null,
+          "selected_because": [
+            "last 5 source-description-matched HbA1c observations; history deliberately bounded"
+          ]
+        }
+      ]
+    }
+  ],
+  "preservation": "Original source columns and data rows retained; no clinical values changed. Subset itself is not complete patient history.",
+  "coding_boundary": "No terminology-to-billing mapping, medical-necessity labels, or reimbursement interpretation generated.",
+  "preparation_manifest_sha256": "00ac6f8272ec9a072b21853224b67e9c1b09852d6c1a59cc11029df1bc449b7b"
+}

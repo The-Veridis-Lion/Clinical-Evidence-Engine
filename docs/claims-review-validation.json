@@ -1,0 +1,342 @@
+{
+  "integration_version": "claims-review/0.1.0",
+  "baseline_commit": "54553dd36095d4d2047f30d66747031a75ecafa5",
+  "candidate_commit": "Commit containing this file; local post-commit checkpoint records the full SHA.",
+  "package_sha256": "4b82277e1f5f16cb547552167cb4a5238190dd5c021a72450e8806b4b538cc4e",
+  "input_files": {
+    "examples/claims_review/development/DEV-001.json": "a5fd394914d246b86f260ee7a980e43b662c52e247904c48b48895e0f0ec96f2",
+    "examples/claims_review/development/DEV-002.json": "6a9a96776c1291f73715179a77cb4d45f91d8e55a6d79314d936e98ffd2a2d29",
+    "examples/claims_review/development/DEV-003.json": "2a0fb48ad18c2c15b218f6d177a3458bb482d27b1fcbe2049ff0e0dd036fae11",
+    "examples/claims_review/development/DEV-004.json": "30d60846f68e9d9b4520727d465151e29d479992209b6c514108fe43773c15e4",
+    "examples/claims_review/development/DEV-005.json": "08aa9f5197b6d70b22a55e9b4f271fdd28836b98be68347e7c1caab0ee18536a",
+    "examples/claims_review/synthea/conditions.csv": "4832ae9fe153833dd46e972c0ead0b7e1111cb55eef05f33c169ce9c390efde4",
+    "examples/claims_review/synthea/observations.csv": "213124f01cda9d10367e7fd6123a3f251b1cec31dd20da9b2f97acb85944705b",
+    "examples/claims_review/synthea/source_manifest.json": "61420d93d0fbe6073aeb497e593ac3ce1ccd2a2f2c04e79f8ad607f3bd6209b6",
+    "examples/claims_review/synthea/SYNTHEA-START-001.json": "b3fb416231f4d18ec4705ba46d24f2cb2d05a8b831865b86dcc10cbc07c34fcb"
+  },
+  "policy_version": "0.1.0-draft-ai-20261008",
+  "rule_version": "claims-review-rules/2",
+  "baseline_regression": {
+    "executed": true,
+    "passed": 238
+  },
+  "offline_regression": {
+    "passed": 290,
+    "preparation_migrated": 20,
+    "new_integration": 32,
+    "provider_calls": 0
+  },
+  "fixed_provider_fixtures": {
+    "passed": 5,
+    "total": 5,
+    "provider_calls": 0
+  },
+  "initial_live": {
+    "passed": 4,
+    "total": 5,
+    "criterion_states_matched": 19,
+    "criterion_states_total": 20,
+    "cases": [
+      {
+        "case_id": "DEV-001",
+        "passed": true,
+        "criterion_states": {
+          "MONITORING_CONTEXT": "SUPPORTED",
+          "TEST_TIMELINE": "SUPPORTED",
+          "SHORT_INTERVAL_RATIONALE": "NOT_APPLICABLE",
+          "ORDER_INTENT": "SUPPORTED"
+        },
+        "unsupported_support": [],
+        "unnecessary_criterion_abstention": [],
+        "actual_provider_calls": 1,
+        "failed_checks": []
+      },
+      {
+        "case_id": "DEV-002",
+        "passed": false,
+        "criterion_states": {
+          "MONITORING_CONTEXT": "SUPPORTED",
+          "TEST_TIMELINE": "SUPPORTED",
+          "SHORT_INTERVAL_RATIONALE": "INSUFFICIENT_EVIDENCE",
+          "ORDER_INTENT": "SUPPORTED"
+        },
+        "unsupported_support": [],
+        "unnecessary_criterion_abstention": [
+          "SHORT_INTERVAL_RATIONALE"
+        ],
+        "actual_provider_calls": 1,
+        "failed_checks": [
+          "overall_state",
+          "SHORT_INTERVAL_RATIONALE"
+        ]
+      },
+      {
+        "case_id": "DEV-003",
+        "passed": true,
+        "criterion_states": {
+          "MONITORING_CONTEXT": "INSUFFICIENT_EVIDENCE",
+          "TEST_TIMELINE": "INSUFFICIENT_EVIDENCE",
+          "SHORT_INTERVAL_RATIONALE": "INSUFFICIENT_EVIDENCE",
+          "ORDER_INTENT": "INSUFFICIENT_EVIDENCE"
+        },
+        "unsupported_support": [],
+        "unnecessary_criterion_abstention": [],
+        "actual_provider_calls": 1,
+        "failed_checks": []
+      },
+      {
+        "case_id": "DEV-004",
+        "passed": true,
+        "criterion_states": {
+          "MONITORING_CONTEXT": "SUPPORTED",
+          "TEST_TIMELINE": "CONFLICTED",
+          "SHORT_INTERVAL_RATIONALE": "CONFLICTED",
+          "ORDER_INTENT": "SUPPORTED"
+        },
+        "unsupported_support": [],
+        "unnecessary_criterion_abstention": [],
+        "actual_provider_calls": 1,
+        "failed_checks": []
+      },
+      {
+        "case_id": "DEV-005",
+        "passed": true,
+        "criterion_states": {
+          "MONITORING_CONTEXT": "NOT_EVALUATED",
+          "TEST_TIMELINE": "NOT_EVALUATED",
+          "SHORT_INTERVAL_RATIONALE": "NOT_EVALUATED",
+          "ORDER_INTENT": "NOT_EVALUATED"
+        },
+        "unsupported_support": [],
+        "unnecessary_criterion_abstention": [],
+        "actual_provider_calls": 1,
+        "failed_checks": []
+      }
+    ]
+  },
+  "saved_response_replay": {
+    "passed": 5,
+    "total": 5,
+    "criterion_states_matched": 20,
+    "criterion_states_total": 20,
+    "provider_calls": 0,
+    "cases": [
+      {
+        "case_id": "DEV-001",
+        "passed": true,
+        "criterion_states": {
+          "MONITORING_CONTEXT": "SUPPORTED",
+          "TEST_TIMELINE": "SUPPORTED",
+          "SHORT_INTERVAL_RATIONALE": "NOT_APPLICABLE",
+          "ORDER_INTENT": "SUPPORTED"
+        },
+        "unsupported_support": [],
+        "unnecessary_criterion_abstention": [],
+        "actual_provider_calls": 0,
+        "failed_checks": []
+      },
+      {
+        "case_id": "DEV-002",
+        "passed": true,
+        "criterion_states": {
+          "MONITORING_CONTEXT": "SUPPORTED",
+          "TEST_TIMELINE": "SUPPORTED",
+          "SHORT_INTERVAL_RATIONALE": "SUPPORTED",
+          "ORDER_INTENT": "SUPPORTED"
+        },
+        "unsupported_support": [],
+        "unnecessary_criterion_abstention": [],
+        "actual_provider_calls": 0,
+        "failed_checks": []
+      },
+      {
+        "case_id": "DEV-003",
+        "passed": true,
+        "criterion_states": {
+          "MONITORING_CONTEXT": "INSUFFICIENT_EVIDENCE",
+          "TEST_TIMELINE": "INSUFFICIENT_EVIDENCE",
+          "SHORT_INTERVAL_RATIONALE": "INSUFFICIENT_EVIDENCE",
+          "ORDER_INTENT": "INSUFFICIENT_EVIDENCE"
+        },
+        "unsupported_support": [],
+        "unnecessary_criterion_abstention": [],
+        "actual_provider_calls": 0,
+        "failed_checks": []
+      },
+      {
+        "case_id": "DEV-004",
+        "passed": true,
+        "criterion_states": {
+          "MONITORING_CONTEXT": "SUPPORTED",
+          "TEST_TIMELINE": "CONFLICTED",
+          "SHORT_INTERVAL_RATIONALE": "CONFLICTED",
+          "ORDER_INTENT": "SUPPORTED"
+        },
+        "unsupported_support": [],
+        "unnecessary_criterion_abstention": [],
+        "actual_provider_calls": 0,
+        "failed_checks": []
+      },
+      {
+        "case_id": "DEV-005",
+        "passed": true,
+        "criterion_states": {
+          "MONITORING_CONTEXT": "NOT_EVALUATED",
+          "TEST_TIMELINE": "NOT_EVALUATED",
+          "SHORT_INTERVAL_RATIONALE": "NOT_EVALUATED",
+          "ORDER_INTENT": "NOT_EVALUATED"
+        },
+        "unsupported_support": [],
+        "unnecessary_criterion_abstention": [],
+        "actual_provider_calls": 0,
+        "failed_checks": []
+      }
+    ]
+  },
+  "targeted_live": {
+    "case_id": "DEV-002",
+    "passed": true,
+    "criterion_states": {
+      "MONITORING_CONTEXT": "SUPPORTED",
+      "TEST_TIMELINE": "SUPPORTED",
+      "SHORT_INTERVAL_RATIONALE": "SUPPORTED",
+      "ORDER_INTENT": "SUPPORTED"
+    },
+    "unsupported_support": [],
+    "unnecessary_criterion_abstention": [],
+    "actual_provider_calls": 1,
+    "failed_checks": []
+  },
+  "call_budget": {
+    "ceiling": 20,
+    "allocated": 6,
+    "actual_provider_calls": 6,
+    "repairs": 0,
+    "failures": 0,
+    "reserved_unfinished": 0
+  },
+  "model": {
+    "provider": "codex_cli",
+    "model": "gpt-6-luna",
+    "reasoning_effort": "high",
+    "timeout_seconds": 180,
+    "cli_version": "codex-cli 0.159.3",
+    "sandbox": "read-only",
+    "tools": "disabled",
+    "ephemeral": true
+  },
+  "backend_model_snapshot": null,
+  "tokens": {
+    "input_tokens": 104339,
+    "output_tokens": 9227,
+    "cached_tokens": 0
+  },
+  "summed_provider_latency_seconds": 90.74779560009483,
+  "actual_billed_cost_usd": null,
+  "synthea": {
+    "status": "PASSED",
+    "verified_subset_rows": 8,
+    "subset_files": 2,
+    "original_archive_redownload_or_hash_verification": "NOT VERIFIED",
+    "original_row_hashes": "Preserved preparation provenance; not independently verified against the original archive.",
+    "original_ehr_availability": null,
+    "clinical_validation": false
+  },
+  "calls": [
+    {
+      "call": 1,
+      "status": "completed",
+      "purpose": "claims_review_note_extraction",
+      "prompt_sha256": "6971caacd8348fa94b344e475954525317361eff5c9e541579613a96e6f3f326",
+      "schema_sha256": "d03f4fcb1b721aa04cddef52e083d281bbb4b9dde7c61d70b32913401942501b"
+    },
+    {
+      "call": 2,
+      "status": "completed",
+      "purpose": "claims_review_note_extraction",
+      "prompt_sha256": "fca6638722f64474a9c4fa87388453d2bb1c83855eb56ee7c30335c528d762e7",
+      "schema_sha256": "33ca67cf93aec0f7d03af11432bee07447c1fd39cf0b099a9129efb0b4f03e25"
+    },
+    {
+      "call": 3,
+      "status": "completed",
+      "purpose": "claims_review_note_extraction",
+      "prompt_sha256": "37056ea49a2a2c3808610e2181272c9bb9b79923482ea569dca55e1e56ff7b94",
+      "schema_sha256": "17c890104f2ff3f231b25590da9386d22171b9047e928f114346d48ee3044ddc"
+    },
+    {
+      "call": 4,
+      "status": "completed",
+      "purpose": "claims_review_note_extraction",
+      "prompt_sha256": "63773f852b20301be295dcc7d6438fd99876dfc654f7b9586ae4ce0b0c3e4117",
+      "schema_sha256": "32dad43f65482be9d8b47661fdc357ebdd27a8f3e700380e1789c1bb3fbddbdf"
+    },
+    {
+      "call": 5,
+      "status": "completed",
+      "purpose": "claims_review_note_extraction",
+      "prompt_sha256": "09d4a0edcd1eb75816ab9de56a6ee095b41b0e8c12701aede2b17e3743681a28",
+      "schema_sha256": "9d4b661754bc9de6bd0a6aed77d4fa7b749203d0e88ca7f23f742caf6ed7ed98"
+    },
+    {
+      "call": 6,
+      "status": "completed",
+      "purpose": "claims_review_note_extraction",
+      "prompt_sha256": "911776d434a3335ae31e242cb19ec9c3476d31b6b4b08fc8d7409f5b57b5f0da",
+      "schema_sha256": "19bc4f786d1f8af7fe0295333833ce49f0cafc77900ef4bf920f9b2f5d279c0f"
+    }
+  ],
+  "review": {
+    "human_review_completed": false,
+    "clinical_expert_review_completed": false,
+    "type": "AI-assisted development conformance and source review, not clinical validation"
+  },
+  "not_verified": [
+    "Six reserved independent confirmation candidates",
+    "Final-prompt live round for the four non-DEV-002 cases",
+    "Full upstream Synthea archive/row hashes independently downloaded and verified",
+    "Original EHR availability",
+    "General clinical accuracy, billing/coverage, provider credentials and historical full-policy applicability"
+  ],
+  "residual_model_field_issues": [
+    "Initial DEV-001 current disease labeled historical/order-issued date labeled requested_test",
+    "Initial DEV-003 literal specimen date stored in target_date but fact_date null",
+    "Final DEV-002 purpose target_date null despite explicit date in context; encounter/test binding retained"
+  ],
+  "wheel_installation": {
+    "status": "PASSED",
+    "type": "non-editable pip --target installation with existing locked dependency runtime",
+    "wheel_sha256": "000108be911d37de30f8b9103c78696fd387b6066987c6e40873e17ebefc4fdf",
+    "outside_repository": true,
+    "source_PYTHONPATH": null,
+    "policy_resource_read": "PASSED",
+    "prepare": "PASSED",
+    "structured_only_synthea": "PASSED",
+    "saved_packet_render": "PASSED",
+    "json_markdown_same_packet": "PASSED",
+    "private_or_expected_content_in_wheel": false
+  },
+  "input_file_hash_basis": "Git LF-normalized publication blobs; original subset CSV bytes unchanged.",
+  "measured_runtime_sha256": {
+    "cli.py": "f86f847ef60637630d043464870e985f729393833669446b88e9f32a31e05dc4",
+    "contracts.py": "9daf9df61fecde03f09d1e02f89f30170db61b6a296d3a7bf2d36f254b6e6afb",
+    "facts.py": "cadf16472f8438e31fbfa1db00b1ec0826190350558738e8ef49e6f82d359657",
+    "note_extractor.py": "2fe35bce1b69ff7331ac9dd0bc91eb37d25a12b483ce4a1fb665d1d0a54a3f56",
+    "prepare.py": "8f32389b621d9072aa062de6add17edc12623c9e044d2208da031cac7beabea5",
+    "review.py": "fa5255569bc634c50e9796ce2944cd369f656513c766075543c8bfea25945c29",
+    "__init__.py": "b565cc2a2079e24d397c6105b54d2218e651890aa0d5e7196bb1430dd822e4f9",
+    "__main__.py": "bd045ddd5242d002f692dac452be9afba38deef5cde541a5fc074bfef5987b91",
+    "provider.py": "0460068119f42988f74ee666317c8c03249dc4817c2ad07457cff748a9dc5e9e"
+  },
+  "published_runtime_sha256": {
+    "cli.py": "f86f847ef60637630d043464870e985f729393833669446b88e9f32a31e05dc4",
+    "contracts.py": "9daf9df61fecde03f09d1e02f89f30170db61b6a296d3a7bf2d36f254b6e6afb",
+    "facts.py": "cadf16472f8438e31fbfa1db00b1ec0826190350558738e8ef49e6f82d359657",
+    "note_extractor.py": "2fe35bce1b69ff7331ac9dd0bc91eb37d25a12b483ce4a1fb665d1d0a54a3f56",
+    "prepare.py": "8f32389b621d9072aa062de6add17edc12623c9e044d2208da031cac7beabea5",
+    "review.py": "fa5255569bc634c50e9796ce2944cd369f656513c766075543c8bfea25945c29",
+    "__init__.py": "5d0d6384dbee7aa2bc6490c276811e180ed8f5ee82f2aa0d8c965a33bb2e0bc2",
+    "__main__.py": "bd045ddd5242d002f692dac452be9afba38deef5cde541a5fc074bfef5987b91",
+    "provider.py": "0460068119f42988f74ee666317c8c03249dc4817c2ad07457cff748a9dc5e9e"
+  }
+}

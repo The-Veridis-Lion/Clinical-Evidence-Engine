@@ -1,0 +1,353 @@
+{
+  "schema_version": "claims-review-prep/0.1",
+  "case_id": "SYNTHEA-START-001",
+  "claim": {
+    "claim_id": "CONSTRUCTED-HBA1C-001",
+    "patient_id": "7af6b271-f16d-21e1-882a-7bff71005a7b",
+    "encounter_id": null,
+    "service_date": "2026-10-05",
+    "service_concept": "hba1c_monitoring",
+    "procedure_code": null,
+    "code_system": null,
+    "mapping_status": "constructed_demo",
+    "data_origin": "constructed_synthetic"
+  },
+  "review_context": {
+    "as_of": "2026-10-08",
+    "history_start": "2023-01-01",
+    "history_end": "2026-10-05",
+    "history_completeness": "not_asserted"
+  },
+  "sources": [
+    {
+      "source_id": "SYNTHEA-CONDITIONS-712",
+      "patient_id": "7af6b271-f16d-21e1-882a-7bff71005a7b",
+      "encounter_id": "7af6b271-f16d-21e1-fbf0-a1ae80800ac0",
+      "available_at": "2026-10-08",
+      "origin": "synthea_export",
+      "source_kind": "structured_record",
+      "recorded_at": null,
+      "event_date": "2000-11-14",
+      "record_type": "condition",
+      "event_link_id": null,
+      "content": {
+        "START": "2000-11-14",
+        "STOP": "",
+        "PATIENT": "7af6b271-f16d-21e1-882a-7bff71005a7b",
+        "ENCOUNTER": "7af6b271-f16d-21e1-fbf0-a1ae80800ac0",
+        "SYSTEM": "http://snomed.info/sct",
+        "CODE": "44054006",
+        "DESCRIPTION": "Diabetes mellitus type 2 (disorder)"
+      },
+      "availability_basis": "export_snapshot_received",
+      "original_locator": {
+        "source_file": "conditions.csv",
+        "source_file_sha256": "a3141544140b626c9ae941043ad1afe4a0c201749b2e332c98f4cb2e2b7ec4cd",
+        "data_record_number": 712,
+        "physical_line_start": 713,
+        "physical_line_end": 713,
+        "original_row_sha256": "01d0bd257b48ca45cf94bbdd10524b17a60c4506fcd67deca21ad28926ac9cc7",
+        "subset_data_record_number": 1,
+        "source_record_id": null,
+        "selected_because": [
+          "source description includes diabetes mellitus; pre-existing source start date"
+        ],
+        "subset_path": "data/synthea_subset/conditions.csv",
+        "archive_sha256": "d61417b551e5b0997c33851b339c157421751f0ea68c18ea686ceb1850907c35",
+        "date_column": "START",
+        "date_interpretation": "printed source date component; not a clinic-local timezone conversion",
+        "original_ehr_available_at": null
+      }
+    },
+    {
+      "source_id": "SYNTHEA-CONDITIONS-716",
+      "patient_id": "7af6b271-f16d-21e1-882a-7bff71005a7b",
+      "encounter_id": "7af6b271-f16d-21e1-ad6b-df71202db81e",
+      "available_at": "2026-10-08",
+      "origin": "synthea_export",
+      "source_kind": "structured_record",
+      "recorded_at": null,
+      "event_date": "2005-05-31",
+      "record_type": "condition",
+      "event_link_id": null,
+      "content": {
+        "START": "2005-05-31",
+        "STOP": "",
+        "PATIENT": "7af6b271-f16d-21e1-882a-7bff71005a7b",
+        "ENCOUNTER": "7af6b271-f16d-21e1-ad6b-df71202db81e",
+        "SYSTEM": "http://snomed.info/sct",
+        "CODE": "368581000119106",
+        "DESCRIPTION": "Neuropathy due to type 2 diabetes mellitus (disorder)"
+      },
+      "availability_basis": "export_snapshot_received",
+      "original_locator": {
+        "source_file": "conditions.csv",
+        "source_file_sha256": "a3141544140b626c9ae941043ad1afe4a0c201749b2e332c98f4cb2e2b7ec4cd",
+        "data_record_number": 716,
+        "physical_line_start": 717,
+        "physical_line_end": 717,
+        "original_row_sha256": "60a34a8a72297f149d4461c902f08e9e251990a7a50f358393d12d60e1226aa3",
+        "subset_data_record_number": 2,
+        "source_record_id": null,
+        "selected_because": [
+          "source description includes diabetes mellitus; pre-existing source start date"
+        ],
+        "subset_path": "data/synthea_subset/conditions.csv",
+        "archive_sha256": "d61417b551e5b0997c33851b339c157421751f0ea68c18ea686ceb1850907c35",
+        "date_column": "START",
+        "date_interpretation": "printed source date component; not a clinic-local timezone conversion",
+        "original_ehr_available_at": null
+      }
+    },
+    {
+      "source_id": "SYNTHEA-CONDITIONS-717",
+      "patient_id": "7af6b271-f16d-21e1-882a-7bff71005a7b",
+      "encounter_id": "7af6b271-f16d-21e1-3082-4d25791611cf",
+      "available_at": "2026-10-08",
+      "origin": "synthea_export",
+      "source_kind": "structured_record",
+      "recorded_at": null,
+      "event_date": "2007-08-29",
+      "record_type": "condition",
+      "event_link_id": null,
+      "content": {
+        "START": "2007-08-29",
+        "STOP": "",
+        "PATIENT": "7af6b271-f16d-21e1-882a-7bff71005a7b",
+        "ENCOUNTER": "7af6b271-f16d-21e1-3082-4d25791611cf",
+        "SYSTEM": "http://snomed.info/sct",
+        "CODE": "1551000119108",
+        "DESCRIPTION": "Nonproliferative diabetic retinopathy due to type II diabetes mellitus"
+      },
+      "availability_basis": "export_snapshot_received",
+      "original_locator": {
+        "source_file": "conditions.csv",
+        "source_file_sha256": "a3141544140b626c9ae941043ad1afe4a0c201749b2e332c98f4cb2e2b7ec4cd",
+        "data_record_number": 717,
+        "physical_line_start": 718,
+        "physical_line_end": 718,
+        "original_row_sha256": "4c69c95b30af15d8487d9d76e6140afcfffe163d8143fd8f5b148adbe82e7865",
+        "subset_data_record_number": 3,
+        "source_record_id": null,
+        "selected_because": [
+          "source description includes diabetes mellitus; pre-existing source start date"
+        ],
+        "subset_path": "data/synthea_subset/conditions.csv",
+        "archive_sha256": "d61417b551e5b0997c33851b339c157421751f0ea68c18ea686ceb1850907c35",
+        "date_column": "START",
+        "date_interpretation": "printed source date component; not a clinic-local timezone conversion",
+        "original_ehr_available_at": null
+      }
+    },
+    {
+      "source_id": "SYNTHEA-OBSERVATIONS-9363",
+      "patient_id": "7af6b271-f16d-21e1-882a-7bff71005a7b",
+      "encounter_id": "7af6b271-f16d-21e1-8a53-65fe43a98be3",
+      "available_at": "2026-10-08",
+      "origin": "synthea_export",
+      "source_kind": "structured_record",
+      "recorded_at": null,
+      "event_date": "2023-03-28",
+      "record_type": "observation",
+      "event_link_id": null,
+      "content": {
+        "DATE": "2023-03-28T22:51:41Z",
+        "PATIENT": "7af6b271-f16d-21e1-882a-7bff71005a7b",
+        "ENCOUNTER": "7af6b271-f16d-21e1-8a53-65fe43a98be3",
+        "CATEGORY": "laboratory",
+        "CODE": "4548-4",
+        "DESCRIPTION": "Hemoglobin A1c/Hemoglobin.total in Blood",
+        "VALUE": "5.3",
+        "UNITS": "%",
+        "TYPE": "numeric"
+      },
+      "availability_basis": "export_snapshot_received",
+      "original_locator": {
+        "source_file": "observations.csv",
+        "source_file_sha256": "9517c23df9ebddee59961bcbcb82bd6b2b885ebc8136507ef8a2ccdc7ddae9d1",
+        "data_record_number": 9363,
+        "physical_line_start": 9364,
+        "physical_line_end": 9364,
+        "original_row_sha256": "db10220612de537a7300903482b0d1f7cf3a2c83f5ead52cbd199e070cb6fc84",
+        "subset_data_record_number": 1,
+        "source_record_id": null,
+        "selected_because": [
+          "last 5 source-description-matched HbA1c observations; history deliberately bounded"
+        ],
+        "subset_path": "data/synthea_subset/observations.csv",
+        "archive_sha256": "d61417b551e5b0997c33851b339c157421751f0ea68c18ea686ceb1850907c35",
+        "date_column": "DATE",
+        "date_interpretation": "printed source date component; not a clinic-local timezone conversion",
+        "original_ehr_available_at": null
+      }
+    },
+    {
+      "source_id": "SYNTHEA-OBSERVATIONS-9452",
+      "patient_id": "7af6b271-f16d-21e1-882a-7bff71005a7b",
+      "encounter_id": "7af6b271-f16d-21e1-ba0c-7b1e1de8eef9",
+      "available_at": "2026-10-08",
+      "origin": "synthea_export",
+      "source_kind": "structured_record",
+      "recorded_at": null,
+      "event_date": "2023-05-13",
+      "record_type": "observation",
+      "event_link_id": null,
+      "content": {
+        "DATE": "2023-05-13T22:03:07Z",
+        "PATIENT": "7af6b271-f16d-21e1-882a-7bff71005a7b",
+        "ENCOUNTER": "7af6b271-f16d-21e1-ba0c-7b1e1de8eef9",
+        "CATEGORY": "laboratory",
+        "CODE": "4548-4",
+        "DESCRIPTION": "Hemoglobin A1c/Hemoglobin.total in Blood",
+        "VALUE": "5.3",
+        "UNITS": "%",
+        "TYPE": "numeric"
+      },
+      "availability_basis": "export_snapshot_received",
+      "original_locator": {
+        "source_file": "observations.csv",
+        "source_file_sha256": "9517c23df9ebddee59961bcbcb82bd6b2b885ebc8136507ef8a2ccdc7ddae9d1",
+        "data_record_number": 9452,
+        "physical_line_start": 9453,
+        "physical_line_end": 9453,
+        "original_row_sha256": "989baa80c026b55fd438aa035a03b19a4fd5e8e79a903e5417f3fceec1b7380e",
+        "subset_data_record_number": 2,
+        "source_record_id": null,
+        "selected_because": [
+          "last 5 source-description-matched HbA1c observations; history deliberately bounded"
+        ],
+        "subset_path": "data/synthea_subset/observations.csv",
+        "archive_sha256": "d61417b551e5b0997c33851b339c157421751f0ea68c18ea686ceb1850907c35",
+        "date_column": "DATE",
+        "date_interpretation": "printed source date component; not a clinic-local timezone conversion",
+        "original_ehr_available_at": null
+      }
+    },
+    {
+      "source_id": "SYNTHEA-OBSERVATIONS-9941",
+      "patient_id": "7af6b271-f16d-21e1-882a-7bff71005a7b",
+      "encounter_id": "7af6b271-f16d-21e1-7a2c-eb7bed181b58",
+      "available_at": "2026-10-08",
+      "origin": "synthea_export",
+      "source_kind": "structured_record",
+      "recorded_at": null,
+      "event_date": "2024-04-02",
+      "record_type": "observation",
+      "event_link_id": null,
+      "content": {
+        "DATE": "2024-04-02T22:51:41Z",
+        "PATIENT": "7af6b271-f16d-21e1-882a-7bff71005a7b",
+        "ENCOUNTER": "7af6b271-f16d-21e1-7a2c-eb7bed181b58",
+        "CATEGORY": "laboratory",
+        "CODE": "4548-4",
+        "DESCRIPTION": "Hemoglobin A1c/Hemoglobin.total in Blood",
+        "VALUE": "5.5",
+        "UNITS": "%",
+        "TYPE": "numeric"
+      },
+      "availability_basis": "export_snapshot_received",
+      "original_locator": {
+        "source_file": "observations.csv",
+        "source_file_sha256": "9517c23df9ebddee59961bcbcb82bd6b2b885ebc8136507ef8a2ccdc7ddae9d1",
+        "data_record_number": 9941,
+        "physical_line_start": 9942,
+        "physical_line_end": 9942,
+        "original_row_sha256": "3369d63a5bedf33b617d7ea09c1b415a81204e00263a79b7a8f76575994c9d67",
+        "subset_data_record_number": 3,
+        "source_record_id": null,
+        "selected_because": [
+          "last 5 source-description-matched HbA1c observations; history deliberately bounded"
+        ],
+        "subset_path": "data/synthea_subset/observations.csv",
+        "archive_sha256": "d61417b551e5b0997c33851b339c157421751f0ea68c18ea686ceb1850907c35",
+        "date_column": "DATE",
+        "date_interpretation": "printed source date component; not a clinic-local timezone conversion",
+        "original_ehr_available_at": null
+      }
+    },
+    {
+      "source_id": "SYNTHEA-OBSERVATIONS-10003",
+      "patient_id": "7af6b271-f16d-21e1-882a-7bff71005a7b",
+      "encounter_id": "7af6b271-f16d-21e1-88a8-e60228cfb046",
+      "available_at": "2026-10-08",
+      "origin": "synthea_export",
+      "source_kind": "structured_record",
+      "recorded_at": null,
+      "event_date": "2025-04-08",
+      "record_type": "observation",
+      "event_link_id": null,
+      "content": {
+        "DATE": "2025-04-08T22:51:41Z",
+        "PATIENT": "7af6b271-f16d-21e1-882a-7bff71005a7b",
+        "ENCOUNTER": "7af6b271-f16d-21e1-88a8-e60228cfb046",
+        "CATEGORY": "laboratory",
+        "CODE": "4548-4",
+        "DESCRIPTION": "Hemoglobin A1c/Hemoglobin.total in Blood",
+        "VALUE": "5.7",
+        "UNITS": "%",
+        "TYPE": "numeric"
+      },
+      "availability_basis": "export_snapshot_received",
+      "original_locator": {
+        "source_file": "observations.csv",
+        "source_file_sha256": "9517c23df9ebddee59961bcbcb82bd6b2b885ebc8136507ef8a2ccdc7ddae9d1",
+        "data_record_number": 10003,
+        "physical_line_start": 10004,
+        "physical_line_end": 10004,
+        "original_row_sha256": "6a681599a59f36224f4ba003f8075ee056a91eaf38b10de1123312f1268eeb44",
+        "subset_data_record_number": 4,
+        "source_record_id": null,
+        "selected_because": [
+          "last 5 source-description-matched HbA1c observations; history deliberately bounded"
+        ],
+        "subset_path": "data/synthea_subset/observations.csv",
+        "archive_sha256": "d61417b551e5b0997c33851b339c157421751f0ea68c18ea686ceb1850907c35",
+        "date_column": "DATE",
+        "date_interpretation": "printed source date component; not a clinic-local timezone conversion",
+        "original_ehr_available_at": null
+      }
+    },
+    {
+      "source_id": "SYNTHEA-OBSERVATIONS-10058",
+      "patient_id": "7af6b271-f16d-21e1-882a-7bff71005a7b",
+      "encounter_id": "7af6b271-f16d-21e1-ef7e-4920d39bbcd3",
+      "available_at": "2026-10-08",
+      "origin": "synthea_export",
+      "source_kind": "structured_record",
+      "recorded_at": null,
+      "event_date": "2026-04-14",
+      "record_type": "observation",
+      "event_link_id": null,
+      "content": {
+        "DATE": "2026-04-14T22:51:41Z",
+        "PATIENT": "7af6b271-f16d-21e1-882a-7bff71005a7b",
+        "ENCOUNTER": "7af6b271-f16d-21e1-ef7e-4920d39bbcd3",
+        "CATEGORY": "laboratory",
+        "CODE": "4548-4",
+        "DESCRIPTION": "Hemoglobin A1c/Hemoglobin.total in Blood",
+        "VALUE": "5.9",
+        "UNITS": "%",
+        "TYPE": "numeric"
+      },
+      "availability_basis": "export_snapshot_received",
+      "original_locator": {
+        "source_file": "observations.csv",
+        "source_file_sha256": "9517c23df9ebddee59961bcbcb82bd6b2b885ebc8136507ef8a2ccdc7ddae9d1",
+        "data_record_number": 10058,
+        "physical_line_start": 10059,
+        "physical_line_end": 10059,
+        "original_row_sha256": "e10acbe02b240ebd6f3b32297fbff53c604e8613df083217501ef44c637c110e",
+        "subset_data_record_number": 5,
+        "source_record_id": null,
+        "selected_because": [
+          "last 5 source-description-matched HbA1c observations; history deliberately bounded"
+        ],
+        "subset_path": "data/synthea_subset/observations.csv",
+        "archive_sha256": "d61417b551e5b0997c33851b339c157421751f0ea68c18ea686ceb1850907c35",
+        "date_column": "DATE",
+        "date_interpretation": "printed source date component; not a clinic-local timezone conversion",
+        "original_ehr_available_at": null
+      }
+    }
+  ]
+}

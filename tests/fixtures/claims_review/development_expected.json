@@ -1,0 +1,464 @@
+{
+  "schema_version": "claims-review-prep-expected-set/0.1",
+  "test_type": "synthetic_expected_constraints",
+  "status": "development_expectations_not_implemented_evaluator_results",
+  "human_reviewed": false,
+  "cases": [
+    {
+      "schema_version": "claims-review-prep-expected/0.1",
+      "case_id": "DEV-001",
+      "test_type": "synthetic_expected_constraints",
+      "design_provenance": {
+        "method": "AI-assisted synthetic scenario design and consistency check",
+        "human_reviewed": false,
+        "clinical_validation": false
+      },
+      "overall_expectation": {
+        "status": "EVIDENCE_READY_FOR_HUMAN_REVIEW",
+        "meaning": "Status is for this scoped evidence packet only; it is not coverage, payment, authorization, approval, or denial."
+      },
+      "criterion_expectations": [
+        {
+          "criterion_id": "MONITORING_CONTEXT",
+          "status": "SUPPORTED",
+          "evidence_source_ids": [
+            "DEV-001-S001",
+            "DEV-001-S004",
+            "DEV-001-S006"
+          ],
+          "constraint": "The source establishes existing diabetes and the monitoring purpose for this target service."
+        },
+        {
+          "criterion_id": "TEST_TIMELINE",
+          "status": "SUPPORTED",
+          "evidence_source_ids": [
+            "DEV-001-S002",
+            "DEV-001-S003",
+            "DEV-001-S005"
+          ],
+          "constraint": "Previous actual test is 2026-05-15; target actual test is 2026-09-15. The two prior-table rows are one explicitly linked event."
+        },
+        {
+          "criterion_id": "SHORT_INTERVAL_RATIONALE",
+          "status": "NOT_APPLICABLE",
+          "evidence_source_ids": [
+            "DEV-001-S002",
+            "DEV-001-S005"
+          ],
+          "constraint": "The known interval is four calendar months, with no unresolved additional testing event in the constructed history."
+        },
+        {
+          "criterion_id": "ORDER_INTENT",
+          "status": "SUPPORTED",
+          "evidence_source_ids": [
+            "DEV-001-S004"
+          ],
+          "constraint": "A signed, target-specific HbA1c order is supplied."
+        }
+      ],
+      "scope_expectation": null,
+      "source_handling_expectations": {
+        "exclude": [
+          {
+            "source_id": "DEV-001-S007",
+            "reason": "patient_id_mismatch"
+          }
+        ],
+        "retain": [],
+        "event_groups": [
+          {
+            "event_link_id": "SYN-D1-HBA1C-PREV",
+            "member_source_ids": [
+              "DEV-001-S002",
+              "DEV-001-S003"
+            ],
+            "expected_event_count": 1,
+            "preserve_all_source_references": true,
+            "conflicting_event_dates": false
+          }
+        ]
+      },
+      "fact_constraints": [
+        {
+          "constraint_id": "D1-NO-CROSS-PATIENT",
+          "must_hold": "The other patient result cannot supply this patient history or clinical state.",
+          "source_ids": [
+            "DEV-001-S007"
+          ]
+        },
+        {
+          "constraint_id": "D1-NO-DOUBLE-COUNT",
+          "must_hold": "One linked observation/procedure pair must not become two prior tests.",
+          "source_ids": [
+            "DEV-001-S002",
+            "DEV-001-S003"
+          ]
+        }
+      ],
+      "interpretation_limits": [
+        "No real patient data or payer adjudication labels are present.",
+        "Completeness applies only to the explicitly constructed case and its stated time window.",
+        "SUPPORTED concerns one evidence condition, not Medicare eligibility or payment.",
+        "Unavailable or unretrieved evidence is not evidence that a clinical event did not occur."
+      ]
+    },
+    {
+      "schema_version": "claims-review-prep-expected/0.1",
+      "case_id": "DEV-002",
+      "test_type": "synthetic_expected_constraints",
+      "design_provenance": {
+        "method": "AI-assisted synthetic scenario design and consistency check",
+        "human_reviewed": false,
+        "clinical_validation": false
+      },
+      "overall_expectation": {
+        "status": "EVIDENCE_READY_FOR_HUMAN_REVIEW",
+        "meaning": "Status is for this scoped evidence packet only; it is not coverage, payment, authorization, approval, or denial."
+      },
+      "criterion_expectations": [
+        {
+          "criterion_id": "MONITORING_CONTEXT",
+          "status": "SUPPORTED",
+          "evidence_source_ids": [
+            "DEV-002-S001",
+            "DEV-002-S004"
+          ],
+          "constraint": "Existing diabetes and the target monitoring purpose are explicit."
+        },
+        {
+          "criterion_id": "TEST_TIMELINE",
+          "status": "SUPPORTED",
+          "evidence_source_ids": [
+            "DEV-002-S002",
+            "DEV-002-S006"
+          ],
+          "constraint": "Actual prior and target tests are 2026-07-22 and 2026-09-22."
+        },
+        {
+          "criterion_id": "SHORT_INTERVAL_RATIONALE",
+          "status": "SUPPORTED",
+          "evidence_source_ids": [
+            "DEV-002-S004"
+          ],
+          "constraint": "For this two-calendar-month interval, the authenticated note explicitly connects the target test to a regimen change already started on 2026-08-10. This supports the rationale evidence item only."
+        },
+        {
+          "criterion_id": "ORDER_INTENT",
+          "status": "SUPPORTED",
+          "evidence_source_ids": [
+            "DEV-002-S004",
+            "DEV-002-S005"
+          ],
+          "constraint": "The unsigned order is accompanied by an authenticated treating-provider note stating intent to order this test; a separate signed order is not mandatory in this scoped evidence condition."
+        }
+      ],
+      "scope_expectation": null,
+      "source_handling_expectations": {
+        "exclude": [],
+        "retain": [],
+        "event_groups": []
+      },
+      "fact_constraints": [
+        {
+          "constraint_id": "D2-START-VS-ORDER",
+          "must_hold": "The medication order alone establishes an intended change, not actual initiation. Actual start is supported by the separate authenticated note.",
+          "source_ids": [
+            "DEV-002-S003",
+            "DEV-002-S004"
+          ]
+        },
+        {
+          "constraint_id": "D2-NO-COVERAGE-INFERENCE",
+          "must_hold": "The presence of a relevant reason must not be transformed into a final coverage or payment decision.",
+          "source_ids": [
+            "DEV-002-S004"
+          ]
+        }
+      ],
+      "interpretation_limits": [
+        "No real patient data or payer adjudication labels are present.",
+        "Completeness applies only to the explicitly constructed case and its stated time window.",
+        "SUPPORTED concerns one evidence condition, not Medicare eligibility or payment.",
+        "Unavailable or unretrieved evidence is not evidence that a clinical event did not occur."
+      ]
+    },
+    {
+      "schema_version": "claims-review-prep-expected/0.1",
+      "case_id": "DEV-003",
+      "test_type": "synthetic_expected_constraints",
+      "design_provenance": {
+        "method": "AI-assisted synthetic scenario design and consistency check",
+        "human_reviewed": false,
+        "clinical_validation": false
+      },
+      "overall_expectation": {
+        "status": "NEEDS_HUMAN_REVIEW",
+        "meaning": "Status is for this scoped evidence packet only; it is not coverage, payment, authorization, approval, or denial."
+      },
+      "criterion_expectations": [
+        {
+          "criterion_id": "MONITORING_CONTEXT",
+          "status": "INSUFFICIENT_EVIDENCE",
+          "evidence_source_ids": [
+            "DEV-003-S001",
+            "DEV-003-S002",
+            "DEV-003-S004"
+          ],
+          "constraint": "The disease and a completed HbA1c result are known, but the supplied, available material does not establish this target test purpose."
+        },
+        {
+          "criterion_id": "TEST_TIMELINE",
+          "status": "INSUFFICIENT_EVIDENCE",
+          "evidence_source_ids": [
+            "DEV-003-S002",
+            "DEV-003-S003"
+          ],
+          "constraint": "The target test date is known and the older value is known, but the older specimen date and history coverage are not established."
+        },
+        {
+          "criterion_id": "SHORT_INTERVAL_RATIONALE",
+          "status": "INSUFFICIENT_EVIDENCE",
+          "evidence_source_ids": [
+            "DEV-003-S003"
+          ],
+          "constraint": "The interval cannot be established; do not assign NOT_APPLICABLE or infer a frequent-testing exception."
+        },
+        {
+          "criterion_id": "ORDER_INTENT",
+          "status": "INSUFFICIENT_EVIDENCE",
+          "evidence_source_ids": [
+            "DEV-003-S004"
+          ],
+          "constraint": "No available treating-provider order or equivalent intent evidence exists as of 2026-10-08."
+        }
+      ],
+      "scope_expectation": null,
+      "source_handling_expectations": {
+        "exclude": [
+          {
+            "source_id": "DEV-003-S005",
+            "reason": "available_after_review_as_of"
+          },
+          {
+            "source_id": "DEV-003-S006",
+            "reason": "post_service_event_and_future_scheduled_not_performed",
+            "exclusion_scope": "prior_completed_test_history"
+          }
+        ],
+        "retain": [
+          "DEV-003-S002",
+          "DEV-003-S003"
+        ],
+        "event_groups": []
+      },
+      "fact_constraints": [
+        {
+          "constraint_id": "D3-PRESERVE-PARTIAL-FACTS",
+          "must_hold": "Keep current value 7.1 and date 2026-09-25, and older value 6.9 with unknown event date. Missing history must not erase these facts.",
+          "source_ids": [
+            "DEV-003-S002",
+            "DEV-003-S003"
+          ]
+        },
+        {
+          "constraint_id": "D3-NO-DATE-BORROWING",
+          "must_hold": "Do not replace the historical specimen date with recorded_at, available_at, the target date, or a note date.",
+          "source_ids": [
+            "DEV-003-S003",
+            "DEV-003-S004"
+          ]
+        },
+        {
+          "constraint_id": "D3-ASOF",
+          "must_hold": "The later-received order cannot resolve this review as of 2026-10-08, even though its recorded event is earlier.",
+          "source_ids": [
+            "DEV-003-S005"
+          ]
+        },
+        {
+          "constraint_id": "D3-ABSENCE-VS-NEGATION",
+          "must_hold": "No supplied order does not prove no order existed; future scheduled testing does not prove a previous completed test.",
+          "source_ids": [
+            "DEV-003-S004",
+            "DEV-003-S006"
+          ]
+        }
+      ],
+      "interpretation_limits": [
+        "No real patient data or payer adjudication labels are present.",
+        "Completeness applies only to the explicitly constructed case and its stated time window.",
+        "SUPPORTED concerns one evidence condition, not Medicare eligibility or payment.",
+        "Unavailable or unretrieved evidence is not evidence that a clinical event did not occur."
+      ]
+    },
+    {
+      "schema_version": "claims-review-prep-expected/0.1",
+      "case_id": "DEV-004",
+      "test_type": "synthetic_expected_constraints",
+      "design_provenance": {
+        "method": "AI-assisted synthetic scenario design and consistency check",
+        "human_reviewed": false,
+        "clinical_validation": false
+      },
+      "overall_expectation": {
+        "status": "NEEDS_HUMAN_REVIEW",
+        "meaning": "Status is for this scoped evidence packet only; it is not coverage, payment, authorization, approval, or denial."
+      },
+      "criterion_expectations": [
+        {
+          "criterion_id": "MONITORING_CONTEXT",
+          "status": "SUPPORTED",
+          "evidence_source_ids": [
+            "DEV-004-S001",
+            "DEV-004-S005"
+          ],
+          "constraint": "The patient background and target monitoring purpose are explicit."
+        },
+        {
+          "criterion_id": "TEST_TIMELINE",
+          "status": "CONFLICTED",
+          "evidence_source_ids": [
+            "DEV-004-S002",
+            "DEV-004-S003",
+            "DEV-004-S004",
+            "DEV-004-S006"
+          ],
+          "constraint": "The single prior event has two unresolved specimen dates: 2026-05-20 and 2026-08-20. They imply different intervals to the target 2026-09-20."
+        },
+        {
+          "criterion_id": "SHORT_INTERVAL_RATIONALE",
+          "status": "CONFLICTED",
+          "evidence_source_ids": [
+            "DEV-004-S002",
+            "DEV-004-S003"
+          ],
+          "constraint": "Whether the short-interval rationale condition applies depends on the unresolved prior-event date. Do not select a date using receipt order."
+        },
+        {
+          "criterion_id": "ORDER_INTENT",
+          "status": "SUPPORTED",
+          "evidence_source_ids": [
+            "DEV-004-S005"
+          ],
+          "constraint": "The target-specific signed order is present."
+        }
+      ],
+      "scope_expectation": null,
+      "source_handling_expectations": {
+        "exclude": [],
+        "retain": [
+          "DEV-004-S002",
+          "DEV-004-S003"
+        ],
+        "event_groups": [
+          {
+            "event_link_id": "SYN-D4-ACCESSION-001",
+            "member_source_ids": [
+              "DEV-004-S002",
+              "DEV-004-S003"
+            ],
+            "expected_event_count": 1,
+            "preserve_all_source_references": true,
+            "conflicting_event_dates": true,
+            "resolved_event_date": null
+          }
+        ]
+      },
+      "fact_constraints": [
+        {
+          "constraint_id": "D4-PRESERVE-CONFLICT",
+          "must_hold": "Retain the two supported date claims with their source IDs. A null selected date does not replace the conflict evidence.",
+          "source_ids": [
+            "DEV-004-S002",
+            "DEV-004-S003"
+          ]
+        },
+        {
+          "constraint_id": "D4-NO-LATEST-WINS",
+          "must_hold": "Later receipt or later signature alone does not establish a correction relationship.",
+          "source_ids": [
+            "DEV-004-S002",
+            "DEV-004-S003"
+          ]
+        },
+        {
+          "constraint_id": "D4-ONE-EVENT-TWO-CLAIMS",
+          "must_hold": "A shared explicit event ID groups the reports; it neither turns them into two tests nor licenses discarding one report.",
+          "source_ids": [
+            "DEV-004-S002",
+            "DEV-004-S003"
+          ]
+        }
+      ],
+      "interpretation_limits": [
+        "No real patient data or payer adjudication labels are present.",
+        "Completeness applies only to the explicitly constructed case and its stated time window.",
+        "SUPPORTED concerns one evidence condition, not Medicare eligibility or payment.",
+        "Unavailable or unretrieved evidence is not evidence that a clinical event did not occur."
+      ]
+    },
+    {
+      "schema_version": "claims-review-prep-expected/0.1",
+      "case_id": "DEV-005",
+      "test_type": "synthetic_expected_constraints",
+      "design_provenance": {
+        "method": "AI-assisted synthetic scenario design and consistency check",
+        "human_reviewed": false,
+        "clinical_validation": false
+      },
+      "overall_expectation": {
+        "status": "UNSUPPORTED_SCOPE",
+        "meaning": "Status is for this scoped evidence packet only; it is not coverage, payment, authorization, approval, or denial."
+      },
+      "criterion_expectations": [],
+      "scope_expectation": {
+        "reason": "explicit_screening_purpose_outside_this_monitoring_demo",
+        "source_ids": [
+          "DEV-005-S002",
+          "DEV-005-S003"
+        ],
+        "criteria_not_evaluated": [
+          "MONITORING_CONTEXT",
+          "TEST_TIMELINE",
+          "SHORT_INTERVAL_RATIONALE",
+          "ORDER_INTENT"
+        ]
+      },
+      "source_handling_expectations": {
+        "exclude": [],
+        "retain": [
+          "DEV-005-S004"
+        ],
+        "event_groups": []
+      },
+      "fact_constraints": [
+        {
+          "constraint_id": "D5-SCOPE-NOT-DENIAL",
+          "must_hold": "Report screening as outside this monitoring prototype. Do not infer that Medicare denies screening or that other benefits or policies do not apply.",
+          "source_ids": [
+            "DEV-005-S002",
+            "DEV-005-S003"
+          ]
+        },
+        {
+          "constraint_id": "D5-NO-DISEASE-INVENTION",
+          "must_hold": "Family history and a screening order do not establish that this patient has diabetes.",
+          "source_ids": [
+            "DEV-005-S002"
+          ]
+        },
+        {
+          "constraint_id": "D5-SCOPE-NOT-CODE-GUESS",
+          "must_hold": "No billing code is supplied or required for this constructed concept example; do not manufacture one.",
+          "source_ids": []
+        }
+      ],
+      "interpretation_limits": [
+        "No real patient data or payer adjudication labels are present.",
+        "Completeness applies only to the explicitly constructed case and its stated time window.",
+        "SUPPORTED concerns one evidence condition, not Medicare eligibility or payment.",
+        "Unavailable or unretrieved evidence is not evidence that a clinical event did not occur."
+      ]
+    }
+  ]
+}

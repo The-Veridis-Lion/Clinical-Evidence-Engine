@@ -1,0 +1,2855 @@
+{
+  "version": "claims-review/0.1.0",
+  "case_id": "DEV-002",
+  "status": "EVIDENCE_READY_FOR_HUMAN_REVIEW",
+  "target": {
+    "claim_id": "DEV-002-CLAIM",
+    "patient_id": "SYN-DEV-P002",
+    "encounter_id": "SYN-DEV-E002",
+    "service_date": "2026-09-22",
+    "service_concept": "hba1c_monitoring",
+    "procedure_code": null,
+    "code_system": null,
+    "mapping_status": "constructed_demo",
+    "data_origin": "constructed_synthetic"
+  },
+  "review_context": {
+    "as_of": "2026-10-08",
+    "history_start": "2026-04-01",
+    "history_end": "2026-09-22",
+    "history_completeness": "complete_within_constructed_case"
+  },
+  "preparation": {
+    "preparation_version": "claims-review/0.1.0",
+    "case_id": "DEV-002",
+    "preparation_status": "PREPARED_NOT_EVALUATED",
+    "claim": {
+      "claim_id": "DEV-002-CLAIM",
+      "patient_id": "SYN-DEV-P002",
+      "encounter_id": "SYN-DEV-E002",
+      "service_date": "2026-09-22",
+      "service_concept": "hba1c_monitoring",
+      "procedure_code": null,
+      "code_system": null,
+      "mapping_status": "constructed_demo",
+      "data_origin": "constructed_synthetic"
+    },
+    "review_context": {
+      "as_of": "2026-10-08",
+      "history_start": "2026-04-01",
+      "history_end": "2026-09-22",
+      "history_completeness": "complete_within_constructed_case"
+    },
+    "reasons": [],
+    "claim_metadata_boundary": "service_concept selects a requested workflow; it is not documentary proof of the actual clinical purpose or test performance.",
+    "source_candidates": [
+      {
+        "source_id": "DEV-002-S001",
+        "patient_id": "SYN-DEV-P002",
+        "encounter_id": null,
+        "available_at": "2026-04-02",
+        "origin": "constructed_synthetic",
+        "source_kind": "structured_record",
+        "recorded_at": "2026-04-02",
+        "event_date": "2026-04-02",
+        "record_type": "condition",
+        "event_link_id": null,
+        "content": {
+          "description": "Established type 2 diabetes mellitus",
+          "status": "active",
+          "date_role": "active_problem_review",
+          "diagnosis_previously_established": true
+        },
+        "availability_basis": "explicit_case_metadata",
+        "original_locator": null,
+        "source_ref": {
+          "input": "examples\\claims_review\\development\\DEV-002.json",
+          "json_pointer": "/sources/0",
+          "source_id": "DEV-002-S001",
+          "sha256": "f83936ba8dea42b69a13338d3fc98bdc3c5f556dbf55a865cf2690037683d268"
+        },
+        "temporal_role": "historical_or_background",
+        "field_refs": {
+          "description": "/sources/0/content/description",
+          "status": "/sources/0/content/status",
+          "date_role": "/sources/0/content/date_role",
+          "diagnosis_previously_established": "/sources/0/content/diagnosis_previously_established"
+        }
+      },
+      {
+        "source_id": "DEV-002-S002",
+        "patient_id": "SYN-DEV-P002",
+        "encounter_id": null,
+        "available_at": "2026-07-22",
+        "origin": "constructed_synthetic",
+        "source_kind": "structured_record",
+        "recorded_at": "2026-07-22",
+        "event_date": "2026-07-22",
+        "record_type": "observation",
+        "event_link_id": "SYN-D2-HBA1C-PREV",
+        "content": {
+          "service_concept": "hba1c",
+          "description": "Hemoglobin A1c",
+          "value": 8.1,
+          "unit": "%",
+          "status": "final"
+        },
+        "availability_basis": "explicit_case_metadata",
+        "original_locator": null,
+        "source_ref": {
+          "input": "examples\\claims_review\\development\\DEV-002.json",
+          "json_pointer": "/sources/1",
+          "source_id": "DEV-002-S002",
+          "sha256": "c794aa8e7bc4c2b1a08f208c574e8b20dac7a92d4f2cae8d1d8f59a41cb5d1f1"
+        },
+        "temporal_role": "historical_or_background",
+        "field_refs": {
+          "service_concept": "/sources/1/content/service_concept",
+          "description": "/sources/1/content/description",
+          "value": "/sources/1/content/value",
+          "unit": "/sources/1/content/unit",
+          "status": "/sources/1/content/status"
+        }
+      },
+      {
+        "source_id": "DEV-002-S003",
+        "patient_id": "SYN-DEV-P002",
+        "encounter_id": null,
+        "available_at": "2026-08-05",
+        "origin": "constructed_synthetic",
+        "source_kind": "structured_record",
+        "recorded_at": "2026-08-05",
+        "event_date": "2026-08-05",
+        "record_type": "medication_order",
+        "event_link_id": null,
+        "content": {
+          "description": "Adjustment of existing glucose-lowering regimen",
+          "status": "ordered",
+          "date_role": "order_issued",
+          "planned_start_date": "2026-08-10",
+          "administration_or_start_confirmed": null
+        },
+        "availability_basis": "explicit_case_metadata",
+        "original_locator": null,
+        "source_ref": {
+          "input": "examples\\claims_review\\development\\DEV-002.json",
+          "json_pointer": "/sources/2",
+          "source_id": "DEV-002-S003",
+          "sha256": "d7f3d3594afcdf70f21a5bb8c5f9d53d45f1894f44a25b15b75fe52119cfc7b3"
+        },
+        "temporal_role": "historical_or_background",
+        "field_refs": {
+          "description": "/sources/2/content/description",
+          "status": "/sources/2/content/status",
+          "date_role": "/sources/2/content/date_role",
+          "planned_start_date": "/sources/2/content/planned_start_date",
+          "administration_or_start_confirmed": "/sources/2/content/administration_or_start_confirmed"
+        }
+      },
+      {
+        "source_id": "DEV-002-S004",
+        "patient_id": "SYN-DEV-P002",
+        "encounter_id": "SYN-DEV-E002",
+        "available_at": "2026-09-15",
+        "origin": "constructed_synthetic",
+        "source_kind": "synthetic_note",
+        "recorded_at": "2026-09-15",
+        "event_date": null,
+        "record_type": "note",
+        "event_link_id": null,
+        "content": "Diabetes medication follow-up\nThe patient has established type 2 diabetes. The previously prescribed adjustment of the glucose-lowering regimen was started on 2026-08-10; this was confirmed with the patient today. The prior HbA1c was collected on 2026-07-22. I am ordering another HbA1c for 2026-09-22 to assess response after this treatment change.\nElectronically signed by Dr. Simulated Provider, 2026-09-15.",
+        "availability_basis": "explicit_case_metadata",
+        "original_locator": null,
+        "source_ref": {
+          "input": "examples\\claims_review\\development\\DEV-002.json",
+          "json_pointer": "/sources/3",
+          "source_id": "DEV-002-S004",
+          "sha256": "ed48f94c49a8791a3c42dd544e0a44abc1f41e495fe2bf2fb3eda1e27b117ebe"
+        },
+        "temporal_role": "requires_semantic_extraction",
+        "line_anchors": [
+          {
+            "span_id": "DEV-002-S004:L001",
+            "start": 0,
+            "end": 29,
+            "quote": "Diabetes medication follow-up"
+          },
+          {
+            "span_id": "DEV-002-S004:L002",
+            "start": 30,
+            "end": 349,
+            "quote": "The patient has established type 2 diabetes. The previously prescribed adjustment of the glucose-lowering regimen was started on 2026-08-10; this was confirmed with the patient today. The prior HbA1c was collected on 2026-07-22. I am ordering another HbA1c for 2026-09-22 to assess response after this treatment change."
+          },
+          {
+            "span_id": "DEV-002-S004:L003",
+            "start": 350,
+            "end": 410,
+            "quote": "Electronically signed by Dr. Simulated Provider, 2026-09-15."
+          }
+        ]
+      },
+      {
+        "source_id": "DEV-002-S005",
+        "patient_id": "SYN-DEV-P002",
+        "encounter_id": "SYN-DEV-E002",
+        "available_at": "2026-09-15",
+        "origin": "constructed_synthetic",
+        "source_kind": "structured_record",
+        "recorded_at": "2026-09-15",
+        "event_date": "2026-09-15",
+        "record_type": "order",
+        "event_link_id": null,
+        "content": {
+          "service_concept": "hba1c",
+          "requested_service_date": "2026-09-22",
+          "purpose": "Monitor response after the treatment change",
+          "order_status": "issued",
+          "date_role": "order_issued",
+          "authentication_status": "unsigned",
+          "ordering_provider": "Dr. Simulated Provider",
+          "signed_at": null
+        },
+        "availability_basis": "explicit_case_metadata",
+        "original_locator": null,
+        "source_ref": {
+          "input": "examples\\claims_review\\development\\DEV-002.json",
+          "json_pointer": "/sources/4",
+          "source_id": "DEV-002-S005",
+          "sha256": "ad4f321ebd0f689b3fcac14a1c708fdf8a2f1b99ff1c6b6367f7699aca89b9da"
+        },
+        "temporal_role": "historical_or_background",
+        "field_refs": {
+          "service_concept": "/sources/4/content/service_concept",
+          "requested_service_date": "/sources/4/content/requested_service_date",
+          "purpose": "/sources/4/content/purpose",
+          "order_status": "/sources/4/content/order_status",
+          "date_role": "/sources/4/content/date_role",
+          "authentication_status": "/sources/4/content/authentication_status",
+          "ordering_provider": "/sources/4/content/ordering_provider",
+          "signed_at": "/sources/4/content/signed_at"
+        }
+      },
+      {
+        "source_id": "DEV-002-S006",
+        "patient_id": "SYN-DEV-P002",
+        "encounter_id": "SYN-DEV-E002",
+        "available_at": "2026-09-22",
+        "origin": "constructed_synthetic",
+        "source_kind": "structured_record",
+        "recorded_at": "2026-09-22",
+        "event_date": "2026-09-22",
+        "record_type": "observation",
+        "event_link_id": "SYN-D2-HBA1C-CURRENT",
+        "content": {
+          "service_concept": "hba1c",
+          "description": "Hemoglobin A1c",
+          "value": 7.6,
+          "unit": "%",
+          "status": "final"
+        },
+        "availability_basis": "explicit_case_metadata",
+        "original_locator": null,
+        "source_ref": {
+          "input": "examples\\claims_review\\development\\DEV-002.json",
+          "json_pointer": "/sources/5",
+          "source_id": "DEV-002-S006",
+          "sha256": "7fc49a4f88ee4250b2e42fa06020b41f580ffb543362f499b9a736329f87189f"
+        },
+        "temporal_role": "same_calendar_date_as_target",
+        "field_refs": {
+          "service_concept": "/sources/5/content/service_concept",
+          "description": "/sources/5/content/description",
+          "value": "/sources/5/content/value",
+          "unit": "/sources/5/content/unit",
+          "status": "/sources/5/content/status"
+        }
+      }
+    ],
+    "excluded_sources": [],
+    "unresolved_source_metadata": [],
+    "explicit_event_groups": [
+      {
+        "patient_id": "SYN-DEV-P002",
+        "event_link_id": "SYN-D2-HBA1C-CURRENT",
+        "source_ids": [
+          "DEV-002-S006"
+        ],
+        "members": [
+          {
+            "source_id": "DEV-002-S006",
+            "event_date": "2026-09-22",
+            "source_ref": {
+              "input": "examples\\claims_review\\development\\DEV-002.json",
+              "json_pointer": "/sources/5",
+              "source_id": "DEV-002-S006",
+              "sha256": "7fc49a4f88ee4250b2e42fa06020b41f580ffb543362f499b9a736329f87189f"
+            },
+            "candidate_exclusion_reason": null
+          }
+        ],
+        "documented_event_dates": [
+          "2026-09-22"
+        ],
+        "has_date_disagreement": false,
+        "has_unknown_event_date": false,
+        "reconciliation": "not_performed",
+        "counted_as_tests": null
+      },
+      {
+        "patient_id": "SYN-DEV-P002",
+        "event_link_id": "SYN-D2-HBA1C-PREV",
+        "source_ids": [
+          "DEV-002-S002"
+        ],
+        "members": [
+          {
+            "source_id": "DEV-002-S002",
+            "event_date": "2026-07-22",
+            "source_ref": {
+              "input": "examples\\claims_review\\development\\DEV-002.json",
+              "json_pointer": "/sources/1",
+              "source_id": "DEV-002-S002",
+              "sha256": "c794aa8e7bc4c2b1a08f208c574e8b20dac7a92d4f2cae8d1d8f59a41cb5d1f1"
+            },
+            "candidate_exclusion_reason": null
+          }
+        ],
+        "documented_event_dates": [
+          "2026-07-22"
+        ],
+        "has_date_disagreement": false,
+        "has_unknown_event_date": false,
+        "reconciliation": "not_performed",
+        "counted_as_tests": null
+      }
+    ],
+    "policy_reference": {
+      "registry_version": "0.1.0-draft-ai-20261008",
+      "sha256": "8b05df5b5e40bb27bf5e2350c43a1c7014557925b26593bc0eb0f0f9cc03073f",
+      "review_status": "draft_ai_reviewed",
+      "human_review_completed": false,
+      "criterion_ids": [
+        "MONITORING_CONTEXT",
+        "TEST_TIMELINE",
+        "SHORT_INTERVAL_RATIONALE",
+        "ORDER_INTENT"
+      ]
+    },
+    "execution": {
+      "live_model_calls": 0,
+      "note_extraction": "not_run",
+      "clinical_reconciliation": "not_run",
+      "policy_evaluation": "not_run",
+      "uses_gold": false,
+      "note_source_count": 1
+    },
+    "input_sha256": "0aaca86d8547bb14ee14a250c15d4450f6c052c8ea427511d3e4ab50562f0b04",
+    "temporal_contract": "Date-level inclusive cutoff; source availability, event date and recorded date have separate roles. Mixed note event dates still need semantic extraction.",
+    "output_sha256": "78f5b9045f667698acd67dbd65eb61132bde0d4ae855c43ea94ec086214e7c4d"
+  },
+  "facts": [
+    {
+      "fact_id": "fb54eebc421702a3616c7cda",
+      "patient_id": "SYN-DEV-P002",
+      "source_id": "DEV-002-S001",
+      "kind": "source_record",
+      "statement": "condition: Established type 2 diabetes mellitus",
+      "value": null,
+      "fact_date": null,
+      "date_role": "unknown",
+      "temporal_status": "unknown",
+      "target_date": null,
+      "test_specific": null,
+      "provider": null,
+      "reporter": null,
+      "authenticated": null,
+      "event_link_id": null,
+      "citations": [
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S001",
+          "source_sha256": "5eeaf6f47c534c612c2ac69e45f49a18531535feef8ccc171d1dfa9f79fc9eda",
+          "method": "input_json_pointer",
+          "locator": "/sources/0/content/description",
+          "quote": null,
+          "start": null,
+          "end": null,
+          "raw_value": "Established type 2 diabetes mellitus",
+          "original_locator": null
+        },
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S001",
+          "source_sha256": "5eeaf6f47c534c612c2ac69e45f49a18531535feef8ccc171d1dfa9f79fc9eda",
+          "method": "input_json_pointer",
+          "locator": "/sources/0/content/status",
+          "quote": null,
+          "start": null,
+          "end": null,
+          "raw_value": "active",
+          "original_locator": null
+        },
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S001",
+          "source_sha256": "5eeaf6f47c534c612c2ac69e45f49a18531535feef8ccc171d1dfa9f79fc9eda",
+          "method": "input_json_pointer",
+          "locator": "/sources/0/content/date_role",
+          "quote": null,
+          "start": null,
+          "end": null,
+          "raw_value": "active_problem_review",
+          "original_locator": null
+        },
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S001",
+          "source_sha256": "5eeaf6f47c534c612c2ac69e45f49a18531535feef8ccc171d1dfa9f79fc9eda",
+          "method": "input_json_pointer",
+          "locator": "/sources/0/content/diagnosis_previously_established",
+          "quote": null,
+          "start": null,
+          "end": null,
+          "raw_value": true,
+          "original_locator": null
+        },
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S001",
+          "source_sha256": "5eeaf6f47c534c612c2ac69e45f49a18531535feef8ccc171d1dfa9f79fc9eda",
+          "method": "input_json_pointer",
+          "locator": "/sources/0/event_date",
+          "quote": null,
+          "start": null,
+          "end": null,
+          "raw_value": "2026-04-02",
+          "original_locator": null
+        }
+      ],
+      "details": {
+        "raw_content": {
+          "description": "Established type 2 diabetes mellitus",
+          "status": "active",
+          "date_role": "active_problem_review",
+          "diagnosis_previously_established": true
+        },
+        "interpretation": "Unmodified structured fields; not a clinical assertion."
+      }
+    },
+    {
+      "fact_id": "4553e1dd2caaa190ee4ecec0",
+      "patient_id": "SYN-DEV-P002",
+      "source_id": "DEV-002-S001",
+      "kind": "diabetes_context",
+      "statement": "condition: Established type 2 diabetes mellitus",
+      "value": true,
+      "fact_date": "2026-04-02",
+      "date_role": "background_review",
+      "temporal_status": "actual",
+      "target_date": null,
+      "test_specific": null,
+      "provider": null,
+      "reporter": null,
+      "authenticated": null,
+      "event_link_id": null,
+      "citations": [
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S001",
+          "source_sha256": "5eeaf6f47c534c612c2ac69e45f49a18531535feef8ccc171d1dfa9f79fc9eda",
+          "method": "input_json_pointer",
+          "locator": "/sources/0/content/description",
+          "quote": null,
+          "start": null,
+          "end": null,
+          "raw_value": "Established type 2 diabetes mellitus",
+          "original_locator": null
+        },
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S001",
+          "source_sha256": "5eeaf6f47c534c612c2ac69e45f49a18531535feef8ccc171d1dfa9f79fc9eda",
+          "method": "input_json_pointer",
+          "locator": "/sources/0/content/status",
+          "quote": null,
+          "start": null,
+          "end": null,
+          "raw_value": "active",
+          "original_locator": null
+        },
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S001",
+          "source_sha256": "5eeaf6f47c534c612c2ac69e45f49a18531535feef8ccc171d1dfa9f79fc9eda",
+          "method": "input_json_pointer",
+          "locator": "/sources/0/content/date_role",
+          "quote": null,
+          "start": null,
+          "end": null,
+          "raw_value": "active_problem_review",
+          "original_locator": null
+        },
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S001",
+          "source_sha256": "5eeaf6f47c534c612c2ac69e45f49a18531535feef8ccc171d1dfa9f79fc9eda",
+          "method": "input_json_pointer",
+          "locator": "/sources/0/content/diagnosis_previously_established",
+          "quote": null,
+          "start": null,
+          "end": null,
+          "raw_value": true,
+          "original_locator": null
+        },
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S001",
+          "source_sha256": "5eeaf6f47c534c612c2ac69e45f49a18531535feef8ccc171d1dfa9f79fc9eda",
+          "method": "input_json_pointer",
+          "locator": "/sources/0/event_date",
+          "quote": null,
+          "start": null,
+          "end": null,
+          "raw_value": "2026-04-02",
+          "original_locator": null
+        }
+      ],
+      "details": {
+        "current_activity": true,
+        "raw_content": {
+          "description": "Established type 2 diabetes mellitus",
+          "status": "active",
+          "date_role": "active_problem_review",
+          "diagnosis_previously_established": true
+        }
+      }
+    },
+    {
+      "fact_id": "08a9d8c1579059cebb9a1fe0",
+      "patient_id": "SYN-DEV-P002",
+      "source_id": "DEV-002-S002",
+      "kind": "source_record",
+      "statement": "observation: Hemoglobin A1c",
+      "value": null,
+      "fact_date": null,
+      "date_role": "unknown",
+      "temporal_status": "unknown",
+      "target_date": null,
+      "test_specific": null,
+      "provider": null,
+      "reporter": null,
+      "authenticated": null,
+      "event_link_id": "SYN-D2-HBA1C-PREV",
+      "citations": [
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S002",
+          "source_sha256": "e6987e85198a488f6a9743a869748478f7d8f7fcc39ea58866cf1cff56d15cc6",
+          "method": "input_json_pointer",
+          "locator": "/sources/1/content/service_concept",
+          "quote": null,
+          "start": null,
+          "end": null,
+          "raw_value": "hba1c",
+          "original_locator": null
+        },
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S002",
+          "source_sha256": "e6987e85198a488f6a9743a869748478f7d8f7fcc39ea58866cf1cff56d15cc6",
+          "method": "input_json_pointer",
+          "locator": "/sources/1/content/description",
+          "quote": null,
+          "start": null,
+          "end": null,
+          "raw_value": "Hemoglobin A1c",
+          "original_locator": null
+        },
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S002",
+          "source_sha256": "e6987e85198a488f6a9743a869748478f7d8f7fcc39ea58866cf1cff56d15cc6",
+          "method": "input_json_pointer",
+          "locator": "/sources/1/content/value",
+          "quote": null,
+          "start": null,
+          "end": null,
+          "raw_value": 8.1,
+          "original_locator": null
+        },
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S002",
+          "source_sha256": "e6987e85198a488f6a9743a869748478f7d8f7fcc39ea58866cf1cff56d15cc6",
+          "method": "input_json_pointer",
+          "locator": "/sources/1/content/unit",
+          "quote": null,
+          "start": null,
+          "end": null,
+          "raw_value": "%",
+          "original_locator": null
+        },
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S002",
+          "source_sha256": "e6987e85198a488f6a9743a869748478f7d8f7fcc39ea58866cf1cff56d15cc6",
+          "method": "input_json_pointer",
+          "locator": "/sources/1/content/status",
+          "quote": null,
+          "start": null,
+          "end": null,
+          "raw_value": "final",
+          "original_locator": null
+        },
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S002",
+          "source_sha256": "e6987e85198a488f6a9743a869748478f7d8f7fcc39ea58866cf1cff56d15cc6",
+          "method": "input_json_pointer",
+          "locator": "/sources/1/event_date",
+          "quote": null,
+          "start": null,
+          "end": null,
+          "raw_value": "2026-07-22",
+          "original_locator": null
+        }
+      ],
+      "details": {
+        "raw_content": {
+          "service_concept": "hba1c",
+          "description": "Hemoglobin A1c",
+          "value": 8.1,
+          "unit": "%",
+          "status": "final"
+        },
+        "interpretation": "Unmodified structured fields; not a clinical assertion."
+      }
+    },
+    {
+      "fact_id": "b0fd4783bca7d1065112bfcd",
+      "patient_id": "SYN-DEV-P002",
+      "source_id": "DEV-002-S002",
+      "kind": "test_event",
+      "statement": "observation: Hemoglobin A1c",
+      "value": 8.1,
+      "fact_date": "2026-07-22",
+      "date_role": "actual_test",
+      "temporal_status": "actual",
+      "target_date": null,
+      "test_specific": true,
+      "provider": null,
+      "reporter": null,
+      "authenticated": null,
+      "event_link_id": "SYN-D2-HBA1C-PREV",
+      "citations": [
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S002",
+          "source_sha256": "e6987e85198a488f6a9743a869748478f7d8f7fcc39ea58866cf1cff56d15cc6",
+          "method": "input_json_pointer",
+          "locator": "/sources/1/content/service_concept",
+          "quote": null,
+          "start": null,
+          "end": null,
+          "raw_value": "hba1c",
+          "original_locator": null
+        },
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S002",
+          "source_sha256": "e6987e85198a488f6a9743a869748478f7d8f7fcc39ea58866cf1cff56d15cc6",
+          "method": "input_json_pointer",
+          "locator": "/sources/1/content/description",
+          "quote": null,
+          "start": null,
+          "end": null,
+          "raw_value": "Hemoglobin A1c",
+          "original_locator": null
+        },
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S002",
+          "source_sha256": "e6987e85198a488f6a9743a869748478f7d8f7fcc39ea58866cf1cff56d15cc6",
+          "method": "input_json_pointer",
+          "locator": "/sources/1/content/value",
+          "quote": null,
+          "start": null,
+          "end": null,
+          "raw_value": 8.1,
+          "original_locator": null
+        },
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S002",
+          "source_sha256": "e6987e85198a488f6a9743a869748478f7d8f7fcc39ea58866cf1cff56d15cc6",
+          "method": "input_json_pointer",
+          "locator": "/sources/1/content/unit",
+          "quote": null,
+          "start": null,
+          "end": null,
+          "raw_value": "%",
+          "original_locator": null
+        },
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S002",
+          "source_sha256": "e6987e85198a488f6a9743a869748478f7d8f7fcc39ea58866cf1cff56d15cc6",
+          "method": "input_json_pointer",
+          "locator": "/sources/1/content/status",
+          "quote": null,
+          "start": null,
+          "end": null,
+          "raw_value": "final",
+          "original_locator": null
+        },
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S002",
+          "source_sha256": "e6987e85198a488f6a9743a869748478f7d8f7fcc39ea58866cf1cff56d15cc6",
+          "method": "input_json_pointer",
+          "locator": "/sources/1/event_date",
+          "quote": null,
+          "start": null,
+          "end": null,
+          "raw_value": "2026-07-22",
+          "original_locator": null
+        }
+      ],
+      "details": {
+        "actual_performance_supported": true,
+        "raw_content": {
+          "service_concept": "hba1c",
+          "description": "Hemoglobin A1c",
+          "value": 8.1,
+          "unit": "%",
+          "status": "final"
+        }
+      }
+    },
+    {
+      "fact_id": "28f6360220a9842d92a2b60a",
+      "patient_id": "SYN-DEV-P002",
+      "source_id": "DEV-002-S003",
+      "kind": "source_record",
+      "statement": "medication_order: Adjustment of existing glucose-lowering regimen",
+      "value": null,
+      "fact_date": null,
+      "date_role": "unknown",
+      "temporal_status": "unknown",
+      "target_date": null,
+      "test_specific": null,
+      "provider": null,
+      "reporter": null,
+      "authenticated": null,
+      "event_link_id": null,
+      "citations": [
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S003",
+          "source_sha256": "2cd0cd90c105956a3b91d26806872090ef93468869d9cb12390aa1f9314a282b",
+          "method": "input_json_pointer",
+          "locator": "/sources/2/content/description",
+          "quote": null,
+          "start": null,
+          "end": null,
+          "raw_value": "Adjustment of existing glucose-lowering regimen",
+          "original_locator": null
+        },
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S003",
+          "source_sha256": "2cd0cd90c105956a3b91d26806872090ef93468869d9cb12390aa1f9314a282b",
+          "method": "input_json_pointer",
+          "locator": "/sources/2/content/status",
+          "quote": null,
+          "start": null,
+          "end": null,
+          "raw_value": "ordered",
+          "original_locator": null
+        },
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S003",
+          "source_sha256": "2cd0cd90c105956a3b91d26806872090ef93468869d9cb12390aa1f9314a282b",
+          "method": "input_json_pointer",
+          "locator": "/sources/2/content/date_role",
+          "quote": null,
+          "start": null,
+          "end": null,
+          "raw_value": "order_issued",
+          "original_locator": null
+        },
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S003",
+          "source_sha256": "2cd0cd90c105956a3b91d26806872090ef93468869d9cb12390aa1f9314a282b",
+          "method": "input_json_pointer",
+          "locator": "/sources/2/content/planned_start_date",
+          "quote": null,
+          "start": null,
+          "end": null,
+          "raw_value": "2026-08-10",
+          "original_locator": null
+        },
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S003",
+          "source_sha256": "2cd0cd90c105956a3b91d26806872090ef93468869d9cb12390aa1f9314a282b",
+          "method": "input_json_pointer",
+          "locator": "/sources/2/content/administration_or_start_confirmed",
+          "quote": null,
+          "start": null,
+          "end": null,
+          "raw_value": null,
+          "original_locator": null
+        },
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S003",
+          "source_sha256": "2cd0cd90c105956a3b91d26806872090ef93468869d9cb12390aa1f9314a282b",
+          "method": "input_json_pointer",
+          "locator": "/sources/2/event_date",
+          "quote": null,
+          "start": null,
+          "end": null,
+          "raw_value": "2026-08-05",
+          "original_locator": null
+        }
+      ],
+      "details": {
+        "raw_content": {
+          "description": "Adjustment of existing glucose-lowering regimen",
+          "status": "ordered",
+          "date_role": "order_issued",
+          "planned_start_date": "2026-08-10",
+          "administration_or_start_confirmed": null
+        },
+        "interpretation": "Unmodified structured fields; not a clinical assertion."
+      }
+    },
+    {
+      "fact_id": "c03200eacf838ea85b0f8b52",
+      "patient_id": "SYN-DEV-P002",
+      "source_id": "DEV-002-S003",
+      "kind": "regimen_change",
+      "statement": "medication_order: Adjustment of existing glucose-lowering regimen",
+      "value": null,
+      "fact_date": null,
+      "date_role": "unknown",
+      "temporal_status": "planned",
+      "target_date": null,
+      "test_specific": null,
+      "provider": null,
+      "reporter": null,
+      "authenticated": null,
+      "event_link_id": null,
+      "citations": [
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S003",
+          "source_sha256": "2cd0cd90c105956a3b91d26806872090ef93468869d9cb12390aa1f9314a282b",
+          "method": "input_json_pointer",
+          "locator": "/sources/2/content/description",
+          "quote": null,
+          "start": null,
+          "end": null,
+          "raw_value": "Adjustment of existing glucose-lowering regimen",
+          "original_locator": null
+        },
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S003",
+          "source_sha256": "2cd0cd90c105956a3b91d26806872090ef93468869d9cb12390aa1f9314a282b",
+          "method": "input_json_pointer",
+          "locator": "/sources/2/content/status",
+          "quote": null,
+          "start": null,
+          "end": null,
+          "raw_value": "ordered",
+          "original_locator": null
+        },
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S003",
+          "source_sha256": "2cd0cd90c105956a3b91d26806872090ef93468869d9cb12390aa1f9314a282b",
+          "method": "input_json_pointer",
+          "locator": "/sources/2/content/date_role",
+          "quote": null,
+          "start": null,
+          "end": null,
+          "raw_value": "order_issued",
+          "original_locator": null
+        },
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S003",
+          "source_sha256": "2cd0cd90c105956a3b91d26806872090ef93468869d9cb12390aa1f9314a282b",
+          "method": "input_json_pointer",
+          "locator": "/sources/2/content/planned_start_date",
+          "quote": null,
+          "start": null,
+          "end": null,
+          "raw_value": "2026-08-10",
+          "original_locator": null
+        },
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S003",
+          "source_sha256": "2cd0cd90c105956a3b91d26806872090ef93468869d9cb12390aa1f9314a282b",
+          "method": "input_json_pointer",
+          "locator": "/sources/2/content/administration_or_start_confirmed",
+          "quote": null,
+          "start": null,
+          "end": null,
+          "raw_value": null,
+          "original_locator": null
+        },
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S003",
+          "source_sha256": "2cd0cd90c105956a3b91d26806872090ef93468869d9cb12390aa1f9314a282b",
+          "method": "input_json_pointer",
+          "locator": "/sources/2/event_date",
+          "quote": null,
+          "start": null,
+          "end": null,
+          "raw_value": "2026-08-05",
+          "original_locator": null
+        }
+      ],
+      "details": {
+        "raw_content": {
+          "description": "Adjustment of existing glucose-lowering regimen",
+          "status": "ordered",
+          "date_role": "order_issued",
+          "planned_start_date": "2026-08-10",
+          "administration_or_start_confirmed": null
+        },
+        "order_issued_date": "2026-08-05"
+      }
+    },
+    {
+      "fact_id": "ece292ef9e68f44cda9e3a8f",
+      "patient_id": "SYN-DEV-P002",
+      "source_id": "DEV-002-S005",
+      "kind": "source_record",
+      "statement": "order: source_record",
+      "value": null,
+      "fact_date": null,
+      "date_role": "unknown",
+      "temporal_status": "unknown",
+      "target_date": null,
+      "test_specific": null,
+      "provider": null,
+      "reporter": null,
+      "authenticated": null,
+      "event_link_id": null,
+      "citations": [
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S005",
+          "source_sha256": "8cf276bf96873e8cd4aa5bccc7f99e3bbd9295e088e792490240a9954486b4ff",
+          "method": "input_json_pointer",
+          "locator": "/sources/4/content/service_concept",
+          "quote": null,
+          "start": null,
+          "end": null,
+          "raw_value": "hba1c",
+          "original_locator": null
+        },
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S005",
+          "source_sha256": "8cf276bf96873e8cd4aa5bccc7f99e3bbd9295e088e792490240a9954486b4ff",
+          "method": "input_json_pointer",
+          "locator": "/sources/4/content/requested_service_date",
+          "quote": null,
+          "start": null,
+          "end": null,
+          "raw_value": "2026-09-22",
+          "original_locator": null
+        },
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S005",
+          "source_sha256": "8cf276bf96873e8cd4aa5bccc7f99e3bbd9295e088e792490240a9954486b4ff",
+          "method": "input_json_pointer",
+          "locator": "/sources/4/content/purpose",
+          "quote": null,
+          "start": null,
+          "end": null,
+          "raw_value": "Monitor response after the treatment change",
+          "original_locator": null
+        },
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S005",
+          "source_sha256": "8cf276bf96873e8cd4aa5bccc7f99e3bbd9295e088e792490240a9954486b4ff",
+          "method": "input_json_pointer",
+          "locator": "/sources/4/content/order_status",
+          "quote": null,
+          "start": null,
+          "end": null,
+          "raw_value": "issued",
+          "original_locator": null
+        },
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S005",
+          "source_sha256": "8cf276bf96873e8cd4aa5bccc7f99e3bbd9295e088e792490240a9954486b4ff",
+          "method": "input_json_pointer",
+          "locator": "/sources/4/content/date_role",
+          "quote": null,
+          "start": null,
+          "end": null,
+          "raw_value": "order_issued",
+          "original_locator": null
+        },
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S005",
+          "source_sha256": "8cf276bf96873e8cd4aa5bccc7f99e3bbd9295e088e792490240a9954486b4ff",
+          "method": "input_json_pointer",
+          "locator": "/sources/4/content/authentication_status",
+          "quote": null,
+          "start": null,
+          "end": null,
+          "raw_value": "unsigned",
+          "original_locator": null
+        },
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S005",
+          "source_sha256": "8cf276bf96873e8cd4aa5bccc7f99e3bbd9295e088e792490240a9954486b4ff",
+          "method": "input_json_pointer",
+          "locator": "/sources/4/content/ordering_provider",
+          "quote": null,
+          "start": null,
+          "end": null,
+          "raw_value": "Dr. Simulated Provider",
+          "original_locator": null
+        },
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S005",
+          "source_sha256": "8cf276bf96873e8cd4aa5bccc7f99e3bbd9295e088e792490240a9954486b4ff",
+          "method": "input_json_pointer",
+          "locator": "/sources/4/content/signed_at",
+          "quote": null,
+          "start": null,
+          "end": null,
+          "raw_value": null,
+          "original_locator": null
+        },
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S005",
+          "source_sha256": "8cf276bf96873e8cd4aa5bccc7f99e3bbd9295e088e792490240a9954486b4ff",
+          "method": "input_json_pointer",
+          "locator": "/sources/4/event_date",
+          "quote": null,
+          "start": null,
+          "end": null,
+          "raw_value": "2026-09-15",
+          "original_locator": null
+        }
+      ],
+      "details": {
+        "raw_content": {
+          "service_concept": "hba1c",
+          "requested_service_date": "2026-09-22",
+          "purpose": "Monitor response after the treatment change",
+          "order_status": "issued",
+          "date_role": "order_issued",
+          "authentication_status": "unsigned",
+          "ordering_provider": "Dr. Simulated Provider",
+          "signed_at": null
+        },
+        "interpretation": "Unmodified structured fields; not a clinical assertion."
+      }
+    },
+    {
+      "fact_id": "fec05e32043cac838e2f4ac9",
+      "patient_id": "SYN-DEV-P002",
+      "source_id": "DEV-002-S005",
+      "kind": "order_intent",
+      "statement": "order: order_intent",
+      "value": true,
+      "fact_date": "2026-09-15",
+      "date_role": "order_issued",
+      "temporal_status": "planned",
+      "target_date": "2026-09-22",
+      "test_specific": true,
+      "provider": "Dr. Simulated Provider",
+      "reporter": null,
+      "authenticated": false,
+      "event_link_id": null,
+      "citations": [
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S005",
+          "source_sha256": "8cf276bf96873e8cd4aa5bccc7f99e3bbd9295e088e792490240a9954486b4ff",
+          "method": "input_json_pointer",
+          "locator": "/sources/4/content/service_concept",
+          "quote": null,
+          "start": null,
+          "end": null,
+          "raw_value": "hba1c",
+          "original_locator": null
+        },
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S005",
+          "source_sha256": "8cf276bf96873e8cd4aa5bccc7f99e3bbd9295e088e792490240a9954486b4ff",
+          "method": "input_json_pointer",
+          "locator": "/sources/4/content/requested_service_date",
+          "quote": null,
+          "start": null,
+          "end": null,
+          "raw_value": "2026-09-22",
+          "original_locator": null
+        },
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S005",
+          "source_sha256": "8cf276bf96873e8cd4aa5bccc7f99e3bbd9295e088e792490240a9954486b4ff",
+          "method": "input_json_pointer",
+          "locator": "/sources/4/content/purpose",
+          "quote": null,
+          "start": null,
+          "end": null,
+          "raw_value": "Monitor response after the treatment change",
+          "original_locator": null
+        },
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S005",
+          "source_sha256": "8cf276bf96873e8cd4aa5bccc7f99e3bbd9295e088e792490240a9954486b4ff",
+          "method": "input_json_pointer",
+          "locator": "/sources/4/content/order_status",
+          "quote": null,
+          "start": null,
+          "end": null,
+          "raw_value": "issued",
+          "original_locator": null
+        },
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S005",
+          "source_sha256": "8cf276bf96873e8cd4aa5bccc7f99e3bbd9295e088e792490240a9954486b4ff",
+          "method": "input_json_pointer",
+          "locator": "/sources/4/content/date_role",
+          "quote": null,
+          "start": null,
+          "end": null,
+          "raw_value": "order_issued",
+          "original_locator": null
+        },
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S005",
+          "source_sha256": "8cf276bf96873e8cd4aa5bccc7f99e3bbd9295e088e792490240a9954486b4ff",
+          "method": "input_json_pointer",
+          "locator": "/sources/4/content/authentication_status",
+          "quote": null,
+          "start": null,
+          "end": null,
+          "raw_value": "unsigned",
+          "original_locator": null
+        },
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S005",
+          "source_sha256": "8cf276bf96873e8cd4aa5bccc7f99e3bbd9295e088e792490240a9954486b4ff",
+          "method": "input_json_pointer",
+          "locator": "/sources/4/content/ordering_provider",
+          "quote": null,
+          "start": null,
+          "end": null,
+          "raw_value": "Dr. Simulated Provider",
+          "original_locator": null
+        },
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S005",
+          "source_sha256": "8cf276bf96873e8cd4aa5bccc7f99e3bbd9295e088e792490240a9954486b4ff",
+          "method": "input_json_pointer",
+          "locator": "/sources/4/content/signed_at",
+          "quote": null,
+          "start": null,
+          "end": null,
+          "raw_value": null,
+          "original_locator": null
+        },
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S005",
+          "source_sha256": "8cf276bf96873e8cd4aa5bccc7f99e3bbd9295e088e792490240a9954486b4ff",
+          "method": "input_json_pointer",
+          "locator": "/sources/4/event_date",
+          "quote": null,
+          "start": null,
+          "end": null,
+          "raw_value": "2026-09-15",
+          "original_locator": null
+        }
+      ],
+      "details": {
+        "raw_content": {
+          "service_concept": "hba1c",
+          "requested_service_date": "2026-09-22",
+          "purpose": "Monitor response after the treatment change",
+          "order_status": "issued",
+          "date_role": "order_issued",
+          "authentication_status": "unsigned",
+          "ordering_provider": "Dr. Simulated Provider",
+          "signed_at": null
+        },
+        "authentication_scope": "This order only; not other records."
+      }
+    },
+    {
+      "fact_id": "3967a26c6d5e96a36ecdff81",
+      "patient_id": "SYN-DEV-P002",
+      "source_id": "DEV-002-S005",
+      "kind": "purpose",
+      "statement": "order: purpose",
+      "value": "monitoring",
+      "fact_date": null,
+      "date_role": "unknown",
+      "temporal_status": "planned",
+      "target_date": "2026-09-22",
+      "test_specific": true,
+      "provider": null,
+      "reporter": null,
+      "authenticated": null,
+      "event_link_id": null,
+      "citations": [
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S005",
+          "source_sha256": "8cf276bf96873e8cd4aa5bccc7f99e3bbd9295e088e792490240a9954486b4ff",
+          "method": "input_json_pointer",
+          "locator": "/sources/4/content/service_concept",
+          "quote": null,
+          "start": null,
+          "end": null,
+          "raw_value": "hba1c",
+          "original_locator": null
+        },
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S005",
+          "source_sha256": "8cf276bf96873e8cd4aa5bccc7f99e3bbd9295e088e792490240a9954486b4ff",
+          "method": "input_json_pointer",
+          "locator": "/sources/4/content/requested_service_date",
+          "quote": null,
+          "start": null,
+          "end": null,
+          "raw_value": "2026-09-22",
+          "original_locator": null
+        },
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S005",
+          "source_sha256": "8cf276bf96873e8cd4aa5bccc7f99e3bbd9295e088e792490240a9954486b4ff",
+          "method": "input_json_pointer",
+          "locator": "/sources/4/content/purpose",
+          "quote": null,
+          "start": null,
+          "end": null,
+          "raw_value": "Monitor response after the treatment change",
+          "original_locator": null
+        },
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S005",
+          "source_sha256": "8cf276bf96873e8cd4aa5bccc7f99e3bbd9295e088e792490240a9954486b4ff",
+          "method": "input_json_pointer",
+          "locator": "/sources/4/content/order_status",
+          "quote": null,
+          "start": null,
+          "end": null,
+          "raw_value": "issued",
+          "original_locator": null
+        },
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S005",
+          "source_sha256": "8cf276bf96873e8cd4aa5bccc7f99e3bbd9295e088e792490240a9954486b4ff",
+          "method": "input_json_pointer",
+          "locator": "/sources/4/content/date_role",
+          "quote": null,
+          "start": null,
+          "end": null,
+          "raw_value": "order_issued",
+          "original_locator": null
+        },
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S005",
+          "source_sha256": "8cf276bf96873e8cd4aa5bccc7f99e3bbd9295e088e792490240a9954486b4ff",
+          "method": "input_json_pointer",
+          "locator": "/sources/4/content/authentication_status",
+          "quote": null,
+          "start": null,
+          "end": null,
+          "raw_value": "unsigned",
+          "original_locator": null
+        },
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S005",
+          "source_sha256": "8cf276bf96873e8cd4aa5bccc7f99e3bbd9295e088e792490240a9954486b4ff",
+          "method": "input_json_pointer",
+          "locator": "/sources/4/content/ordering_provider",
+          "quote": null,
+          "start": null,
+          "end": null,
+          "raw_value": "Dr. Simulated Provider",
+          "original_locator": null
+        },
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S005",
+          "source_sha256": "8cf276bf96873e8cd4aa5bccc7f99e3bbd9295e088e792490240a9954486b4ff",
+          "method": "input_json_pointer",
+          "locator": "/sources/4/content/signed_at",
+          "quote": null,
+          "start": null,
+          "end": null,
+          "raw_value": null,
+          "original_locator": null
+        },
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S005",
+          "source_sha256": "8cf276bf96873e8cd4aa5bccc7f99e3bbd9295e088e792490240a9954486b4ff",
+          "method": "input_json_pointer",
+          "locator": "/sources/4/event_date",
+          "quote": null,
+          "start": null,
+          "end": null,
+          "raw_value": "2026-09-15",
+          "original_locator": null
+        }
+      ],
+      "details": {
+        "raw_purpose": "Monitor response after the treatment change",
+        "mapping": "Declared finite purpose vocabulary."
+      }
+    },
+    {
+      "fact_id": "8cb001a4c66bda5b56907b39",
+      "patient_id": "SYN-DEV-P002",
+      "source_id": "DEV-002-S006",
+      "kind": "source_record",
+      "statement": "observation: Hemoglobin A1c",
+      "value": null,
+      "fact_date": null,
+      "date_role": "unknown",
+      "temporal_status": "unknown",
+      "target_date": null,
+      "test_specific": null,
+      "provider": null,
+      "reporter": null,
+      "authenticated": null,
+      "event_link_id": "SYN-D2-HBA1C-CURRENT",
+      "citations": [
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S006",
+          "source_sha256": "21adbbbe049d6048ddff8fdbf6b7c19333cd6037e69adf36741070266370f6d5",
+          "method": "input_json_pointer",
+          "locator": "/sources/5/content/service_concept",
+          "quote": null,
+          "start": null,
+          "end": null,
+          "raw_value": "hba1c",
+          "original_locator": null
+        },
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S006",
+          "source_sha256": "21adbbbe049d6048ddff8fdbf6b7c19333cd6037e69adf36741070266370f6d5",
+          "method": "input_json_pointer",
+          "locator": "/sources/5/content/description",
+          "quote": null,
+          "start": null,
+          "end": null,
+          "raw_value": "Hemoglobin A1c",
+          "original_locator": null
+        },
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S006",
+          "source_sha256": "21adbbbe049d6048ddff8fdbf6b7c19333cd6037e69adf36741070266370f6d5",
+          "method": "input_json_pointer",
+          "locator": "/sources/5/content/value",
+          "quote": null,
+          "start": null,
+          "end": null,
+          "raw_value": 7.6,
+          "original_locator": null
+        },
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S006",
+          "source_sha256": "21adbbbe049d6048ddff8fdbf6b7c19333cd6037e69adf36741070266370f6d5",
+          "method": "input_json_pointer",
+          "locator": "/sources/5/content/unit",
+          "quote": null,
+          "start": null,
+          "end": null,
+          "raw_value": "%",
+          "original_locator": null
+        },
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S006",
+          "source_sha256": "21adbbbe049d6048ddff8fdbf6b7c19333cd6037e69adf36741070266370f6d5",
+          "method": "input_json_pointer",
+          "locator": "/sources/5/content/status",
+          "quote": null,
+          "start": null,
+          "end": null,
+          "raw_value": "final",
+          "original_locator": null
+        },
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S006",
+          "source_sha256": "21adbbbe049d6048ddff8fdbf6b7c19333cd6037e69adf36741070266370f6d5",
+          "method": "input_json_pointer",
+          "locator": "/sources/5/event_date",
+          "quote": null,
+          "start": null,
+          "end": null,
+          "raw_value": "2026-09-22",
+          "original_locator": null
+        }
+      ],
+      "details": {
+        "raw_content": {
+          "service_concept": "hba1c",
+          "description": "Hemoglobin A1c",
+          "value": 7.6,
+          "unit": "%",
+          "status": "final"
+        },
+        "interpretation": "Unmodified structured fields; not a clinical assertion."
+      }
+    },
+    {
+      "fact_id": "7ea9f1a4bb2d1a801eda7b7d",
+      "patient_id": "SYN-DEV-P002",
+      "source_id": "DEV-002-S006",
+      "kind": "test_event",
+      "statement": "observation: Hemoglobin A1c",
+      "value": 7.6,
+      "fact_date": "2026-09-22",
+      "date_role": "actual_test",
+      "temporal_status": "actual",
+      "target_date": null,
+      "test_specific": true,
+      "provider": null,
+      "reporter": null,
+      "authenticated": null,
+      "event_link_id": "SYN-D2-HBA1C-CURRENT",
+      "citations": [
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S006",
+          "source_sha256": "21adbbbe049d6048ddff8fdbf6b7c19333cd6037e69adf36741070266370f6d5",
+          "method": "input_json_pointer",
+          "locator": "/sources/5/content/service_concept",
+          "quote": null,
+          "start": null,
+          "end": null,
+          "raw_value": "hba1c",
+          "original_locator": null
+        },
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S006",
+          "source_sha256": "21adbbbe049d6048ddff8fdbf6b7c19333cd6037e69adf36741070266370f6d5",
+          "method": "input_json_pointer",
+          "locator": "/sources/5/content/description",
+          "quote": null,
+          "start": null,
+          "end": null,
+          "raw_value": "Hemoglobin A1c",
+          "original_locator": null
+        },
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S006",
+          "source_sha256": "21adbbbe049d6048ddff8fdbf6b7c19333cd6037e69adf36741070266370f6d5",
+          "method": "input_json_pointer",
+          "locator": "/sources/5/content/value",
+          "quote": null,
+          "start": null,
+          "end": null,
+          "raw_value": 7.6,
+          "original_locator": null
+        },
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S006",
+          "source_sha256": "21adbbbe049d6048ddff8fdbf6b7c19333cd6037e69adf36741070266370f6d5",
+          "method": "input_json_pointer",
+          "locator": "/sources/5/content/unit",
+          "quote": null,
+          "start": null,
+          "end": null,
+          "raw_value": "%",
+          "original_locator": null
+        },
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S006",
+          "source_sha256": "21adbbbe049d6048ddff8fdbf6b7c19333cd6037e69adf36741070266370f6d5",
+          "method": "input_json_pointer",
+          "locator": "/sources/5/content/status",
+          "quote": null,
+          "start": null,
+          "end": null,
+          "raw_value": "final",
+          "original_locator": null
+        },
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S006",
+          "source_sha256": "21adbbbe049d6048ddff8fdbf6b7c19333cd6037e69adf36741070266370f6d5",
+          "method": "input_json_pointer",
+          "locator": "/sources/5/event_date",
+          "quote": null,
+          "start": null,
+          "end": null,
+          "raw_value": "2026-09-22",
+          "original_locator": null
+        }
+      ],
+      "details": {
+        "actual_performance_supported": true,
+        "raw_content": {
+          "service_concept": "hba1c",
+          "description": "Hemoglobin A1c",
+          "value": 7.6,
+          "unit": "%",
+          "status": "final"
+        }
+      }
+    },
+    {
+      "fact_id": "c8e10a987d81044b73f2b150",
+      "patient_id": "SYN-DEV-P002",
+      "source_id": "DEV-002-S004",
+      "kind": "purpose",
+      "statement": "The visit is for diabetes medication follow-up and HbA1c monitoring to assess response after a treatment change.",
+      "value": "monitoring",
+      "fact_date": null,
+      "date_role": "unknown",
+      "temporal_status": "actual",
+      "target_date": null,
+      "test_specific": true,
+      "provider": "Dr. Simulated Provider",
+      "reporter": null,
+      "authenticated": true,
+      "event_link_id": null,
+      "citations": [
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S004",
+          "source_sha256": "6328c216f6551c68322b17cb975c59aabec2c0bb25782975f9c01f2102a916f8",
+          "method": "unicode_line_anchor",
+          "locator": "DEV-002-S004:L001",
+          "quote": "Diabetes medication follow-up",
+          "start": 0,
+          "end": 29,
+          "raw_value": null,
+          "original_locator": null
+        },
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S004",
+          "source_sha256": "6328c216f6551c68322b17cb975c59aabec2c0bb25782975f9c01f2102a916f8",
+          "method": "unicode_line_anchor",
+          "locator": "DEV-002-S004:L002",
+          "quote": "The patient has established type 2 diabetes. The previously prescribed adjustment of the glucose-lowering regimen was started on 2026-08-10; this was confirmed with the patient today. The prior HbA1c was collected on 2026-07-22. I am ordering another HbA1c for 2026-09-22 to assess response after this treatment change.",
+          "start": 30,
+          "end": 349,
+          "raw_value": null,
+          "original_locator": null
+        },
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S004",
+          "source_sha256": "6328c216f6551c68322b17cb975c59aabec2c0bb25782975f9c01f2102a916f8",
+          "method": "unicode_line_anchor",
+          "locator": "DEV-002-S004:L003",
+          "quote": "Electronically signed by Dr. Simulated Provider, 2026-09-15.",
+          "start": 350,
+          "end": 410,
+          "raw_value": null,
+          "original_locator": null
+        }
+      ],
+      "details": {
+        "extraction": "note",
+        "semantic_validation": "Source binding/lexical checks; not a general semantic proof."
+      }
+    },
+    {
+      "fact_id": "c127befab1881a1d24fa1aea",
+      "patient_id": "SYN-DEV-P002",
+      "source_id": "DEV-002-S004",
+      "kind": "diabetes_context",
+      "statement": "The patient has established type 2 diabetes.",
+      "value": true,
+      "fact_date": null,
+      "date_role": "background_review",
+      "temporal_status": "actual",
+      "target_date": null,
+      "test_specific": null,
+      "provider": "Dr. Simulated Provider",
+      "reporter": null,
+      "authenticated": true,
+      "event_link_id": null,
+      "citations": [
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S004",
+          "source_sha256": "6328c216f6551c68322b17cb975c59aabec2c0bb25782975f9c01f2102a916f8",
+          "method": "unicode_line_anchor",
+          "locator": "DEV-002-S004:L002",
+          "quote": "The patient has established type 2 diabetes. The previously prescribed adjustment of the glucose-lowering regimen was started on 2026-08-10; this was confirmed with the patient today. The prior HbA1c was collected on 2026-07-22. I am ordering another HbA1c for 2026-09-22 to assess response after this treatment change.",
+          "start": 30,
+          "end": 349,
+          "raw_value": null,
+          "original_locator": null
+        },
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S004",
+          "source_sha256": "6328c216f6551c68322b17cb975c59aabec2c0bb25782975f9c01f2102a916f8",
+          "method": "unicode_line_anchor",
+          "locator": "DEV-002-S004:L003",
+          "quote": "Electronically signed by Dr. Simulated Provider, 2026-09-15.",
+          "start": 350,
+          "end": 410,
+          "raw_value": null,
+          "original_locator": null
+        }
+      ],
+      "details": {
+        "extraction": "note",
+        "semantic_validation": "Source binding/lexical checks; not a general semantic proof."
+      }
+    },
+    {
+      "fact_id": "cecc0dcc51cf2c3008383242",
+      "patient_id": "SYN-DEV-P002",
+      "source_id": "DEV-002-S004",
+      "kind": "test_mention",
+      "statement": "The prior HbA1c was collected on 2026-07-22.",
+      "value": "HbA1c collected",
+      "fact_date": "2026-07-22",
+      "date_role": "actual_test",
+      "temporal_status": "historical",
+      "target_date": null,
+      "test_specific": true,
+      "provider": "Dr. Simulated Provider",
+      "reporter": null,
+      "authenticated": true,
+      "event_link_id": null,
+      "citations": [
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S004",
+          "source_sha256": "6328c216f6551c68322b17cb975c59aabec2c0bb25782975f9c01f2102a916f8",
+          "method": "unicode_line_anchor",
+          "locator": "DEV-002-S004:L002",
+          "quote": "The patient has established type 2 diabetes. The previously prescribed adjustment of the glucose-lowering regimen was started on 2026-08-10; this was confirmed with the patient today. The prior HbA1c was collected on 2026-07-22. I am ordering another HbA1c for 2026-09-22 to assess response after this treatment change.",
+          "start": 30,
+          "end": 349,
+          "raw_value": null,
+          "original_locator": null
+        },
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S004",
+          "source_sha256": "6328c216f6551c68322b17cb975c59aabec2c0bb25782975f9c01f2102a916f8",
+          "method": "unicode_line_anchor",
+          "locator": "DEV-002-S004:L003",
+          "quote": "Electronically signed by Dr. Simulated Provider, 2026-09-15.",
+          "start": 350,
+          "end": 410,
+          "raw_value": null,
+          "original_locator": null
+        }
+      ],
+      "details": {
+        "extraction": "note",
+        "semantic_validation": "Source binding/lexical checks; not a general semantic proof."
+      }
+    },
+    {
+      "fact_id": "f5c07ff686f1df8fb4b4bfd7",
+      "patient_id": "SYN-DEV-P002",
+      "source_id": "DEV-002-S004",
+      "kind": "regimen_change",
+      "statement": "The previously prescribed adjustment of the glucose-lowering regimen was started on 2026-08-10 and confirmed with the patient today.",
+      "value": true,
+      "fact_date": "2026-08-10",
+      "date_role": "adjustment_start",
+      "temporal_status": "actual",
+      "target_date": null,
+      "test_specific": null,
+      "provider": "Dr. Simulated Provider",
+      "reporter": "patient",
+      "authenticated": true,
+      "event_link_id": null,
+      "citations": [
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S004",
+          "source_sha256": "6328c216f6551c68322b17cb975c59aabec2c0bb25782975f9c01f2102a916f8",
+          "method": "unicode_line_anchor",
+          "locator": "DEV-002-S004:L002",
+          "quote": "The patient has established type 2 diabetes. The previously prescribed adjustment of the glucose-lowering regimen was started on 2026-08-10; this was confirmed with the patient today. The prior HbA1c was collected on 2026-07-22. I am ordering another HbA1c for 2026-09-22 to assess response after this treatment change.",
+          "start": 30,
+          "end": 349,
+          "raw_value": null,
+          "original_locator": null
+        },
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S004",
+          "source_sha256": "6328c216f6551c68322b17cb975c59aabec2c0bb25782975f9c01f2102a916f8",
+          "method": "unicode_line_anchor",
+          "locator": "DEV-002-S004:L003",
+          "quote": "Electronically signed by Dr. Simulated Provider, 2026-09-15.",
+          "start": 350,
+          "end": 410,
+          "raw_value": null,
+          "original_locator": null
+        }
+      ],
+      "details": {
+        "extraction": "note",
+        "semantic_validation": "Source binding/lexical checks; not a general semantic proof."
+      }
+    },
+    {
+      "fact_id": "bc3cf94dbc42b6526faeb4dd",
+      "patient_id": "SYN-DEV-P002",
+      "source_id": "DEV-002-S004",
+      "kind": "clinical_rationale",
+      "statement": "The HbA1c is being ordered to assess response after the treatment change.",
+      "value": "implemented_change",
+      "fact_date": null,
+      "date_role": "requested_test",
+      "temporal_status": "planned",
+      "target_date": "2026-09-22",
+      "test_specific": true,
+      "provider": "Dr. Simulated Provider",
+      "reporter": null,
+      "authenticated": true,
+      "event_link_id": null,
+      "citations": [
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S004",
+          "source_sha256": "6328c216f6551c68322b17cb975c59aabec2c0bb25782975f9c01f2102a916f8",
+          "method": "unicode_line_anchor",
+          "locator": "DEV-002-S004:L002",
+          "quote": "The patient has established type 2 diabetes. The previously prescribed adjustment of the glucose-lowering regimen was started on 2026-08-10; this was confirmed with the patient today. The prior HbA1c was collected on 2026-07-22. I am ordering another HbA1c for 2026-09-22 to assess response after this treatment change.",
+          "start": 30,
+          "end": 349,
+          "raw_value": null,
+          "original_locator": null
+        },
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S004",
+          "source_sha256": "6328c216f6551c68322b17cb975c59aabec2c0bb25782975f9c01f2102a916f8",
+          "method": "unicode_line_anchor",
+          "locator": "DEV-002-S004:L003",
+          "quote": "Electronically signed by Dr. Simulated Provider, 2026-09-15.",
+          "start": 350,
+          "end": 410,
+          "raw_value": null,
+          "original_locator": null
+        }
+      ],
+      "details": {
+        "extraction": "note",
+        "semantic_validation": "Source binding/lexical checks; not a general semantic proof."
+      }
+    },
+    {
+      "fact_id": "719fb695f520e96ceb76e290",
+      "patient_id": "SYN-DEV-P002",
+      "source_id": "DEV-002-S004",
+      "kind": "order_intent",
+      "statement": "The provider is ordering another HbA1c for 2026-09-22.",
+      "value": true,
+      "fact_date": null,
+      "date_role": "requested_test",
+      "temporal_status": "planned",
+      "target_date": "2026-09-22",
+      "test_specific": true,
+      "provider": "Dr. Simulated Provider",
+      "reporter": null,
+      "authenticated": true,
+      "event_link_id": null,
+      "citations": [
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S004",
+          "source_sha256": "6328c216f6551c68322b17cb975c59aabec2c0bb25782975f9c01f2102a916f8",
+          "method": "unicode_line_anchor",
+          "locator": "DEV-002-S004:L002",
+          "quote": "The patient has established type 2 diabetes. The previously prescribed adjustment of the glucose-lowering regimen was started on 2026-08-10; this was confirmed with the patient today. The prior HbA1c was collected on 2026-07-22. I am ordering another HbA1c for 2026-09-22 to assess response after this treatment change.",
+          "start": 30,
+          "end": 349,
+          "raw_value": null,
+          "original_locator": null
+        },
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S004",
+          "source_sha256": "6328c216f6551c68322b17cb975c59aabec2c0bb25782975f9c01f2102a916f8",
+          "method": "unicode_line_anchor",
+          "locator": "DEV-002-S004:L003",
+          "quote": "Electronically signed by Dr. Simulated Provider, 2026-09-15.",
+          "start": 350,
+          "end": 410,
+          "raw_value": null,
+          "original_locator": null
+        }
+      ],
+      "details": {
+        "extraction": "note",
+        "semantic_validation": "Source binding/lexical checks; not a general semantic proof."
+      }
+    }
+  ],
+  "criteria": [
+    {
+      "criterion_id": "MONITORING_CONTEXT",
+      "criterion_role": "CMS clinical indication, deliberately narrowed to the demo monitoring scope",
+      "status": "SUPPORTED",
+      "reason": "Target-linked monitoring purpose and current diabetes background are documented.",
+      "clinical_refs": [
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S005",
+          "source_sha256": "8cf276bf96873e8cd4aa5bccc7f99e3bbd9295e088e792490240a9954486b4ff",
+          "method": "input_json_pointer",
+          "locator": "/sources/4/content/service_concept",
+          "quote": null,
+          "start": null,
+          "end": null,
+          "raw_value": "hba1c",
+          "original_locator": null
+        },
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S005",
+          "source_sha256": "8cf276bf96873e8cd4aa5bccc7f99e3bbd9295e088e792490240a9954486b4ff",
+          "method": "input_json_pointer",
+          "locator": "/sources/4/content/requested_service_date",
+          "quote": null,
+          "start": null,
+          "end": null,
+          "raw_value": "2026-09-22",
+          "original_locator": null
+        },
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S005",
+          "source_sha256": "8cf276bf96873e8cd4aa5bccc7f99e3bbd9295e088e792490240a9954486b4ff",
+          "method": "input_json_pointer",
+          "locator": "/sources/4/content/purpose",
+          "quote": null,
+          "start": null,
+          "end": null,
+          "raw_value": "Monitor response after the treatment change",
+          "original_locator": null
+        },
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S005",
+          "source_sha256": "8cf276bf96873e8cd4aa5bccc7f99e3bbd9295e088e792490240a9954486b4ff",
+          "method": "input_json_pointer",
+          "locator": "/sources/4/content/order_status",
+          "quote": null,
+          "start": null,
+          "end": null,
+          "raw_value": "issued",
+          "original_locator": null
+        },
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S005",
+          "source_sha256": "8cf276bf96873e8cd4aa5bccc7f99e3bbd9295e088e792490240a9954486b4ff",
+          "method": "input_json_pointer",
+          "locator": "/sources/4/content/date_role",
+          "quote": null,
+          "start": null,
+          "end": null,
+          "raw_value": "order_issued",
+          "original_locator": null
+        },
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S005",
+          "source_sha256": "8cf276bf96873e8cd4aa5bccc7f99e3bbd9295e088e792490240a9954486b4ff",
+          "method": "input_json_pointer",
+          "locator": "/sources/4/content/authentication_status",
+          "quote": null,
+          "start": null,
+          "end": null,
+          "raw_value": "unsigned",
+          "original_locator": null
+        },
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S005",
+          "source_sha256": "8cf276bf96873e8cd4aa5bccc7f99e3bbd9295e088e792490240a9954486b4ff",
+          "method": "input_json_pointer",
+          "locator": "/sources/4/content/ordering_provider",
+          "quote": null,
+          "start": null,
+          "end": null,
+          "raw_value": "Dr. Simulated Provider",
+          "original_locator": null
+        },
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S005",
+          "source_sha256": "8cf276bf96873e8cd4aa5bccc7f99e3bbd9295e088e792490240a9954486b4ff",
+          "method": "input_json_pointer",
+          "locator": "/sources/4/content/signed_at",
+          "quote": null,
+          "start": null,
+          "end": null,
+          "raw_value": null,
+          "original_locator": null
+        },
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S005",
+          "source_sha256": "8cf276bf96873e8cd4aa5bccc7f99e3bbd9295e088e792490240a9954486b4ff",
+          "method": "input_json_pointer",
+          "locator": "/sources/4/event_date",
+          "quote": null,
+          "start": null,
+          "end": null,
+          "raw_value": "2026-09-15",
+          "original_locator": null
+        },
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S004",
+          "source_sha256": "6328c216f6551c68322b17cb975c59aabec2c0bb25782975f9c01f2102a916f8",
+          "method": "unicode_line_anchor",
+          "locator": "DEV-002-S004:L001",
+          "quote": "Diabetes medication follow-up",
+          "start": 0,
+          "end": 29,
+          "raw_value": null,
+          "original_locator": null
+        },
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S004",
+          "source_sha256": "6328c216f6551c68322b17cb975c59aabec2c0bb25782975f9c01f2102a916f8",
+          "method": "unicode_line_anchor",
+          "locator": "DEV-002-S004:L002",
+          "quote": "The patient has established type 2 diabetes. The previously prescribed adjustment of the glucose-lowering regimen was started on 2026-08-10; this was confirmed with the patient today. The prior HbA1c was collected on 2026-07-22. I am ordering another HbA1c for 2026-09-22 to assess response after this treatment change.",
+          "start": 30,
+          "end": 349,
+          "raw_value": null,
+          "original_locator": null
+        },
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S004",
+          "source_sha256": "6328c216f6551c68322b17cb975c59aabec2c0bb25782975f9c01f2102a916f8",
+          "method": "unicode_line_anchor",
+          "locator": "DEV-002-S004:L003",
+          "quote": "Electronically signed by Dr. Simulated Provider, 2026-09-15.",
+          "start": 350,
+          "end": 410,
+          "raw_value": null,
+          "original_locator": null
+        },
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S001",
+          "source_sha256": "5eeaf6f47c534c612c2ac69e45f49a18531535feef8ccc171d1dfa9f79fc9eda",
+          "method": "input_json_pointer",
+          "locator": "/sources/0/content/description",
+          "quote": null,
+          "start": null,
+          "end": null,
+          "raw_value": "Established type 2 diabetes mellitus",
+          "original_locator": null
+        },
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S001",
+          "source_sha256": "5eeaf6f47c534c612c2ac69e45f49a18531535feef8ccc171d1dfa9f79fc9eda",
+          "method": "input_json_pointer",
+          "locator": "/sources/0/content/status",
+          "quote": null,
+          "start": null,
+          "end": null,
+          "raw_value": "active",
+          "original_locator": null
+        },
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S001",
+          "source_sha256": "5eeaf6f47c534c612c2ac69e45f49a18531535feef8ccc171d1dfa9f79fc9eda",
+          "method": "input_json_pointer",
+          "locator": "/sources/0/content/date_role",
+          "quote": null,
+          "start": null,
+          "end": null,
+          "raw_value": "active_problem_review",
+          "original_locator": null
+        },
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S001",
+          "source_sha256": "5eeaf6f47c534c612c2ac69e45f49a18531535feef8ccc171d1dfa9f79fc9eda",
+          "method": "input_json_pointer",
+          "locator": "/sources/0/content/diagnosis_previously_established",
+          "quote": null,
+          "start": null,
+          "end": null,
+          "raw_value": true,
+          "original_locator": null
+        },
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S001",
+          "source_sha256": "5eeaf6f47c534c612c2ac69e45f49a18531535feef8ccc171d1dfa9f79fc9eda",
+          "method": "input_json_pointer",
+          "locator": "/sources/0/event_date",
+          "quote": null,
+          "start": null,
+          "end": null,
+          "raw_value": "2026-04-02",
+          "original_locator": null
+        }
+      ],
+      "policy_refs": [
+        {
+          "source_id": "CMS_NCD_190_21_V1",
+          "source_version": "1",
+          "official_url": "https://www.cms.gov/medicare-coverage-database/view/ncd.aspx?NCDid=100",
+          "locator": "Indications and Limitations of Coverage > Indications"
+        }
+      ],
+      "gaps": [],
+      "conflicts": [],
+      "derivation": {},
+      "evidence_complete": true
+    },
+    {
+      "criterion_id": "TEST_TIMELINE",
+      "criterion_role": "Project evidence-completeness check supporting date calculations; not an independent CMS coverage prerequisite",
+      "status": "SUPPORTED",
+      "reason": "Actual target/prior events and the declared complete synthetic window are traceable; this is not frequency compliance.",
+      "clinical_refs": [
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S002",
+          "source_sha256": "e6987e85198a488f6a9743a869748478f7d8f7fcc39ea58866cf1cff56d15cc6",
+          "method": "input_json_pointer",
+          "locator": "/sources/1/content/service_concept",
+          "quote": null,
+          "start": null,
+          "end": null,
+          "raw_value": "hba1c",
+          "original_locator": null
+        },
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S002",
+          "source_sha256": "e6987e85198a488f6a9743a869748478f7d8f7fcc39ea58866cf1cff56d15cc6",
+          "method": "input_json_pointer",
+          "locator": "/sources/1/content/description",
+          "quote": null,
+          "start": null,
+          "end": null,
+          "raw_value": "Hemoglobin A1c",
+          "original_locator": null
+        },
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S002",
+          "source_sha256": "e6987e85198a488f6a9743a869748478f7d8f7fcc39ea58866cf1cff56d15cc6",
+          "method": "input_json_pointer",
+          "locator": "/sources/1/content/value",
+          "quote": null,
+          "start": null,
+          "end": null,
+          "raw_value": 8.1,
+          "original_locator": null
+        },
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S002",
+          "source_sha256": "e6987e85198a488f6a9743a869748478f7d8f7fcc39ea58866cf1cff56d15cc6",
+          "method": "input_json_pointer",
+          "locator": "/sources/1/content/unit",
+          "quote": null,
+          "start": null,
+          "end": null,
+          "raw_value": "%",
+          "original_locator": null
+        },
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S002",
+          "source_sha256": "e6987e85198a488f6a9743a869748478f7d8f7fcc39ea58866cf1cff56d15cc6",
+          "method": "input_json_pointer",
+          "locator": "/sources/1/content/status",
+          "quote": null,
+          "start": null,
+          "end": null,
+          "raw_value": "final",
+          "original_locator": null
+        },
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S002",
+          "source_sha256": "e6987e85198a488f6a9743a869748478f7d8f7fcc39ea58866cf1cff56d15cc6",
+          "method": "input_json_pointer",
+          "locator": "/sources/1/event_date",
+          "quote": null,
+          "start": null,
+          "end": null,
+          "raw_value": "2026-07-22",
+          "original_locator": null
+        },
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S006",
+          "source_sha256": "21adbbbe049d6048ddff8fdbf6b7c19333cd6037e69adf36741070266370f6d5",
+          "method": "input_json_pointer",
+          "locator": "/sources/5/content/service_concept",
+          "quote": null,
+          "start": null,
+          "end": null,
+          "raw_value": "hba1c",
+          "original_locator": null
+        },
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S006",
+          "source_sha256": "21adbbbe049d6048ddff8fdbf6b7c19333cd6037e69adf36741070266370f6d5",
+          "method": "input_json_pointer",
+          "locator": "/sources/5/content/description",
+          "quote": null,
+          "start": null,
+          "end": null,
+          "raw_value": "Hemoglobin A1c",
+          "original_locator": null
+        },
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S006",
+          "source_sha256": "21adbbbe049d6048ddff8fdbf6b7c19333cd6037e69adf36741070266370f6d5",
+          "method": "input_json_pointer",
+          "locator": "/sources/5/content/value",
+          "quote": null,
+          "start": null,
+          "end": null,
+          "raw_value": 7.6,
+          "original_locator": null
+        },
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S006",
+          "source_sha256": "21adbbbe049d6048ddff8fdbf6b7c19333cd6037e69adf36741070266370f6d5",
+          "method": "input_json_pointer",
+          "locator": "/sources/5/content/unit",
+          "quote": null,
+          "start": null,
+          "end": null,
+          "raw_value": "%",
+          "original_locator": null
+        },
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S006",
+          "source_sha256": "21adbbbe049d6048ddff8fdbf6b7c19333cd6037e69adf36741070266370f6d5",
+          "method": "input_json_pointer",
+          "locator": "/sources/5/content/status",
+          "quote": null,
+          "start": null,
+          "end": null,
+          "raw_value": "final",
+          "original_locator": null
+        },
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S006",
+          "source_sha256": "21adbbbe049d6048ddff8fdbf6b7c19333cd6037e69adf36741070266370f6d5",
+          "method": "input_json_pointer",
+          "locator": "/sources/5/event_date",
+          "quote": null,
+          "start": null,
+          "end": null,
+          "raw_value": "2026-09-22",
+          "original_locator": null
+        }
+      ],
+      "policy_refs": [
+        {
+          "source_id": "CMS_NCD_190_21_V1",
+          "source_version": "1",
+          "official_url": "https://www.cms.gov/medicare-coverage-database/view/ncd.aspx?NCDid=100",
+          "locator": "Description and Limitations: frequency discussion"
+        }
+      ],
+      "gaps": [],
+      "conflicts": [],
+      "derivation": {
+        "counted_events": 2,
+        "history_scope": {
+          "as_of": "2026-10-08",
+          "history_start": "2026-04-01",
+          "history_end": "2026-09-22",
+          "history_completeness": "complete_within_constructed_case"
+        }
+      },
+      "evidence_complete": true
+    },
+    {
+      "criterion_id": "SHORT_INTERVAL_RATIONALE",
+      "criterion_role": "Conditional CMS clinical context plus a declared project review trigger",
+      "status": "SUPPORTED",
+      "reason": "An observed short interval and linked implemented clinical rationale are supported; no exception or payment adjudication is made.",
+      "clinical_refs": [
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S002",
+          "source_sha256": "e6987e85198a488f6a9743a869748478f7d8f7fcc39ea58866cf1cff56d15cc6",
+          "method": "input_json_pointer",
+          "locator": "/sources/1/content/service_concept",
+          "quote": null,
+          "start": null,
+          "end": null,
+          "raw_value": "hba1c",
+          "original_locator": null
+        },
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S002",
+          "source_sha256": "e6987e85198a488f6a9743a869748478f7d8f7fcc39ea58866cf1cff56d15cc6",
+          "method": "input_json_pointer",
+          "locator": "/sources/1/content/description",
+          "quote": null,
+          "start": null,
+          "end": null,
+          "raw_value": "Hemoglobin A1c",
+          "original_locator": null
+        },
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S002",
+          "source_sha256": "e6987e85198a488f6a9743a869748478f7d8f7fcc39ea58866cf1cff56d15cc6",
+          "method": "input_json_pointer",
+          "locator": "/sources/1/content/value",
+          "quote": null,
+          "start": null,
+          "end": null,
+          "raw_value": 8.1,
+          "original_locator": null
+        },
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S002",
+          "source_sha256": "e6987e85198a488f6a9743a869748478f7d8f7fcc39ea58866cf1cff56d15cc6",
+          "method": "input_json_pointer",
+          "locator": "/sources/1/content/unit",
+          "quote": null,
+          "start": null,
+          "end": null,
+          "raw_value": "%",
+          "original_locator": null
+        },
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S002",
+          "source_sha256": "e6987e85198a488f6a9743a869748478f7d8f7fcc39ea58866cf1cff56d15cc6",
+          "method": "input_json_pointer",
+          "locator": "/sources/1/content/status",
+          "quote": null,
+          "start": null,
+          "end": null,
+          "raw_value": "final",
+          "original_locator": null
+        },
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S002",
+          "source_sha256": "e6987e85198a488f6a9743a869748478f7d8f7fcc39ea58866cf1cff56d15cc6",
+          "method": "input_json_pointer",
+          "locator": "/sources/1/event_date",
+          "quote": null,
+          "start": null,
+          "end": null,
+          "raw_value": "2026-07-22",
+          "original_locator": null
+        },
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S006",
+          "source_sha256": "21adbbbe049d6048ddff8fdbf6b7c19333cd6037e69adf36741070266370f6d5",
+          "method": "input_json_pointer",
+          "locator": "/sources/5/content/service_concept",
+          "quote": null,
+          "start": null,
+          "end": null,
+          "raw_value": "hba1c",
+          "original_locator": null
+        },
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S006",
+          "source_sha256": "21adbbbe049d6048ddff8fdbf6b7c19333cd6037e69adf36741070266370f6d5",
+          "method": "input_json_pointer",
+          "locator": "/sources/5/content/description",
+          "quote": null,
+          "start": null,
+          "end": null,
+          "raw_value": "Hemoglobin A1c",
+          "original_locator": null
+        },
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S006",
+          "source_sha256": "21adbbbe049d6048ddff8fdbf6b7c19333cd6037e69adf36741070266370f6d5",
+          "method": "input_json_pointer",
+          "locator": "/sources/5/content/value",
+          "quote": null,
+          "start": null,
+          "end": null,
+          "raw_value": 7.6,
+          "original_locator": null
+        },
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S006",
+          "source_sha256": "21adbbbe049d6048ddff8fdbf6b7c19333cd6037e69adf36741070266370f6d5",
+          "method": "input_json_pointer",
+          "locator": "/sources/5/content/unit",
+          "quote": null,
+          "start": null,
+          "end": null,
+          "raw_value": "%",
+          "original_locator": null
+        },
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S006",
+          "source_sha256": "21adbbbe049d6048ddff8fdbf6b7c19333cd6037e69adf36741070266370f6d5",
+          "method": "input_json_pointer",
+          "locator": "/sources/5/content/status",
+          "quote": null,
+          "start": null,
+          "end": null,
+          "raw_value": "final",
+          "original_locator": null
+        },
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S006",
+          "source_sha256": "21adbbbe049d6048ddff8fdbf6b7c19333cd6037e69adf36741070266370f6d5",
+          "method": "input_json_pointer",
+          "locator": "/sources/5/event_date",
+          "quote": null,
+          "start": null,
+          "end": null,
+          "raw_value": "2026-09-22",
+          "original_locator": null
+        },
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S004",
+          "source_sha256": "6328c216f6551c68322b17cb975c59aabec2c0bb25782975f9c01f2102a916f8",
+          "method": "unicode_line_anchor",
+          "locator": "DEV-002-S004:L002",
+          "quote": "The patient has established type 2 diabetes. The previously prescribed adjustment of the glucose-lowering regimen was started on 2026-08-10; this was confirmed with the patient today. The prior HbA1c was collected on 2026-07-22. I am ordering another HbA1c for 2026-09-22 to assess response after this treatment change.",
+          "start": 30,
+          "end": 349,
+          "raw_value": null,
+          "original_locator": null
+        },
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S004",
+          "source_sha256": "6328c216f6551c68322b17cb975c59aabec2c0bb25782975f9c01f2102a916f8",
+          "method": "unicode_line_anchor",
+          "locator": "DEV-002-S004:L003",
+          "quote": "Electronically signed by Dr. Simulated Provider, 2026-09-15.",
+          "start": 350,
+          "end": 410,
+          "raw_value": null,
+          "original_locator": null
+        }
+      ],
+      "policy_refs": [
+        {
+          "source_id": "CMS_NCD_190_21_V1",
+          "source_version": "1",
+          "official_url": "https://www.cms.gov/medicare-coverage-database/view/ncd.aspx?NCDid=100",
+          "locator": "Description: more frequent assessment paragraph; Limitations: controlled/uncontrolled diabetes and supporting documentation"
+        }
+      ],
+      "gaps": [],
+      "conflicts": [],
+      "derivation": {
+        "comparisons": [
+          {
+            "event_key": "SYN-D2-HBA1C-PREV",
+            "prior": "2026-07-22",
+            "target": "2026-09-22",
+            "three_month_boundary": "2026-10-22",
+            "short": true
+          }
+        ],
+        "trigger": true
+      },
+      "evidence_complete": true
+    },
+    {
+      "criterion_id": "ORDER_INTENT",
+      "criterion_role": "General CMS lab documentation evidence; separate from the NCD-specific clinical indication",
+      "status": "SUPPORTED",
+      "reason": "A specific-test signed order or authenticated treating-provider record supports intent. A separate signed order is not mandatory.",
+      "clinical_refs": [
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S005",
+          "source_sha256": "8cf276bf96873e8cd4aa5bccc7f99e3bbd9295e088e792490240a9954486b4ff",
+          "method": "input_json_pointer",
+          "locator": "/sources/4/content/service_concept",
+          "quote": null,
+          "start": null,
+          "end": null,
+          "raw_value": "hba1c",
+          "original_locator": null
+        },
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S005",
+          "source_sha256": "8cf276bf96873e8cd4aa5bccc7f99e3bbd9295e088e792490240a9954486b4ff",
+          "method": "input_json_pointer",
+          "locator": "/sources/4/content/requested_service_date",
+          "quote": null,
+          "start": null,
+          "end": null,
+          "raw_value": "2026-09-22",
+          "original_locator": null
+        },
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S005",
+          "source_sha256": "8cf276bf96873e8cd4aa5bccc7f99e3bbd9295e088e792490240a9954486b4ff",
+          "method": "input_json_pointer",
+          "locator": "/sources/4/content/purpose",
+          "quote": null,
+          "start": null,
+          "end": null,
+          "raw_value": "Monitor response after the treatment change",
+          "original_locator": null
+        },
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S005",
+          "source_sha256": "8cf276bf96873e8cd4aa5bccc7f99e3bbd9295e088e792490240a9954486b4ff",
+          "method": "input_json_pointer",
+          "locator": "/sources/4/content/order_status",
+          "quote": null,
+          "start": null,
+          "end": null,
+          "raw_value": "issued",
+          "original_locator": null
+        },
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S005",
+          "source_sha256": "8cf276bf96873e8cd4aa5bccc7f99e3bbd9295e088e792490240a9954486b4ff",
+          "method": "input_json_pointer",
+          "locator": "/sources/4/content/date_role",
+          "quote": null,
+          "start": null,
+          "end": null,
+          "raw_value": "order_issued",
+          "original_locator": null
+        },
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S005",
+          "source_sha256": "8cf276bf96873e8cd4aa5bccc7f99e3bbd9295e088e792490240a9954486b4ff",
+          "method": "input_json_pointer",
+          "locator": "/sources/4/content/authentication_status",
+          "quote": null,
+          "start": null,
+          "end": null,
+          "raw_value": "unsigned",
+          "original_locator": null
+        },
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S005",
+          "source_sha256": "8cf276bf96873e8cd4aa5bccc7f99e3bbd9295e088e792490240a9954486b4ff",
+          "method": "input_json_pointer",
+          "locator": "/sources/4/content/ordering_provider",
+          "quote": null,
+          "start": null,
+          "end": null,
+          "raw_value": "Dr. Simulated Provider",
+          "original_locator": null
+        },
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S005",
+          "source_sha256": "8cf276bf96873e8cd4aa5bccc7f99e3bbd9295e088e792490240a9954486b4ff",
+          "method": "input_json_pointer",
+          "locator": "/sources/4/content/signed_at",
+          "quote": null,
+          "start": null,
+          "end": null,
+          "raw_value": null,
+          "original_locator": null
+        },
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S005",
+          "source_sha256": "8cf276bf96873e8cd4aa5bccc7f99e3bbd9295e088e792490240a9954486b4ff",
+          "method": "input_json_pointer",
+          "locator": "/sources/4/event_date",
+          "quote": null,
+          "start": null,
+          "end": null,
+          "raw_value": "2026-09-15",
+          "original_locator": null
+        },
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S004",
+          "source_sha256": "6328c216f6551c68322b17cb975c59aabec2c0bb25782975f9c01f2102a916f8",
+          "method": "unicode_line_anchor",
+          "locator": "DEV-002-S004:L002",
+          "quote": "The patient has established type 2 diabetes. The previously prescribed adjustment of the glucose-lowering regimen was started on 2026-08-10; this was confirmed with the patient today. The prior HbA1c was collected on 2026-07-22. I am ordering another HbA1c for 2026-09-22 to assess response after this treatment change.",
+          "start": 30,
+          "end": 349,
+          "raw_value": null,
+          "original_locator": null
+        },
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S004",
+          "source_sha256": "6328c216f6551c68322b17cb975c59aabec2c0bb25782975f9c01f2102a916f8",
+          "method": "unicode_line_anchor",
+          "locator": "DEV-002-S004:L003",
+          "quote": "Electronically signed by Dr. Simulated Provider, 2026-09-15.",
+          "start": 350,
+          "end": 410,
+          "raw_value": null,
+          "original_locator": null
+        }
+      ],
+      "policy_refs": [
+        {
+          "source_id": "CMS_MLN909221_2026_05",
+          "source_version": "2026-05",
+          "official_url": "https://www.cms.gov/files/document/mln909221-complying-documentation-requirements-lab-services.pdf",
+          "locator": "PDF page 2: order documentation alternatives; page 3: documented intent"
+        }
+      ],
+      "gaps": [],
+      "conflicts": [],
+      "derivation": {},
+      "evidence_complete": true
+    }
+  ],
+  "timeline": [
+    {
+      "event_key": "SYN-D2-HBA1C-PREV",
+      "source_ids": [
+        "DEV-002-S002"
+      ],
+      "dates": [
+        "2026-07-22"
+      ],
+      "date_unknown": false,
+      "identity_explicit": true,
+      "citations": [
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S002",
+          "source_sha256": "e6987e85198a488f6a9743a869748478f7d8f7fcc39ea58866cf1cff56d15cc6",
+          "method": "input_json_pointer",
+          "locator": "/sources/1/content/service_concept",
+          "quote": null,
+          "start": null,
+          "end": null,
+          "raw_value": "hba1c",
+          "original_locator": null
+        },
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S002",
+          "source_sha256": "e6987e85198a488f6a9743a869748478f7d8f7fcc39ea58866cf1cff56d15cc6",
+          "method": "input_json_pointer",
+          "locator": "/sources/1/content/description",
+          "quote": null,
+          "start": null,
+          "end": null,
+          "raw_value": "Hemoglobin A1c",
+          "original_locator": null
+        },
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S002",
+          "source_sha256": "e6987e85198a488f6a9743a869748478f7d8f7fcc39ea58866cf1cff56d15cc6",
+          "method": "input_json_pointer",
+          "locator": "/sources/1/content/value",
+          "quote": null,
+          "start": null,
+          "end": null,
+          "raw_value": 8.1,
+          "original_locator": null
+        },
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S002",
+          "source_sha256": "e6987e85198a488f6a9743a869748478f7d8f7fcc39ea58866cf1cff56d15cc6",
+          "method": "input_json_pointer",
+          "locator": "/sources/1/content/unit",
+          "quote": null,
+          "start": null,
+          "end": null,
+          "raw_value": "%",
+          "original_locator": null
+        },
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S002",
+          "source_sha256": "e6987e85198a488f6a9743a869748478f7d8f7fcc39ea58866cf1cff56d15cc6",
+          "method": "input_json_pointer",
+          "locator": "/sources/1/content/status",
+          "quote": null,
+          "start": null,
+          "end": null,
+          "raw_value": "final",
+          "original_locator": null
+        },
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S002",
+          "source_sha256": "e6987e85198a488f6a9743a869748478f7d8f7fcc39ea58866cf1cff56d15cc6",
+          "method": "input_json_pointer",
+          "locator": "/sources/1/event_date",
+          "quote": null,
+          "start": null,
+          "end": null,
+          "raw_value": "2026-07-22",
+          "original_locator": null
+        }
+      ],
+      "conflicted": false,
+      "counted_as_tests": 1
+    },
+    {
+      "event_key": "SYN-D2-HBA1C-CURRENT",
+      "source_ids": [
+        "DEV-002-S006"
+      ],
+      "dates": [
+        "2026-09-22"
+      ],
+      "date_unknown": false,
+      "identity_explicit": true,
+      "citations": [
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S006",
+          "source_sha256": "21adbbbe049d6048ddff8fdbf6b7c19333cd6037e69adf36741070266370f6d5",
+          "method": "input_json_pointer",
+          "locator": "/sources/5/content/service_concept",
+          "quote": null,
+          "start": null,
+          "end": null,
+          "raw_value": "hba1c",
+          "original_locator": null
+        },
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S006",
+          "source_sha256": "21adbbbe049d6048ddff8fdbf6b7c19333cd6037e69adf36741070266370f6d5",
+          "method": "input_json_pointer",
+          "locator": "/sources/5/content/description",
+          "quote": null,
+          "start": null,
+          "end": null,
+          "raw_value": "Hemoglobin A1c",
+          "original_locator": null
+        },
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S006",
+          "source_sha256": "21adbbbe049d6048ddff8fdbf6b7c19333cd6037e69adf36741070266370f6d5",
+          "method": "input_json_pointer",
+          "locator": "/sources/5/content/value",
+          "quote": null,
+          "start": null,
+          "end": null,
+          "raw_value": 7.6,
+          "original_locator": null
+        },
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S006",
+          "source_sha256": "21adbbbe049d6048ddff8fdbf6b7c19333cd6037e69adf36741070266370f6d5",
+          "method": "input_json_pointer",
+          "locator": "/sources/5/content/unit",
+          "quote": null,
+          "start": null,
+          "end": null,
+          "raw_value": "%",
+          "original_locator": null
+        },
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S006",
+          "source_sha256": "21adbbbe049d6048ddff8fdbf6b7c19333cd6037e69adf36741070266370f6d5",
+          "method": "input_json_pointer",
+          "locator": "/sources/5/content/status",
+          "quote": null,
+          "start": null,
+          "end": null,
+          "raw_value": "final",
+          "original_locator": null
+        },
+        {
+          "patient_id": "SYN-DEV-P002",
+          "source_id": "DEV-002-S006",
+          "source_sha256": "21adbbbe049d6048ddff8fdbf6b7c19333cd6037e69adf36741070266370f6d5",
+          "method": "input_json_pointer",
+          "locator": "/sources/5/event_date",
+          "quote": null,
+          "start": null,
+          "end": null,
+          "raw_value": "2026-09-22",
+          "original_locator": null
+        }
+      ],
+      "conflicted": false,
+      "counted_as_tests": 1
+    }
+  ],
+  "gaps": [],
+  "execution": {
+    "preparation": "completed",
+    "structured_facts": "completed",
+    "note_extraction": "completed",
+    "note_sources": [
+      {
+        "source_id": "DEV-002-S004",
+        "status": "completed",
+        "calls": 1,
+        "repairs": 0,
+        "prompt_sha256": "911776d434a3335ae31e242cb19ec9c3476d31b6b4b08fc8d7409f5b57b5f0da",
+        "schema_sha256": "19bc4f786d1f8af7fe0295333833ce49f0cafc77900ef4bf920f9b2f5d279c0f",
+        "proposal_sha256": "961ad67348b1f7c8247d429bcc87ef37c9c36cf0972b3110873896b78897618b"
+      }
+    ],
+    "policy_evaluation": "completed",
+    "execution_failed": false,
+    "actual_provider_calls": 1,
+    "usage": {
+      "provider": "codex_cli",
+      "model": "gpt-6-luna",
+      "settings": {
+        "provider": "codex_cli",
+        "model": "gpt-6-luna",
+        "reasoning_effort": "high",
+        "timeout_seconds": 180,
+        "cli_version": "codex-cli 0.159.3",
+        "sandbox": "read-only",
+        "tools": "disabled",
+        "ephemeral": true
+      },
+      "latency_seconds": 16.544712400063872,
+      "model_calls": 1,
+      "input_tokens": 18438,
+      "output_tokens": 1575,
+      "cached_tokens": 0,
+      "input_characters": null,
+      "call_metrics": [
+        {
+          "purpose": "claims_review_note_extraction",
+          "request_prompt_characters": 3997,
+          "output_schema_characters": 2041,
+          "status": "completed",
+          "started_at": "2026-10-09T03:58:43.788880+00:00",
+          "model_call_seconds": 16.527433300041594,
+          "ended_at": "2026-10-09T03:59:00.316062+00:00",
+          "tokens": {
+            "input_tokens": 18438,
+            "cached_input_tokens": 0,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 1575,
+            "reasoning_output_tokens": 941
+          },
+          "response_characters": 2373
+        }
+      ],
+      "parse_failures": 0,
+      "retry_count": 0,
+      "claim_counts": {},
+      "cost_usd": null,
+      "cost_basis": "Codex subscription: actual billed cost unavailable"
+    },
+    "cache_enabled": false,
+    "application_cache_hit": false,
+    "backend_model_snapshot": "unavailable",
+    "uses_expected": false
+  },
+  "identity": {
+    "baseline_commit": "54553dd36095d4d2047f30d66747031a75ecafa5",
+    "rule_version": "claims-review-rules/2",
+    "policy_version": "0.1.0-draft-ai-20261008",
+    "policy_sha256": "8b05df5b5e40bb27bf5e2350c43a1c7014557925b26593bc0eb0f0f9cc03073f",
+    "runtime_sha256": {
+      "cli.py": "f86f847ef60637630d043464870e985f729393833669446b88e9f32a31e05dc4",
+      "contracts.py": "9daf9df61fecde03f09d1e02f89f30170db61b6a296d3a7bf2d36f254b6e6afb",
+      "facts.py": "cadf16472f8438e31fbfa1db00b1ec0826190350558738e8ef49e6f82d359657",
+      "note_extractor.py": "2fe35bce1b69ff7331ac9dd0bc91eb37d25a12b483ce4a1fb665d1d0a54a3f56",
+      "prepare.py": "8f32389b621d9072aa062de6add17edc12623c9e044d2208da031cac7beabea5",
+      "review.py": "fa5255569bc634c50e9796ce2944cd369f656513c766075543c8bfea25945c29",
+      "__init__.py": "b565cc2a2079e24d397c6105b54d2218e651890aa0d5e7196bb1430dd822e4f9",
+      "__main__.py": "bd045ddd5242d002f692dac452be9afba38deef5cde541a5fc074bfef5987b91",
+      "provider.py": "0460068119f42988f74ee666317c8c03249dc4817c2ad07457cff748a9dc5e9e"
+    },
+    "input_sha256": "0aaca86d8547bb14ee14a250c15d4450f6c052c8ea427511d3e4ab50562f0b04",
+    "review_input_sha256": "115aeb6129ac37ad52b3abe9950c9485bf4f73c0b4d4f814834fb43ce3eb22cd"
+  },
+  "policy_review_status": "draft_ai_reviewed",
+  "human_review_completed": false,
+  "clinical_expert_review_completed": false,
+  "decision_boundary": "Evidence review only; no approval, denial, payment, or medical-necessity adjudication."
+}
