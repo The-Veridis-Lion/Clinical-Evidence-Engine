@@ -12,6 +12,7 @@ from .note_extractor import BudgetLedger, BudgetedProvider
 from .retrieval import RetrievalQuery, retrieve, download, VERSION as RETRIEVAL_VERSION
 from .prepare import digest
 from datetime import date
+from .archive_verification import verify_archive, VERSION as VERIFICATION_VERSION
 
 
 def live_provider(args):
@@ -57,6 +58,7 @@ def main(argv=None):
     discovery.add_argument('--output',type=Path,required=True)
     run=commands.add_parser('run');inputs=run.add_mutually_exclusive_group(required=True)
     inputs.add_argument('--case',type=Path);inputs.add_argument('--retrieval',type=Path)
+    run.add_argument('--verify-archive',type=Path,help='Reopen this original ZIP and verify every supplied clinical CSV source before review.')
     run.add_argument('--mode',choices=['structured-only','live'],default='structured-only')
     run.add_argument('--format',choices=['json','markdown','summary'],default='json');run.add_argument('--output',type=Path)
     run.add_argument('--model',default='gpt-6-luna');run.add_argument('--reasoning',default='high',choices=['none','low','medium','high','xhigh','max'])
@@ -68,7 +70,7 @@ def main(argv=None):
     render.add_argument('--format',choices=['json','markdown','summary'],default='markdown');render.add_argument('--output',type=Path)
     args=parser.parse_args(argv);stage='input'
     input_path=getattr(args,'case',None) or getattr(args,'packet',None) or getattr(args,'query',None) or getattr(args,'retrieval',None)
-    protected=[p for p in [input_path,getattr(args,'archive',None),getattr(args,'metadata',None)] if p is not None]
+    protected=[p for p in [input_path,getattr(args,'archive',None),getattr(args,'metadata',None),getattr(args,'verify_archive',None)] if p is not None]
     if args.output is not None and any(args.output.resolve()==p.resolve() for p in protected):
         print('Output must not overwrite the source input.',file=sys.stderr);return 1
     try:
@@ -82,12 +84,18 @@ def main(argv=None):
         if args.command=='render':
             stage='packet_validation';packet=ReviewPacket.model_validate_json(args.packet.read_text(encoding='utf-8'))
         else:
-            retrieved=None
+            retrieved=None;verification=None
+            if getattr(args,'verify_archive',None) and not getattr(args,'retrieval',None):
+                raise ValueError('--verify-archive requires --retrieval')
             if getattr(args,'retrieval',None):
                 retrieved=json.loads(args.retrieval.read_text(encoding='utf-8'))
                 case=CaseInput.model_validate_json(json.dumps(retrieved['case']))
                 if retrieved['version']!=RETRIEVAL_VERSION or retrieved['case_sha256']!=digest(case.model_dump(mode='json')):
                     raise ValueError('Saved retrieval version or case identity mismatch')
+                stage='archive_verification'
+                verification=verify_archive(retrieved,args.verify_archive) if args.verify_archive else {
+                    'version':VERIFICATION_VERSION,'mode':'lightweight_replay',
+                    'original_archive_reverified':False,'status':'Original archive not reverified; internal case digest only.'}
             else:case=CaseInput.model_validate_json(args.case.read_text(encoding='utf-8'))
             if args.command=='prepare':
                 stage='preparation';value=prepare_case(case,load_policy(),input_label=str(args.case))
@@ -96,6 +104,7 @@ def main(argv=None):
             stage='review';packet=run_review(case,mode=args.mode,provider=provider,usage=usage,input_label=str(input_path),requested_policy=args.policy_version)
             if retrieved:
                 packet.execution['retrieval']={k:retrieved[k] for k in ['version','archive','case_sha256','matched_source_ids','latency_seconds','scope']}
+                packet.execution['archive_verification']=verification
         stage='save';text=concise_markdown(packet) if args.format=='summary' else markdown(packet) if args.format=='markdown' else packet.model_dump_json(indent=2)+'\n'
         write_output(args.output,text)
         return int(packet.execution['execution_failed'])
