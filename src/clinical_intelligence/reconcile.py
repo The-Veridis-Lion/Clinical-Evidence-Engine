@@ -10,7 +10,7 @@ from .domain import (Assessment, AssessmentClaim, CalculationTrace, ClinicalObse
                      THERAPY_TYPES, TimeInterval, TreatmentPlan, Uncertainty)
 from .temporal import treatment_minutes
 
-POLICY_VERSION = "4"
+POLICY_VERSION = "8"
 
 
 def stable_id(*values) -> str:
@@ -156,11 +156,15 @@ def _event(group: list[ServiceClaim], relationships: list[CorrectionRelationship
 
     # Rejected schedule/copy metadata must not override authoritative dates or types.
     identity_sources = active or group
-    dates = sorted({c.service_date for c in identity_sources})
-    types = sorted({c.service_type for c in identity_sources})
-    if len(dates) != 1:
+    dates = sorted({c.service_date for c in identity_sources if c.service_date is not None})
+    types = sorted({c.service_type for c in identity_sources if c.service_type is not None})
+    if not dates:
+        uncertainties.append(Uncertainty(subject_id=event_id,claim_ids=ids,explanation='No source service date is established.',needed_evidence='A service date linked to this encounter'))
+    elif len(dates) != 1:
         conflicts.append(_conflict(event_id, "service_date", dates, [c.claim_id for c in identity_sources], "Authoritative linked sources disagree on service date; temporal attribution is unresolved."))
-    if len(types) != 1:
+    if not types:
+        uncertainties.append(Uncertainty(subject_id=event_id,claim_ids=ids,explanation='No source service category is established.',needed_evidence='A service category linked to this encounter'))
+    elif len(types) != 1:
         conflicts.append(_conflict(event_id, "service_type", types, [c.claim_id for c in identity_sources], "Authoritative linked sources disagree on service type; attribution is unresolved."))
 
     presence_values = {c.patient_present for c in active if c.patient_present is not None}
@@ -223,7 +227,7 @@ def _event(group: list[ServiceClaim], relationships: list[CorrectionRelationship
                                    "Source-specific corrections leave incompatible patient-presence claims."))
 
     # Eligibility can be certain even when the event's exact duration is conflicted.
-    therapy_possible = any(t in THERAPY_TYPES for t in types)
+    therapy_possible = not types or any(t in THERAPY_TYPES for t in types)
     therapy_certain = bool(types) and all(t in THERAPY_TYPES for t in types)
     prospective_only = not active and all(c.evidence_kind in {EvidenceKind.SCHEDULE, EvidenceKind.DRAFT, EvidenceKind.BILLING} for c in group)
     if prospective_only:
@@ -297,6 +301,7 @@ def reconcile(extractions: list[DocumentExtraction], policy: str = "explicit") -
                                       explanation="Correction target constraints do not identify a service source.",
                                       needed_evidence="Consistent document, encounter and service-date references")
                           for r in relationships if r.relation == "corrects" and r.signed
+                          and r.field != 'plan'
                           and not any(_matches_service_target(r, source, refs) for source in services)]
 
     # Equivalent signed plan claims share one requirement while retaining every source.
@@ -332,34 +337,41 @@ def reconcile(extractions: list[DocumentExtraction], policy: str = "explicit") -
                 conflicts.append(_conflict(p.plan_id, "applicable_plan", [p.plan_id, q.plan_id], p.claim_ids + q.claim_ids,
                                            "Signed plan intervals overlap; no explicit relationship establishes precedence."))
 
+    # Patient name and the explicit patient role identify the same known person.
+    # Preserve raw speakers/experiencers in source claims; never normalize partner
+    # or clinician roles into the patient.
+    patient=extractions[0].patient
+    def experiencer_identity(value):
+        return patient.patient_id if value.casefold() in {'patient','the patient',patient.patient_id.casefold(),(patient.name or '').casefold()} else value.casefold()
     # Explicit form reference links copied summaries to their original completion date.
     assessment_claims = [c for c in claims if isinstance(c, AssessmentClaim)]
     form_dates = defaultdict(set)
     for c in assessment_claims:
-        if c.form_ref:
-            form_dates[(c.instrument.casefold(), c.form_ref, c.experiencer.casefold())].add(c.assessment_date)
+        if c.form_ref and c.assessment_date is not None:
+            form_dates[(c.instrument.casefold(), c.form_ref, experiencer_identity(c.experiencer))].add(c.assessment_date)
     by_identity = defaultdict(list)
     for c in assessment_claims:
-        key = (c.instrument.casefold(), c.form_ref or str(c.assessment_date), c.experiencer.casefold())
-        if not c.form_ref:
+        key = (c.instrument.casefold(), c.form_ref or (str(c.assessment_date) if c.assessment_date else c.claim_id), experiencer_identity(c.experiencer))
+        if not c.form_ref and c.assessment_date is not None:
             matching = [k for k, dates in form_dates.items() if k[0] == key[0] and k[2] == key[2] and c.assessment_date in dates]
             if len(matching) == 1:
                 key = matching[0]
         by_identity[key].append(c)
     assessments = []
     for key, group in by_identity.items():
-        scores = sorted({c.score for c in group})
-        dates = sorted({c.assessment_date for c in group})
+        scores = sorted({c.score for c in group if c.score is not None})
+        dates = sorted({c.assessment_date for c in group if c.assessment_date is not None})
         aid = stable_id(extractions[0].patient.patient_id, key)
         # A shared form ID does not resolve incompatible scores or completion dates.
-        state = State.CONFLICTED if len(scores) > 1 or len(dates) > 1 else State.RESOLVED
+        state = (State.CONFLICTED if len(scores) > 1 or len(dates) > 1 else
+                 State.INSUFFICIENT if not scores or not dates else State.RESOLVED)
         if state == State.CONFLICTED:
             conflicts.append(_conflict(aid, "assessment", [f"{c.assessment_date}:{c.score}" for c in group], [c.claim_id for c in group],
                                        "One assessment identity has incompatible score/completion-date claims."))
         assessments.append(Assessment(assessment_id=aid, patient_id=group[0].patient_id, instrument=group[0].instrument,
                                       assessment_date=dates[0] if len(dates) == 1 else None, date_options=dates,
                                       form_ref=next((c.form_ref for c in group if c.form_ref), None),
-                                      experiencer=group[0].experiencer, reporters=sorted({c.reporter for c in group}),
+                                      experiencer=(patient.name or patient.patient_id) if key[2]==patient.patient_id else group[0].experiencer, reporters=sorted({c.reporter for c in group}),
                                       score_options=scores, state=state, claim_ids=[c.claim_id for c in group],
                                       decisions=[ReconciliationDecision(rule="assessment_identity", claim_ids=[c.claim_id for c in group],
                                                                        explanation="Group by explicit form identity, or patient/instrument/completion date when form ID is absent; receipt/review is not a new questionnaire.")]))

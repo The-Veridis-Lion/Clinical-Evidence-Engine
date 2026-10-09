@@ -246,5 +246,24 @@ def test_process_cli_requests_ten_independent_extractors(tmp_path, monkeypatch, 
         assert len(made) == 2
         return {"failed": 0}
     monkeypatch.setattr(cli, "process", inspect_process)
-    assert cli.main(["--db", str(tmp_path / "cli.sqlite"), "process", "--input", str(path)]) == 0
+    assert cli.main(["--db", str(tmp_path / "cli.sqlite"), "process", "--input", str(path),"--extractor","baseline","--workers","10"]) == 0
     assert json.loads(capsys.readouterr().out) == {"failed": 0}
+
+
+def test_optimized_cli_parameters_reach_each_independent_extractor(tmp_path,monkeypatch):
+    from clinical_intelligence import cli, provider, luna_candidates
+    path=source(tmp_path);made=[]
+    class FixedExtractor:
+        def __init__(self,model,configuration):
+            self.model=model;self.configuration=configuration;made.append(self)
+    monkeypatch.setattr(provider,'CodexCLIProvider',lambda config:config)
+    monkeypatch.setattr(luna_candidates,'CandidateExtractor',FixedExtractor)
+    def inspect_process(store,paths,extractor,progress,*,max_workers,extractor_factory):
+        second=extractor_factory()
+        assert max_workers==2 and second is not extractor
+        assert all(e.model.reasoning_effort==e.configuration['reasoning']=='medium' and e.model.timeout_seconds==60 for e in made)
+        assert all(e.configuration['flow']=='clinical_partition' for e in made)
+        return {'failed':0}
+    monkeypatch.setattr(cli,'process',inspect_process)
+    assert cli.main(['--db',str(tmp_path/'cli.sqlite'),'process','--input',str(path),
+                     '--reasoning','medium','--timeout','60','--workers','2'])==0

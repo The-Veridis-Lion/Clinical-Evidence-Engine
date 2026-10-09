@@ -1,0 +1,371 @@
+[
+  {
+    "id": "letter",
+    "split": "sealed",
+    "group": "letter",
+    "family": "narrative_letter",
+    "source": "new_synthetic",
+    "text": "MRN: SYN-LETTER | Patient: Letter Example | DOB: 1984-03-17\nDocument ID: DOC-LETTER\nFinal signed correspondence, July 2, 2026\nI certify the family therapy encounter TEST-E1. Although the partner arrived earlier, the patient's therapeutic participation began at 16:07 and ended at 16:39. I recorded 32 minutes of patient therapy.\n",
+    "patient": {
+      "patient_id": "SYN-LETTER",
+      "name": "Letter Example",
+      "dob": "1984-03-17"
+    },
+    "declared_id": "DOC-LETTER",
+    "facts": [
+      {
+        "kind": "service",
+        "encounter_ref": "TEST-E1",
+        "appointment_ref": null,
+        "service_date": "2026-07-02",
+        "service_type": "family",
+        "evidence_kind": "clinical",
+        "signed": true,
+        "patient_present": true,
+        "delivered": true,
+        "actual_intervals": [
+          {
+            "start": "16:07",
+            "end": "16:39"
+          }
+        ],
+        "scheduled_intervals": [],
+        "unspecified_intervals": [],
+        "breaks": [],
+        "reported_minutes": 32
+      }
+    ],
+    "exhaustive": true
+  },
+  {
+    "id": "twovisits",
+    "split": "sealed",
+    "group": "twovisits",
+    "family": "two_same_day_visits",
+    "source": "new_synthetic",
+    "text": "MRN: SYN-TWOVISITS | Patient: Twovisits Example | DOB: 1984-03-17\nDocument ID: DOC-TWOVISITS\nJuly 3, 2026 / Final signed individual psychotherapy logs\nTEST-E2 -- patient contact 09:05 to 09:25, 20 minutes.\nTEST-E3 -- a separate appointment, patient contact 11:10 to 11:35, 25 minutes.\n",
+    "patient": {
+      "patient_id": "SYN-TWOVISITS",
+      "name": "Twovisits Example",
+      "dob": "1984-03-17"
+    },
+    "declared_id": "DOC-TWOVISITS",
+    "facts": [
+      {
+        "kind": "service",
+        "encounter_ref": "TEST-E2",
+        "appointment_ref": null,
+        "service_date": "2026-07-03",
+        "service_type": "individual",
+        "evidence_kind": "clinical",
+        "signed": true,
+        "patient_present": true,
+        "delivered": true,
+        "actual_intervals": [
+          {
+            "start": "09:05",
+            "end": "09:25"
+          }
+        ],
+        "scheduled_intervals": [],
+        "unspecified_intervals": [],
+        "breaks": [],
+        "reported_minutes": 20
+      },
+      {
+        "kind": "service",
+        "encounter_ref": "TEST-E3",
+        "appointment_ref": null,
+        "service_date": "2026-07-03",
+        "service_type": "individual",
+        "evidence_kind": "clinical",
+        "signed": true,
+        "patient_present": true,
+        "delivered": true,
+        "actual_intervals": [
+          {
+            "start": "11:10",
+            "end": "11:35"
+          }
+        ],
+        "scheduled_intervals": [],
+        "unspecified_intervals": [],
+        "breaks": [],
+        "reported_minutes": 25
+      }
+    ],
+    "exhaustive": true
+  },
+  {
+    "id": "vertical",
+    "split": "sealed",
+    "group": "vertical",
+    "family": "vertical_roster",
+    "source": "new_synthetic",
+    "text": "MRN: SYN-VERTICAL | Patient: Vertical Example | DOB: 1984-03-17\nDocument ID: DOC-VERTICAL\nFinal signed attendance\nDate = July 6, 2026\nEncounter = TEST-E4\nService = group psychotherapy\nPatient arrived = 10:06\nPatient departed = 11:02\nStatus = attended, treatment delivered\n",
+    "patient": {
+      "patient_id": "SYN-VERTICAL",
+      "name": "Vertical Example",
+      "dob": "1984-03-17"
+    },
+    "declared_id": "DOC-VERTICAL",
+    "facts": [
+      {
+        "kind": "service",
+        "encounter_ref": "TEST-E4",
+        "appointment_ref": null,
+        "service_date": "2026-07-06",
+        "service_type": "group",
+        "evidence_kind": "attendance",
+        "signed": true,
+        "patient_present": true,
+        "delivered": true,
+        "actual_intervals": [
+          {
+            "start": "10:06",
+            "end": "11:02"
+          }
+        ],
+        "scheduled_intervals": [],
+        "unspecified_intervals": [],
+        "breaks": [],
+        "reported_minutes": null
+      }
+    ],
+    "exhaustive": true
+  },
+  {
+    "id": "cancelphone",
+    "split": "sealed",
+    "group": "cancelphone",
+    "family": "previsit_cancel",
+    "source": "new_synthetic",
+    "text": "MRN: SYN-CANCELPHONE | Patient: Cancelphone Example | DOB: 1984-03-17\nDocument ID: DOC-CANCELPHONE\nDesk log, unsigned, July 7, 2026\nIndividual appointment TEST-E5 reserved 15:00 to 15:45. Cancelled by patient before the start. Administrative phone message only; patient never attended and no therapeutic service occurred.\n",
+    "patient": {
+      "patient_id": "SYN-CANCELPHONE",
+      "name": "Cancelphone Example",
+      "dob": "1984-03-17"
+    },
+    "declared_id": "DOC-CANCELPHONE",
+    "facts": [
+      {
+        "kind": "service",
+        "encounter_ref": "TEST-E5",
+        "appointment_ref": null,
+        "service_date": "2026-07-07",
+        "service_type": "individual",
+        "evidence_kind": "schedule",
+        "signed": false,
+        "patient_present": false,
+        "delivered": false,
+        "actual_intervals": [],
+        "scheduled_intervals": [
+          {
+            "start": "15:00",
+            "end": "15:45"
+          }
+        ],
+        "unspecified_intervals": [],
+        "breaks": [],
+        "reported_minutes": null
+      }
+    ],
+    "exhaustive": true
+  },
+  {
+    "id": "erratum",
+    "split": "sealed",
+    "group": "erratum",
+    "family": "duration_erratum",
+    "source": "new_synthetic",
+    "text": "MRN: SYN-ERRATUM | Patient: Erratum Example | DOB: 1984-03-17\nDocument ID: DOC-ERRATUM\nFinal signed erratum dated July 9, 2026\nFor the July 8 encounter TEST-E6 recorded in ORIGINAL-D6, replace the stated completed patient therapy duration with 28 minutes. This corrects only minutes and records no new service.\n",
+    "patient": {
+      "patient_id": "SYN-ERRATUM",
+      "name": "Erratum Example",
+      "dob": "1984-03-17"
+    },
+    "declared_id": "DOC-ERRATUM",
+    "facts": [
+      {
+        "kind": "relationship",
+        "relation": "corrects",
+        "signed": true,
+        "target_encounter": "TEST-E6",
+        "target_document_ref": "ORIGINAL-D6",
+        "target_plan_ref": null,
+        "field": "minutes",
+        "replacement_time": null,
+        "replacement_minutes": 28,
+        "replacement_presence": null,
+        "original_time": null,
+        "service_date": "2026-07-08"
+      }
+    ],
+    "exhaustive": true
+  },
+  {
+    "id": "envelope",
+    "split": "sealed",
+    "group": "envelope",
+    "family": "measurement_envelope",
+    "source": "new_synthetic",
+    "text": "MRN: SYN-ENVELOPE | Patient: Envelope Example | DOB: 1984-03-17\nDocument ID: DOC-ENVELOPE\nScanned envelope received July 14, 2026\nEnclosed original questionnaire: GAD-7, self-completed by Envelope Example July 10, 2026, score nine. The original has no form identifier. Filing occurred July 14 and is not a new completion or treatment encounter.\n",
+    "patient": {
+      "patient_id": "SYN-ENVELOPE",
+      "name": "Envelope Example",
+      "dob": "1984-03-17"
+    },
+    "declared_id": "DOC-ENVELOPE",
+    "facts": [
+      {
+        "kind": "assessment",
+        "instrument": "GAD-7",
+        "assessment_date": "2026-07-10",
+        "form_ref": null,
+        "score": 9,
+        "reporter": "Envelope Example",
+        "experiencer": "Envelope Example",
+        "copied": false
+      }
+    ],
+    "exhaustive": true
+  },
+  {
+    "id": "negation",
+    "split": "sealed",
+    "group": "negation",
+    "family": "quoted_parent_report",
+    "source": "new_synthetic",
+    "text": "MRN: SYN-NEGATION | Patient: Negation Example | DOB: 1984-03-17\nDocument ID: DOC-NEGATION\nJuly 15, 2026 / Parent statement\nParent says: \"Negation Example has no suicidal thoughts, but Negation Example is still losing sleep.\" No visit or therapy is documented.\n",
+    "patient": {
+      "patient_id": "SYN-NEGATION",
+      "name": "Negation Example",
+      "dob": "1984-03-17"
+    },
+    "declared_id": "DOC-NEGATION",
+    "facts": [
+      {
+        "kind": "observation",
+        "observation_date": "2026-07-15",
+        "category": "safety",
+        "reporter": "Parent",
+        "experiencer": "Negation Example",
+        "polarity": "absent",
+        "temporality": "current",
+        "keywords": [
+          "suicid"
+        ]
+      },
+      {
+        "kind": "observation",
+        "observation_date": "2026-07-15",
+        "category": "symptom",
+        "reporter": "Parent",
+        "experiencer": "Negation Example",
+        "polarity": "present",
+        "temporality": "current",
+        "keywords": [
+          "sleep"
+        ]
+      }
+    ],
+    "exhaustive": true
+  },
+  {
+    "id": "unfinalized",
+    "split": "sealed",
+    "group": "unfinalized",
+    "family": "unsigned_ambiguous_template",
+    "source": "new_synthetic",
+    "text": "MRN: SYN-UNFINALIZED | Patient: Unfinalized Example | DOB: 1984-03-17\nDocument ID: DOC-UNFINALIZED\nUnsigned draft for individual appointment TEST-E8 on July 16, 2026, booked 12:00 to 12:45. Attendance field and clinical content are blank. There is no evidence establishing whether patient contact occurred.\n",
+    "patient": {
+      "patient_id": "SYN-UNFINALIZED",
+      "name": "Unfinalized Example",
+      "dob": "1984-03-17"
+    },
+    "declared_id": "DOC-UNFINALIZED",
+    "facts": [
+      {
+        "kind": "service",
+        "encounter_ref": "TEST-E8",
+        "appointment_ref": null,
+        "service_date": "2026-07-16",
+        "service_type": "individual",
+        "evidence_kind": "draft",
+        "signed": false,
+        "patient_present": null,
+        "delivered": null,
+        "actual_intervals": [],
+        "scheduled_intervals": [
+          {
+            "start": "12:00",
+            "end": "12:45"
+          }
+        ],
+        "unspecified_intervals": [],
+        "breaks": [],
+        "reported_minutes": null
+      }
+    ],
+    "exhaustive": true
+  },
+  {
+    "id": "mailing",
+    "split": "sealed",
+    "group": "mailing",
+    "family": "mailing_metadata",
+    "source": "new_synthetic",
+    "text": "MRN: SYN-MAILING | Patient: Mailing Example | DOB: 1984-03-17\nDocument ID: DOC-MAILING\nClerical update July 17, 2026: mailing preference changed to electronic delivery. No service, symptoms, assessment, treatment plan or clinical action is described.\n",
+    "patient": {
+      "patient_id": "SYN-MAILING",
+      "name": "Mailing Example",
+      "dob": "1984-03-17"
+    },
+    "declared_id": "DOC-MAILING",
+    "facts": [],
+    "exhaustive": true
+  },
+  {
+    "id": "equipment",
+    "split": "sealed",
+    "group": "equipment",
+    "family": "mechanical_pause",
+    "source": "new_synthetic",
+    "text": "MRN: SYN-EQUIPMENT | Patient: Equipment Example | DOB: 1984-03-17\nDocument ID: DOC-EQUIPMENT\nFinal signed group log, July 20, 2026\nTEST-E10: patient treatment/presence 09:00 to 09:40. Equipment repair paused all treatment 09:12 to 09:16. No intervention, discussion or therapeutic activity was conducted in that pause.\n",
+    "patient": {
+      "patient_id": "SYN-EQUIPMENT",
+      "name": "Equipment Example",
+      "dob": "1984-03-17"
+    },
+    "declared_id": "DOC-EQUIPMENT",
+    "facts": [
+      {
+        "kind": "service",
+        "encounter_ref": "TEST-E10",
+        "appointment_ref": null,
+        "service_date": "2026-07-20",
+        "service_type": "group",
+        "evidence_kind": "clinical",
+        "signed": true,
+        "patient_present": true,
+        "delivered": true,
+        "actual_intervals": [
+          {
+            "start": "09:00",
+            "end": "09:40"
+          }
+        ],
+        "scheduled_intervals": [],
+        "unspecified_intervals": [],
+        "breaks": [
+          {
+            "start": "09:12",
+            "end": "09:16"
+          }
+        ],
+        "reported_minutes": null
+      }
+    ],
+    "exhaustive": true
+  }
+]

@@ -49,7 +49,7 @@ def compliance(abstraction, start, end):
         elif totals["therapy_days"]["lower"] >= plan.required_days and totals["minutes"]["lower"] >= plan.required_minutes:
             # Both lower bounds meet the goals, so every supported candidate passes.
             status = "met"
-        elif totals["therapy_days"]["upper"] < plan.required_days or (totals["minutes"]["upper"] is not None and totals["minutes"]["upper"] < plan.required_minutes):
+        elif (totals["therapy_days"]["upper"] is not None and totals["therapy_days"]["upper"] < plan.required_days) or (totals["minutes"]["upper"] is not None and totals["minutes"]["upper"] < plan.required_minutes):
             # Even the best supported value misses a goal, so the outcome is definite.
             status = "not_met"
         else:
@@ -74,7 +74,7 @@ def compliance(abstraction, start, end):
 def threshold_status(totals, plan):
     if totals["therapy_days"]["lower"] >= plan.required_days and totals["minutes"]["lower"] >= plan.required_minutes:
         return "met"
-    if totals["therapy_days"]["upper"] < plan.required_days or (totals["minutes"]["upper"] is not None and totals["minutes"]["upper"] < plan.required_minutes):
+    if (totals["therapy_days"]["upper"] is not None and totals["therapy_days"]["upper"] < plan.required_days) or (totals["minutes"]["upper"] is not None and totals["minutes"]["upper"] < plan.required_minutes):
         return "not_met"
     return "cannot_determine"
 

@@ -1,0 +1,258 @@
+[
+  {
+    "id": "robust-1",
+    "group": "robust-patient-1",
+    "source": "new_synthetic",
+    "split": "dev",
+    "patient": {
+      "patient_id": "ROB-P1",
+      "name": "Robust 1 Example",
+      "dob": "1988-08-02"
+    },
+    "declared_id": "ROB-D1",
+    "facts": [
+      {
+        "kind": "service",
+        "encounter_ref": "ROB-E1",
+        "appointment_ref": null,
+        "service_date": null,
+        "service_type": "individual",
+        "evidence_kind": "clinical",
+        "signed": true,
+        "patient_present": true,
+        "delivered": true,
+        "actual_intervals": [
+          {
+            "start": "14:05",
+            "end": "14:25"
+          }
+        ],
+        "scheduled_intervals": [],
+        "unspecified_intervals": [],
+        "breaks": [],
+        "reported_minutes": 20
+      }
+    ],
+    "text": "Patient: Robust 1 Example | MRN: ROB-P1 | DOB: 1988-08-02 | Document ID: ROB-D1\nEncounter ID: ROB-E1\nFinal signed individual psychotherapy record, undated. Patient contact occurred 14:05 to 14:25; treatment was delivered to the patient, completed 20 minutes. No service date or entry date is recorded.\n",
+    "exhaustive": true
+  },
+  {
+    "id": "robust-2",
+    "group": "robust-patient-2",
+    "source": "new_synthetic",
+    "split": "dev",
+    "patient": {
+      "patient_id": "ROB-P2",
+      "name": "Robust 2 Example",
+      "dob": "1988-08-02"
+    },
+    "declared_id": "ROB-D2",
+    "facts": [
+      {
+        "kind": "service",
+        "encounter_ref": "ROB-E2",
+        "appointment_ref": null,
+        "service_date": null,
+        "service_type": "individual",
+        "evidence_kind": "clinical",
+        "signed": true,
+        "patient_present": true,
+        "delivered": true,
+        "actual_intervals": [
+          {
+            "start": "09:00",
+            "end": "09:35"
+          }
+        ],
+        "scheduled_intervals": [],
+        "unspecified_intervals": [],
+        "breaks": [],
+        "reported_minutes": 35,
+        "recorded_at": "2026-08-05T16:40:00"
+      }
+    ],
+    "text": "Patient: Robust 2 Example | MRN: ROB-P2 | DOB: 1988-08-02 | Document ID: ROB-D2\nFinal signed individual psychotherapy note | Encounter ROB-E2\nRecorded August 5, 2026, 16:40. This is a late entry for earlier patient therapy; the service date is unknown. Patient contact 09:00 to 09:35, completed 35 minutes. The entry date does not identify the encounter date.\n",
+    "exhaustive": true
+  },
+  {
+    "id": "robust-3",
+    "group": "robust-patient-3",
+    "source": "new_synthetic",
+    "split": "dev",
+    "patient": {
+      "patient_id": "ROB-P3",
+      "name": "Robust 3 Example",
+      "dob": "1988-08-02"
+    },
+    "declared_id": "ROB-D3",
+    "facts": [
+      {
+        "kind": "service",
+        "encounter_ref": "ROB-E3",
+        "appointment_ref": "ROB-A3",
+        "service_date": "2026-08-06",
+        "service_type": "individual",
+        "evidence_kind": "clinical",
+        "signed": true,
+        "patient_present": true,
+        "delivered": true,
+        "actual_intervals": [
+          {
+            "start": "11:00",
+            "end": "11:40"
+          }
+        ],
+        "scheduled_intervals": [],
+        "unspecified_intervals": [],
+        "breaks": [],
+        "reported_minutes": 40
+      }
+    ],
+    "text": "Patient: Robust 3 Example | MRN: ROB-P3 | DOB: 1988-08-02 | Document ID: ROB-D3\nEncounter ID: ROB-E3 | Appointment ID: ROB-A3\nAugust 6, 2026 / Final signed individual psychotherapy. Patient contact 11:00 to 11:40, completed 40 minutes.\n",
+    "exhaustive": true
+  },
+  {
+    "id": "robust-4",
+    "group": "robust-patient-4",
+    "source": "new_synthetic",
+    "split": "dev",
+    "patient": {
+      "patient_id": "ROB-P4",
+      "name": "Robust 4 Example",
+      "dob": null
+    },
+    "declared_id": "ROB-D4",
+    "facts": [
+      {
+        "kind": "service",
+        "encounter_ref": "ROB-E4",
+        "appointment_ref": null,
+        "service_date": "2026-08-07",
+        "service_type": null,
+        "evidence_kind": "clinical",
+        "signed": true,
+        "patient_present": true,
+        "delivered": true,
+        "actual_intervals": [
+          {
+            "start": "15:00",
+            "end": "15:20"
+          }
+        ],
+        "scheduled_intervals": [],
+        "unspecified_intervals": [],
+        "breaks": [],
+        "reported_minutes": 20
+      }
+    ],
+    "exhaustive": true,
+    "text": "Patient: Robust 4 Example | MRN: ROB-P4 | Document ID: ROB-D4\nEncounter ROB-E4, August 7, 2026. Final signed clinical contact. Patient treatment contact occurred 15:00 to 15:20, 20 minutes delivered with the patient present. The source does not identify the treatment modality or service category.\n"
+  },
+  {
+    "id": "robust-5",
+    "group": "robust-patient-5",
+    "source": "new_synthetic",
+    "split": "dev",
+    "patient": {
+      "patient_id": "ROB-P5",
+      "name": "Robust 5 Example",
+      "dob": "1988-08-02"
+    },
+    "declared_id": "ROB-D5",
+    "facts": [
+      {
+        "kind": "observation",
+        "observation_date": null,
+        "category": "symptom",
+        "reporter": "Robust 5 Example",
+        "experiencer": "Robust 5 Example",
+        "polarity": "present",
+        "temporality": "current",
+        "keywords": [
+          "sleep"
+        ]
+      },
+      {
+        "kind": "observation",
+        "observation_date": null,
+        "category": "safety",
+        "reporter": "Robust 5 Example",
+        "experiencer": "Robust 5 Example",
+        "polarity": "absent",
+        "temporality": "current",
+        "keywords": [
+          "suicid"
+        ]
+      }
+    ],
+    "exhaustive": true,
+    "text": "Patient: Robust 5 Example | MRN: ROB-P5 | DOB: 1988-08-02 | Document ID: ROB-D5\nUndated patient update. Robust 5 Example reports currently disrupted sleep and explicitly denies current suicidal thoughts. No appointment, service, or clinical report date is recorded.\n"
+  },
+  {
+    "id": "robust-6",
+    "group": "robust-patient-6",
+    "source": "new_synthetic",
+    "split": "dev",
+    "patient": {
+      "patient_id": "ROB-P6",
+      "name": "Robust 6 Example",
+      "dob": "1988-08-02"
+    },
+    "declared_id": "ROB-D6",
+    "facts": [
+      {
+        "kind": "assessment",
+        "instrument": "PHQ-9",
+        "assessment_date": null,
+        "form_ref": null,
+        "score": 11,
+        "reporter": "Robust 6 Example",
+        "experiencer": "Robust 6 Example",
+        "copied": false
+      }
+    ],
+    "exhaustive": true,
+    "text": "Patient: Robust 6 Example | MRN: ROB-P6 | DOB: 1988-08-02 | Document ID: ROB-D6\nOriginal paper PHQ-9 completed by Robust 6 Example, total score 11. The completion date is not entered on the form. The original was received by the clinic on August 10, 2026; receipt is not completion and no new questionnaire or visit occurred.\n"
+  },
+  {
+    "id": "robust-7",
+    "group": "robust-patient-7",
+    "source": "new_synthetic",
+    "split": "dev",
+    "patient": {
+      "patient_id": "ROB-P7",
+      "name": "Robust 7 Example",
+      "dob": null
+    },
+    "declared_id": "ROB-D7",
+    "facts": [
+      {
+        "kind": "assessment",
+        "instrument": "PHQ-9",
+        "assessment_date": "2026-08-08",
+        "form_ref": "ROB-Q7",
+        "score": null,
+        "reporter": "Robust 7 Example",
+        "experiencer": "Robust 7 Example",
+        "copied": false
+      }
+    ],
+    "exhaustive": true,
+    "text": "Patient: Robust 7 Example | MRN: ROB-P7 | Document ID: ROB-D7\nOriginal PHQ-9 form ROB-Q7 completed by Robust 7 Example on August 8, 2026. The total score field is blank; no total score is recorded. No visit is documented.\n"
+  },
+  {
+    "id": "robust-8",
+    "group": "robust-patient-8",
+    "source": "new_synthetic",
+    "split": "dev",
+    "patient": {
+      "patient_id": "ROB-P8",
+      "name": "Robust 8 Example",
+      "dob": null
+    },
+    "declared_id": "ROB-D8",
+    "facts": [],
+    "exhaustive": true,
+    "text": "Patient: Robust 8 Example | MRN: ROB-P8 | Document ID: ROB-D8\nClerical export closed September 15, 2026. No patient contact occurred. This page records only an address-format update and no clinical appointment, assessment, symptoms or treatment plan.\n"
+  }
+]

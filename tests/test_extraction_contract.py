@@ -103,6 +103,21 @@ def test_exact_library_interval_and_unique_quote_keep_existing_paths():
     assert passage.quote == unique and passage.locator == "unique_exact_substring"
 
 
+def test_valid_offset_cannot_bind_repeated_quote_to_other_encounter():
+    source = repeated_document()
+    start = source.text.find(REPEATED_LINE)
+    with pytest.raises(ValueError, match="context does not match"):
+        locate_passage(source, REPEATED_LINE, start, start + len(REPEATED_LINE), context={"encounter_ref": "TEST-E2"})
+
+
+def test_adjacent_encounter_headings_establish_repeated_quote_ownership():
+    source = document('Encounter E-1\nsame\nEncounter E-2\nsame\n')
+    with pytest.raises(ValueError,match='context does not match'):
+        locate_passage(source,'same',14,18,context={'encounter_ref':'E-2'})
+    passage = locate_passage(source,'same',None,None,context={'encounter_ref':'E-2'})
+    assert passage.start==source.text.rfind('same')
+
+
 def test_adapter_uses_claim_context_when_library_alignment_is_unavailable(monkeypatch):
     import json
     import langextract as lx

@@ -35,7 +35,10 @@ def main(argv=None):
     ingest = commands.add_parser("process")
     ingest.add_argument("--input", default="examples/synthetic/documents")
     ingest.add_argument("--model", default="gpt-6-luna")
-    ingest.add_argument("--reasoning", default="high")
+    ingest.add_argument("--reasoning", choices=["none","low","medium","high","xhigh","max"])
+    ingest.add_argument("--extractor", choices=["optimized","baseline"], default="optimized")
+    ingest.add_argument("--workers", type=int, default=8)
+    ingest.add_argument("--timeout", type=int, default=180)
     inspect = commands.add_parser("inspect")
     inspect.add_argument("--patient")
     inspect.add_argument("--document")
@@ -72,6 +75,10 @@ def main(argv=None):
                 # Saved inspections and queries do not construct a model provider.
                 from .provider import CodexCLIProvider, ProviderConfig
                 from .extraction import LangExtractExtractor
+                from .luna_candidates import CandidateExtractor
+                configuration=json.loads((Path(__file__).parent/'contracts/luna_best.json').read_text(encoding='utf-8'))
+                if args.reasoning:
+                    configuration['reasoning']=args.reasoning
                 path = Path(args.input)
                 paths = list(path.glob("*.txt")) if path.is_dir() else [path]
                 if not paths:
@@ -79,11 +86,13 @@ def main(argv=None):
                 def progress(item):
                     print(json.dumps({k: item[k] for k in ("source", "status", "error") if k in item}), file=sys.stderr, flush=True)
                 def new_extractor():
-                    return LangExtractExtractor(CodexCLIProvider(ProviderConfig(
-                        model=args.model, reasoning_effort=args.reasoning)))
+                    provider=CodexCLIProvider(ProviderConfig(model=args.model,
+                        reasoning_effort=configuration['reasoning'],timeout_seconds=args.timeout))
+                    return (LangExtractExtractor(provider) if args.extractor=='baseline' else
+                            CandidateExtractor(provider,configuration))
                 # Each independent document request owns its provider and usage records.
                 result = process(store, paths, new_extractor(), progress,
-                                 max_workers=10, extractor_factory=new_extractor)
+                                 max_workers=args.workers, extractor_factory=new_extractor)
                 write_result(result, args.output)
                 return int(result["failed"] > 0)
             if args.command == "inspect":

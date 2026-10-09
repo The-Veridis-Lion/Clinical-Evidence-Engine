@@ -1,6 +1,7 @@
 """Local Codex CLI provider. SDK/library objects stay inside extraction adapters."""
 from __future__ import annotations
 import json
+import os
 import shutil
 import subprocess
 import tempfile
@@ -70,11 +71,23 @@ class CodexCLIProvider:
         return output
 
     def run_cli(self, command, request, folder):
-        return subprocess.run(command, input=request, cwd=folder, capture_output=True,
-                              text=True, encoding="utf-8", timeout=self.config.timeout_seconds,
-                              check=False)
+        process = subprocess.Popen(command, cwd=folder, stdin=subprocess.PIPE, stdout=subprocess.PIPE,
+                                   stderr=subprocess.PIPE, text=True, encoding="utf-8",
+                                   creationflags=subprocess.CREATE_NO_WINDOW if os.name == "nt" else 0,
+                                   start_new_session=os.name != "nt")
+        try:
+            stdout, stderr = process.communicate(request, timeout=self.config.timeout_seconds)
+        except subprocess.TimeoutExpired:
+            if os.name == "nt":
+                subprocess.run(["taskkill", "/PID", str(process.pid), "/T", "/F"], capture_output=True, timeout=10)
+            else:
+                import signal
+                os.killpg(process.pid, signal.SIGKILL)
+            process.communicate(timeout=10)
+            raise
+        return subprocess.CompletedProcess(command, process.returncode, stdout, stderr)
 
-    def structured_output(self, prompt: str, schema: dict) -> dict:
+    def structured_output(self, prompt: str, schema: dict, *, purpose: str = "query_interpretation") -> dict:
         """Separate query interpretation from the unchanged LangExtract adapter."""
         with tempfile.TemporaryDirectory(prefix="clinical-query-") as directory:
             folder = Path(directory)
@@ -88,7 +101,7 @@ class CodexCLIProvider:
                        "-c", "features.apply_patch_freeform=false", "-c", "features.multi_agent=false",
                        "--output-schema", str(schema_path), "--output-last-message", str(answer_path), "-"]
             self._calls += 1
-            metric = {"purpose": "query_interpretation", "request_prompt_characters": len(prompt),
+            metric = {"purpose": purpose, "request_prompt_characters": len(prompt),
                       "output_schema_characters": len(json.dumps(schema)), "status": "started",
                       "started_at": datetime.now(timezone.utc).isoformat()}
             self._call_metrics.append(metric)
@@ -146,6 +159,12 @@ class CodexCLIProvider:
                 self.set_fence_output(False)
 
             def infer(self, batch_prompts, **kwargs):
+                # LangExtract forwards its already-consumed alignment/scheduling
+                # controls to infer(). They are not generation parameters.
+                unsupported = {k: v for k, v in kwargs.items() if v is not None
+                               and k not in {"max_workers", "enable_fuzzy_alignment"}}
+                if unsupported:
+                    raise ValueError(f"Codex CLI does not support inference overrides: {sorted(unsupported)}; use ProviderConfig")
                 for prompt in batch_prompts:
                     # Empty ephemeral work directory plus ignored user/project instructions:
                     # clinical extraction never receives the repository, interview context or keys.

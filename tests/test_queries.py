@@ -37,6 +37,66 @@ def result(abstract, family, **fields):
     return query_patient(abstract, QuerySpec(family=family, **fields))["result"]
 
 
+def test_missing_base_for_signed_correction_cannot_answer_zero(evidence):
+    abstract=reconcile([evidence('erratum',[{'factory':CorrectionRelationship,'relation':'corrects',
+        'signed':True,'target_encounter':'MISSING-E1','field':'minutes','replacement_minutes':28,
+        'service_date':MONDAY}])])
+    actual=result(abstract,'utilization',start=MONDAY,end=MONDAY)
+    assert actual['totals']['minutes']=={'lower':0,'upper':None,'value':None}
+    assert actual['totals']['sessions']['value'] is None
+    assert actual['unresolved_service_corrections']==['erratum:0']
+    assert 'erratum:0' in actual['calculation']['claim_ids']
+    assert result(abstract,'utilization',start=MONDAY+timedelta(days=1),end=MONDAY+timedelta(days=1))['totals']['minutes']['value']==0
+    assert result(abstract,'utilization',start=MONDAY,end=MONDAY,service_types=[])['totals']['minutes']['value']==0
+
+
+def test_unsigned_correction_does_not_create_unknown_utilization(evidence):
+    abstract=reconcile([evidence('draft',[{'factory':CorrectionRelationship,'relation':'corrects',
+        'signed':False,'target_encounter':'MISSING-E1','field':'minutes','replacement_minutes':28,
+        'service_date':MONDAY}])])
+    assert result(abstract,'utilization',start=MONDAY,end=MONDAY)['totals']['minutes']['value']==0
+
+
+def test_unresolved_service_correction_propagates_through_plan_and_cohort(evidence):
+    abstract=reconcile([evidence('erratum',[plan(),{'factory':CorrectionRelationship,'relation':'corrects',
+        'signed':True,'target_encounter':'MISSING-E1','field':'minutes','replacement_minutes':28,
+        'service_date':MONDAY}])])
+    assert result(abstract,'compliance')['weeks'][0]['status']=='cannot_determine'
+    assert result(abstract,'cohort',min_minutes=10)['conditional_inclusion']
+    assert result(abstract,'utilization')['totals']['minutes']['value'] is None
+
+
+def test_patient_role_and_name_merge_assessments_but_partner_stays_separate(evidence,patient):
+    def assessment(who,copy=False):
+        return {'factory':AssessmentClaim,'instrument':'PHQ-9','assessment_date':MONDAY,
+                'form_ref':'FORM-1','score':8,'reporter':who,'experiencer':who,'copied':copy}
+    abstract=reconcile([evidence('original',[assessment(patient.name)]),evidence('copy',[assessment('patient',True)]),
+                        evidence('partner',[assessment('partner')])])
+    assert len(abstract.assessments)==2
+    own=next(a for a in abstract.assessments if a.experiencer==patient.name)
+    assert set(own.claim_ids)=={'original:0','copy:0'}
+    assert abstract.source_claims[1].experiencer=='patient'
+
+
+@pytest.mark.parametrize('unknown_field',['service_date','service_type'])
+def test_missing_date_or_category_preserves_known_duration_without_guessing(evidence,service,unknown_field):
+    abstract=reconcile([evidence('unknown',[service(actual_intervals=[],reported_minutes=20,**{unknown_field:None})])])
+    actual=result(abstract,'utilization',start=MONDAY,end=MONDAY+timedelta(days=6))
+    assert actual['totals']['sessions']=={'lower':0,'upper':1,'value':None}
+    assert actual['totals']['therapy_days']=={'lower':0,'upper':1,'value':None}
+    assert actual['totals']['minutes']=={'lower':0,'upper':20,'value':None}
+    assert actual['totals']['minute_alternatives']==[0,20]
+    assert result(abstract,'utilization',start=MONDAY,end=MONDAY,service_types=[])['totals']['minutes']['value']==0
+
+
+def test_known_encounter_date_can_bind_an_undated_same_encounter_source(evidence,service):
+    abstract=reconcile([evidence('dated',[service(reported_minutes=45)]),
+                        evidence('undated',[service(service_date=None,reported_minutes=45)])])
+    actual=result(abstract,'utilization',start=MONDAY,end=MONDAY)
+    assert actual['totals']['minutes']['value']==45
+    assert actual['totals']['sessions']['value']==1
+
+
 def test_duration_conflict_does_not_make_known_sessions_and_dates_uncertain(evidence, service):
     abstract = conflicted_week(evidence, service)
     actual = result(abstract, "utilization")

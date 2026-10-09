@@ -1,0 +1,96 @@
+{
+  "scope": "Best within this round, requested model and tested designs; engineering evaluation, not clinical validation",
+  "model": "gpt-6-luna",
+  "reasoning": "high",
+  "backend_snapshot": "unavailable",
+  "cli_version": "0.159.3",
+  "historical_code_commit": "9adc0ff",
+  "scorer": "critical-fields-9",
+  "candidates_explored": 42,
+  "retained_local_runs": 29,
+  "runner_tasks": 4250,
+  "cli_attempts": 5826,
+  "generations_with_usage": 5825,
+  "usage": {
+    "input_tokens": 118739782,
+    "cached_input_tokens": 37597952,
+    "output_tokens": 6092364,
+    "reasoning_output_tokens_subset": 2775914
+  },
+  "summed_call_seconds": 68728.11,
+  "final_comparison": {
+    "repeats": 3,
+    "original_31_documents": {
+      "baseline_correct": 63,
+      "best_correct": 90,
+      "equal_budget_control_correct": 92,
+      "denominator": 93
+    },
+    "new_24_documents": {
+      "baseline_correct": 58,
+      "best_correct": 71,
+      "control_correct": 71,
+      "denominator": 72
+    },
+    "public_8_documents": {
+      "baseline_correct": 17,
+      "best_correct": 24,
+      "control_correct": 24,
+      "denominator": 24
+    },
+    "clinical_coverage": {
+      "baseline_correct": 63,
+      "best_correct": 76,
+      "control_correct": 74,
+      "denominator": 81
+    },
+    "median_seconds": {
+      "baseline": 12.4,
+      "best": 20.16,
+      "control": 27.54
+    }
+  },
+  "stability": {
+    "repeats": 10,
+    "original_8_documents": {
+      "baseline_correct": 53,
+      "best_correct": 72,
+      "denominator": 80
+    },
+    "new_10_documents": {
+      "baseline_correct": 93,
+      "best_correct": 100,
+      "denominator": 100
+    },
+    "public_1_document": {
+      "baseline_correct": 2,
+      "best_correct": 10,
+      "denominator": 10
+    }
+  },
+  "sealed": {
+    "documents": 10,
+    "repeats": 3,
+    "baseline_correct": 19,
+    "best_correct": 21,
+    "denominator": 30,
+    "baseline_query_correct": 25,
+    "best_query_correct": 27,
+    "caveat": "Three templates have gold/wording discrepancies; frozen original scores retained, no post-holdout tuning."
+  },
+  "deployed_validation": {
+    "public_correct": 8,
+    "public_documents": 8,
+    "public_calls": 16,
+    "original_correct": 27,
+    "original_documents": 31,
+    "original_calls": 64
+  },
+  "offline_tests_before_publication": 206,
+  "excluded_records": "Full candidate configurations, prompts, responses, original sources and annotations, databases and detailed run history retained locally; not published.",
+  "publication_verification": {
+    "offline_tests_passed": 206,
+    "measured_prompt_schema_pairs_identical": 16,
+    "new_model_calls": 0
+  }
+}

@@ -1,0 +1,334 @@
+[
+  {
+    "id": "header",
+    "split": "dev",
+    "group": "header",
+    "family": "header_clinical",
+    "source": "new_synthetic",
+    "text": "MRN: SYN-HEADER | Patient: Header Example | DOB: 1984-03-17\nDocument ID: DOC-HEADER\nEncounter DEV-E1 | Service date 2026-05-04\nSigned individual psychotherapy. Patient contact 09:03 to 09:34; explicitly completed 31 minutes.\n",
+    "patient": {
+      "patient_id": "SYN-HEADER",
+      "name": "Header Example",
+      "dob": "1984-03-17"
+    },
+    "declared_id": "DOC-HEADER",
+    "facts": [
+      {
+        "kind": "service",
+        "encounter_ref": "DEV-E1",
+        "appointment_ref": null,
+        "service_date": "2026-05-04",
+        "service_type": "individual",
+        "evidence_kind": "clinical",
+        "signed": true,
+        "patient_present": true,
+        "delivered": true,
+        "actual_intervals": [
+          {
+            "start": "09:03",
+            "end": "09:34"
+          }
+        ],
+        "scheduled_intervals": [],
+        "unspecified_intervals": [],
+        "breaks": [],
+        "reported_minutes": 31
+      }
+    ],
+    "exhaustive": true
+  },
+  {
+    "id": "repeated",
+    "split": "dev",
+    "group": "repeated",
+    "family": "blank_sections",
+    "source": "new_synthetic",
+    "text": "MRN: SYN-REPEATED | Patient: Repeated Example | DOB: 1984-03-17\nDocument ID: DOC-REPEATED\nEncounter DEV-E2, 2026-05-05\nSigned group care. Patient contact 10:00 to 10:50; no therapy during break 10:20 to 10:25.\n\nEncounter DEV-E3, 2026-05-06\nSigned group care. Patient contact 10:00 to 10:50; no therapy during break 10:20 to 10:25.\n",
+    "patient": {
+      "patient_id": "SYN-REPEATED",
+      "name": "Repeated Example",
+      "dob": "1984-03-17"
+    },
+    "declared_id": "DOC-REPEATED",
+    "facts": [
+      {
+        "kind": "service",
+        "encounter_ref": "DEV-E2",
+        "appointment_ref": null,
+        "service_date": "2026-05-05",
+        "service_type": "group",
+        "evidence_kind": "clinical",
+        "signed": true,
+        "patient_present": true,
+        "delivered": true,
+        "actual_intervals": [
+          {
+            "start": "10:00",
+            "end": "10:50"
+          }
+        ],
+        "scheduled_intervals": [],
+        "unspecified_intervals": [],
+        "breaks": [
+          {
+            "start": "10:20",
+            "end": "10:25"
+          }
+        ],
+        "reported_minutes": null
+      },
+      {
+        "kind": "service",
+        "encounter_ref": "DEV-E3",
+        "appointment_ref": null,
+        "service_date": "2026-05-06",
+        "service_type": "group",
+        "evidence_kind": "clinical",
+        "signed": true,
+        "patient_present": true,
+        "delivered": true,
+        "actual_intervals": [
+          {
+            "start": "10:00",
+            "end": "10:50"
+          }
+        ],
+        "scheduled_intervals": [],
+        "unspecified_intervals": [],
+        "breaks": [
+          {
+            "start": "10:20",
+            "end": "10:25"
+          }
+        ],
+        "reported_minutes": null
+      }
+    ],
+    "exhaustive": true
+  },
+  {
+    "id": "reconnect",
+    "split": "dev",
+    "group": "reconnect",
+    "family": "platform_segments",
+    "source": "new_synthetic",
+    "text": "MRN: SYN-RECONNECT | Patient: Reconnect Example | DOB: 1984-03-17\nDocument ID: DOC-RECONNECT\nEncounter DEV-E4 | Appointment DEV-A4 | 2026-05-07\nSigned individual psychotherapy. Patient contact 13:00 to 13:13 and 13:23 to 13:48. Network outage 13:13 to 13:23: no therapeutic contact. The second connection continued the same appointment. Total patient therapy: 38 minutes.\n",
+    "patient": {
+      "patient_id": "SYN-RECONNECT",
+      "name": "Reconnect Example",
+      "dob": "1984-03-17"
+    },
+    "declared_id": "DOC-RECONNECT",
+    "facts": [
+      {
+        "kind": "service",
+        "encounter_ref": "DEV-E4",
+        "appointment_ref": "DEV-A4",
+        "service_date": "2026-05-07",
+        "service_type": "individual",
+        "evidence_kind": "clinical",
+        "signed": true,
+        "patient_present": true,
+        "delivered": true,
+        "actual_intervals": [
+          {
+            "start": "13:00",
+            "end": "13:13"
+          },
+          {
+            "start": "13:23",
+            "end": "13:48"
+          }
+        ],
+        "scheduled_intervals": [],
+        "unspecified_intervals": [],
+        "breaks": [
+          {
+            "start": "13:13",
+            "end": "13:23"
+          }
+        ],
+        "reported_minutes": 38
+      }
+    ],
+    "exhaustive": true
+  },
+  {
+    "id": "family",
+    "split": "dev",
+    "group": "family",
+    "family": "partner_only",
+    "source": "new_synthetic",
+    "text": "MRN: SYN-FAMILY | Patient: Family Example | DOB: 1984-03-17\nDocument ID: DOC-FAMILY\nEncounter DEV-E5 | 2026-05-08\nSigned family psychotherapy. Therapist worked 14:00 to 14:55. Partner only 14:00 to 14:19; patient joined at 14:19 and received therapy through 14:55, 36 patient-present minutes.\n",
+    "patient": {
+      "patient_id": "SYN-FAMILY",
+      "name": "Family Example",
+      "dob": "1984-03-17"
+    },
+    "declared_id": "DOC-FAMILY",
+    "facts": [
+      {
+        "kind": "service",
+        "encounter_ref": "DEV-E5",
+        "appointment_ref": null,
+        "service_date": "2026-05-08",
+        "service_type": "family",
+        "evidence_kind": "clinical",
+        "signed": true,
+        "patient_present": true,
+        "delivered": true,
+        "actual_intervals": [
+          {
+            "start": "14:19",
+            "end": "14:55"
+          }
+        ],
+        "scheduled_intervals": [],
+        "unspecified_intervals": [],
+        "breaks": [],
+        "reported_minutes": 36
+      }
+    ],
+    "exhaustive": true
+  },
+  {
+    "id": "noshow",
+    "split": "dev",
+    "group": "noshow",
+    "family": "desk_absence",
+    "source": "new_synthetic",
+    "text": "MRN: SYN-NOSHOW | Patient: Noshow Example | DOB: 1984-03-17\nDocument ID: DOC-NOSHOW\nEncounter DEV-E6 | 2026-05-11\nIndividual psychotherapy booked 11:00 to 11:45. Desk status: No show. Patient did not arrive; no treatment contact. Unsigned scheduling export.\n",
+    "patient": {
+      "patient_id": "SYN-NOSHOW",
+      "name": "Noshow Example",
+      "dob": "1984-03-17"
+    },
+    "declared_id": "DOC-NOSHOW",
+    "facts": [
+      {
+        "kind": "service",
+        "encounter_ref": "DEV-E6",
+        "appointment_ref": null,
+        "service_date": "2026-05-11",
+        "service_type": "individual",
+        "evidence_kind": "schedule",
+        "signed": false,
+        "patient_present": false,
+        "delivered": false,
+        "actual_intervals": [],
+        "scheduled_intervals": [
+          {
+            "start": "11:00",
+            "end": "11:45"
+          }
+        ],
+        "unspecified_intervals": [],
+        "breaks": [],
+        "reported_minutes": null
+      }
+    ],
+    "exhaustive": true
+  },
+  {
+    "id": "unknown",
+    "split": "dev",
+    "group": "unknown",
+    "family": "unknown_duration",
+    "source": "new_synthetic",
+    "text": "MRN: SYN-UNKNOWN | Patient: Unknown Example | DOB: 1984-03-17\nDocument ID: DOC-UNKNOWN\nEncounter DEV-E7 | 2026-05-12\nSigned individual psychotherapy. Patient attended and treatment was delivered. Neither clock times nor a completed duration were recorded.\n",
+    "patient": {
+      "patient_id": "SYN-UNKNOWN",
+      "name": "Unknown Example",
+      "dob": "1984-03-17"
+    },
+    "declared_id": "DOC-UNKNOWN",
+    "facts": [
+      {
+        "kind": "service",
+        "encounter_ref": "DEV-E7",
+        "appointment_ref": null,
+        "service_date": "2026-05-12",
+        "service_type": "individual",
+        "evidence_kind": "clinical",
+        "signed": true,
+        "patient_present": true,
+        "delivered": true,
+        "actual_intervals": [],
+        "scheduled_intervals": [],
+        "unspecified_intervals": [],
+        "breaks": [],
+        "reported_minutes": null
+      }
+    ],
+    "exhaustive": true
+  },
+  {
+    "id": "mixed",
+    "split": "dev",
+    "group": "mixed",
+    "family": "mixed_assertions",
+    "source": "new_synthetic",
+    "text": "MRN: SYN-MIXED | Patient: Mixed Example | DOB: 1984-03-17\nDocument ID: DOC-MIXED\n2026-05-13: Mixed Example reports disrupted sleep and denies current suicidal thoughts. The partner reports that the partner feels anxious about giving reminders. No visit occurred.\n",
+    "patient": {
+      "patient_id": "SYN-MIXED",
+      "name": "Mixed Example",
+      "dob": "1984-03-17"
+    },
+    "declared_id": "DOC-MIXED",
+    "facts": [
+      {
+        "kind": "observation",
+        "observation_date": "2026-05-13",
+        "category": "symptom",
+        "reporter": "Mixed Example",
+        "experiencer": "Mixed Example",
+        "polarity": "present",
+        "temporality": "current",
+        "keywords": [
+          "sleep"
+        ]
+      },
+      {
+        "kind": "observation",
+        "observation_date": "2026-05-13",
+        "category": "safety",
+        "reporter": "Mixed Example",
+        "experiencer": "Mixed Example",
+        "polarity": "absent",
+        "temporality": "current",
+        "keywords": [
+          "suicid"
+        ]
+      },
+      {
+        "kind": "observation",
+        "observation_date": "2026-05-13",
+        "category": "symptom",
+        "reporter": "partner",
+        "experiencer": "partner",
+        "polarity": "present",
+        "temporality": "current",
+        "keywords": [
+          "anx"
+        ]
+      }
+    ],
+    "exhaustive": true
+  },
+  {
+    "id": "administrative",
+    "split": "dev",
+    "group": "administrative",
+    "family": "authorization_only",
+    "source": "new_synthetic",
+    "text": "MRN: SYN-ADMINISTRATIVE | Patient: Administrative Example | DOB: 1984-03-17\nDocument ID: DOC-ADMINISTRATIVE\nAuthorization correspondence dated 2026-05-14: 6 group slots approved for the next month. This is an authorization only, no clinical visit, no weekly therapy requirement and no symptom or function report.\n",
+    "patient": {
+      "patient_id": "SYN-ADMINISTRATIVE",
+      "name": "Administrative Example",
+      "dob": "1984-03-17"
+    },
+    "declared_id": "DOC-ADMINISTRATIVE",
+    "facts": [],
+    "exhaustive": true
+  }
+]

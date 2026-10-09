@@ -1,0 +1,18 @@
+{
+  "schema": "typed",
+  "prompt": "concise",
+  "examples": "documents",
+  "evidence": "span_id",
+  "semantic_rules": true,
+  "expanded_examples": true,
+  "aligned_examples": true,
+  "reasoning": "high",
+  "precise_rules": true,
+  "identifier_inventory": true,
+  "identity_object": true,
+  "clinical_examples": true,
+  "scope_rules": true,
+  "clinical_rules": true,
+  "flow": "clinical_partition",
+  "observation_scope": true
+}

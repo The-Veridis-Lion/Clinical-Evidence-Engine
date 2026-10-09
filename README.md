@@ -95,7 +95,9 @@ failure. Fixture/replay success is not a measure of live model accuracy.
 ## Live model workflow
 
 Install and authenticate Codex CLI separately and put it on PATH. The provider uses
-`gpt-6-luna` with high reasoning and the baseline extraction contract; live commands
+`gpt-6-luna` with high reasoning and the tested `clinical_partition` configuration;
+typed extraction is followed by a dedicated clinical-observation pass, with at most
+one repair triggered by runtime validation. Live commands
 require the operator's account and network. No credentials or model weights are included.
 
 ```sh
@@ -104,6 +106,14 @@ clinical --db artifacts/live.sqlite query --patient DEMO-CEDAR --family utilizat
 python tools/validate_live.py artifacts/live.sqlite
 clinical --db artifacts/demo.sqlite ask --patient DEMO-CEDAR "How many therapy minutes were delivered from April 6 through April 12, 2026?"
 ```
+
+`process --extractor baseline` retains the historical string-payload prompt for
+comparison and rollback. Use a separate database. [The Luna optimization report](docs/luna-optimization-report.md)
+documents 42 tested configurations, real independent repetitions, a frozen holdout,
+residual failures, and exact reproduction commands. [The aggregate summary](docs/luna-results-summary.json)
+records final comparisons, call accounting and holdout limitations. Full experiment
+history remains local; live calls are distinguished from offline replay and cache reuse. Raw original materials, responses, and databases remain
+in ignored `artifacts/` and are not publication-approved.
 
 `validate_live.py` compares reconstructed encounters with the synthetic fact fixtures
 and exits nonzero on differences. `ask` proposes a validated QuerySpec; the engine
@@ -114,14 +124,20 @@ period comparison, consecutive under-target weeks, assessments, progress, and co
 ## Limitations
 
 The earlier live run omitted an activity encounter ID and failed the semantic comparison;
-it is not presented as a successful clinical validation. The current plan-field locator
+it is retained as a historical failure. The optimized default passed the public synthetic
+encounter comparison through the real CLI, while repeated original-task extraction still
+showed copied-record, presence, role, and clinical-coverage errors. The frozen holdout also
+exposed annotation/wording inconsistencies; its original scores are preserved in the report.
+These are engineering measurements, not clinical validation. The current plan-field locator
 misses wording such as "115 patient-present minutes", so compliance provenance reports
 partial coverage even though the full plan quote remains available.
 
 The engine assumes one patient per document, explicit encounter identities, same-day
 local intervals, and quantitative Monday–Sunday plans. Missing midweek applicability
 rules remain ambiguous. The baseline live extractor does not emit functional-action
-claims; structured stored actions are supported by the domain and progress queries.
+claims, and neither does the optimized contract; structured stored actions are supported
+by the domain and progress queries. Missing dates and scores are represented explicitly,
+with undated facts and uncertain bounds retained rather than invented dates or zero scores.
 Exact quotation does not guarantee semantic accuracy. Whole-patient loads and detailed
 evidence output constrain scale; no large-corpus throughput is demonstrated. There is
 no production deployment, real-patient validation, regulatory certification, fine-tuning,

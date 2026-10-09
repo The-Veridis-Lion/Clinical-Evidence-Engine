@@ -1,0 +1,146 @@
+[
+  {
+    "text": "Patient: Dana Example | MRN: EX-P1 | DOB: 1980-04-03 | Document ID: EX-D1\nEncounter EX-E1 | 2026-02-04 | Final signed individual psychotherapy. Patient contact 10:00 to 10:25; 25 completed patient-treatment minutes.\nOn 2026-02-04 Dana Example reports interrupted sleep and denies current suicidal thoughts.",
+    "extractions": [
+      {
+        "kind": "patient",
+        "quote": "Patient: Dana Example | MRN: EX-P1 | DOB: 1980-04-03 | Document ID: EX-D1",
+        "data": {
+          "patient_id": "EX-P1",
+          "name": "Dana Example",
+          "dob": "1980-04-03",
+          "declared_id": "EX-D1"
+        }
+      },
+      {
+        "kind": "service",
+        "quote": "Encounter EX-E1 | 2026-02-04 | Final signed individual psychotherapy. Patient contact 10:00 to 10:25; 25 completed patient-treatment minutes.",
+        "data": {
+          "encounter_ref": "EX-E1",
+          "appointment_ref": null,
+          "service_date": "2026-02-04",
+          "service_type": "individual",
+          "evidence_kind": "clinical",
+          "signed": true,
+          "patient_present": true,
+          "delivered": true,
+          "actual_intervals": [
+            {
+              "start": "10:00",
+              "end": "10:25"
+            }
+          ],
+          "scheduled_intervals": [],
+          "unspecified_intervals": [],
+          "breaks": [],
+          "reported_minutes": 25,
+          "statement": "Signed individual psychotherapy",
+          "recorded_at": null
+        }
+      },
+      {
+        "kind": "observation",
+        "quote": "On 2026-02-04 Dana Example reports interrupted sleep and denies current suicidal thoughts.",
+        "data": {
+          "observation_date": "2026-02-04",
+          "category": "symptom",
+          "reporter": "Dana Example",
+          "experiencer": "Dana Example",
+          "polarity": "present",
+          "temporality": "current",
+          "statement": "Patient reports interrupted sleep",
+          "recorded_at": null
+        }
+      },
+      {
+        "kind": "observation",
+        "quote": "On 2026-02-04 Dana Example reports interrupted sleep and denies current suicidal thoughts.",
+        "data": {
+          "observation_date": "2026-02-04",
+          "category": "safety",
+          "reporter": "Dana Example",
+          "experiencer": "Dana Example",
+          "polarity": "absent",
+          "temporality": "current",
+          "statement": "Patient denies current suicidal thoughts",
+          "recorded_at": null
+        }
+      }
+    ]
+  },
+  {
+    "text": "Patient: Ellis Example | MRN: EX-P2 | Document ID: EX-D2\nEncounter EX-E2 | 2026-02-05 | Signed group activity. Patient participated in group therapy. No treatment during equipment pause 09:20 to 09:28; actual attendance is documented separately.",
+    "extractions": [
+      {
+        "kind": "patient",
+        "quote": "Patient: Ellis Example | MRN: EX-P2 | Document ID: EX-D2",
+        "data": {
+          "patient_id": "EX-P2",
+          "name": "Ellis Example",
+          "dob": null,
+          "declared_id": "EX-D2"
+        }
+      },
+      {
+        "kind": "service",
+        "quote": "Encounter EX-E2 | 2026-02-05 | Signed group activity. Patient participated in group therapy. No treatment during equipment pause 09:20 to 09:28; actual attendance is documented separately.",
+        "data": {
+          "encounter_ref": "EX-E2",
+          "appointment_ref": null,
+          "service_date": "2026-02-05",
+          "service_type": "group",
+          "evidence_kind": "clinical",
+          "signed": true,
+          "patient_present": true,
+          "delivered": true,
+          "actual_intervals": [],
+          "scheduled_intervals": [],
+          "unspecified_intervals": [],
+          "breaks": [
+            {
+              "start": "09:20",
+              "end": "09:28"
+            }
+          ],
+          "reported_minutes": null,
+          "statement": "Group participation with no-treatment pause",
+          "recorded_at": null
+        }
+      }
+    ]
+  },
+  {
+    "text": "Patient: Jules Example | MRN: EX-P3 | Document ID: EX-D3\nSigned amendment for encounter EX-E3 on 2026-02-06: departure corrected to 11:10, replacing 11:20. No additional service occurred.",
+    "extractions": [
+      {
+        "kind": "patient",
+        "quote": "Patient: Jules Example | MRN: EX-P3 | Document ID: EX-D3",
+        "data": {
+          "patient_id": "EX-P3",
+          "name": "Jules Example",
+          "dob": null,
+          "declared_id": "EX-D3"
+        }
+      },
+      {
+        "kind": "relationship",
+        "quote": "Signed amendment for encounter EX-E3 on 2026-02-06: departure corrected to 11:10, replacing 11:20. No additional service occurred.",
+        "data": {
+          "statement": "Departure-only correction",
+          "recorded_at": null,
+          "relation": "corrects",
+          "signed": true,
+          "target_encounter": "EX-E3",
+          "target_document_ref": null,
+          "target_plan_ref": null,
+          "field": "departure",
+          "replacement_time": "11:10",
+          "original_time": "11:20",
+          "replacement_minutes": null,
+          "replacement_presence": null,
+          "service_date": "2026-02-06"
+        }
+      }
+    ]
+  }
+]

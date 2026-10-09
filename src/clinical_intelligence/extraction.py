@@ -37,7 +37,11 @@ class LangExtractExtractor:
     def key(self):
         import importlib.metadata
         payload = dict(self._baseline)
-        payload.update(provider=self.provider.config.model_dump(), langextract=importlib.metadata.version("langextract"))
+        payload.update(provider=self.provider.config.model_dump(), langextract=importlib.metadata.version("langextract"),
+                       pydantic=importlib.metadata.version("pydantic"),
+                       cli_version=getattr(self.provider, "cli_version", "unavailable"),
+                       runtime={name: hashlib.sha256((Path(__file__).parent / name).read_bytes()).hexdigest()
+                                for name in ("provider.py", "extraction.py", "domain.py", "extraction_validation.py")})
         return hashlib.sha256(json.dumps(payload, sort_keys=True).encode()).hexdigest()
 
     def extract(self, document):
@@ -64,6 +68,9 @@ class LangExtractExtractor:
                             max_char_buffer=max(10000, len(document.text) + 1), max_workers=1,
                             resolver_params={"suppress_parse_errors": False, "enable_fuzzy_alignment": False},
                             show_progress=False)
+        return self.from_result(document, result, start)
+
+    def from_result(self, document, result, start):
         classes = {"service": ServiceClaim, "plan": PlanClaim, "assessment": AssessmentClaim,
                    "observation": ClinicalObservation, "relationship": CorrectionRelationship}
         patient = None
@@ -110,9 +117,12 @@ class LangExtractExtractor:
         usage.input_characters = len(document.text)
         usage.claim_counts = {kind: sum(c.kind == kind for c in claims.values())
                               for kind in sorted({c.kind for c in claims.values()})}
-        return DocumentExtraction(document_id=document.document_id, extraction_key=self.key,
+        value = DocumentExtraction(document_id=document.document_id, extraction_key=self.key,
                                   declared_id=declared_id, patient=patient, claims=list(claims.values()),
                                   usage=usage)
+        from .extraction_validation import validate_source_contract
+        validate_source_contract(document, value)
+        return value
 
 
 def locate_passage(document: RegisteredDocument, quote: str, start: int | None, end: int | None,
@@ -125,6 +135,13 @@ def locate_passage(document: RegisteredDocument, quote: str, start: int | None, 
     No approximate match, whitespace normalization or reconstructed quotation is accepted.
     """
     locator = "langextract"
+    # Offsets prove text identity, not encounter identity. Verify repeated evidence's
+    # local context on BOTH the library-offset and exact-substring paths.
+    if context and quote and document.text.count(quote) > 1 and start is not None and end is not None and document.text[start:end] == quote:
+        left, right = local_bounds(document.text, start, end)
+        if not all(re.search(r"(?<![\w-])" + re.escape(identifier) + r"(?![\w-])", document.text[left:right])
+                   for identifier in context.values()):
+            raise ValueError("Evidence offset is exact but its encounter context does not match")
     if start is None or end is None or not (0 <= start < end <= len(document.text)) or document.text[start:end] != quote:
         candidates = []
         offset = document.text.find(quote) if quote else -1
@@ -134,11 +151,9 @@ def locate_passage(document: RegisteredDocument, quote: str, start: int | None, 
         locator = "unique_exact_substring"
         if len(candidates) > 1 and context:
             # Blank-line boundaries prevent context from leaking between source sections.
-            boundaries = list(re.finditer(r"\r?\n[ \t]*\r?\n", document.text))
             supported = []
             for candidate in candidates:
-                left = max((b.end() for b in boundaries if b.end() <= candidate), default=0)
-                right = min((b.start() for b in boundaries if b.start() >= candidate + len(quote)), default=len(document.text))
+                left, right = local_bounds(document.text, candidate, candidate + len(quote))
                 section = document.text[left:right]
                 if all(re.search(r"(?<![\w-])" + re.escape(identifier) + r"(?![\w-])", section)
                        for identifier in context.values()):
@@ -150,6 +165,19 @@ def locate_passage(document: RegisteredDocument, quote: str, start: int | None, 
     return SourcePassage(document_id=document.document_id, start=start, end=end, quote=quote,
                          line_start=document.text.count("\n", 0, start) + 1,
                          line_end=document.text.count("\n", 0, end - 1) + 1, locator=locator)
+
+
+def local_bounds(text, start, end):
+    boundaries = list(re.finditer(r"\r?\n[ \t]*\r?\n", text))
+    left = max((b.end() for b in boundaries if b.end() <= start), default=0)
+    right = min((b.start() for b in boundaries if b.start() >= end), default=len(text))
+    # Encounter headings also delimit adjacent sections without a blank line.
+    # Only syntactically declared, distinct identifiers establish this boundary.
+    headings = list(re.finditer(r"(?im)^.*?\bencounter\b\s*[:=]?\s*([A-Za-z0-9_-]*\d[A-Za-z0-9_-]*)[^\n]*", text))
+    if len({h.group(1) for h in headings}) > 1:
+        left = max(left, max((h.start() for h in headings if h.start() <= start), default=0))
+        right = min(right, min((h.start() for h in headings if h.start() >= end), default=len(text)))
+    return left, right
 
 
 def clock_minutes(value: str) -> int:

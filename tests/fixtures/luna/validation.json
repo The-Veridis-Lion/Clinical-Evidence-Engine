@@ -1,0 +1,307 @@
+[
+  {
+    "id": "bodyid",
+    "split": "validation",
+    "group": "bodyid",
+    "family": "identifier_prose",
+    "source": "new_synthetic",
+    "text": "MRN: SYN-BODYID | Patient: Bodyid Example | DOB: 1984-03-17\nDocument ID: DOC-BODYID\nSigned note dated June 1, 2026\nThe individual psychotherapy contact is filed as VAL-E1. The patient was present from 08:20 until 08:47; treatment duration was reported as 27 minutes.\n",
+    "patient": {
+      "patient_id": "SYN-BODYID",
+      "name": "Bodyid Example",
+      "dob": "1984-03-17"
+    },
+    "declared_id": "DOC-BODYID",
+    "facts": [
+      {
+        "kind": "service",
+        "encounter_ref": "VAL-E1",
+        "appointment_ref": null,
+        "service_date": "2026-06-01",
+        "service_type": "individual",
+        "evidence_kind": "clinical",
+        "signed": true,
+        "patient_present": true,
+        "delivered": true,
+        "actual_intervals": [
+          {
+            "start": "08:20",
+            "end": "08:47"
+          }
+        ],
+        "scheduled_intervals": [],
+        "unspecified_intervals": [],
+        "breaks": [],
+        "reported_minutes": 27
+      }
+    ],
+    "exhaustive": true
+  },
+  {
+    "id": "adjacent",
+    "split": "validation",
+    "group": "adjacent",
+    "family": "adjacent_sections",
+    "source": "new_synthetic",
+    "text": "MRN: SYN-ADJACENT | Patient: Adjacent Example | DOB: 1984-03-17\nDocument ID: DOC-ADJACENT\nEncounter VAL-E2 | June 2, 2026\nSigned group psychotherapy; actual patient contact 09:10 to 10:00.\nEncounter VAL-E3 | June 3, 2026\nSigned group psychotherapy; actual patient contact 09:10 to 10:00.\n",
+    "patient": {
+      "patient_id": "SYN-ADJACENT",
+      "name": "Adjacent Example",
+      "dob": "1984-03-17"
+    },
+    "declared_id": "DOC-ADJACENT",
+    "facts": [
+      {
+        "kind": "service",
+        "encounter_ref": "VAL-E2",
+        "appointment_ref": null,
+        "service_date": "2026-06-02",
+        "service_type": "group",
+        "evidence_kind": "clinical",
+        "signed": true,
+        "patient_present": true,
+        "delivered": true,
+        "actual_intervals": [
+          {
+            "start": "09:10",
+            "end": "10:00"
+          }
+        ],
+        "scheduled_intervals": [],
+        "unspecified_intervals": [],
+        "breaks": [],
+        "reported_minutes": null
+      },
+      {
+        "kind": "service",
+        "encounter_ref": "VAL-E3",
+        "appointment_ref": null,
+        "service_date": "2026-06-03",
+        "service_type": "group",
+        "evidence_kind": "clinical",
+        "signed": true,
+        "patient_present": true,
+        "delivered": true,
+        "actual_intervals": [
+          {
+            "start": "09:10",
+            "end": "10:00"
+          }
+        ],
+        "scheduled_intervals": [],
+        "unspecified_intervals": [],
+        "breaks": [],
+        "reported_minutes": null
+      }
+    ],
+    "exhaustive": true
+  },
+  {
+    "id": "clockconflict",
+    "split": "validation",
+    "group": "clockconflict",
+    "family": "within_document_conflict",
+    "source": "new_synthetic",
+    "text": "MRN: SYN-CLOCKCONFLICT | Patient: Clockconflict Example | DOB: 1984-03-17\nDocument ID: DOC-CLOCKCONFLICT\nEncounter VAL-E4 | June 4, 2026\nFinal signed individual psychotherapy: actual patient contact 10:00 to 10:30. Separately reported completed patient therapy duration: 35 minutes. Both statements remain in the signed note; no correction is indicated.\n",
+    "patient": {
+      "patient_id": "SYN-CLOCKCONFLICT",
+      "name": "Clockconflict Example",
+      "dob": "1984-03-17"
+    },
+    "declared_id": "DOC-CLOCKCONFLICT",
+    "facts": [
+      {
+        "kind": "service",
+        "encounter_ref": "VAL-E4",
+        "appointment_ref": null,
+        "service_date": "2026-06-04",
+        "service_type": "individual",
+        "evidence_kind": "clinical",
+        "signed": true,
+        "patient_present": true,
+        "delivered": true,
+        "actual_intervals": [
+          {
+            "start": "10:00",
+            "end": "10:30"
+          }
+        ],
+        "scheduled_intervals": [],
+        "unspecified_intervals": [],
+        "breaks": [],
+        "reported_minutes": 35
+      }
+    ],
+    "exhaustive": true
+  },
+  {
+    "id": "headerclock",
+    "split": "validation",
+    "group": "headerclock",
+    "family": "unqualified_header_clock",
+    "source": "new_synthetic",
+    "text": "MRN: SYN-HEADERCLOCK | Patient: Headerclock Example | DOB: 1984-03-17\nDocument ID: DOC-HEADERCLOCK\nEncounter VAL-E5 | June 5, 2026 | 14:00 to 14:50\nFinal signed individual psychotherapy. Patient participated; completed patient therapy duration was 40 minutes. The header interval is unqualified and is not an actual contact attestation.\n",
+    "patient": {
+      "patient_id": "SYN-HEADERCLOCK",
+      "name": "Headerclock Example",
+      "dob": "1984-03-17"
+    },
+    "declared_id": "DOC-HEADERCLOCK",
+    "facts": [
+      {
+        "kind": "service",
+        "encounter_ref": "VAL-E5",
+        "appointment_ref": null,
+        "service_date": "2026-06-05",
+        "service_type": "individual",
+        "evidence_kind": "clinical",
+        "signed": true,
+        "patient_present": true,
+        "delivered": true,
+        "actual_intervals": [],
+        "scheduled_intervals": [],
+        "unspecified_intervals": [
+          {
+            "start": "14:00",
+            "end": "14:50"
+          }
+        ],
+        "breaks": [],
+        "reported_minutes": 40
+      }
+    ],
+    "exhaustive": true
+  },
+  {
+    "id": "measure",
+    "split": "validation",
+    "group": "measure",
+    "family": "receipt_completion",
+    "source": "new_synthetic",
+    "text": "MRN: SYN-MEASURE | Patient: Measure Example | DOB: 1984-03-17\nDocument ID: DOC-MEASURE\nImport receipt June 6, 2026\nCopied PHQ-9 form VAL-Q6: completed by Measure Example on June 2, 2026, total 11. June 6 is the filing date. No new questionnaire or visit.\n",
+    "patient": {
+      "patient_id": "SYN-MEASURE",
+      "name": "Measure Example",
+      "dob": "1984-03-17"
+    },
+    "declared_id": "DOC-MEASURE",
+    "facts": [
+      {
+        "kind": "assessment",
+        "instrument": "PHQ-9",
+        "assessment_date": "2026-06-02",
+        "form_ref": "VAL-Q6",
+        "score": 11,
+        "reporter": "Measure Example",
+        "experiencer": "Measure Example",
+        "copied": true
+      }
+    ],
+    "exhaustive": true
+  },
+  {
+    "id": "collateral",
+    "split": "validation",
+    "group": "collateral",
+    "family": "professional_contact",
+    "source": "new_synthetic",
+    "text": "MRN: SYN-COLLATERAL | Patient: Collateral Example | DOB: 1984-03-17\nDocument ID: DOC-COLLATERAL\nEncounter VAL-E7 | June 8, 2026\nSigned collateral consultation with the partner only; patient absent throughout. This entry records service classification only, with no symptom or function report. No patient psychotherapy or patient-contact minutes were provided.\n",
+    "patient": {
+      "patient_id": "SYN-COLLATERAL",
+      "name": "Collateral Example",
+      "dob": "1984-03-17"
+    },
+    "declared_id": "DOC-COLLATERAL",
+    "facts": [
+      {
+        "kind": "service",
+        "encounter_ref": "VAL-E7",
+        "appointment_ref": null,
+        "service_date": "2026-06-08",
+        "service_type": "collateral",
+        "evidence_kind": "clinical",
+        "signed": true,
+        "patient_present": false,
+        "delivered": false,
+        "actual_intervals": [],
+        "scheduled_intervals": [],
+        "unspecified_intervals": [],
+        "breaks": [],
+        "reported_minutes": null
+      }
+    ],
+    "exhaustive": true
+  },
+  {
+    "id": "numericplan",
+    "split": "validation",
+    "group": "numericplan",
+    "family": "quantitative_weekly",
+    "source": "new_synthetic",
+    "text": "MRN: SYN-NUMERICPLAN | Patient: Numericplan Example | DOB: 1984-03-17\nDocument ID: DOC-NUMERICPLAN\nSigned treatment plan VAL-P8, effective June 8 through June 26, 2026: at least two therapy days and 95 patient-present minutes per Monday-Sunday week. Only individual and group psychotherapy count. No other clinical statements.\n",
+    "patient": {
+      "patient_id": "SYN-NUMERICPLAN",
+      "name": "Numericplan Example",
+      "dob": "1984-03-17"
+    },
+    "declared_id": "DOC-NUMERICPLAN",
+    "facts": [
+      {
+        "kind": "plan",
+        "plan_ref": "VAL-P8",
+        "effective_start": "2026-06-08",
+        "effective_end": "2026-06-26",
+        "required_days": 2,
+        "required_minutes": 95,
+        "service_types": [
+          "individual",
+          "group"
+        ],
+        "week_basis": "monday_sunday",
+        "signed": true
+      }
+    ],
+    "exhaustive": true
+  },
+  {
+    "id": "tense",
+    "split": "validation",
+    "group": "tense",
+    "family": "history_vs_intention",
+    "source": "new_synthetic",
+    "text": "MRN: SYN-TENSE | Patient: Tense Example | DOB: 1984-03-17\nDocument ID: DOC-TENSE\nJune 9, 2026: Tense Example reports having avoided telephone calls last winter. Tense Example plans to make one telephone call tomorrow; it has not been attempted. No service took place.\n",
+    "patient": {
+      "patient_id": "SYN-TENSE",
+      "name": "Tense Example",
+      "dob": "1984-03-17"
+    },
+    "declared_id": "DOC-TENSE",
+    "facts": [
+      {
+        "kind": "observation",
+        "observation_date": "2026-06-09",
+        "category": "function",
+        "reporter": "Tense Example",
+        "experiencer": "Tense Example",
+        "polarity": "present",
+        "temporality": "historical",
+        "keywords": [
+          "avoid"
+        ]
+      },
+      {
+        "kind": "observation",
+        "observation_date": "2026-06-09",
+        "category": "function",
+        "reporter": "Tense Example",
+        "experiencer": "Tense Example",
+        "polarity": "present",
+        "temporality": "planned",
+        "keywords": [
+          "call"
+        ]
+      }
+    ],
+    "exhaustive": true
+  }
+]

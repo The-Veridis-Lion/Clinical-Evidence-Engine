@@ -34,8 +34,9 @@ def _period(abstraction, spec):
     dates += [d for a in abstraction.assessments for d in a.date_options]
     dates += [p.effective_start for p in abstraction.plans]
     dates += [p.effective_end for p in abstraction.plans if p.effective_end]
-    dates += [o.observation_date for o in abstraction.observations]
+    dates += [o.observation_date for o in abstraction.observations if o.observation_date]
     dates += [a.report_date for a in abstraction.functional_actions]
+    dates += [r.service_date for r in abstraction.relationships if r.service_date]
     if not dates and (spec.start is None or spec.end is None):
         raise ValueError("No episode dates established; supply an explicit review period")
     return spec.start or min(dates), spec.end or max(dates)
@@ -75,20 +76,26 @@ def _compare_periods(abstraction, spec, start, end):
 
 def _clinical_progress(abstraction, spec, start, end):
     assessments = [a for a in abstraction.assessments if any(start <= d <= end for d in a.date_options)]
-    result = {"assessments": [a.model_dump() for a in assessments], "score_changes": []}
+    result = {"assessments": [a.model_dump() for a in assessments],
+              "undated_assessments": [a.model_dump() for a in abstraction.assessments if not a.date_options],
+              "score_changes": []}
     # Compare the same instrument and experiencer; uncertain dates cannot order a trend.
     histories = sorted({(a.instrument.casefold(), a.experiencer.casefold()) for a in assessments})
     for instrument, experiencer in histories:
         sequence = [a for a in assessments if a.instrument.casefold() == instrument and a.experiencer.casefold() == experiencer and a.assessment_date is not None]
         for a, b in zip(sequence, sequence[1:]):
+            if not a.score_options or not b.score_options:
+                continue
             differences = sorted({y - x for x in a.score_options for y in b.score_options})
             result["score_changes"].append(CalculationTrace(operation="assessment_score_change", inputs={"from_date": str(a.assessment_date), "to_date": str(b.assessment_date),
                                                                                                          "from_scores": a.score_options, "to_scores": b.score_options},
                                                             output={"instrument": instrument, "difference_options": differences}, claim_ids=a.claim_ids + b.claim_ids).model_dump())
     if spec.family == "progress":
-        result["observations"] = [o.model_dump() for o in sorted(abstraction.observations, key=lambda o: (o.observation_date, o.claim_id)) if start <= o.observation_date <= end]
+        result["observations"] = [o.model_dump() for o in sorted((o for o in abstraction.observations if o.observation_date), key=lambda o: (o.observation_date, o.claim_id)) if start <= o.observation_date <= end]
+        result["undated_observations"] = [o.model_dump() for o in abstraction.observations if o.observation_date is None]
         result["functional_actions"] = [a.model_dump() for a in sorted(abstraction.functional_actions, key=lambda a: (a.report_date, a.claim_id)) if start <= a.report_date <= end]
         result["interpretation_limits"] = ["Symptom score change does not establish remission, restored occupational function, or a causal treatment effect.",
+                                           "Undated evidence is retained separately; membership in the requested period is unknown.",
                                            "Reporter/experiencer, negation and planned versus completed actions remain explicit in source claims."]
     return result
 

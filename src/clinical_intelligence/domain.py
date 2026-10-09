@@ -7,7 +7,7 @@ from typing import Annotated, Literal
 from pydantic import BaseModel, ConfigDict, Field, model_validator
 
 # Extraction contracts and derived facts have separate invalidation versions.
-ABSTRACTION_VERSION = "3"
+ABSTRACTION_VERSION = "4"
 
 
 class Model(BaseModel):
@@ -105,8 +105,8 @@ class ServiceClaim(ClinicalClaim):
     kind: Literal["service"] = "service"
     encounter_ref: str | None = None
     appointment_ref: str | None = None
-    service_date: date
-    service_type: ServiceType
+    service_date: date | None = None
+    service_type: ServiceType | None = None
     evidence_kind: EvidenceKind
     signed: bool = False
     # None means unknown; patient presence and service delivery are separate claims.
@@ -137,9 +137,9 @@ class PlanClaim(ClinicalClaim):
 class AssessmentClaim(ClinicalClaim):
     kind: Literal["assessment"] = "assessment"
     instrument: str
-    assessment_date: date
+    assessment_date: date | None = None
     form_ref: str | None = None
-    score: float
+    score: float | None = None
     reporter: str
     experiencer: str
     copied: bool = False
@@ -147,7 +147,7 @@ class AssessmentClaim(ClinicalClaim):
 
 class ClinicalObservation(ClinicalClaim):
     kind: Literal["observation"] = "observation"
-    observation_date: date
+    observation_date: date | None = None
     category: Literal["symptom", "function", "safety", "treatment_reason", "response"]
     # A partner may report the patient's symptoms or describe their own experience.
     reporter: str

@@ -161,6 +161,9 @@ def quantitative_evidence(claim: ClinicalClaim, document: RegisteredDocument | N
     units = _source_units(document) if document is not None else []
     result = {}
     for field, value in _fields(claim).items():
+        if value is None:
+            result[field] = {"value": None, "status": "unknown", "basis": None, "passages": []}
+            continue
         passages = [p for p in claim.passages if _matches(claim, field, value, p.quote, existing=True)]
         basis = "existing_claim_passage"
         if not passages and document is not None:

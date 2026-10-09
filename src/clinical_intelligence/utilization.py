@@ -36,15 +36,16 @@ def _service_accounting(event: ServiceEvent):
 
 def _contribution(event: ServiceEvent, start, end, service_types):
     possible_dates = [d for d in event.date_options if start <= d <= end]
-    possible_type = any(t in service_types for t in event.type_options)
+    date_missing = not event.date_options
+    possible_type = bool(service_types) and (not event.type_options or any(t in service_types for t in event.type_options))
     countable, lower, upper = _service_accounting(event)
-    if not possible_dates or not possible_type or countable is False:
+    if (not possible_dates and not date_missing) or not possible_type or countable is False:
         return None
     # A guaranteed contribution must be eligible under every supported date/type choice.
-    certain = all(start <= d <= end for d in event.date_options) and all(t in service_types for t in event.type_options)
+    certain = not date_missing and bool(event.type_options) and all(start <= d <= end for d in event.date_options) and all(t in service_types for t in event.type_options)
     definite = certain and countable is True
     return {"event_id": event.event_id, "encounter_ref": event.encounter_ref,
-            "service_date": event.service_date, "date_options": possible_dates,
+            "service_date": event.service_date, "date_options": possible_dates,"date_missing":date_missing,
             "service_type": event.service_type, "type_options": event.type_options,
             "sessions": bounded(int(definite), 1),
             "minutes": bounded(lower if definite else 0, upper),
@@ -66,11 +67,14 @@ def utilization(abstraction: PatientAbstraction, start: date, end: date, service
     # 2**7 states; preserve them rather than counting all possible dates as delivered.
     day_sets = {frozenset()}
     for c in contributions:
+        if c['date_missing']:
+            continue
         updated = {days | {d} for days in day_sets for d in c["date_options"]}
         if c["sessions"]["lower"] == 0:
             updated |= day_sets
         day_sets = updated
-    days = bounded(min(map(len, day_sets)), max(map(len, day_sets)))
+    unknown_date_contacts=sum(c['date_missing'] for c in contributions)
+    days = bounded(min(map(len, day_sets)), min((end-start).days+1,max(map(len, day_sets))+unknown_date_contacts))
     # Keep discrete supported totals as well as bounds; intermediate values may be impossible.
     options = {0}
     for c in contributions:
@@ -90,6 +94,18 @@ def utilization(abstraction: PatientAbstraction, start: date, end: date, service
               "therapy_days": days, "minutes": bounded(low, high),
               "hours": bounded(low / 60, high / 60 if high is not None else None),
               "minute_alternatives": sorted(options) if options is not None else None}
+    # A signed correction with a missing/inconsistent service target is evidence
+    # that this corpus cannot establish final utilization. No missing base visit
+    # is invented and no unresolved correction is silently treated as zero.
+    unresolved_ids={u.subject_id for u in abstraction.uncertainties
+                    if u.explanation=='Correction target constraints do not identify a service source.'}
+    unresolved=[r for r in abstraction.relationships if r.claim_id in unresolved_ids
+                and r.field in {'arrival','departure','minutes','presence','record'}
+                and (r.service_date is None or start<=r.service_date<=end)] if service_types else []
+    if unresolved:
+        totals={key:bounded(0,None) for key in ('sessions','distinct_service_days','therapy_days','minutes','hours')}
+        totals['minute_alternatives']=None
+        claim_ids=sorted(set(claim_ids)|{r.claim_id for r in unresolved})
     trace = CalculationTrace(operation="sum_events_and_count_distinct_local_dates",
                              inputs={"start": str(start), "end": str(end), "service_types": sorted(service_types),
                                      "contributions": [{k: c[k] for k in ("event_id", "sessions", "minutes", "date_options")} for c in contributions]},
@@ -98,6 +114,7 @@ def utilization(abstraction: PatientAbstraction, start: date, end: date, service
                                           "Bounds express supported alternatives, not averages or probabilities.",
                                           "No undocumented therapy is imputed for missing/cancelled appointments."])
     return {"start": start, "end": end, "totals": totals, "contributions": contributions,
+            "unresolved_service_corrections": [r.claim_id for r in unresolved],
             "excluded_events": [{"event_id": e.event_id, "encounter_ref": e.encounter_ref,
                                  "service_type": e.service_type, "claim_ids": e.claim_ids,
                                  "decisions": [d.model_dump() for d in e.decisions]} for e in excluded],
