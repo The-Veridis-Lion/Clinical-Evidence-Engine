@@ -293,6 +293,12 @@ For project inquiries or commercial licensing:
 The-Veridis-Lion
 ## Generalizable review reliability
 
+The subsequent [bounded note prompt A/B round](docs/luna-bounded-ab-round.md)
+completed 48 planned executions using 56 real Luna requests. Its semantic benchmark
+was marked invalid after frozen expectation/matching defects were found; the original
+scores and failures remain preserved. A remains the default, B is experimental, and
+this round makes no adoption or clinical accuracy claim.
+
 The [reliability delivery](docs/reliability-delivery.md) separates terminology
 grounding, policy applicability and field-scoped amendment reconciliation while
 preserving original facts and all failure traces. Frozen new-material confirmation
