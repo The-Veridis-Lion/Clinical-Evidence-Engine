@@ -188,14 +188,14 @@ def evaluate(case,prepared,facts,notes,policy,mode,usage=None,requested_policy=N
         identity=identity,policy_review_status=policy['review_status'],human_review_completed=policy['human_review_completed'],clinical_expert_review_completed=policy['clinical_expert_review_completed'])
 
 
-def run_review(case,*,mode='structured-only',provider=None,input_label='case.json',usage=None,requested_policy=None):
+def run_review(case,*,mode='structured-only',provider=None,input_label='case.json',usage=None,requested_policy=None,note_prompt='A'):
     if mode not in {'structured-only','live','fixture'}:raise ValueError('Unsupported review mode')
     if mode!='structured-only' and provider is None:raise ValueError('Note mode requires an explicitly injected provider')
     policy=load_policy();prepared=prepare_case(case,policy,input_label=input_label);facts=structured_facts(prepared);notes=[]
     for source in prepared['source_candidates']:
         if source['source_kind']!='synthetic_note':continue
         if mode=='structured-only':notes.append({'source_id':source['source_id'],'status':'not_run','calls':0,'repairs':0});continue
-        extracted,record=extract_note(provider,source,case.claim.model_dump(mode='json'),case.review_context.as_of)
+        extracted,record=extract_note(provider,source,case.claim.model_dump(mode='json'),case.review_context.as_of,prompt_variant=note_prompt)
         facts+=extracted;notes.append(record)
     actual_usage=usage() if callable(usage) else usage
     return evaluate(case,prepared,facts,notes,policy,mode,actual_usage,requested_policy)

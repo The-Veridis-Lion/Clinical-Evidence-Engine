@@ -63,6 +63,7 @@ def main(argv=None):
     run.add_argument('--format',choices=['json','markdown','summary'],default='json');run.add_argument('--output',type=Path)
     run.add_argument('--model',default='gpt-6-luna');run.add_argument('--reasoning',default='high',choices=['none','low','medium','high','xhigh','max'])
     run.add_argument('--timeout',type=int,default=180)
+    run.add_argument('--note-prompt',choices=['A','B'],default='A',help='B is an explicit experimental prompt; A remains the default.')
     run.add_argument('--ledger',type=Path,default=Path('artifacts/claims-review/live-budget.json'))
     run.add_argument('--trace-directory',type=Path,default=Path('artifacts/claims-review/live-calls'))
     run.add_argument('--policy-version')
@@ -101,7 +102,7 @@ def main(argv=None):
                 stage='preparation';value=prepare_case(case,load_policy(),input_label=str(args.case))
                 stage='save';write_output(args.output,json.dumps(value,ensure_ascii=False,indent=2)+'\n');return 0
             stage='provider_setup';provider,usage=live_provider(args) if args.mode=='live' else (None,None)
-            stage='review';packet=run_review(case,mode=args.mode,provider=provider,usage=usage,input_label=str(input_path),requested_policy=args.policy_version)
+            stage='review';packet=run_review(case,mode=args.mode,provider=provider,usage=usage,input_label=str(input_path),requested_policy=args.policy_version,note_prompt=args.note_prompt)
             if retrieved:
                 packet.execution['retrieval']={k:retrieved[k] for k in ['version','archive','case_sha256','matched_source_ids','latency_seconds','scope']}
                 packet.execution['archive_verification']=verification

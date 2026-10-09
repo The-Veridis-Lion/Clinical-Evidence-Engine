@@ -74,13 +74,15 @@ def preserves(original,final):
     return False
 
 
-def note_request(source,claim):
+def note_request(source,claim,*,prompt_variant='A'):
+    if prompt_variant not in {'A','B'}:raise ValueError('Unknown note prompt variant')
+    from .note_prompt_b import PROMPT_B
     schema=NoteProposal.model_json_schema()
     schema['properties']['patient_id']={'type':'string','enum':[source['patient_id']]}
     schema['properties']['source_id']={'type':'string','enum':[source['source_id']]}
     schema['$defs']['NoteAssertion']['properties']['span_ids']['items']={'type':'string','enum':[a['span_id'] for a in source['line_anchors']]}
     context={k:source[k] for k in ['patient_id','source_id','encounter_id','recorded_at','available_at']}
-    prompt=PROMPT+'\nREQUEST CONTEXT (not clinical evidence):\n'+json.dumps(claim)+'\nSOURCE IDENTITY:\n'+json.dumps(context)+'\nSOURCE SPANS:\n'+json.dumps(source['line_anchors'],ensure_ascii=False)
+    prompt=(PROMPT if prompt_variant=='A' else PROMPT_B)+'\nREQUEST CONTEXT (not clinical evidence):\n'+json.dumps(claim)+'\nSOURCE IDENTITY:\n'+json.dumps(context)+'\nSOURCE SPANS:\n'+json.dumps(source['line_anchors'],ensure_ascii=False)
     return prompt,schema
 
 
@@ -142,8 +144,8 @@ def adapt(proposal,source):
     return facts
 
 
-def extract_note(provider:NoteProvider,source,claim,as_of):
-    prompt,schema=note_request(source,claim);raw=None;calls=0;failures=[];protected=[]
+def extract_note(provider:NoteProvider,source,claim,as_of,*,prompt_variant='A'):
+    prompt,schema=note_request(source,claim,prompt_variant=prompt_variant);raw=None;calls=0;failures=[];protected=[]
     for attempt in range(2):
         request=prompt if attempt==0 else prompt+'\nRUNTIME VALIDATION ERRORS:\n'+'\n'.join(failures)+'\nPREVIOUS PROPOSAL:\n'+json.dumps(raw,ensure_ascii=False)+'\nRepair only source-supported assertions; do not invent values. Preserve independently valid assertions and their known fields. Do not replace them with null to satisfy validation.'
         calls+=1
