@@ -68,6 +68,67 @@ Synthea slice are engineering examples. The six independent confirmation candida
 were not opened or used. See the [semantic contract](docs/claims-review-contract.md)
 and [representative final packet](examples/claims_review/DEV-002-review.json).
 
+## Original archive evidence demo
+
+The review now starts from an original unfiltered official Synthea CSV archive plus
+an explicitly constructed target request, rather than a preselected source list.
+Retrieval preserves patient/encounter identities, original field strings, row/file
+hashes, exclusions and uncertain event linkage. Only selected natural-language notes
+would use Luna; the demonstrated CSV run contains no such notes and makes zero calls.
+
+After the installation above, run from the repository root:
+
+```sh
+python -m clinical_intelligence.claims_review download --output artifacts/raw-source/original.zip
+python -m clinical_intelligence.claims_review retrieve --archive artifacts/raw-source/original.zip --query examples/claims_review/raw/target-query.json --snapshot-available-at 2026-10-09 --output artifacts/raw-source/retrieval.json
+python -m clinical_intelligence.claims_review run --retrieval artifacts/raw-source/retrieval.json --output artifacts/raw-source/review.json
+python -m clinical_intelligence.claims_review render --packet artifacts/raw-source/review.json --format summary --output artifacts/raw-source/review.md
+python tools/benchmark_claims_retrieval.py --archive artifacts/raw-source/original.zip --output artifacts/raw-source/benchmark
+python tools/audit_claims_packet.py --retrieval artifacts/raw-source/retrieval.json --packet artifacts/raw-source/review.json --output artifacts/raw-source/citation-audit.json
+```
+
+Download refuses to overwrite an existing archive; reuse your verified local file.
+These dates reproduce the recorded 2026-10-09 snapshot-receipt experiment. For a later
+new download, use its actual receipt date and update the query's as_of date; do not
+backdate availability. Without a receipt declaration, sources have unknown
+availability. Receipt never establishes original EHR availability or history completeness.
+The fixed benchmark requires SHA
+`d61417b551e5b0997c33851b339c157421751f0ea68c18ea686ceb1850907c35`;
+changed latest downloads need a new source inventory. Expanded JSON and the archive
+remain ignored. The [concise example packet](examples/claims_review/raw/review-summary.md)
+retains visible gaps; full machine JSON is generated separately.
+
+```mermaid
+flowchart LR
+    A[Original CSV archive + constructed request] --> R[Patient/code/date retrieval]
+    R --> P[Prepared sources + exclusion provenance]
+    P --> S[Deterministic structured facts]
+    P --> N[Selected notes, when available]
+    N --> L[Nullable Luna facts + exact offsets]
+    S --> C[Four scoped evidence criteria]
+    L --> C
+    C --> E[JSON + concise packet + missing/conflicting evidence]
+```
+
+Actual new evidence: 18 original tables / 201,657 rows; 19 prior HbA1c result rows
+instead of the old slice's five. Three overlapping retrieval windows matched **26/26
+source-task pairs**, with no observed candidate false positives or wrong-patient
+inclusions under the finite oracle. They represent one patient, not independent
+clinical validation. The freshly executed suite passed 303 tests; current-rule replay
+passed 5/5 saved development responses. Six reserved confirmation inputs/expectations
+were unavailable, so independent final-prompt confirmation is **NOT VERIFIED**.
+The prior 4/5 live development result and one final-prompt DEV-002 check remain historical.
+
+The raw-source example correctly exposes absent target-performance/order/intent
+documentation: all four criteria remain INSUFFICIENT_EVIDENCE. An archive result is
+not a verified billing claim. Positional citation checks do not certify meaning;
+independent semantic precision is unavailable. See the [delivery and benchmark](docs/raw-source-delivery.md),
+[versioned machine summary](docs/raw-source-validation.json),
+[retrieval contract](docs/raw-source-retrieval-contract.md),
+[AI-assisted assertion review](docs/raw-source-semantic-review.md),
+[official policy verification sheet](docs/claims-review-policy-verification.md), and
+[90-second demonstration/interview notes](docs/claims-review-portfolio.md).
+
 ## Architecture
 
 ```mermaid

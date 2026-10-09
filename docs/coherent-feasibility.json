@@ -1,0 +1,34 @@
+{
+  "accessed_on": "2026-10-09",
+  "license": "https://creativecommons.org/licenses/by/4.0/",
+  "copyright": "2021 The MITRE Corporation",
+  "public_release": "21-1917",
+  "registry_url": "https://registry.opendata.aws/synthea-coherent-data/",
+  "reference": "Walonoski et al. The Coherent Data Set. Electronics 2022;11(8):1199. https://doi.org/10.3390/electronics11081199",
+  "bundles": [
+    {
+      "url": "https://synthea-open-data.s3.amazonaws.com/coherent/unzipped/fhir/Abe604_Frami345_b8dd1798-beef-094d-1be4-f90ee0e6b7d5.json",
+      "sha256": "270ea43702ed2a9a16983ee1b880302653257eb63635a61761e026893ad83ecf",
+      "bytes": 1328697,
+      "document_note_count": 35,
+      "note_patient_encounter_binding_failures": 0,
+      "hba1c_keyword_note_count": 0,
+      "diabetes_keyword_notes": 0,
+      "screening_method": "Decode complete inline plain text; keyword screen and direct selected-text review. Not semantic absence proof across corpus."
+    },
+    {
+      "url": "https://synthea-open-data.s3.amazonaws.com/coherent/unzipped/fhir/Abraham100_Stracke611_990db43c-4604-a27c-4153-bfa9ef42a9e2.json",
+      "sha256": "954eb37d9f01a92783431df6105f32d72a8229c12fbccba2a844e859a20dafcc",
+      "bytes": 3082774,
+      "document_note_count": 108,
+      "note_patient_encounter_binding_failures": 0,
+      "hba1c_keyword_note_count": 0,
+      "diabetes_keyword_notes": 13,
+      "screening_method": "Decode complete inline plain text; keyword screen and direct selected-text review. Not semantic absence proof across corpus."
+    }
+  ],
+  "complete_full_zip_downloaded": false,
+  "real_model_calls": 0,
+  "pilot_status": "NOT VERIFIED: no qualifying monitoring note in bounded discovery",
+  "human_review_completed": false
+}

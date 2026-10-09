@@ -1,0 +1,121 @@
+{
+  "url": "https://synthetichealth.github.io/synthea-sample-data/downloads/latest/synthea_sample_data_csv_latest.zip",
+  "retrieved_at": "2026-10-09T04:37:06.928880+00:00",
+  "sha256": "d61417b551e5b0997c33851b339c157421751f0ea68c18ea686ceb1850907c35",
+  "bytes": 5960866,
+  "http_last_modified": "Tue, 18 Aug 2026 16:21:36 GMT",
+  "http_etag": "\"6a848690-5af4a2\"",
+  "members": [
+    {
+      "path": "encounters.csv",
+      "bytes": 1857081,
+      "sha256": "16d209cb1429605c90c80cd859ac16569108dc46890f50eb6a125a0602235b3a",
+      "rows": 5571
+    },
+    {
+      "path": "conditions.csv",
+      "bytes": 552897,
+      "sha256": "a3141544140b626c9ae941043ad1afe4a0c201749b2e332c98f4cb2e2b7ec4cd",
+      "rows": 3517
+    },
+    {
+      "path": "claims.csv",
+      "bytes": 3605269,
+      "sha256": "ce4e6acb7569f12fba058fb6f0b9734a3cdde446ce41c2135167ce668ea5d288",
+      "rows": 9421
+    },
+    {
+      "path": "imaging_studies.csv",
+      "bytes": 187543,
+      "sha256": "bebfa122958cde7522706dddc1187663f11d34136dbf63a5a2aa16128638aa3f",
+      "rows": 478
+    },
+    {
+      "path": "providers.csv",
+      "bytes": 55141,
+      "sha256": "6957c3f7e2bb1b5ab1505b09fc73db41eed6ff41e867d765704a953159405627",
+      "rows": 278
+    },
+    {
+      "path": "payers.csv",
+      "bytes": 1770,
+      "sha256": "daa80d02749bbd1b1076d8daa290780c89a45802d4161b69cbff1918dc66e69f",
+      "rows": 10
+    },
+    {
+      "path": "medications.csv",
+      "bytes": 1009699,
+      "sha256": "53d1d9f51c62cc6cebf236ab739ef9973ba27e65f1000a8a518026670fbffa62",
+      "rows": 3850
+    },
+    {
+      "path": "allergies.csv",
+      "bytes": 18989,
+      "sha256": "f40ba61ee159bd91989ad239743e4d2c80a05c9e7da83db613b54271bba9b746",
+      "rows": 105
+    },
+    {
+      "path": "careplans.csv",
+      "bytes": 69430,
+      "sha256": "bce3029163eb85442255fa4361be456191308a18173b91a139050979119f43ae",
+      "rows": 349
+    },
+    {
+      "path": "patients.csv",
+      "bytes": 32471,
+      "sha256": "0e8a61760644976571e7ede02e8be5bfece5111bc179d2139af87f84b630c859",
+      "rows": 108
+    },
+    {
+      "path": "devices.csv",
+      "bytes": 117807,
+      "sha256": "576fde327c40587c5e34075bc57c12d237d646964a6062bec71916d5092a7d29",
+      "rows": 524
+    },
+    {
+      "path": "organizations.csv",
+      "bytes": 46563,
+      "sha256": "fdbea738d91e8b643e53c3b7f29d7ff47319caf7ee943323d1058c3000341969",
+      "rows": 278
+    },
+    {
+      "path": "supplies.csv",
+      "bytes": 307090,
+      "sha256": "d64513799796616b4a8d0e67f80bda493b5027d14e8b3bcb108409a9ad5a8a38",
+      "rows": 2225
+    },
+    {
+      "path": "observations.csv",
+      "bytes": 12025080,
+      "sha256": "9517c23df9ebddee59961bcbcb82bd6b2b885ebc8136507ef8a2ccdc7ddae9d1",
+      "rows": 68648
+    },
+    {
+      "path": "immunizations.csv",
+      "bytes": 216050,
+      "sha256": "caecf46c86586f91b507e3ab1f847f52e022550acbf5c48759a1ac151cdb2763",
+      "rows": 1549
+    },
+    {
+      "path": "claims_transactions.csv",
+      "bytes": 38557508,
+      "sha256": "660a48994403bfe85884126e1904fabc16960ce8c554aa7d951cce59ec2460b6",
+      "rows": 85047
+    },
+    {
+      "path": "payer_transitions.csv",
+      "bytes": 631702,
+      "sha256": "614fda09baa674f452f73db6afe3a48997dc5e2be27d01098094d1689e5e27e7",
+      "rows": 3815
+    },
+    {
+      "path": "procedures.csv",
+      "bytes": 3570625,
+      "sha256": "0eb6949cc13053f31dda394db8de2dd8ec73a712b21b755cece14f8829f9534b",
+      "rows": 15884
+    }
+  ],
+  "total_member_rows": 201657,
+  "verification": "Actual new download; original member bytes and row counts independently inventoried, then matched to retrieval manifest. AI-assisted; no human verification.",
+  "latest_identity_warning": "A later download may differ; frozen benchmark rejects a changed archive."
+}
