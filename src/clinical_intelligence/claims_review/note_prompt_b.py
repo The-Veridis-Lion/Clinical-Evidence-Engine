@@ -1,4 +1,4 @@
-"""Frozen experimental proposition/event guidance; A remains the default."""
+"""Frozen original proposition/event guidance; B is the research default."""
 
 VERSION = 'claims-note-prompt-b/1'
 PROMPT_B = '''Extract source-supported HbA1c review facts only, using the existing schema.

@@ -74,7 +74,7 @@ fix, requiring new independent confirmation.
 
 ## Actual resource accounting
 
-Original ledger: `D:/Codex/Take Home Excerise/clinical-evidence-review/artifacts/claims-review/live-budget.json`.
+Original ledger: `artifacts/claims-review/live-budget.json`.
 Original trace root: the sibling `live-calls` directory. Existing six reservations
 remain intact; this run adds calls **7-13**, two of which are runtime validation repairs.
 Cumulative **13/20**, remaining **7**. No new ledger, reset or hidden sampling occurred.
@@ -156,8 +156,8 @@ and trace hashes are sealed. The six original outputs are local immutable record
 fresh generation reproduces the procedure, not identical answers.
 
 ```powershell
-$ledger='D:/Codex/Take Home Excerise/clinical-evidence-review/artifacts/claims-review/live-budget.json'
-$traces='D:/Codex/Take Home Excerise/clinical-evidence-review/artifacts/claims-review/live-calls'
+$ledger='artifacts/claims-review/live-budget.json'
+$traces='artifacts/claims-review/live-calls'
 # Run only after freeze/hash checks, with expected still closed and a fresh output directory.
 foreach ($id in 1..6) {
   $name='CONF-{0:D3}' -f $id

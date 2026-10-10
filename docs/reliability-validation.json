@@ -201,7 +201,7 @@
     "human_review_completed": false
   },
   "ledger": {
-    "path": "D:\\Codex\\Take Home Excerise\\clinical-evidence-review\\artifacts\\claims-review\\live-budget.json",
+    "path": "artifacts\\claims-review\\live-budget.json",
     "before": 13,
     "after": 17,
     "limit": 20,
@@ -236,7 +236,7 @@
       "schema_sha256": "0aa19e99bfe5741281d27fc6fa0df325923490936914735f670aef7205653f27",
       "answer_sha256": "aa53622bdc9c45700a91ab8fab048e3ae3580468839d1bf51c6496b4218a348a",
       "seconds": 15.507865500170738,
-      "path": "D:\\Codex\\Take Home Excerise\\clinical-evidence-review\\artifacts\\claims-review\\live-calls\\call-014"
+      "path": "artifacts\\claims-review\\live-calls\\call-014"
     },
     {
       "call": 15,
@@ -246,7 +246,7 @@
       "schema_sha256": "4ced9361dc85f2b2f295e1c59b5dc413bb88ceaf68875c1e92d7c8a8256cbc41",
       "answer_sha256": "14236639755d8d3f0744bd6d7d0ab2aa0708a9c1587bc275555047d986db852e",
       "seconds": 18.629055899800733,
-      "path": "D:\\Codex\\Take Home Excerise\\clinical-evidence-review\\artifacts\\claims-review\\live-calls\\call-015"
+      "path": "artifacts\\claims-review\\live-calls\\call-015"
     },
     {
       "call": 16,
@@ -256,7 +256,7 @@
       "schema_sha256": "4ced9361dc85f2b2f295e1c59b5dc413bb88ceaf68875c1e92d7c8a8256cbc41",
       "answer_sha256": "a34b206478fe7feaf01998d42b870422eb25eb7796259ed3cf6b76595f39998d",
       "seconds": 10.21336349984631,
-      "path": "D:\\Codex\\Take Home Excerise\\clinical-evidence-review\\artifacts\\claims-review\\live-calls\\call-016"
+      "path": "artifacts\\claims-review\\live-calls\\call-016"
     },
     {
       "call": 17,
@@ -266,12 +266,12 @@
       "schema_sha256": "49515b20e4b3f0a2cbdbfab87c75ac919222a934f702f9bf463bb2342d97e09b",
       "answer_sha256": "3fda8e25971614004694508f7ad4290573ddd8459fddd82d1e0c44ba2649ae9a",
       "seconds": 15.50209329999052,
-      "path": "D:\\Codex\\Take Home Excerise\\clinical-evidence-review\\artifacts\\claims-review\\live-calls\\call-017"
+      "path": "artifacts\\claims-review\\live-calls\\call-017"
     }
   ],
   "installed_cli": {
     "passed": true,
-    "module_path": "D:\\Codex\\Take Home Excerise\\clinical-evidence-confirmation\\artifacts\\reliability-round-01\\installed\\clinical_intelligence\\claims_review\\review.py",
+    "module_path": "artifacts\\reliability-round-01\\installed\\clinical_intelligence\\claims_review\\review.py",
     "criterion_states": {
       "MONITORING_CONTEXT": "SUPPORTED",
       "TEST_TIMELINE": "SUPPORTED",
@@ -324,7 +324,7 @@
   },
   "final_installed_cli": {
     "passed": true,
-    "module_path": "D:\\Codex\\Take Home Excerise\\clinical-evidence-confirmation\\artifacts\\reliability-round-01\\final-installed\\clinical_intelligence\\claims_review\\facts.py",
+    "module_path": "artifacts\\reliability-round-01\\final-installed\\clinical_intelligence\\claims_review\\facts.py",
     "structured_version": "claims-review-structured/3",
     "criterion_states": {
       "MONITORING_CONTEXT": "SUPPORTED",

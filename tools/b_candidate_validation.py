@@ -1,3 +1,4 @@
+import os
 """Fixed new-material validation using the existing bounded runner and original B.
 
 Inference reads only input cases. Labels are opened only by preflight and scoring.
@@ -162,7 +163,7 @@ def freeze(directory):
     state.update(plan=plan, phase='FROZEN', seed=202610091, calls=[],
         start_utc=state['started_at'], execution_deadline=state['work_deadline'],
         model='gpt-6-luna', reasoning='high', request_timeout_seconds=180)
-    ledger = Path('D:/Codex/Take Home Excerise/clinical-evidence-review/artifacts/claims-review/live-budget.json')
+    ledger = Path(os.environ['CLINICAL_HISTORICAL_LEDGER'])
     state['historical_ledger'] = {'path': str(ledger), 'sha256': sha(ledger),
                                 'count': len(read(ledger)['calls']), 'limit': 20}
     requests = {}

@@ -1,6 +1,10 @@
 # Saved Luna A/B outputs: offline semantic reanalysis
 
-**POST_HOC_REANALYSIS — A remains the default.** This evaluation-only change
+> Historical phase report: scores and the phase-specific A/B decision below are
+> preserved. The current release selects original B by explicit research decision;
+> see [the engineering case study](engineering-case-study.md).
+
+**POST_HOC_REANALYSIS â€” A remains the default.** This evaluation-only change
 reanalyzes 48 saved executions from 16 notes. It makes no new model, embedding or
 judge requests. It does not change production prompts, schema, validation,
 repair, adapters or policy rules. The original `BENCHMARK_INVALID` report, gold,

@@ -1,0 +1,770 @@
+{
+  "version": "portfolio-release-costs/1",
+  "measurement": "Historical B-only workflows including extraction repair; zero new requests",
+  "source_round": "b-candidate-new-validation-01",
+  "frozen_experiment_commit": "d2d03f951ff50a6bff99c3c2b80fce94cc295ade",
+  "release_baseline_commit": "909d4ed435aa6ff47e7fd34fcae81c9d4fb2bff2",
+  "model": "gpt-6-luna",
+  "reasoning": "high",
+  "source_class": "constructed_synthetic",
+  "pricing_verified_on": "2026-10-09",
+  "pricing_urls": [
+    "https://developers.openai.com/api/docs/models/gpt-6-luna",
+    "https://developers.openai.com/api/docs/pricing"
+  ],
+  "standard_short_context_usd_per_million": {
+    "input": 0.1,
+    "output": 0.5,
+    "cached_input": 0.01,
+    "cache_write": 0.125
+  },
+  "calculation": "input_tokens * 0.10 / 1000000 + output_tokens * 0.50 / 1000000",
+  "cost_assumptions": "No cached-input discount or regional/fast-tier surcharge. API-equivalent estimate, not an observed Codex subscription bill. Reasoning output is already included; recorded cache writes are zero.",
+  "actual_billed_cost_usd": null,
+  "notes": [
+    {
+      "case_id": "N01",
+      "source_id": "N01-NOTE",
+      "words": 647,
+      "characters": 4319,
+      "content_sha256": "096af93a30db5c0600d990c1dbdb7b815981da0ae5c985346329822e00941cb4",
+      "long_form": true,
+      "template_family": "outpatient_long",
+      "utf8_bytes": 4319,
+      "runs": [
+        {
+          "run_id": "n01-B-r1",
+          "repeat": 1,
+          "requests": 1,
+          "repairs": 0,
+          "input_tokens": 18050,
+          "cached_input_tokens": 0,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 1919,
+          "reasoning_output_tokens_subset": 1012,
+          "elapsed_seconds": 16.412993300007656,
+          "usage_records": [
+            {
+              "locator": "calls/call-012/usage.json",
+              "sha256": "b324e5a42c8be178c4ec12cbf3b658f7f54b6a8772df479eab01883cfed74ceb"
+            }
+          ],
+          "standard_api_equivalent_usd_no_cache_discount": 0.0027645
+        },
+        {
+          "run_id": "n01-B-r2",
+          "repeat": 2,
+          "requests": 1,
+          "repairs": 0,
+          "input_tokens": 18048,
+          "cached_input_tokens": 0,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 1876,
+          "reasoning_output_tokens_subset": 919,
+          "elapsed_seconds": 15.583748899865896,
+          "usage_records": [
+            {
+              "locator": "calls/call-045/usage.json",
+              "sha256": "f03c47cb87f88d5061a8ad2b4dc4121a4f6b9b530d9b8a0356d0cefd42836481"
+            }
+          ],
+          "standard_api_equivalent_usd_no_cache_discount": 0.0027428
+        }
+      ]
+    },
+    {
+      "case_id": "N02",
+      "source_id": "N02-NOTE",
+      "words": 707,
+      "characters": 4638,
+      "content_sha256": "152a4fa8d6e9326ad9a6ab89bfd84ff0f4ce469dc8bc20005152d88ea3b6b1e4",
+      "long_form": true,
+      "template_family": "discharge_long",
+      "utf8_bytes": 4638,
+      "runs": [
+        {
+          "run_id": "n02-B-r1",
+          "repeat": 1,
+          "requests": 1,
+          "repairs": 0,
+          "input_tokens": 18142,
+          "cached_input_tokens": 0,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 1585,
+          "reasoning_output_tokens_subset": 957,
+          "elapsed_seconds": 15.085672300076112,
+          "usage_records": [
+            {
+              "locator": "calls/call-002/usage.json",
+              "sha256": "4775d52a5a03a0fbc2c83348966100214c06e8d588f4a805c4b056578f5284f3"
+            }
+          ],
+          "standard_api_equivalent_usd_no_cache_discount": 0.0026067
+        },
+        {
+          "run_id": "n02-B-r2",
+          "repeat": 2,
+          "requests": 1,
+          "repairs": 0,
+          "input_tokens": 18144,
+          "cached_input_tokens": 0,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 1964,
+          "reasoning_output_tokens_subset": 1170,
+          "elapsed_seconds": 39.83238140004687,
+          "usage_records": [
+            {
+              "locator": "calls/call-036/usage.json",
+              "sha256": "75d52dd8b7e52c7355f1ae76eac9c4d0626cc87a8e1961f8989a94369e937076"
+            }
+          ],
+          "standard_api_equivalent_usd_no_cache_discount": 0.0027964
+        }
+      ]
+    },
+    {
+      "case_id": "N03",
+      "source_id": "N03-NOTE",
+      "words": 674,
+      "characters": 4372,
+      "content_sha256": "4262070a56b5b3162f2ef0dabd84a60d5b620344b2ce3f07834135ef0bbd194f",
+      "long_form": true,
+      "template_family": "lab_receipt_long",
+      "utf8_bytes": 4372,
+      "runs": [
+        {
+          "run_id": "n03-B-r1",
+          "repeat": 1,
+          "requests": 2,
+          "repairs": 1,
+          "input_tokens": 37218,
+          "cached_input_tokens": 0,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 2733,
+          "reasoning_output_tokens_subset": 888,
+          "elapsed_seconds": 24.300807899795473,
+          "usage_records": [
+            {
+              "locator": "calls/call-026/usage.json",
+              "sha256": "4c390481db683a746f61ddb6f4d1ea42b48debcc10d07e8ad3e4c7a617494739"
+            },
+            {
+              "locator": "calls/call-027/usage.json",
+              "sha256": "b27c805950e14abdba85ed2ca6dac785fe447429d5737be7d66aaffe948ee7b8"
+            }
+          ],
+          "standard_api_equivalent_usd_no_cache_discount": 0.0050883
+        },
+        {
+          "run_id": "n03-B-r2",
+          "repeat": 2,
+          "requests": 2,
+          "repairs": 1,
+          "input_tokens": 38850,
+          "cached_input_tokens": 0,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 3346,
+          "reasoning_output_tokens_subset": 1547,
+          "elapsed_seconds": 27.973451499827206,
+          "usage_records": [
+            {
+              "locator": "calls/call-050/usage.json",
+              "sha256": "70ab55b7d1d3302e1c92d0b233aaf45f627bb0704d0d94ca0a827f05511ec251"
+            },
+            {
+              "locator": "calls/call-051/usage.json",
+              "sha256": "7766b2b01daa3d92c1ba08aa31d5821dbe649cdba876037fb92c98ffc2b6a361"
+            }
+          ],
+          "standard_api_equivalent_usd_no_cache_discount": 0.005558
+        }
+      ]
+    },
+    {
+      "case_id": "N04",
+      "source_id": "N04-NOTE",
+      "words": 667,
+      "characters": 4506,
+      "content_sha256": "0ee55e880918c5ef30163ed9876aef99958e1f52f25f23fe10ff41cbec4c3ad4",
+      "long_form": true,
+      "template_family": "conference_long",
+      "utf8_bytes": 4506,
+      "runs": [
+        {
+          "run_id": "n04-B-r1",
+          "repeat": 1,
+          "requests": 1,
+          "repairs": 0,
+          "input_tokens": 18096,
+          "cached_input_tokens": 0,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 1852,
+          "reasoning_output_tokens_subset": 1004,
+          "elapsed_seconds": 15.457974100019783,
+          "usage_records": [
+            {
+              "locator": "calls/call-003/usage.json",
+              "sha256": "8cf46877a54e1ef040d946c357701a979ba736ab1b48ab217668a2a66e103c83"
+            }
+          ],
+          "standard_api_equivalent_usd_no_cache_discount": 0.0027356
+        },
+        {
+          "run_id": "n04-B-r2",
+          "repeat": 2,
+          "requests": 1,
+          "repairs": 0,
+          "input_tokens": 18098,
+          "cached_input_tokens": 0,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 1948,
+          "reasoning_output_tokens_subset": 899,
+          "elapsed_seconds": 16.896997899981216,
+          "usage_records": [
+            {
+              "locator": "calls/call-041/usage.json",
+              "sha256": "547b8dee61ff90b97e4ddc0e024b723888e349460ed412633932b99da12a1909"
+            }
+          ],
+          "standard_api_equivalent_usd_no_cache_discount": 0.0027838
+        }
+      ]
+    },
+    {
+      "case_id": "N05",
+      "source_id": "N05-NOTE",
+      "words": 194,
+      "characters": 1302,
+      "content_sha256": "f85bb1b146324bf611ccc0ccba0884a49551d6645b53e3ee65f633660e984d4d",
+      "long_form": false,
+      "template_family": "unsigned_order",
+      "utf8_bytes": 1302,
+      "runs": [
+        {
+          "run_id": "n05-B-r1",
+          "repeat": 1,
+          "requests": 1,
+          "repairs": 0,
+          "input_tokens": 17073,
+          "cached_input_tokens": 0,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 1598,
+          "reasoning_output_tokens_subset": 1002,
+          "elapsed_seconds": 15.191290399990976,
+          "usage_records": [
+            {
+              "locator": "calls/call-017/usage.json",
+              "sha256": "7d9dd6be74cbcf539a1968df76735d6c068898fed1e481bbd24431fb660582ef"
+            }
+          ],
+          "standard_api_equivalent_usd_no_cache_discount": 0.0025063
+        },
+        {
+          "run_id": "n05-B-r2",
+          "repeat": 2,
+          "requests": 1,
+          "repairs": 0,
+          "input_tokens": 17073,
+          "cached_input_tokens": 0,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 2092,
+          "reasoning_output_tokens_subset": 1552,
+          "elapsed_seconds": 40.86907790019177,
+          "usage_records": [
+            {
+              "locator": "calls/call-040/usage.json",
+              "sha256": "1068b7f55bbfbee247fc4542566b1a735a504df52b81abca0fe4ddfd4e06f66d"
+            }
+          ],
+          "standard_api_equivalent_usd_no_cache_discount": 0.0027533
+        }
+      ]
+    },
+    {
+      "case_id": "N06",
+      "source_id": "N06-NOTE",
+      "words": 215,
+      "characters": 1390,
+      "content_sha256": "292f826d0e147b359e468d2dcb52cd4e23226af8b798b018cadeed6ea068134d",
+      "long_form": false,
+      "template_family": "patient_report",
+      "utf8_bytes": 1390,
+      "runs": [
+        {
+          "run_id": "n06-B-r1",
+          "repeat": 1,
+          "requests": 1,
+          "repairs": 0,
+          "input_tokens": 17098,
+          "cached_input_tokens": 0,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 2766,
+          "reasoning_output_tokens_subset": 2014,
+          "elapsed_seconds": 23.06864250008948,
+          "usage_records": [
+            {
+              "locator": "calls/call-007/usage.json",
+              "sha256": "1a09cfca3747991d3e53488e1705aa4730a2b03bc0c605ba5d7ae490ce7d5128"
+            }
+          ],
+          "standard_api_equivalent_usd_no_cache_discount": 0.0030928
+        },
+        {
+          "run_id": "n06-B-r2",
+          "repeat": 2,
+          "requests": 1,
+          "repairs": 0,
+          "input_tokens": 17098,
+          "cached_input_tokens": 0,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 1803,
+          "reasoning_output_tokens_subset": 1337,
+          "elapsed_seconds": 16.856583599932492,
+          "usage_records": [
+            {
+              "locator": "calls/call-035/usage.json",
+              "sha256": "0c44dd7fed3db426bf27b780b4bcffca1c0518543445eaefc633803b1f577fb7"
+            }
+          ],
+          "standard_api_equivalent_usd_no_cache_discount": 0.0026113
+        }
+      ]
+    },
+    {
+      "case_id": "N07",
+      "source_id": "N07-NOTE",
+      "words": 186,
+      "characters": 1256,
+      "content_sha256": "24b406f4e78f23614d5e335550ced6ac0dc01d33029c2f133b2678fa45bfe6fb",
+      "long_form": false,
+      "template_family": "diagnostic_plain",
+      "utf8_bytes": 1256,
+      "runs": [
+        {
+          "run_id": "n07-B-r1",
+          "repeat": 1,
+          "requests": 1,
+          "repairs": 0,
+          "input_tokens": 18723,
+          "cached_input_tokens": 0,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 1604,
+          "reasoning_output_tokens_subset": 1155,
+          "elapsed_seconds": 15.166450600139797,
+          "usage_records": [
+            {
+              "locator": "calls/call-006/usage.json",
+              "sha256": "ba712ed088f55173c804b6fa77b1801fb4af57b025b7aff3277f1fead1867876"
+            }
+          ],
+          "standard_api_equivalent_usd_no_cache_discount": 0.0026743
+        },
+        {
+          "run_id": "n07-B-r2",
+          "repeat": 2,
+          "requests": 1,
+          "repairs": 0,
+          "input_tokens": 17067,
+          "cached_input_tokens": 0,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 1835,
+          "reasoning_output_tokens_subset": 1352,
+          "elapsed_seconds": 16.664072399958968,
+          "usage_records": [
+            {
+              "locator": "calls/call-059/usage.json",
+              "sha256": "28a2dc5ce2c73ebd1465f47abfa331c018d48f66cfc89938bbc9103db788369b"
+            }
+          ],
+          "standard_api_equivalent_usd_no_cache_discount": 0.0026242
+        }
+      ]
+    },
+    {
+      "case_id": "N08",
+      "source_id": "N08-NOTE",
+      "words": 200,
+      "characters": 1266,
+      "content_sha256": "05b334e243a1b3d5e2ec55a9c90988cc3651e086d3276dda0d34fea7c442cf56",
+      "long_form": false,
+      "template_family": "two_intents",
+      "utf8_bytes": 1266,
+      "runs": [
+        {
+          "run_id": "n08-B-r1",
+          "repeat": 1,
+          "requests": 1,
+          "repairs": 0,
+          "input_tokens": 18728,
+          "cached_input_tokens": 0,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 1835,
+          "reasoning_output_tokens_subset": 1221,
+          "elapsed_seconds": 17.829819299979135,
+          "usage_records": [
+            {
+              "locator": "calls/call-028/usage.json",
+              "sha256": "d810e934ae3410857f600578bf3f97221d8ec289b083cfd2c34dbb6cb217c7cc"
+            }
+          ],
+          "standard_api_equivalent_usd_no_cache_discount": 0.0027903
+        },
+        {
+          "run_id": "n08-B-r2",
+          "repeat": 2,
+          "requests": 1,
+          "repairs": 0,
+          "input_tokens": 17076,
+          "cached_input_tokens": 11008,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 1879,
+          "reasoning_output_tokens_subset": 1220,
+          "elapsed_seconds": 36.93429460003972,
+          "usage_records": [
+            {
+              "locator": "calls/call-055/usage.json",
+              "sha256": "d21f4fd6364aed9b059f2f82f15ff34e41ee925e06b4e7cc6850eeace8dea99d"
+            }
+          ],
+          "standard_api_equivalent_usd_no_cache_discount": 0.0026471
+        }
+      ]
+    },
+    {
+      "case_id": "N09",
+      "source_id": "N09-NOTE",
+      "words": 188,
+      "characters": 1287,
+      "content_sha256": "1a6978fa0e5e65615082679a2bb1507b10d7470fc3fde041e240ea2872333723",
+      "long_form": false,
+      "template_family": "planned_vs_current",
+      "utf8_bytes": 1287,
+      "runs": [
+        {
+          "run_id": "n09-B-r1",
+          "repeat": 1,
+          "requests": 2,
+          "repairs": 1,
+          "input_tokens": 34944,
+          "cached_input_tokens": 0,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 1973,
+          "reasoning_output_tokens_subset": 792,
+          "elapsed_seconds": 20.425384799949825,
+          "usage_records": [
+            {
+              "locator": "calls/call-020/usage.json",
+              "sha256": "1d9718bb10002adc5408ebfb2aee99923da003b353f31ac3cbfd412c2358f2c8"
+            },
+            {
+              "locator": "calls/call-021/usage.json",
+              "sha256": "06c1756d5b84f1e2150db6da354bb6dbb2b1c14a91296231f0efd52cf8c9f0d7"
+            }
+          ],
+          "standard_api_equivalent_usd_no_cache_discount": 0.0044809
+        },
+        {
+          "run_id": "n09-B-r2",
+          "repeat": 2,
+          "requests": 2,
+          "repairs": 1,
+          "input_tokens": 34968,
+          "cached_input_tokens": 0,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 2568,
+          "reasoning_output_tokens_subset": 1351,
+          "elapsed_seconds": 36.249577099923044,
+          "usage_records": [
+            {
+              "locator": "calls/call-031/usage.json",
+              "sha256": "5b2f1a6ab295aafbaaf1d392ea72be64f2353fe2827363f7500f6505e5164b6d"
+            },
+            {
+              "locator": "calls/call-032/usage.json",
+              "sha256": "b33234c675d909d98aa99fbb79b4ea07ebd25592c70b5aefc410284ef802a952"
+            }
+          ],
+          "standard_api_equivalent_usd_no_cache_discount": 0.0047808
+        }
+      ]
+    },
+    {
+      "case_id": "N10",
+      "source_id": "N10-NOTE",
+      "words": 184,
+      "characters": 1183,
+      "content_sha256": "e4fef807a71f86063e42be09f7002cb9d11cd88a3ccd0de06d15e17704034ebd",
+      "long_form": false,
+      "template_family": "ambiguous_issue_date",
+      "utf8_bytes": 1183,
+      "runs": [
+        {
+          "run_id": "n10-B-r1",
+          "repeat": 1,
+          "requests": 1,
+          "repairs": 0,
+          "input_tokens": 18706,
+          "cached_input_tokens": 0,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 1271,
+          "reasoning_output_tokens_subset": 834,
+          "elapsed_seconds": 12.340727200033143,
+          "usage_records": [
+            {
+              "locator": "calls/call-013/usage.json",
+              "sha256": "5b5ff60011588b2dabccfd3d0b4e8c5eedff55c585f37196d3bf4c22a1f0a4b4"
+            }
+          ],
+          "standard_api_equivalent_usd_no_cache_discount": 0.0025061
+        },
+        {
+          "run_id": "n10-B-r2",
+          "repeat": 2,
+          "requests": 1,
+          "repairs": 0,
+          "input_tokens": 17054,
+          "cached_input_tokens": 0,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 1315,
+          "reasoning_output_tokens_subset": 783,
+          "elapsed_seconds": 11.681867799954489,
+          "usage_records": [
+            {
+              "locator": "calls/call-052/usage.json",
+              "sha256": "56061eb90c72269f062b9c33c729daf68c32457c3f386f44468b01e738ad252f"
+            }
+          ],
+          "standard_api_equivalent_usd_no_cache_discount": 0.0023629
+        }
+      ]
+    },
+    {
+      "case_id": "N11",
+      "source_id": "N11-NOTE",
+      "words": 155,
+      "characters": 1051,
+      "content_sha256": "480ecc5fe7d840a5e4e46edf7fab2758d07452f1260af3bbda98801bb474264d",
+      "long_form": false,
+      "template_family": "administrative_control",
+      "utf8_bytes": 1051,
+      "runs": [
+        {
+          "run_id": "n11-B-r1",
+          "repeat": 1,
+          "requests": 1,
+          "repairs": 0,
+          "input_tokens": 16942,
+          "cached_input_tokens": 0,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 274,
+          "reasoning_output_tokens_subset": 240,
+          "elapsed_seconds": 5.278165900148451,
+          "usage_records": [
+            {
+              "locator": "calls/call-022/usage.json",
+              "sha256": "a99101036b1566fdfc9bf08a4e5b8b530af6074d81d37b8b762b3df8549eedb8"
+            }
+          ],
+          "standard_api_equivalent_usd_no_cache_discount": 0.0018312
+        },
+        {
+          "run_id": "n11-B-r2",
+          "repeat": 2,
+          "requests": 1,
+          "repairs": 0,
+          "input_tokens": 16940,
+          "cached_input_tokens": 0,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 1483,
+          "reasoning_output_tokens_subset": 759,
+          "elapsed_seconds": 13.718372600153089,
+          "usage_records": [
+            {
+              "locator": "calls/call-046/usage.json",
+              "sha256": "069f89b0fecdc1b9590d353d8e249a72b5e2669904d4853e0da0e3f9ba5015de"
+            }
+          ],
+          "standard_api_equivalent_usd_no_cache_discount": 0.0024355
+        }
+      ]
+    },
+    {
+      "case_id": "N12",
+      "source_id": "N12-NOTE",
+      "words": 182,
+      "characters": 1289,
+      "content_sha256": "24268d06dfb2dd4c02e03115465e77b565c0c9614c3f43852465d5d04703821a",
+      "long_form": false,
+      "template_family": "other_subject_analyte",
+      "utf8_bytes": 1289,
+      "runs": [
+        {
+          "run_id": "n12-B-r1",
+          "repeat": 1,
+          "requests": 1,
+          "repairs": 0,
+          "input_tokens": 17066,
+          "cached_input_tokens": 0,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 1318,
+          "reasoning_output_tokens_subset": 690,
+          "elapsed_seconds": 12.90116440015845,
+          "usage_records": [
+            {
+              "locator": "calls/call-016/usage.json",
+              "sha256": "91b4427e7de8b0642df1d38f91cfda6b0b89ff9d7c223f711dcfcd7f6bd01454"
+            }
+          ],
+          "standard_api_equivalent_usd_no_cache_discount": 0.0023656
+        },
+        {
+          "run_id": "n12-B-r2",
+          "repeat": 2,
+          "requests": 1,
+          "repairs": 0,
+          "input_tokens": 17068,
+          "cached_input_tokens": 0,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 1867,
+          "reasoning_output_tokens_subset": 1070,
+          "elapsed_seconds": 16.84142929990776,
+          "usage_records": [
+            {
+              "locator": "calls/call-056/usage.json",
+              "sha256": "49ca0c3d3c1ba3e0203ec45db906f22d854c70e4a13da40e53618d30d1678616"
+            }
+          ],
+          "standard_api_equivalent_usd_no_cache_discount": 0.0026403
+        }
+      ]
+    }
+  ],
+  "summary": {
+    "all": {
+      "distinct_notes": 12,
+      "workflows": 24,
+      "requests": 28,
+      "repairs": 4,
+      "input_tokens": 498270,
+      "cached_input_tokens": 11008,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 44704,
+      "sum_workflow_seconds": 483.5609477001708,
+      "calculated_total_usd": 0.072179,
+      "words_per_distinct_note": {
+        "mean": 349.9166666666667,
+        "median": 197.0,
+        "min": 155,
+        "max": 707
+      },
+      "characters_per_distinct_note": {
+        "mean": 2321.5833333333335,
+        "median": 1295.5,
+        "min": 1051,
+        "max": 4638
+      },
+      "utf8_bytes_per_distinct_note": {
+        "mean": 2321.5833333333335,
+        "median": 1295.5,
+        "min": 1051,
+        "max": 4638
+      },
+      "seconds_per_workflow": {
+        "mean": 20.14837282084045,
+        "median": 16.752750849933363,
+        "min": 5.278165900148451,
+        "max": 40.86907790019177
+      },
+      "usd_per_workflow": {
+        "mean": 0.0030074583333333333,
+        "median": 0.0027049500000000002,
+        "min": 0.0018312,
+        "max": 0.005558
+      }
+    },
+    "long": {
+      "distinct_notes": 4,
+      "workflows": 8,
+      "requests": 10,
+      "repairs": 2,
+      "input_tokens": 184646,
+      "cached_input_tokens": 0,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 17223,
+      "sum_workflow_seconds": 171.5440272996202,
+      "calculated_total_usd": 0.0270761,
+      "words_per_distinct_note": {
+        "mean": 673.75,
+        "median": 670.5,
+        "min": 647,
+        "max": 707
+      },
+      "characters_per_distinct_note": {
+        "mean": 4458.75,
+        "median": 4439.0,
+        "min": 4319,
+        "max": 4638
+      },
+      "utf8_bytes_per_distinct_note": {
+        "mean": 4458.75,
+        "median": 4439.0,
+        "min": 4319,
+        "max": 4638
+      },
+      "seconds_per_workflow": {
+        "mean": 21.443003412452526,
+        "median": 16.654995599994436,
+        "min": 15.085672300076112,
+        "max": 39.83238140004687
+      },
+      "usd_per_workflow": {
+        "mean": 0.0033845125,
+        "median": 0.00277415,
+        "min": 0.0026067,
+        "max": 0.005558
+      }
+    },
+    "short": {
+      "distinct_notes": 8,
+      "workflows": 16,
+      "requests": 18,
+      "repairs": 2,
+      "input_tokens": 313624,
+      "cached_input_tokens": 11008,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 27481,
+      "sum_workflow_seconds": 312.0169204005506,
+      "calculated_total_usd": 0.0451029,
+      "words_per_distinct_note": {
+        "mean": 188,
+        "median": 187.0,
+        "min": 155,
+        "max": 215
+      },
+      "characters_per_distinct_note": {
+        "mean": 1253,
+        "median": 1276.5,
+        "min": 1051,
+        "max": 1390
+      },
+      "utf8_bytes_per_distinct_note": {
+        "mean": 1253,
+        "median": 1276.5,
+        "min": 1051,
+        "max": 1390
+      },
+      "seconds_per_workflow": {
+        "mean": 19.501057525034412,
+        "median": 16.752750849933363,
+        "min": 5.278165900148451,
+        "max": 40.86907790019177
+      },
+      "usd_per_workflow": {
+        "mean": 0.00281893125,
+        "median": 0.00263225,
+        "min": 0.0018312,
+        "max": 0.0047808
+      }
+    }
+  }
+}

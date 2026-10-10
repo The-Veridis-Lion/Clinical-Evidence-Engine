@@ -335,7 +335,7 @@
     "cost_usd": null,
     "cost_reason": "Actual subscription billing unavailable; no estimated dollar cost substituted.",
     "old_six_ledger_records_verified_unchanged": true,
-    "actual_ledger_path": "D:\\Codex\\Take Home Excerise\\clinical-evidence-review\\artifacts\\claims-review\\live-budget.json"
+    "actual_ledger_path": "artifacts\\claims-review\\live-budget.json"
   },
   "offline": {
     "baseline": {

@@ -61,7 +61,7 @@ def freeze(round_dir):
     if (round_dir/'freeze.json').exists():raise ValueError('Already frozen; never overwrite')
     if state['attempts']!=0 or state['phase']!='PREPARING':raise ValueError('Preparation state required; never reset existing attempts')
     if now()>=datetime.fromisoformat(state['execution_deadline']):raise ValueError('Timebox expired')
-    old=Path('D:/Codex/Take Home Excerise/clinical-evidence-review/artifacts/claims-review/live-budget.json')
+    old=Path(os.environ['CLINICAL_HISTORICAL_LEDGER'])
     state['historical_ledger']={'path':str(old),'sha256':sha(old),'count':len(read(old)['calls']),'limit':read(old)['limit']}
     state.update(plan=fixed_plan(),phase='FROZEN',seed=20261009,attempts=0,calls=[],
         model='gpt-6-luna',reasoning='high',request_timeout_seconds=180,maximum_calls_per_execution=2)

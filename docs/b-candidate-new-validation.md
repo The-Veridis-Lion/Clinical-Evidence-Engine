@@ -1,5 +1,9 @@
 # Original B integration and new constructed-note comparison
 
+> Historical phase report: scores and the phase-specific A/B decision below are
+> preserved. The current release selects original B by explicit research decision;
+> see [the engineering case study](engineering-case-study.md).
+
 **Decision: INCONCLUSIVE_SCORER / B_NOT_READY. Production default remains A.**
 The original B is explicitly available through `--note-prompt B`, and the isolated
 candidate wrapper defaults to B with prompt-selection provenance. No prompt,

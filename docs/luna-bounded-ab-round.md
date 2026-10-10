@@ -1,5 +1,9 @@
 # Bounded Luna prompt A/B: completed execution, invalid semantic benchmark
 
+> Historical phase report: scores and the phase-specific A/B decision below are
+> preserved. The current release selects original B by explicit research decision;
+> see [the engineering case study](engineering-case-study.md).
+
 **Keep A. B is experimental and is not recommended for adoption from this round.**
 All 48 preplanned note executions completed. Final delivery status is
 `BENCHMARK_INVALID`: post-run inspection established frozen expectation and matcher
