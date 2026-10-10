@@ -1,0 +1,7 @@
+{
+  "status": "FINAL_VERIFICATION_ATTEMPT_RESERVED",
+  "archive": "C:\\Users\\sunxi\\Downloads\\synthea_sample_data_csv_latest.zip",
+  "batch": "artifacts\\general-claims\\full-frozen",
+  "result_path": "docs\\general-claims\\holdout-verification.json",
+  "purpose": "One final deterministic verification; do not tune against this partition."
+}

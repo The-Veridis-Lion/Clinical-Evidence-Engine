@@ -1,0 +1,17 @@
+{
+  "status": "PASS",
+  "partition": "reserve",
+  "archive_sha256": "d61417b551e5b0997c33851b339c157421751f0ea68c18ea686ceb1850907c35",
+  "split_sha256": "9416334c8cb301032e5dc00e14e0bd7c39d4ec88849f65cfd45f3157a73e1d6d",
+  "accounted_claims": 1981,
+  "verified_packets": 1981,
+  "processing_failures": [],
+  "verified_service_items": 4398,
+  "verified_original_sources": 38185,
+  "verified_original_fields": 808768,
+  "cross_patient_evidence": 0,
+  "unsupported_billing_mappings": 0,
+  "verification_seconds": 3.3880094999913126,
+  "live_model_calls": 0,
+  "scope": "Deterministic source identity, fields, byte provenance, patient partitions and selected joins; no clinical accuracy labels."
+}

@@ -1,0 +1,114 @@
+{
+  "schema_version": "claim-evidence/1",
+  "archive_sha256": "d61417b551e5b0997c33851b339c157421751f0ea68c18ea686ceb1850907c35",
+  "metrics": {
+    "original_claim_rows": 9421,
+    "processed_claims": 9421,
+    "claims_linked_to_patient": 9421,
+    "claims_linked_to_encounter": 9421,
+    "claims_with_charge_items": 9421,
+    "claims_with_identifiable_items": 9420,
+    "claims_with_all_items_identifiable": 9420,
+    "claims_with_supporting_service_records": 9420,
+    "claims_with_linkage_issues": 3130,
+    "claims_with_ambiguous_items": 1,
+    "claims_with_unresolved_items": 0,
+    "claims_with_missing_or_ambiguous_information": 9421,
+    "claims_with_unresolved_observation_association": 1904,
+    "items": 26854,
+    "identified_items": 26853,
+    "ambiguous_items": 1,
+    "unresolved_items": 0,
+    "source_linked_claims": 6291,
+    "processing_failures": 0,
+    "distinct_claim_bearing_patients": 108,
+    "accounted_claim_rows": 9421,
+    "duplicate_claim_ids": 0,
+    "orphan_transaction_rows": 0
+  },
+  "service_categories_items": {
+    "encounter": 5571,
+    "immunization": 1549,
+    "procedure": 15482,
+    "imaging": 402,
+    "medication": 3850
+  },
+  "service_categories_claims_nonexclusive": {
+    "encounter": 5571,
+    "immunization": 1072,
+    "procedure": 3955,
+    "imaging": 368,
+    "medication": 3850
+  },
+  "transaction_types": {
+    "CHARGE": 26854,
+    "PAYMENT": 32327,
+    "TRANSFEROUT": 12933,
+    "TRANSFERIN": 12933
+  },
+  "policy_status": {
+    "POLICY_NOT_EVALUATED": 9421
+  },
+  "failures": [],
+  "partitions": {
+    "reserve": {
+      "patients": 8,
+      "claims": 1981,
+      "service_items": {
+        "encounter": 733,
+        "immunization": 139,
+        "procedure": 2225,
+        "imaging": 53,
+        "medication": 1248
+      },
+      "claims_by_category_nonexclusive": {
+        "encounter": 733,
+        "immunization": 84,
+        "procedure": 551,
+        "imaging": 53,
+        "medication": 1248
+      }
+    },
+    "holdout": {
+      "patients": 50,
+      "claims": 3855,
+      "service_items": {
+        "encounter": 2496,
+        "immunization": 726,
+        "procedure": 6758,
+        "imaging": 172,
+        "medication": 1359
+      },
+      "claims_by_category_nonexclusive": {
+        "encounter": 2496,
+        "immunization": 498,
+        "procedure": 1781,
+        "imaging": 154,
+        "medication": 1359
+      }
+    },
+    "development": {
+      "patients": 50,
+      "claims": 3585,
+      "service_items": {
+        "encounter": 2342,
+        "medication": 1243,
+        "immunization": 684,
+        "procedure": 6499,
+        "imaging": 177
+      },
+      "claims_by_category_nonexclusive": {
+        "encounter": 2342,
+        "medication": 1243,
+        "immunization": 490,
+        "procedure": 1623,
+        "imaging": 161
+      }
+    }
+  },
+  "live_model_calls": 0,
+  "processing_seconds": 2.340258999960497,
+  "claims_per_second": 4025.622805065176,
+  "metric_scope": "Source linkage and structured review readiness only; no independent medical or payment accuracy labels.",
+  "documentation": "https://github.com/synthetichealth/synthea/wiki/CSV-File-Data-Dictionary"
+}

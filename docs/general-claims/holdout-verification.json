@@ -1,0 +1,17 @@
+{
+  "status": "PASS",
+  "partition": "holdout",
+  "archive_sha256": "d61417b551e5b0997c33851b339c157421751f0ea68c18ea686ceb1850907c35",
+  "split_sha256": "9416334c8cb301032e5dc00e14e0bd7c39d4ec88849f65cfd45f3157a73e1d6d",
+  "accounted_claims": 3855,
+  "verified_packets": 3855,
+  "processing_failures": [],
+  "verified_service_items": 11511,
+  "verified_original_sources": 74746,
+  "verified_original_fields": 1573945,
+  "cross_patient_evidence": 0,
+  "unsupported_billing_mappings": 0,
+  "verification_seconds": 3.9050815000664443,
+  "live_model_calls": 0,
+  "scope": "Deterministic source identity, fields, byte provenance, patient partitions and selected joins; no clinical accuracy labels."
+}

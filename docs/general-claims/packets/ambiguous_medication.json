@@ -1,0 +1,723 @@
+{
+  "archive_sha256": "d61417b551e5b0997c33851b339c157421751f0ea68c18ea686ceb1850907c35",
+  "claim_id": "35f80d0e-eaad-ef68-be2b-007c53365eb2",
+  "claim_source_id": "claims.csv:6148",
+  "context": [
+    {
+      "proof_of_service": false,
+      "relationship": "patient + encounter FK; not proof of a billed item",
+      "role": "encounter_context",
+      "source_id": "conditions.csv:2439"
+    },
+    {
+      "proof_of_service": false,
+      "relationship": "patient + encounter FK; not proof of a billed item",
+      "role": "encounter_context",
+      "source_id": "conditions.csv:2440"
+    },
+    {
+      "proof_of_service": false,
+      "relationship": "patient + encounter FK; not proof of a billed item",
+      "role": "encounter_context",
+      "source_id": "conditions.csv:2441"
+    },
+    {
+      "proof_of_service": false,
+      "relationship": "patient + encounter FK; not proof of a billed item",
+      "role": "encounter_context",
+      "source_id": "conditions.csv:2442"
+    },
+    {
+      "proof_of_service": false,
+      "relationship": "patient + encounter FK; not proof of a billed item",
+      "role": "encounter_context",
+      "source_id": "conditions.csv:2443"
+    },
+    {
+      "proof_of_service": false,
+      "relationship": "patient + encounter FK; not proof of a billed item",
+      "role": "encounter_context",
+      "source_id": "careplans.csv:259"
+    }
+  ],
+  "diagnoses": [
+    {
+      "code": {
+        "field": "DIAGNOSIS1",
+        "source_id": "claims.csv:6148",
+        "system": "http://snomed.info/sct",
+        "system_basis": "Synthea CSV data dictionary; not printed in claim",
+        "value": "59621000"
+      },
+      "evidence": [
+        {
+          "proof_of_service": false,
+          "relationship": "patient + original diagnosis code + active date interval; not an item/event FK",
+          "role": "diagnosis_context",
+          "source_id": "conditions.csv:2439"
+        }
+      ],
+      "field": "DIAGNOSIS1"
+    },
+    {
+      "code": {
+        "field": "DIAGNOSIS2",
+        "source_id": "claims.csv:6148",
+        "system": "http://snomed.info/sct",
+        "system_basis": "Synthea CSV data dictionary; not printed in claim",
+        "value": "314529007"
+      },
+      "evidence": [
+        {
+          "proof_of_service": false,
+          "relationship": "patient + original diagnosis code + active date interval; not an item/event FK",
+          "role": "diagnosis_context",
+          "source_id": "conditions.csv:2440"
+        }
+      ],
+      "field": "DIAGNOSIS2"
+    },
+    {
+      "code": {
+        "field": "DIAGNOSIS3",
+        "source_id": "claims.csv:6148",
+        "system": "http://snomed.info/sct",
+        "system_basis": "Synthea CSV data dictionary; not printed in claim",
+        "value": "237602007"
+      },
+      "evidence": [
+        {
+          "proof_of_service": false,
+          "relationship": "patient + original diagnosis code + active date interval; not an item/event FK",
+          "role": "diagnosis_context",
+          "source_id": "conditions.csv:2441"
+        }
+      ],
+      "field": "DIAGNOSIS3"
+    },
+    {
+      "code": {
+        "field": "DIAGNOSIS4",
+        "source_id": "claims.csv:6148",
+        "system": "http://snomed.info/sct",
+        "system_basis": "Synthea CSV data dictionary; not printed in claim",
+        "value": "160904001"
+      },
+      "evidence": [
+        {
+          "proof_of_service": false,
+          "relationship": "patient + original diagnosis code + active date interval; not an item/event FK",
+          "role": "diagnosis_context",
+          "source_id": "conditions.csv:2442"
+        }
+      ],
+      "field": "DIAGNOSIS4"
+    },
+    {
+      "code": {
+        "field": "DIAGNOSIS5",
+        "source_id": "claims.csv:6148",
+        "system": "http://snomed.info/sct",
+        "system_basis": "Synthea CSV data dictionary; not printed in claim",
+        "value": "73595000"
+      },
+      "evidence": [
+        {
+          "proof_of_service": false,
+          "relationship": "patient + original diagnosis code + active date interval; not an item/event FK",
+          "role": "diagnosis_context",
+          "source_id": "conditions.csv:2443"
+        }
+      ],
+      "field": "DIAGNOSIS5"
+    }
+  ],
+  "encounter_source_id": "encounters.csv:4011",
+  "encounter_status": "LINKED",
+  "issues": [],
+  "items": [
+    {
+      "category": "medication",
+      "charge_id": "75510",
+      "code": {
+        "field": "PROCEDURECODE",
+        "source_id": "claims_transactions.csv:56990",
+        "system": "RxNorm",
+        "system_basis": "Synthea CSV data dictionary; not printed in row",
+        "value": "314076"
+      },
+      "description": "lisinopril 10 MG Oral Tablet",
+      "diagnosis_fields": [
+        "DIAGNOSIS1",
+        "DIAGNOSIS2",
+        "DIAGNOSIS3",
+        "DIAGNOSIS4"
+      ],
+      "evidence": [
+        {
+          "proof_of_service": false,
+          "relationship": "patient + verified encounter + exact original code + exact start timestamp; composite match, no clinical-event FK",
+          "role": "service_candidate",
+          "source_id": "medications.csv:2136"
+        },
+        {
+          "proof_of_service": false,
+          "relationship": "patient + verified encounter + exact original code + exact start timestamp; composite match, no clinical-event FK",
+          "role": "service_candidate",
+          "source_id": "medications.csv:2137"
+        }
+      ],
+      "from_date": "2026-02-01T22:21:23Z",
+      "identity_status": "AMBIGUOUS",
+      "issues": [
+        "clinical_service_identity:AMBIGUOUS"
+      ],
+      "item_id": "claims_transactions.csv:56990",
+      "source_id": "claims_transactions.csv:56990",
+      "to_date": "1970-01-01T00:00:00Z",
+      "transaction_id": "6df464ea-f2d7-ca1d-8dc6-99ad6a9afd45",
+      "units": "1"
+    }
+  ],
+  "linkage_status": "NEEDS_LINKAGE_REVIEW",
+  "live_model_calls": 0,
+  "missing_information": [
+    "clinical_notes_not_in_archive",
+    "provider_intent_not_established",
+    "separate_orders_not_in_archive",
+    "original_ehr_availability_time_unknown",
+    "independent_medical_necessity_or_coverage_labels_not_in_archive"
+  ],
+  "original_encounter_id": "35f80d0e-eaad-ef68-60a0-b3f9fb295f95",
+  "partition": "development",
+  "patient_id": "35f80d0e-eaad-ef68-b762-3a1c12a872c1",
+  "patient_source_id": "patients.csv:80",
+  "patient_status": "LINKED",
+  "policy": {
+    "module": "NONE",
+    "payment_decision": "NOT_MADE",
+    "reason": "No explicitly supported native-claim policy adapter; source linkage alone does not establish policy applicability.",
+    "specialized_module": "clinical_intelligence.claims_review (HbA1c monitoring; existing versioned constructed-request contract)",
+    "status": "POLICY_NOT_EVALUATED"
+  },
+  "review_readiness": "NEEDS_LINKAGE_REVIEW",
+  "schema_version": "claim-evidence/1",
+  "service_date": "2026-02-01T22:21:23Z",
+  "transaction_relationships": [
+    {
+      "proof_of_service": false,
+      "relationship": "claims_transactions.csv:56992.TRANSFEROUTID = same-claim TRANSFEROUT.CHARGEID",
+      "role": "financial_transfer_reference",
+      "source_id": "claims_transactions.csv:56991"
+    }
+  ],
+  "transaction_source_ids": [
+    "claims_transactions.csv:56990",
+    "claims_transactions.csv:56991",
+    "claims_transactions.csv:56992",
+    "claims_transactions.csv:56993"
+  ],
+  "sources": {
+    "careplans.csv:259": {
+      "archive_sha256": "d61417b551e5b0997c33851b339c157421751f0ea68c18ea686ceb1850907c35",
+      "data_record_number": 259,
+      "encounter_id": "35f80d0e-eaad-ef68-60a0-b3f9fb295f95",
+      "fields": {
+        "CODE": "443402002",
+        "DESCRIPTION": "Lifestyle education regarding hypertension (procedure)",
+        "ENCOUNTER": "35f80d0e-eaad-ef68-60a0-b3f9fb295f95",
+        "Id": "35f80d0e-eaad-ef68-578b-48ec5bfb9b06",
+        "PATIENT": "35f80d0e-eaad-ef68-b762-3a1c12a872c1",
+        "REASONCODE": "59621000",
+        "REASONDESCRIPTION": "Essential hypertension (disorder)",
+        "START": "2026-02-01",
+        "STOP": ""
+      },
+      "original_id": "35f80d0e-eaad-ef68-578b-48ec5bfb9b06",
+      "original_row_sha256": "3c90d63d2cefa41ae4109e28c32b2f628a48b4a8cad9703301a4564ef97dfecf",
+      "patient_id": "35f80d0e-eaad-ef68-b762-3a1c12a872c1",
+      "physical_line_end": 260,
+      "physical_line_start": 260,
+      "source_file_sha256": "bce3029163eb85442255fa4361be456191308a18173b91a139050979119f43ae",
+      "source_id": "careplans.csv:259",
+      "table": "careplans.csv"
+    },
+    "claims.csv:6148": {
+      "archive_sha256": "d61417b551e5b0997c33851b339c157421751f0ea68c18ea686ceb1850907c35",
+      "data_record_number": 6148,
+      "encounter_id": "35f80d0e-eaad-ef68-60a0-b3f9fb295f95",
+      "fields": {
+        "APPOINTMENTID": "35f80d0e-eaad-ef68-60a0-b3f9fb295f95",
+        "CURRENTILLNESSDATE": "2026-02-01T22:21:23Z",
+        "DEPARTMENTID": "20",
+        "DIAGNOSIS1": "59621000",
+        "DIAGNOSIS2": "314529007",
+        "DIAGNOSIS3": "237602007",
+        "DIAGNOSIS4": "160904001",
+        "DIAGNOSIS5": "73595000",
+        "DIAGNOSIS6": "",
+        "DIAGNOSIS7": "",
+        "DIAGNOSIS8": "",
+        "HEALTHCARECLAIMTYPEID1": "1",
+        "HEALTHCARECLAIMTYPEID2": "1",
+        "Id": "35f80d0e-eaad-ef68-be2b-007c53365eb2",
+        "LASTBILLEDDATE1": "2026-02-01T23:06:10Z",
+        "LASTBILLEDDATE2": "2026-02-01T23:06:10Z",
+        "LASTBILLEDDATEP": "2026-02-01T23:06:10Z",
+        "OUTSTANDING1": "0",
+        "OUTSTANDING2": "0",
+        "OUTSTANDINGP": "0",
+        "PATIENTDEPARTMENTID": "20",
+        "PATIENTID": "35f80d0e-eaad-ef68-b762-3a1c12a872c1",
+        "PRIMARYPATIENTINSURANCEID": "26aab0cd-6aba-3e1b-ac5b-05c8867e762c",
+        "PROVIDERID": "170e1c2c-7711-3196-8348-2c91f2571c0f",
+        "REFERRINGPROVIDERID": "",
+        "SECONDARYPATIENTINSURANCEID": "",
+        "SERVICEDATE": "2026-02-01T22:21:23Z",
+        "STATUS1": "CLOSED",
+        "STATUS2": "CLOSED",
+        "STATUSP": "CLOSED",
+        "SUPERVISINGPROVIDERID": "170e1c2c-7711-3196-8348-2c91f2571c0f"
+      },
+      "original_id": "35f80d0e-eaad-ef68-be2b-007c53365eb2",
+      "original_row_sha256": "c36f26fca742a0184c69660d931ae2ea9289cbfc7030a86e90b93577a32aa6bd",
+      "patient_id": "35f80d0e-eaad-ef68-b762-3a1c12a872c1",
+      "physical_line_end": 6149,
+      "physical_line_start": 6149,
+      "source_file_sha256": "ce4e6acb7569f12fba058fb6f0b9734a3cdde446ce41c2135167ce668ea5d288",
+      "source_id": "claims.csv:6148",
+      "table": "claims.csv"
+    },
+    "claims_transactions.csv:56990": {
+      "archive_sha256": "d61417b551e5b0997c33851b339c157421751f0ea68c18ea686ceb1850907c35",
+      "data_record_number": 56990,
+      "encounter_id": "35f80d0e-eaad-ef68-60a0-b3f9fb295f95",
+      "fields": {
+        "ADJUSTMENTS": "0.00",
+        "AMOUNT": "0.91",
+        "APPOINTMENTID": "35f80d0e-eaad-ef68-60a0-b3f9fb295f95",
+        "CHARGEID": "75510",
+        "CLAIMID": "35f80d0e-eaad-ef68-be2b-007c53365eb2",
+        "DEPARTMENTID": "20",
+        "DIAGNOSISREF1": "1",
+        "DIAGNOSISREF2": "2",
+        "DIAGNOSISREF3": "3",
+        "DIAGNOSISREF4": "4",
+        "FEESCHEDULEID": "1",
+        "FROMDATE": "2026-02-01T22:21:23Z",
+        "ID": "6df464ea-f2d7-ca1d-8dc6-99ad6a9afd45",
+        "LINENOTE": "",
+        "METHOD": "",
+        "MODIFIER1": "",
+        "MODIFIER2": "",
+        "NOTES": "lisinopril 10 MG Oral Tablet",
+        "OUTSTANDING": "0.00",
+        "PATIENTID": "35f80d0e-eaad-ef68-b762-3a1c12a872c1",
+        "PATIENTINSURANCEID": "35f80d0e-eaad-ef68-a6c4-7b287cdc51d9",
+        "PAYMENTS": "0.00",
+        "PLACEOFSERVICE": "42d4b607-f14d-370a-818e-40965685776c",
+        "PROCEDURECODE": "314076",
+        "PROVIDERID": "170e1c2c-7711-3196-8348-2c91f2571c0f",
+        "SUPERVISINGPROVIDERID": "170e1c2c-7711-3196-8348-2c91f2571c0f",
+        "TODATE": "1970-01-01T00:00:00Z",
+        "TRANSFEROUTID": "",
+        "TRANSFERS": "",
+        "TRANSFERTYPE": "1",
+        "TYPE": "CHARGE",
+        "UNITAMOUNT": "0.91",
+        "UNITS": "1"
+      },
+      "original_id": "6df464ea-f2d7-ca1d-8dc6-99ad6a9afd45",
+      "original_row_sha256": "7b6082ddb63c7d0be8a46b6a7d0820e3e69f85780dfb7bc7c953634cffa383e2",
+      "patient_id": "35f80d0e-eaad-ef68-b762-3a1c12a872c1",
+      "physical_line_end": 56991,
+      "physical_line_start": 56991,
+      "source_file_sha256": "660a48994403bfe85884126e1904fabc16960ce8c554aa7d951cce59ec2460b6",
+      "source_id": "claims_transactions.csv:56990",
+      "table": "claims_transactions.csv"
+    },
+    "claims_transactions.csv:56991": {
+      "archive_sha256": "d61417b551e5b0997c33851b339c157421751f0ea68c18ea686ceb1850907c35",
+      "data_record_number": 56991,
+      "encounter_id": "35f80d0e-eaad-ef68-60a0-b3f9fb295f95",
+      "fields": {
+        "ADJUSTMENTS": "0.00",
+        "AMOUNT": "",
+        "APPOINTMENTID": "35f80d0e-eaad-ef68-60a0-b3f9fb295f95",
+        "CHARGEID": "75511",
+        "CLAIMID": "35f80d0e-eaad-ef68-be2b-007c53365eb2",
+        "DEPARTMENTID": "20",
+        "DIAGNOSISREF1": "1",
+        "DIAGNOSISREF2": "2",
+        "DIAGNOSISREF3": "3",
+        "DIAGNOSISREF4": "4",
+        "FEESCHEDULEID": "1",
+        "FROMDATE": "2026-02-01T22:21:23Z",
+        "ID": "dbe8c9d5-e5af-983a-1b8d-335ad536068b",
+        "LINENOTE": "",
+        "METHOD": "",
+        "MODIFIER1": "",
+        "MODIFIER2": "",
+        "NOTES": "lisinopril 10 MG Oral Tablet",
+        "OUTSTANDING": "0.91",
+        "PATIENTID": "35f80d0e-eaad-ef68-b762-3a1c12a872c1",
+        "PATIENTINSURANCEID": "35f80d0e-eaad-ef68-a6c4-7b287cdc51d9",
+        "PAYMENTS": "0.00",
+        "PLACEOFSERVICE": "42d4b607-f14d-370a-818e-40965685776c",
+        "PROCEDURECODE": "314076",
+        "PROVIDERID": "170e1c2c-7711-3196-8348-2c91f2571c0f",
+        "SUPERVISINGPROVIDERID": "170e1c2c-7711-3196-8348-2c91f2571c0f",
+        "TODATE": "1970-01-01T00:00:00Z",
+        "TRANSFEROUTID": "",
+        "TRANSFERS": "0.91",
+        "TRANSFERTYPE": "",
+        "TYPE": "TRANSFEROUT",
+        "UNITAMOUNT": "0.00",
+        "UNITS": "1"
+      },
+      "original_id": "dbe8c9d5-e5af-983a-1b8d-335ad536068b",
+      "original_row_sha256": "53cdcaa8bfca9d05705748228cfd280372b5b524424e907f336b1e3d5060f08d",
+      "patient_id": "35f80d0e-eaad-ef68-b762-3a1c12a872c1",
+      "physical_line_end": 56992,
+      "physical_line_start": 56992,
+      "source_file_sha256": "660a48994403bfe85884126e1904fabc16960ce8c554aa7d951cce59ec2460b6",
+      "source_id": "claims_transactions.csv:56991",
+      "table": "claims_transactions.csv"
+    },
+    "claims_transactions.csv:56992": {
+      "archive_sha256": "d61417b551e5b0997c33851b339c157421751f0ea68c18ea686ceb1850907c35",
+      "data_record_number": 56992,
+      "encounter_id": "35f80d0e-eaad-ef68-60a0-b3f9fb295f95",
+      "fields": {
+        "ADJUSTMENTS": "0.00",
+        "AMOUNT": "0.91",
+        "APPOINTMENTID": "35f80d0e-eaad-ef68-60a0-b3f9fb295f95",
+        "CHARGEID": "75512",
+        "CLAIMID": "35f80d0e-eaad-ef68-be2b-007c53365eb2",
+        "DEPARTMENTID": "20",
+        "DIAGNOSISREF1": "1",
+        "DIAGNOSISREF2": "2",
+        "DIAGNOSISREF3": "3",
+        "DIAGNOSISREF4": "4",
+        "FEESCHEDULEID": "1",
+        "FROMDATE": "2026-02-01T22:21:23Z",
+        "ID": "b7d193ab-cb5f-4675-371a-66b5aa6c1316",
+        "LINENOTE": "",
+        "METHOD": "",
+        "MODIFIER1": "",
+        "MODIFIER2": "",
+        "NOTES": "lisinopril 10 MG Oral Tablet",
+        "OUTSTANDING": "0.91",
+        "PATIENTID": "35f80d0e-eaad-ef68-b762-3a1c12a872c1",
+        "PATIENTINSURANCEID": "35f80d0e-eaad-ef68-a6c4-7b287cdc51d9",
+        "PAYMENTS": "0.00",
+        "PLACEOFSERVICE": "42d4b607-f14d-370a-818e-40965685776c",
+        "PROCEDURECODE": "314076",
+        "PROVIDERID": "170e1c2c-7711-3196-8348-2c91f2571c0f",
+        "SUPERVISINGPROVIDERID": "170e1c2c-7711-3196-8348-2c91f2571c0f",
+        "TODATE": "1970-01-01T00:00:00Z",
+        "TRANSFEROUTID": "75511",
+        "TRANSFERS": "0.91",
+        "TRANSFERTYPE": "p",
+        "TYPE": "TRANSFERIN",
+        "UNITAMOUNT": "0.00",
+        "UNITS": "1"
+      },
+      "original_id": "b7d193ab-cb5f-4675-371a-66b5aa6c1316",
+      "original_row_sha256": "35b1522c24ee47004ce39fbf97f7e1e1b819b7eebc600e388a1c1c27277576f7",
+      "patient_id": "35f80d0e-eaad-ef68-b762-3a1c12a872c1",
+      "physical_line_end": 56993,
+      "physical_line_start": 56993,
+      "source_file_sha256": "660a48994403bfe85884126e1904fabc16960ce8c554aa7d951cce59ec2460b6",
+      "source_id": "claims_transactions.csv:56992",
+      "table": "claims_transactions.csv"
+    },
+    "claims_transactions.csv:56993": {
+      "archive_sha256": "d61417b551e5b0997c33851b339c157421751f0ea68c18ea686ceb1850907c35",
+      "data_record_number": 56993,
+      "encounter_id": "35f80d0e-eaad-ef68-60a0-b3f9fb295f95",
+      "fields": {
+        "ADJUSTMENTS": "0.00",
+        "AMOUNT": "",
+        "APPOINTMENTID": "35f80d0e-eaad-ef68-60a0-b3f9fb295f95",
+        "CHARGEID": "75513",
+        "CLAIMID": "35f80d0e-eaad-ef68-be2b-007c53365eb2",
+        "DEPARTMENTID": "20",
+        "DIAGNOSISREF1": "1",
+        "DIAGNOSISREF2": "2",
+        "DIAGNOSISREF3": "3",
+        "DIAGNOSISREF4": "4",
+        "FEESCHEDULEID": "1",
+        "FROMDATE": "2026-02-01T22:21:23Z",
+        "ID": "6fa32757-96be-bceb-6e34-cd6b54d8562c",
+        "LINENOTE": "",
+        "METHOD": "CASH",
+        "MODIFIER1": "",
+        "MODIFIER2": "",
+        "NOTES": "lisinopril 10 MG Oral Tablet",
+        "OUTSTANDING": "0.00",
+        "PATIENTID": "35f80d0e-eaad-ef68-b762-3a1c12a872c1",
+        "PATIENTINSURANCEID": "35f80d0e-eaad-ef68-a6c4-7b287cdc51d9",
+        "PAYMENTS": "0.91",
+        "PLACEOFSERVICE": "42d4b607-f14d-370a-818e-40965685776c",
+        "PROCEDURECODE": "314076",
+        "PROVIDERID": "170e1c2c-7711-3196-8348-2c91f2571c0f",
+        "SUPERVISINGPROVIDERID": "170e1c2c-7711-3196-8348-2c91f2571c0f",
+        "TODATE": "1970-01-01T00:00:00Z",
+        "TRANSFEROUTID": "",
+        "TRANSFERS": "",
+        "TRANSFERTYPE": "",
+        "TYPE": "PAYMENT",
+        "UNITAMOUNT": "0.00",
+        "UNITS": "1"
+      },
+      "original_id": "6fa32757-96be-bceb-6e34-cd6b54d8562c",
+      "original_row_sha256": "7f9ec435b62656cc84a6294567d5ed5bd28b68afd667fdc8695ec16cbcf07174",
+      "patient_id": "35f80d0e-eaad-ef68-b762-3a1c12a872c1",
+      "physical_line_end": 56994,
+      "physical_line_start": 56994,
+      "source_file_sha256": "660a48994403bfe85884126e1904fabc16960ce8c554aa7d951cce59ec2460b6",
+      "source_id": "claims_transactions.csv:56993",
+      "table": "claims_transactions.csv"
+    },
+    "conditions.csv:2439": {
+      "archive_sha256": "d61417b551e5b0997c33851b339c157421751f0ea68c18ea686ceb1850907c35",
+      "data_record_number": 2439,
+      "encounter_id": "35f80d0e-eaad-ef68-60a0-b3f9fb295f95",
+      "fields": {
+        "CODE": "59621000",
+        "DESCRIPTION": "Essential hypertension (disorder)",
+        "ENCOUNTER": "35f80d0e-eaad-ef68-60a0-b3f9fb295f95",
+        "PATIENT": "35f80d0e-eaad-ef68-b762-3a1c12a872c1",
+        "START": "2026-02-01",
+        "STOP": "",
+        "SYSTEM": "http://snomed.info/sct"
+      },
+      "original_id": null,
+      "original_row_sha256": "a9710ee095a838a889761125f4bff53c0d44b1c6136c55970b46a2e563f313f3",
+      "patient_id": "35f80d0e-eaad-ef68-b762-3a1c12a872c1",
+      "physical_line_end": 2440,
+      "physical_line_start": 2440,
+      "source_file_sha256": "a3141544140b626c9ae941043ad1afe4a0c201749b2e332c98f4cb2e2b7ec4cd",
+      "source_id": "conditions.csv:2439",
+      "table": "conditions.csv"
+    },
+    "conditions.csv:2440": {
+      "archive_sha256": "d61417b551e5b0997c33851b339c157421751f0ea68c18ea686ceb1850907c35",
+      "data_record_number": 2440,
+      "encounter_id": "35f80d0e-eaad-ef68-60a0-b3f9fb295f95",
+      "fields": {
+        "CODE": "314529007",
+        "DESCRIPTION": "Medication review due (situation)",
+        "ENCOUNTER": "35f80d0e-eaad-ef68-60a0-b3f9fb295f95",
+        "PATIENT": "35f80d0e-eaad-ef68-b762-3a1c12a872c1",
+        "START": "2026-02-01",
+        "STOP": "2026-02-01",
+        "SYSTEM": "http://snomed.info/sct"
+      },
+      "original_id": null,
+      "original_row_sha256": "dfbac5152f5699cef4ac31618aec963c03444429afedafb808a4b4dbd45fac48",
+      "patient_id": "35f80d0e-eaad-ef68-b762-3a1c12a872c1",
+      "physical_line_end": 2441,
+      "physical_line_start": 2441,
+      "source_file_sha256": "a3141544140b626c9ae941043ad1afe4a0c201749b2e332c98f4cb2e2b7ec4cd",
+      "source_id": "conditions.csv:2440",
+      "table": "conditions.csv"
+    },
+    "conditions.csv:2441": {
+      "archive_sha256": "d61417b551e5b0997c33851b339c157421751f0ea68c18ea686ceb1850907c35",
+      "data_record_number": 2441,
+      "encounter_id": "35f80d0e-eaad-ef68-60a0-b3f9fb295f95",
+      "fields": {
+        "CODE": "237602007",
+        "DESCRIPTION": "Metabolic syndrome X (disorder)",
+        "ENCOUNTER": "35f80d0e-eaad-ef68-60a0-b3f9fb295f95",
+        "PATIENT": "35f80d0e-eaad-ef68-b762-3a1c12a872c1",
+        "START": "2026-02-01",
+        "STOP": "",
+        "SYSTEM": "http://snomed.info/sct"
+      },
+      "original_id": null,
+      "original_row_sha256": "a186c553fb042e421f75783edc31cb6c5bc0f64bd0a2c2c22968f601ba908a3c",
+      "patient_id": "35f80d0e-eaad-ef68-b762-3a1c12a872c1",
+      "physical_line_end": 2442,
+      "physical_line_start": 2442,
+      "source_file_sha256": "a3141544140b626c9ae941043ad1afe4a0c201749b2e332c98f4cb2e2b7ec4cd",
+      "source_id": "conditions.csv:2441",
+      "table": "conditions.csv"
+    },
+    "conditions.csv:2442": {
+      "archive_sha256": "d61417b551e5b0997c33851b339c157421751f0ea68c18ea686ceb1850907c35",
+      "data_record_number": 2442,
+      "encounter_id": "35f80d0e-eaad-ef68-60a0-b3f9fb295f95",
+      "fields": {
+        "CODE": "160904001",
+        "DESCRIPTION": "Part-time employment (finding)",
+        "ENCOUNTER": "35f80d0e-eaad-ef68-60a0-b3f9fb295f95",
+        "PATIENT": "35f80d0e-eaad-ef68-b762-3a1c12a872c1",
+        "START": "2026-02-01",
+        "STOP": "",
+        "SYSTEM": "http://snomed.info/sct"
+      },
+      "original_id": null,
+      "original_row_sha256": "ee485d79992341bb33e85888c82bfa663d3096d87588bca5463b4f325e5d789d",
+      "patient_id": "35f80d0e-eaad-ef68-b762-3a1c12a872c1",
+      "physical_line_end": 2443,
+      "physical_line_start": 2443,
+      "source_file_sha256": "a3141544140b626c9ae941043ad1afe4a0c201749b2e332c98f4cb2e2b7ec4cd",
+      "source_id": "conditions.csv:2442",
+      "table": "conditions.csv"
+    },
+    "conditions.csv:2443": {
+      "archive_sha256": "d61417b551e5b0997c33851b339c157421751f0ea68c18ea686ceb1850907c35",
+      "data_record_number": 2443,
+      "encounter_id": "35f80d0e-eaad-ef68-60a0-b3f9fb295f95",
+      "fields": {
+        "CODE": "73595000",
+        "DESCRIPTION": "Stress (finding)",
+        "ENCOUNTER": "35f80d0e-eaad-ef68-60a0-b3f9fb295f95",
+        "PATIENT": "35f80d0e-eaad-ef68-b762-3a1c12a872c1",
+        "START": "2026-02-01",
+        "STOP": "",
+        "SYSTEM": "http://snomed.info/sct"
+      },
+      "original_id": null,
+      "original_row_sha256": "2ce0d6a8b0627fcd3e174b761b50a8696b4139a96cf203989e29d6726048a581",
+      "patient_id": "35f80d0e-eaad-ef68-b762-3a1c12a872c1",
+      "physical_line_end": 2444,
+      "physical_line_start": 2444,
+      "source_file_sha256": "a3141544140b626c9ae941043ad1afe4a0c201749b2e332c98f4cb2e2b7ec4cd",
+      "source_id": "conditions.csv:2443",
+      "table": "conditions.csv"
+    },
+    "encounters.csv:4011": {
+      "archive_sha256": "d61417b551e5b0997c33851b339c157421751f0ea68c18ea686ceb1850907c35",
+      "data_record_number": 4011,
+      "encounter_id": "35f80d0e-eaad-ef68-60a0-b3f9fb295f95",
+      "fields": {
+        "BASE_ENCOUNTER_COST": "136.80",
+        "CODE": "162673000",
+        "DESCRIPTION": "General examination of patient (procedure)",
+        "ENCOUNTERCLASS": "wellness",
+        "Id": "35f80d0e-eaad-ef68-60a0-b3f9fb295f95",
+        "ORGANIZATION": "42d4b607-f14d-370a-818e-40965685776c",
+        "PATIENT": "35f80d0e-eaad-ef68-b762-3a1c12a872c1",
+        "PAYER": "26aab0cd-6aba-3e1b-ac5b-05c8867e762c",
+        "PAYER_COVERAGE": "0.00",
+        "PROVIDER": "170e1c2c-7711-3196-8348-2c91f2571c0f",
+        "REASONCODE": "",
+        "REASONDESCRIPTION": "",
+        "START": "2026-02-01T22:21:23Z",
+        "STOP": "2026-02-01T23:06:10Z",
+        "TOTAL_CLAIM_COST": "1143.64"
+      },
+      "original_id": "35f80d0e-eaad-ef68-60a0-b3f9fb295f95",
+      "original_row_sha256": "6d281809c5d84ff3de6572d6f6c4d74d1a77a24c487c2a212dbc8dd06db84256",
+      "patient_id": "35f80d0e-eaad-ef68-b762-3a1c12a872c1",
+      "physical_line_end": 4012,
+      "physical_line_start": 4012,
+      "source_file_sha256": "16d209cb1429605c90c80cd859ac16569108dc46890f50eb6a125a0602235b3a",
+      "source_id": "encounters.csv:4011",
+      "table": "encounters.csv"
+    },
+    "medications.csv:2136": {
+      "archive_sha256": "d61417b551e5b0997c33851b339c157421751f0ea68c18ea686ceb1850907c35",
+      "data_record_number": 2136,
+      "encounter_id": "35f80d0e-eaad-ef68-60a0-b3f9fb295f95",
+      "fields": {
+        "BASE_COST": "0.91",
+        "CODE": "314076",
+        "DESCRIPTION": "lisinopril 10 MG Oral Tablet",
+        "DISPENSES": "1",
+        "ENCOUNTER": "35f80d0e-eaad-ef68-60a0-b3f9fb295f95",
+        "PATIENT": "35f80d0e-eaad-ef68-b762-3a1c12a872c1",
+        "PAYER": "26aab0cd-6aba-3e1b-ac5b-05c8867e762c",
+        "PAYER_COVERAGE": "0.00",
+        "REASONCODE": "59621000",
+        "REASONDESCRIPTION": "Essential hypertension (disorder)",
+        "START": "2026-02-01T22:21:23Z",
+        "STOP": "2026-02-01T22:21:23Z",
+        "TOTALCOST": "0.91"
+      },
+      "original_id": null,
+      "original_row_sha256": "ce893028e66a7b93b516240d81f56962c8fe0ea17d52e74c6b2b9fcf4ec7c610",
+      "patient_id": "35f80d0e-eaad-ef68-b762-3a1c12a872c1",
+      "physical_line_end": 2137,
+      "physical_line_start": 2137,
+      "source_file_sha256": "53d1d9f51c62cc6cebf236ab739ef9973ba27e65f1000a8a518026670fbffa62",
+      "source_id": "medications.csv:2136",
+      "table": "medications.csv"
+    },
+    "medications.csv:2137": {
+      "archive_sha256": "d61417b551e5b0997c33851b339c157421751f0ea68c18ea686ceb1850907c35",
+      "data_record_number": 2137,
+      "encounter_id": "35f80d0e-eaad-ef68-60a0-b3f9fb295f95",
+      "fields": {
+        "BASE_COST": "0.91",
+        "CODE": "314076",
+        "DESCRIPTION": "lisinopril 10 MG Oral Tablet",
+        "DISPENSES": "2",
+        "ENCOUNTER": "35f80d0e-eaad-ef68-60a0-b3f9fb295f95",
+        "PATIENT": "35f80d0e-eaad-ef68-b762-3a1c12a872c1",
+        "PAYER": "26aab0cd-6aba-3e1b-ac5b-05c8867e762c",
+        "PAYER_COVERAGE": "0.00",
+        "REASONCODE": "59621000",
+        "REASONDESCRIPTION": "Essential hypertension (disorder)",
+        "START": "2026-02-01T22:21:23Z",
+        "STOP": "",
+        "TOTALCOST": "1.82"
+      },
+      "original_id": null,
+      "original_row_sha256": "c4ba00f12f6cb04708156fc9fbb84dec203951d317a122a234b038562f2a28f5",
+      "patient_id": "35f80d0e-eaad-ef68-b762-3a1c12a872c1",
+      "physical_line_end": 2138,
+      "physical_line_start": 2138,
+      "source_file_sha256": "53d1d9f51c62cc6cebf236ab739ef9973ba27e65f1000a8a518026670fbffa62",
+      "source_id": "medications.csv:2137",
+      "table": "medications.csv"
+    },
+    "patients.csv:80": {
+      "archive_sha256": "d61417b551e5b0997c33851b339c157421751f0ea68c18ea686ceb1850907c35",
+      "data_record_number": 80,
+      "encounter_id": null,
+      "fields": {
+        "ADDRESS": "691 Morissette Frontage road",
+        "BIRTHDATE": "1980-01-13",
+        "BIRTHPLACE": "Swampscott  Massachusetts  US",
+        "CITY": "Easton",
+        "COUNTY": "Bristol County",
+        "DEATHDATE": "",
+        "DRIVERS": "S99994896",
+        "ETHNICITY": "nonhispanic",
+        "FIPS": "",
+        "FIRST": "Brady998",
+        "GENDER": "M",
+        "HEALTHCARE_COVERAGE": "4813.37",
+        "HEALTHCARE_EXPENSES": "85253.53",
+        "INCOME": "631750",
+        "Id": "35f80d0e-eaad-ef68-b762-3a1c12a872c1",
+        "LAST": "Olson653",
+        "LAT": "42.08102951060804",
+        "LON": "-71.14752479240488",
+        "MAIDEN": "",
+        "MARITAL": "S",
+        "MIDDLE": "Coy949",
+        "PASSPORT": "X71351822X",
+        "PREFIX": "Mr.",
+        "RACE": "white",
+        "SSN": "999-69-3762",
+        "STATE": "Massachusetts",
+        "SUFFIX": "",
+        "ZIP": "00000"
+      },
+      "original_id": "35f80d0e-eaad-ef68-b762-3a1c12a872c1",
+      "original_row_sha256": "2faccdbd2cb0844f0e6d259627dc8db674f376f5b34af2545c977a18f404d980",
+      "patient_id": "35f80d0e-eaad-ef68-b762-3a1c12a872c1",
+      "physical_line_end": 81,
+      "physical_line_start": 81,
+      "source_file_sha256": "0e8a61760644976571e7ede02e8be5bfece5111bc179d2139af87f84b630c859",
+      "source_id": "patients.csv:80",
+      "table": "patients.csv"
+    }
+  }
+}

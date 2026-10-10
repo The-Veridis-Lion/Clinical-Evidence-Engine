@@ -1,0 +1,25 @@
+{
+  "archive_sha256": "d61417b551e5b0997c33851b339c157421751f0ea68c18ea686ceb1850907c35",
+  "files": {
+    "claim-index.csv": {
+      "sha256": "38fece8ed1cdc2fa100ac7c8c17cfee2dee0aa3990ba7c4ccbd0dbd96041d5f7",
+      "bytes": 2169481
+    },
+    "failures.json": {
+      "sha256": "a5338d955b09046ec0b16f3a9625b7955c763aae07dc722e474e6078745f932f",
+      "bytes": 4
+    },
+    "packets.jsonl.gz": {
+      "sha256": "52da60a16b37375ac8b026f5158d4fe776ebfb0faa1d12b93c336b63afc52cf5",
+      "bytes": 3739830
+    },
+    "sources.jsonl.gz": {
+      "sha256": "459f52edf0f3bfeeb4c51ffebb34dcb9b0a166c499ec33cd5feceac21d69bdf4",
+      "bytes": 20045614
+    },
+    "summary.json": {
+      "sha256": "0f293ed857eb770efac1e40b72ec722f89f773fc53a26a6a7eccf9f54b2214e9",
+      "bytes": 3263
+    }
+  }
+}
