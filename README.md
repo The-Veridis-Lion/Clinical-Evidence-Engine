@@ -1,174 +1,104 @@
 # Clinical Evidence Engine
 
-An evidence-first Python backend that turns synthetic longitudinal records and
-clinical notes into traceable HbA1c evidence-review packets. It combines
-source-preserving retrieval, typed GPT-6 Luna extraction, and deterministic
-policy checks while retaining missing information and conflicting sources.
+**An evidence-first Python backend that turns fragmented synthetic clinical records into auditable, source-linked evidence reviews.**
 
-## Results at a Glance
+The current workflow focuses on **HbA1c monitoring**: retrieving relevant history, extracting supported facts from clinical notes, reconciling corrections and conflicts, and reporting what can—or cannot—be established. It supports **human review**, not automatic claim approval or denial.
 
-| Demonstrated result | Scope and evidence |
-| --- | --- |
-| **389 offline regression tests passed** | Fresh release check; live network/provider dispatch blocked |
-| **350 words per source note on average** | 12 distinct constructed synthetic notes; 155–707 words, median 197 |
-| **$0.00301 estimated inference cost per document workflow** | 24 B runs, including four repairs; Standard API equivalent, not an observed subscription bill |
-| **20.15 seconds per workflow on average** | Recorded sequential workflow duration; not production throughput |
-| **26/26 expected retrieval source-task pairs** | Original Synthea archive, three overlapping windows for one patient; 19 unique HbA1c rows |
-| **Original Prompt B is the normal default** | Ordinary CLI, public Python API, and request builder; A is an explicit fallback |
+## What It Does
 
-B-only usage was **498,270 input / 44,704 output tokens across 28 requests**.
-At [GPT-6 Luna Standard pricing](https://developers.openai.com/api/docs/models/gpt-6-luna)
-($0.10 input / $0.50 output per million tokens), the calculated total is
-**$0.072179 for 24 runs**, without cached-input discounts. Reasoning tokens are
-already included in output. These are engineering measurements on synthetic
-sources, not clinical accuracy, payment decisions, or production-scale claims.
-See [per-note and per-run measurements](docs/release-measurements.md).
+- **Retrieval with provenance:** filters original Synthea CSV records by patient, code, and date while retaining original values, row locations, hashes, and exclusions.
+- **Evidence-grounded extraction:** combines deterministic structured-data parsing with typed GPT-6 Luna extraction for selected notes; unknown values stay `null`, and proposed passages must pass source-position checks.
+- **Conflict-aware reconciliation:** preserves original records, applies explicit field-level amendments, and refuses to resolve disputed facts merely by choosing the latest record.
+- **Scoped review:** evaluates monitoring context, test timeline, short-interval rationale, and provider order intent, producing cited JSON/Markdown packets with evidence states, gaps, and conflicts.
 
-## Engineering Architecture
+## See It in Action
+
+**A retrieved result is not the same as sufficient evidence.** In the [original-archive example](examples/claims_review/raw/review-summary.md), the engine finds historical HbA1c measurements but cannot establish the requested test's purpose, complete history, or provider intent. Rather than inventing those facts, it returns:
+
+```text
+Monitoring context        INSUFFICIENT_EVIDENCE
+Test timeline             INSUFFICIENT_EVIDENCE
+Short-interval rationale  INSUFFICIENT_EVIDENCE
+Order intent              INSUFFICIENT_EVIDENCE
+Overall                   NEEDS_HUMAN_REVIEW
+```
+
+**A correction is not overwritten by a later copy.** In the constructed [REL-04 case](examples/claims_review/reliability_v1/README.md), an authenticated amendment changes an HbA1c event date from **June 6 to August 6, 2026**. A subsequently received copy containing June 6 does not reverse the amendment. With unknown amendment authority (`REL-05`), the system retains uncertainty instead. [Mechanism and validation details](docs/reliability-delivery.md).
+
+## Architecture
 
 ```mermaid
 flowchart LR
-    A[Original synthetic archive + constructed claim] --> R[Patient/code/date retrieval]
-    R --> P[Prepared sources + exclusions + hashes]
-    P --> S[Deterministic structured facts]
-    P --> N[Selected relevant notes]
-    N --> L[Prompt B + nullable typed assertions]
-    L --> V[Grounding checks + one bounded repair]
-    S --> C[Source relationships + policy prerequisites]
-    V --> C
-    C --> D[Deterministic criterion evaluation]
-    D --> E[JSON + Markdown + citations + gaps/conflicts]
+    A[Synthetic records and notes] --> B[Patient / code / date retrieval]
+    B --> C[Structured facts and typed note extraction]
+    C --> D[Source grounding and field-level reconciliation]
+    D --> E[Policy prerequisites and deterministic criteria]
+    E --> F[Cited JSON / Markdown review packet]
 ```
 
-- **Retrieval:** streams original CSV tables using patient, code, encounter, and
-  temporal constraints. Original row values, locators, hashes, and exclusion
-  reasons survive preparation. Optional archive verification reopens the ZIP.
-- **Extraction:** Pydantic contracts express unknown values as null. The model
-  proposes source-supported facts and span IDs; code assigns internal identities
-  and exact offsets. A quoted passage is traceable evidence, not a semantic proof.
-- **Rules:** field-scoped amendments and explicit relationships produce an
-  auditable derived view without overwriting original facts. Policy applicability
-  is separate from what the clinical evidence establishes.
-- **Review:** four scoped criteria—monitoring context, test timeline, short-interval
-  rationale, and order intent—produce evidence states. `SUPPORTED` applies to one
-  criterion; it never means an approved claim.
+**The LLM proposes note facts; deterministic code handles record identity, amendments, applicability, and evidence-state rules.** Original evidence is preserved separately from the derived view. [Engineering case study](docs/engineering-case-study.md).
 
-### Why GPT-6 Luna and Prompt B?
+## Validation Snapshot
 
-Luna is used for a bounded text-to-facts task, with measured token usage and high
-reasoning held fixed. Original B organizes instructions around propositions,
-actors, events, date roles, and evidence. It improved selected date/authentication
-fields in saved comparisons, but also produced unsupported nonoccurrence claims.
-Shared validation can reject supported facts. B is a chosen **research default**,
-not a finding that all of its clinical interpretations are correct.
+- **389 offline regression tests passed** in the documented release check. Live provider/network dispatch was blocked; this is a software test result, not clinical accuracy.
+- **26/26 expected retrieval source-task pairs** were found across three overlapping windows **for one synthetic patient** (19 unique HbA1c rows). Not a population-wide recall score.
+- **5/7 new synthetic cases** met all predefined case constraints; the live-note subset met **1/3**. A separate earlier reserved confirmation met **3/6** complete cases. Criterion-state matches alone can hide field-level errors.
+- **20.15 seconds** and **$0.00301 estimated model cost** per workflow, averaged over 24 sequential runs on 12 constructed notes. Neither is production throughput or an observed bill.
 
-The optional Scope Audit prototype is **not included in this release**. Its
-experimental projection regressed criterion matches from 63/64 to 55/64 and
-removed genuine conflicts. It remains on `feature/b-default-semantic-safety`.
-See the [engineering case study](docs/engineering-case-study.md) for failures,
-evaluation boundaries, and architecture trade-offs.
+These bounded tests do **not** establish semantic citation accuracy, exhaustive clinical fact precision/recall, or real-patient performance. See [reliability results](docs/reliability-delivery.md), [original confirmation](docs/confirmation-delivery.md), and [measurement details](docs/release-measurements.md).
 
-## Zero-Model-Call Demo
+## Quick Start — No Model Calls
 
-Python 3.12+ is required. Installation needs a package index or populated cache;
-the following review commands need no credentials or model access.
+Requires Python 3.12+ and access to pinned packages:
 
 ```sh
 python -m venv .venv
-# PowerShell: .venv\Scripts\Activate.ps1
-# POSIX: source .venv/bin/activate
+# Activate: .venv\Scripts\Activate.ps1 (PowerShell) or source .venv/bin/activate (macOS/Linux)
 python -m pip install -r requirements.lock
 python -m pip install --no-deps .
-python -m clinical_intelligence.claims_review run --case examples/claims_review/development/DEV-002.json --mode structured-only --format json --output artifacts/review.json
-python -m clinical_intelligence.claims_review render --packet artifacts/review.json --format summary --output artifacts/review.md
+python -m clinical_intelligence.claims_review run --case examples/claims_review/development/DEV-002.json --mode structured-only --format summary
 ```
 
-Structured-only mode deliberately leaves free-text notes unprocessed and reports
-that limitation. [The example archive packet](examples/claims_review/raw/review-summary.md)
-also shows honest gaps: an observed prior result does not establish target
-performance, physician intent, or a verified billing claim.
+`structured-only` intentionally does **not** process the note; it is a no-inference demonstration, not a reproduction of live-note results.
 
-### Start from an Original, Unfiltered Archive
+### Original Archive Evidence Demo
+
+Run against an original Synthea archive:
 
 ```sh
 python -m clinical_intelligence.claims_review download --output artifacts/raw-source/original.zip
 python -m clinical_intelligence.claims_review retrieve --archive artifacts/raw-source/original.zip --query examples/claims_review/raw/target-query.json --output artifacts/raw-source/retrieval.json
-python -m clinical_intelligence.claims_review run --retrieval artifacts/raw-source/retrieval.json --verify-archive artifacts/raw-source/original.zip --mode structured-only --format summary --output artifacts/raw-source/review.md
+python -m clinical_intelligence.claims_review run --retrieval artifacts/raw-source/retrieval.json --verify-archive artifacts/raw-source/original.zip --mode structured-only --format summary
 ```
 
-Download uses the official Synthea distribution and refuses to overwrite an
-existing archive. The `latest` archive can change: inspect the generated manifest
-and do not assume it matches the recorded SHA. Without a receipt declaration,
-source availability stays unknown; download time never establishes original EHR
-availability or complete history. The historical retrieval benchmark used an
-18-table, 201,657-row snapshot. Its fixed oracle requires the recorded archive
-hash; see [retrieval instructions and boundaries](docs/raw-source-delivery.md).
-The full ZIP, expanded outputs, and databases remain ignored.
+[Archive provenance, benchmark, and limitations](docs/raw-source-delivery.md). Live note extraction is **opt-in** (`--mode live`) and requires a separately authenticated Codex CLI, real requests, and a persistent budget ledger. Prompt B is the current default; A is an explicit fallback. [Prompt selection and failure analysis](docs/engineering-case-study.md).
 
-## Explicit Live Usage and Rollback
+## Related Module: Therapy Reconciliation
 
-Install and authenticate Codex CLI separately. **This command makes real requests**
-and consumes the shared persistent ledger. Preserve its path across restarts;
-do not delete or reset an exhausted historical ledger. Each note can use its
-initial request plus at most one existing validation repair.
-
-```sh
-python -m clinical_intelligence.claims_review run --case examples/claims_review/development/DEV-002.json --mode live --model gpt-6-luna --reasoning high --ledger artifacts/claims-review/live-budget.json --trace-directory artifacts/claims-review/live-calls --format markdown --output artifacts/live-review.md
-```
-
-Omitting `--note-prompt` selects original B. Add `--note-prompt A` for explicit
-fallback; public `run_review(..., note_prompt="A")` does the same. Default requests
-and packet identities record the selected prompt hash. No credentials, weights,
-raw private experiment responses, or patient records are included.
-
-## Therapy Reconciliation Remains Available
-
-The original therapy engine retains independent SQLite evidence, explicit
-corrections, retransmissions, unknowns, and unresolved signed alternatives.
-Time conversion, interval union, break subtraction, and utilization remain
-ordinary deterministic Python operations.
+A separate SQLite-backed engine handles synthetic therapy evidence, explicit corrections, retransmissions, and uncertain utilization totals. One fixture correctly preserves **108/120 possible minutes** rather than the **135-minute** answer produced by a naïve latest-record rule. [Therapy demo and evaluation](docs/evaluation.md).
 
 ```sh
 clinical --db artifacts/demo.sqlite demo
 clinical --db artifacts/demo.sqlite query --patient DEMO-CEDAR --family utilization --format audit
-clinical --db artifacts/demo.sqlite query --patient DEMO-JUNIPER --family utilization
 ```
 
-The synthetic demo keeps a corrected 71-minute encounter despite a later copy,
-and retains signed 37/49-minute alternatives: Cedar totals remain **108/120
-minutes**, while Juniper has **23 minutes**. See [therapy evaluation](docs/evaluation.md)
-and the [nullable extraction contract](docs/uncertainty-contract-v1.md).
+## Where to Find the Details
 
-## Verification and Limits
+| Topic | Source |
+| --- | --- |
+| Complete output example | [Source-linked review packet](examples/claims_review/raw/review-summary.md) |
+| Architecture and trade-offs | [Engineering case study](docs/engineering-case-study.md) |
+| Reliability, errors, correction cases | [Reliability report](docs/reliability-delivery.md) |
+| Retrieval verification | [Original-source report](docs/raw-source-delivery.md) |
+| Exact latency, cost, note lengths, tokens | [Measurement report](docs/release-measurements.md) |
+| A/B prompts and historical scoring limits | [Prompt comparison](docs/luna-ab-posthoc-reanalysis.md) · [Prospective follow-up](docs/b-candidate-new-validation.md) |
+| Policies and review semantics | [Review contract](docs/claims-review-contract.md) · [Policy verification](docs/claims-review-policy-verification.md) |
 
-```sh
-python -m pytest -q
-```
+## Limitations, License, and Contact
 
-Release validation includes installed CLI execution and intercepted B-default/A-
-fallback requests. Software tests, injected fixtures, saved-response replay,
-original-archive retrieval, and actual Luna measurements are reported separately.
-The historical reserved six-case confirmation achieved **3/6 complete cases and
-16/24 matching criterion states**. Those cases are now exposed regression material.
-A later finite A/B benchmark had scoring ambiguities; its counts are not validated
-clinical precision/recall. Semantic citation precision remains unavailable.
+This is a **synthetic-data engineering prototype**, not a clinically validated decision system. Policy rules are narrowly scoped and remain `draft_ai_reviewed`; human and clinical-expert verification are incomplete. Source-grounded quotes do not guarantee correct clinical interpretations. No autonomous adjudication, compliance certification, or production scalability is claimed.
 
-The policy registry is `draft_ai_reviewed`; human and clinical-expert review are
-not completed. Three-calendar-month comparison is a program convention, not the
-complete CMS medical-necessity rule. Known limitations include source/subject
-confusion, unsupported definite values, unnecessary unknowns, restrictive
-validator/repair behavior, and unresolved event linkage. No real-patient
-validation, autonomous adjudication, compliance certification, or production
-scalability is claimed. See the [technical design and evaluation](docs/engineering-case-study.md)
-for architecture, measurements, and known failure modes.
+Source-available under [PolyForm Noncommercial 1.0.0](LICENSE.md); commercial use needs separate permission. See [NOTICE](NOTICE) and [third-party notices](THIRD_PARTY_NOTICES.md). Not OSI-approved open source.
 
-## License and Contact
-
-Source-available under [PolyForm Noncommercial 1.0.0](LICENSE.md); commercial use
-requires separate permission. Preserve [NOTICE](NOTICE) and
-[third-party notices](THIRD_PARTY_NOTICES.md). This is not represented as
-OSI-approved open source.
-
-Required Notice: Copyright (c) 2026 The-Veridis-Lion
-
-Contact: [theveridislion@duck.com](mailto:theveridislion@duck.com).
+Required Notice: Copyright (c) 2026 The-Veridis-Lion  
+Contact: [theveridislion@duck.com](mailto:theveridislion@duck.com)
