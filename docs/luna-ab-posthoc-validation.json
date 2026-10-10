@@ -1,0 +1,422 @@
+{
+  "analysis": "POST_HOC_REANALYSIS",
+  "version": "luna-ab-offline-rescore/2",
+  "starting_commit": "d1950aa457980f46ed31d935bc9c0ea4904dbd74",
+  "new_model_calls": 0,
+  "new_experiment_tokens": 0,
+  "historical_requests": 56,
+  "original_notes": 16,
+  "original_executions": 48,
+  "full_rescore_passes": 2,
+  "passes_byte_identical": true,
+  "self_tests_passed": 23,
+  "human_review_completed": false,
+  "reviewer_type": "AI_ASSISTED",
+  "designer_blind": false,
+  "default_prompt": "A",
+  "terminal_status": "COMPLETED_WITH_UNRESOLVED",
+  "groups": {
+    "dev-A": {
+      "executions": 8,
+      "first": {
+        "metrics": {
+          "candidate_fields": 58,
+          "scored_fields": 55,
+          "correct_fields": 54,
+          "unresolved_fields": 3,
+          "wrong_definite": 1,
+          "unnecessary_null": 0,
+          "missing_fields": 0,
+          "missing_propositions": 0,
+          "binding_errors": 1,
+          "required_propositions": 19,
+          "complete_propositions": 16,
+          "duplicate_propositions": 0,
+          "contradictory_propositions": 0,
+          "date_bundle_errors": 0,
+          "grounding_identity_errors": 0
+        },
+        "extra_categories": {
+          "SUPPORTED_IN_SCOPE": 15,
+          "UNRESOLVED": 2,
+          "UNSUPPORTED": 2
+        },
+        "complete_common_scored_constraints": 7,
+        "unresolved_executions": 4
+      },
+      "final": {
+        "metrics": {
+          "candidate_fields": 58,
+          "scored_fields": 55,
+          "correct_fields": 54,
+          "unresolved_fields": 3,
+          "wrong_definite": 1,
+          "unnecessary_null": 0,
+          "missing_fields": 0,
+          "missing_propositions": 0,
+          "binding_errors": 1,
+          "required_propositions": 19,
+          "complete_propositions": 16,
+          "duplicate_propositions": 0,
+          "contradictory_propositions": 0,
+          "date_bundle_errors": 0,
+          "grounding_identity_errors": 0
+        },
+        "extra_categories": {
+          "SUPPORTED_IN_SCOPE": 15,
+          "UNRESOLVED": 2,
+          "UNSUPPORTED": 2
+        },
+        "complete_common_scored_constraints": 7,
+        "unresolved_executions": 4
+      },
+      "historical_strict_first": {
+        "required_total": 19,
+        "missing": 0,
+        "required_recalled": 19,
+        "supported_required": 18,
+        "field_total": 58,
+        "field_matches": 57,
+        "unnecessary_null": 0,
+        "wrong_definite": 1,
+        "binding_temporal_errors": 1,
+        "duplicate_assertions": 0,
+        "unsupported_extras": 0,
+        "unscored_extras": 19
+      },
+      "historical_strict_final": {
+        "required_total": 19,
+        "missing": 0,
+        "required_recalled": 19,
+        "supported_required": 18,
+        "field_total": 58,
+        "field_matches": 57,
+        "unnecessary_null": 0,
+        "wrong_definite": 1,
+        "binding_temporal_errors": 1,
+        "duplicate_assertions": 0,
+        "unsupported_extras": 0,
+        "unscored_extras": 19
+      }
+    },
+    "dev-B": {
+      "executions": 8,
+      "first": {
+        "metrics": {
+          "candidate_fields": 58,
+          "scored_fields": 55,
+          "correct_fields": 54,
+          "unresolved_fields": 3,
+          "wrong_definite": 0,
+          "unnecessary_null": 1,
+          "missing_fields": 0,
+          "missing_propositions": 0,
+          "binding_errors": 0,
+          "required_propositions": 19,
+          "complete_propositions": 15,
+          "duplicate_propositions": 0,
+          "contradictory_propositions": 0,
+          "date_bundle_errors": 0,
+          "grounding_identity_errors": 0
+        },
+        "extra_categories": {
+          "SUPPORTED_IN_SCOPE": 13
+        },
+        "complete_common_scored_constraints": 7,
+        "unresolved_executions": 2
+      },
+      "final": {
+        "metrics": {
+          "candidate_fields": 58,
+          "scored_fields": 55,
+          "correct_fields": 54,
+          "unresolved_fields": 3,
+          "wrong_definite": 0,
+          "unnecessary_null": 1,
+          "missing_fields": 0,
+          "missing_propositions": 0,
+          "binding_errors": 0,
+          "required_propositions": 19,
+          "complete_propositions": 15,
+          "duplicate_propositions": 0,
+          "contradictory_propositions": 0,
+          "date_bundle_errors": 0,
+          "grounding_identity_errors": 0
+        },
+        "extra_categories": {
+          "SUPPORTED_IN_SCOPE": 13
+        },
+        "complete_common_scored_constraints": 7,
+        "unresolved_executions": 2
+      },
+      "historical_strict_first": {
+        "required_total": 19,
+        "missing": 0,
+        "required_recalled": 19,
+        "supported_required": 17,
+        "field_total": 58,
+        "field_matches": 56,
+        "unnecessary_null": 1,
+        "wrong_definite": 1,
+        "binding_temporal_errors": 0,
+        "duplicate_assertions": 0,
+        "unsupported_extras": 0,
+        "unscored_extras": 13
+      },
+      "historical_strict_final": {
+        "required_total": 19,
+        "missing": 0,
+        "required_recalled": 19,
+        "supported_required": 17,
+        "field_total": 58,
+        "field_matches": 56,
+        "unnecessary_null": 1,
+        "wrong_definite": 1,
+        "binding_temporal_errors": 0,
+        "duplicate_assertions": 0,
+        "unsupported_extras": 0,
+        "unscored_extras": 13
+      }
+    },
+    "confirm-A": {
+      "executions": 16,
+      "first": {
+        "metrics": {
+          "candidate_fields": 116,
+          "scored_fields": 112,
+          "correct_fields": 103,
+          "unresolved_fields": 4,
+          "wrong_definite": 2,
+          "unnecessary_null": 7,
+          "missing_fields": 0,
+          "missing_propositions": 0,
+          "binding_errors": 2,
+          "required_propositions": 36,
+          "complete_propositions": 23,
+          "duplicate_propositions": 0,
+          "contradictory_propositions": 0,
+          "date_bundle_errors": 0,
+          "grounding_identity_errors": 0
+        },
+        "extra_categories": {
+          "UNSUPPORTED": 3,
+          "SUPPORTED_IN_SCOPE": 27,
+          "UNRESOLVED": 4,
+          "SUPPORTED_OUT_OF_SCOPE": 2
+        },
+        "complete_common_scored_constraints": 10,
+        "unresolved_executions": 5
+      },
+      "final": {
+        "metrics": {
+          "candidate_fields": 116,
+          "scored_fields": 112,
+          "correct_fields": 103,
+          "unresolved_fields": 4,
+          "wrong_definite": 2,
+          "unnecessary_null": 7,
+          "missing_fields": 0,
+          "missing_propositions": 0,
+          "binding_errors": 2,
+          "required_propositions": 36,
+          "complete_propositions": 23,
+          "duplicate_propositions": 0,
+          "contradictory_propositions": 0,
+          "date_bundle_errors": 0,
+          "grounding_identity_errors": 0
+        },
+        "extra_categories": {
+          "UNSUPPORTED": 3,
+          "SUPPORTED_IN_SCOPE": 28,
+          "UNRESOLVED": 4,
+          "SUPPORTED_OUT_OF_SCOPE": 2
+        },
+        "complete_common_scored_constraints": 10,
+        "unresolved_executions": 5
+      },
+      "historical_strict_first": {
+        "required_total": 36,
+        "missing": 0,
+        "required_recalled": 36,
+        "supported_required": 21,
+        "field_total": 116,
+        "field_matches": 101,
+        "unnecessary_null": 11,
+        "wrong_definite": 4,
+        "binding_temporal_errors": 2,
+        "duplicate_assertions": 0,
+        "unsupported_extras": 2,
+        "unscored_extras": 34
+      },
+      "historical_strict_final": {
+        "required_total": 36,
+        "missing": 0,
+        "required_recalled": 36,
+        "supported_required": 21,
+        "field_total": 116,
+        "field_matches": 101,
+        "unnecessary_null": 11,
+        "wrong_definite": 10,
+        "binding_temporal_errors": 6,
+        "duplicate_assertions": 2,
+        "unsupported_extras": 2,
+        "unscored_extras": 33
+      }
+    },
+    "confirm-B": {
+      "executions": 16,
+      "first": {
+        "metrics": {
+          "candidate_fields": 116,
+          "scored_fields": 112,
+          "correct_fields": 111,
+          "unresolved_fields": 4,
+          "wrong_definite": 0,
+          "unnecessary_null": 1,
+          "missing_fields": 0,
+          "missing_propositions": 0,
+          "binding_errors": 0,
+          "required_propositions": 36,
+          "complete_propositions": 31,
+          "duplicate_propositions": 0,
+          "contradictory_propositions": 0,
+          "date_bundle_errors": 0,
+          "grounding_identity_errors": 0
+        },
+        "extra_categories": {
+          "SUPPORTED_IN_SCOPE": 34,
+          "UNRESOLVED": 2,
+          "SUPPORTED_OUT_OF_SCOPE": 4
+        },
+        "complete_common_scored_constraints": 15,
+        "unresolved_executions": 4
+      },
+      "final": {
+        "metrics": {
+          "candidate_fields": 116,
+          "scored_fields": 112,
+          "correct_fields": 111,
+          "unresolved_fields": 4,
+          "wrong_definite": 0,
+          "unnecessary_null": 1,
+          "missing_fields": 0,
+          "missing_propositions": 0,
+          "binding_errors": 0,
+          "required_propositions": 36,
+          "complete_propositions": 31,
+          "duplicate_propositions": 0,
+          "contradictory_propositions": 0,
+          "date_bundle_errors": 0,
+          "grounding_identity_errors": 0
+        },
+        "extra_categories": {
+          "SUPPORTED_IN_SCOPE": 34,
+          "UNRESOLVED": 2,
+          "SUPPORTED_OUT_OF_SCOPE": 4
+        },
+        "complete_common_scored_constraints": 15,
+        "unresolved_executions": 4
+      },
+      "historical_strict_first": {
+        "required_total": 36,
+        "missing": 0,
+        "required_recalled": 36,
+        "supported_required": 29,
+        "field_total": 116,
+        "field_matches": 109,
+        "unnecessary_null": 5,
+        "wrong_definite": 3,
+        "binding_temporal_errors": 1,
+        "duplicate_assertions": 1,
+        "unsupported_extras": 2,
+        "unscored_extras": 37
+      },
+      "historical_strict_final": {
+        "required_total": 36,
+        "missing": 0,
+        "required_recalled": 36,
+        "supported_required": 29,
+        "field_total": 116,
+        "field_matches": 109,
+        "unnecessary_null": 5,
+        "wrong_definite": 6,
+        "binding_temporal_errors": 3,
+        "duplicate_assertions": 2,
+        "unsupported_extras": 2,
+        "unscored_extras": 36
+      }
+    }
+  },
+  "paired": {
+    "dev": {
+      "pairs": 8,
+      "directions": {
+        "SAME": 6,
+        "REGRESSED": 1,
+        "IMPROVED": 1
+      },
+      "gain_fields": 1,
+      "loss_fields": 1,
+      "common_fields": 55,
+      "repeats": {
+        "1": {
+          "A_correct": 54,
+          "B_correct": 54,
+          "common_fields": 55
+        }
+      }
+    },
+    "confirm": {
+      "pairs": 16,
+      "directions": {
+        "IMPROVED": 6,
+        "SAME": 10
+      },
+      "gain_fields": 8,
+      "loss_fields": 0,
+      "common_fields": 112,
+      "repeats": {
+        "1": {
+          "A_correct": 52,
+          "B_correct": 56,
+          "common_fields": 56
+        },
+        "2": {
+          "A_correct": 51,
+          "B_correct": 55,
+          "common_fields": 56
+        }
+      }
+    }
+  },
+  "candidate_fields_per_stage": 348,
+  "scorable_fields_per_stage": 334,
+  "unresolved_fields_per_stage": 14,
+  "missing_materials": 0,
+  "scorer_sha256": "6cfbaa755ac0d2d7a5a78bc5f08ea3d04dfa516d6fe76fc2c51290a4efa864fb",
+  "review_overlay_sha256": "006e248145692366d0da7dfe4582f9fdae598a5b0f1451500cffd827ea53e375",
+  "contract_sha256": "6423cc8c5cdeb9a6034859c5486ee8c99c6ab42f3ceb50b479be0a2f893e6f04",
+  "result_sha256": "8210f7efaa24a51ed3c2b7ddaa7d28a16375db48b7b91945f0465b025af2f13c",
+  "overall_fact_precision_recall": "UNAVAILABLE",
+  "source_semantic_citation_precision": "UNAVAILABLE: limited finite identity checks and AI-assisted source/constraint review, not exhaustive independent labels",
+  "interpretation": "B improves the selected decidable confirmation fields on these saved outputs; development has mixed gains. No unseen evidence, clinical accuracy claim or default switch.",
+  "local_index": "artifacts/luna-ab-rescore-v2/result-index.json",
+  "historical_files_checked": 605,
+  "historical_files_unchanged": true,
+  "production_runtime_unchanged": true,
+  "historical_ledgers_unchanged": true,
+  "historical_usage_deduplicated": {
+    "input_tokens": 966368,
+    "cached_input_tokens": 56320,
+    "cache_write_input_tokens": 0,
+    "output_tokens": 69026,
+    "reasoning_output_tokens": 41147
+  },
+  "zero_call_check": "stdlib-only offline entry, fail-immediately provider stubs and unchanged original call/ledger hashes",
+  "historical_billed_cost": "UNAVAILABLE",
+  "unfinished_semantics": [
+    "Ambiguous order/target dates",
+    "Future-discussion and receipt boolean scope",
+    "Non-exhaustive extras and semantic citation labels"
+  ]
+}

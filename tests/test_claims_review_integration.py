@@ -220,7 +220,8 @@ def test_unicode_repeated_lines_have_distinct_exact_offsets():
 def test_unknown_target_no_metadata_date_borrowing_and_scope_guard():
     c = changed(case(1), lambda b: b['claim'].update(service_date=None))
     r = run_review(c)
-    assert r.target.service_date is None and statuses(r)['TEST_TIMELINE'] == 'INSUFFICIENT_EVIDENCE'
+    assert r.target.service_date is None and statuses(r)['TEST_TIMELINE'] == 'NOT_EVALUATED'
+    assert next(x for x in r.criteria if x.criterion_id=='TEST_TIMELINE').derivation['clinical_evidence_status']=='INSUFFICIENT_EVIDENCE'
     r = run_review(case(1), requested_policy='unmapped-historical-version')
     assert r.status == 'UNSUPPORTED_SCOPE' and set(statuses(r).values()) == {'NOT_EVALUATED'}
 
@@ -299,7 +300,7 @@ def test_false_authentication_and_cancelled_order_stay_false():
 def test_future_target_and_requested_date_cannot_manufacture_performance():
     c = changed(case(2), lambda b: b['claim'].update(service_date='2026-11-22'))
     r = run_review(c)
-    assert statuses(r)['TEST_TIMELINE'] == 'INSUFFICIENT_EVIDENCE' and r.status == 'NEEDS_HUMAN_REVIEW'
+    assert statuses(r)['TEST_TIMELINE'] == 'NOT_EVALUATED' and r.status == 'NEEDS_HUMAN_REVIEW'
 
 
 def test_negative_signature_is_rejected_when_claimed_positive():

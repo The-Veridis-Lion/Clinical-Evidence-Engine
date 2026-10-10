@@ -1,0 +1,36 @@
+{
+  "schema_version": "claims-review-prep/0.1",
+  "case_id": "N06",
+  "claim": {
+    "claim_id": "CONSTRUCTED-N06",
+    "patient_id": "SYN-NEW-N06",
+    "encounter_id": "VISIT-N06",
+    "service_date": null,
+    "service_concept": "hba1c_monitoring",
+    "procedure_code": null,
+    "code_system": null,
+    "mapping_status": "constructed_demo",
+    "data_origin": "constructed_synthetic"
+  },
+  "review_context": {
+    "as_of": "2027-06-01",
+    "history_start": "2026-01-01",
+    "history_end": "2027-05-31",
+    "history_completeness": "not_asserted"
+  },
+  "sources": [
+    {
+      "source_id": "N06-NOTE",
+      "patient_id": "SYN-NEW-N06",
+      "encounter_id": "VISIT-N06",
+      "available_at": "2027-05-31",
+      "origin": "constructed_synthetic",
+      "source_kind": "synthetic_note",
+      "recorded_at": "2027-05-30",
+      "event_date": null,
+      "record_type": "note",
+      "event_link_id": null,
+      "content": "Telephone message signed by the recorder\nThe patient reports: \"Dr. Celia Reed told me to have HbA1c collected December 2, 2026, to monitor my established diabetes.\"\nThe patient says the treating clinician considers the diabetes diagnosis established; this is a patient-reported history, not a new diagnosis by the call handler.\nRecorded and signed by RN Owen Clay on November 12, 2026. The nurse authenticates the telephone message only, not Dr. Celia Reed's order.\nNo authentication information about the attributed physician request is available.\nThe call concerned where the patient should go for a collection already discussed with the physician. The nurse recorded the patient's words and asked the patient to retain the written instructions if they could be found at home. No original signed laboratory order was inspected during the call. The nurse did not issue an independent request under a different name. The patient asked whether the office could mail directions; the staff member agreed to send the usual map. Sending a map does not confirm a laboratory result or actual attendance. The source records no regimen change, prior HbA1c value, or clinical reason for an unusually short interval. The nurse's signature verifies the call documentation within its stated scope. It does not retrospectively turn the reported physician instruction into an authenticated original order."
+    }
+  ]
+}

@@ -1,0 +1,58 @@
+{
+  "schema_version": "claims-review-prep/0.1",
+  "case_id": "REL-07",
+  "claim": {
+    "claim_id": "REQUEST-REL-07",
+    "patient_id": "SYN-REL-REL-07",
+    "encounter_id": "VISIT-REL-07",
+    "service_date": "2026-09-30",
+    "service_concept": "hba1c_monitoring",
+    "procedure_code": null,
+    "code_system": null,
+    "mapping_status": "constructed_demo",
+    "data_origin": "constructed_synthetic"
+  },
+  "review_context": {
+    "as_of": "2026-10-08",
+    "history_start": "2026-01-01",
+    "history_end": "2026-09-30",
+    "history_completeness": "complete_within_constructed_case"
+  },
+  "sources": [
+    {
+      "source_id": "REL-07-OTHER",
+      "patient_id": "OTHER-PATIENT",
+      "encounter_id": "VISIT-REL-07",
+      "available_at": "2026-10-07",
+      "origin": "constructed_synthetic",
+      "source_kind": "structured_record",
+      "recorded_at": "2026-10-06",
+      "event_date": "2026-09-30",
+      "record_type": "observation",
+      "event_link_id": "OTHER-EVENT",
+      "content": {
+        "service_concept": "hba1c",
+        "status": "final",
+        "value": 8.2
+      }
+    },
+    {
+      "source_id": "REL-07-IRRELEVANT",
+      "patient_id": "SYN-REL-REL-07",
+      "encounter_id": null,
+      "available_at": "2026-10-07",
+      "origin": "constructed_synthetic",
+      "source_kind": "structured_record",
+      "recorded_at": "2026-10-06",
+      "event_date": "2026-09-30",
+      "record_type": "observation",
+      "event_link_id": "ALBUMIN-EVENT",
+      "content": {
+        "service_concept": "albumin",
+        "description": "Albumin",
+        "status": "final",
+        "value": 4.2
+      }
+    }
+  ]
+}

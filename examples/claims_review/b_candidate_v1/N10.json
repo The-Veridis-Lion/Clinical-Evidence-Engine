@@ -1,0 +1,36 @@
+{
+  "schema_version": "claims-review-prep/0.1",
+  "case_id": "N10",
+  "claim": {
+    "claim_id": "CONSTRUCTED-N10",
+    "patient_id": "SYN-NEW-N10",
+    "encounter_id": "VISIT-N10",
+    "service_date": null,
+    "service_concept": "hba1c_monitoring",
+    "procedure_code": null,
+    "code_system": null,
+    "mapping_status": "constructed_demo",
+    "data_origin": "constructed_synthetic"
+  },
+  "review_context": {
+    "as_of": "2027-06-01",
+    "history_start": "2026-01-01",
+    "history_end": "2027-05-31",
+    "history_completeness": "not_asserted"
+  },
+  "sources": [
+    {
+      "source_id": "N10-NOTE",
+      "patient_id": "SYN-NEW-N10",
+      "encounter_id": "VISIT-N10",
+      "available_at": "2027-05-31",
+      "origin": "constructed_synthetic",
+      "source_kind": "synthetic_note",
+      "recorded_at": "2027-05-30",
+      "event_date": null,
+      "record_type": "note",
+      "event_link_id": null,
+      "content": "Referral correspondence with ambiguous date\nDr. Remy Wells orders Hgb A1c on May 11, 2027 for monitoring.\nThe letter does not specify whether that date is the order date or a requested collection date; no other timing statement clarifies it.\nThe attached diagnosis section is incomplete, not an explicit negative diabetes assessment.\nAuthentication status is not documented for Dr. Remy Wells or this request.\nThe receiving office asked the referring practice to clarify the timing before giving the patient collection instructions. That request for clarification is not an additional clinical order. The available letter contains a named provider and an explicit test purpose, but it leaves the timing relationship open. A date typed beside a request can have more than one role when the surrounding text does not resolve it. This source does not authorize a reviewer to choose a role based on the constructed claim date or the date on which the packet was downloaded. The missing diagnosis section similarly does not prove absence of disease. No score, laboratory result, medication adjustment, actual specimen event, or policy determination appears in the supplied correspondence."
+    }
+  ]
+}

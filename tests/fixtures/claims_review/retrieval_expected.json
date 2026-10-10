@@ -1,0 +1,100 @@
+{
+  "version": "raw-source-retrieval-gold/1",
+  "method": "AI-assisted independent original-row inventory before retrieval execution; no human verification",
+  "archive_sha256": "d61417b551e5b0997c33851b339c157421751f0ea68c18ea686ceb1850907c35",
+  "patient_id": "7af6b271-f16d-21e1-882a-7bff71005a7b",
+  "hba1c_rows": [
+    8765,
+    8812,
+    8868,
+    8924,
+    8972,
+    9027,
+    9084,
+    9151,
+    9201,
+    9202,
+    9249,
+    9251,
+    9297,
+    9298,
+    9363,
+    9452,
+    9941,
+    10003,
+    10058
+  ],
+  "diabetes_condition_rows": [
+    712
+  ],
+  "metformin_rows": [
+    421,
+    424,
+    427,
+    430,
+    433,
+    435,
+    439,
+    442,
+    445,
+    447,
+    449,
+    451,
+    453,
+    455,
+    457,
+    462,
+    479,
+    483,
+    486
+  ],
+  "tasks": [
+    {
+      "id": "full_history",
+      "history_start": "2000-01-01",
+      "history_end": "2026-10-05",
+      "expected_hba1c_rows": [
+        8765,
+        8812,
+        8868,
+        8924,
+        8972,
+        9027,
+        9084,
+        9151,
+        9201,
+        9202,
+        9249,
+        9251,
+        9297,
+        9298,
+        9363,
+        9452,
+        9941,
+        10003,
+        10058
+      ]
+    },
+    {
+      "id": "old_slice_window",
+      "history_start": "2023-01-01",
+      "history_end": "2026-10-05",
+      "expected_hba1c_rows": [
+        9363,
+        9452,
+        9941,
+        10003,
+        10058
+      ]
+    },
+    {
+      "id": "tight_window",
+      "history_start": "2025-01-01",
+      "history_end": "2026-10-05",
+      "expected_hba1c_rows": [
+        10003,
+        10058
+      ]
+    }
+  ]
+}

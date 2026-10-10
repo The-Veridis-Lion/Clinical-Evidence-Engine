@@ -1,0 +1,356 @@
+{
+  "version": "claims-reliability-delivery/1",
+  "starting_commit": "a194ac6c56c3b947be9dd362db441b8070cf5161",
+  "candidate_commit": "171c08fbe985172f41f1ddb588620ba2c368192b",
+  "semantics": {
+    "note": "claims-review-note/3",
+    "grounding": "claims-review-grounding/1",
+    "relationships": "claims-review-relationships/1",
+    "applicability": "claims-review-applicability/1",
+    "rules": "claims-review-rules/3",
+    "policy": "0.2.0-draft-ai-20261009"
+  },
+  "baseline_tests": {
+    "passed": 314,
+    "seconds": 4.53
+  },
+  "candidate_tests": {
+    "passed": 348,
+    "seconds": 4.13
+  },
+  "historical_frozen": {
+    "complete": [
+      3,
+      6
+    ],
+    "criterion_matches": [
+      16,
+      24
+    ],
+    "new_calls": 0,
+    "note": "Existing measured history, unchanged."
+  },
+  "exposed_saved_response_replay": {
+    "complete": [
+      5,
+      6
+    ],
+    "criterion_matches": [
+      24,
+      24
+    ],
+    "new_calls": 0,
+    "execution_failures": 1,
+    "failure": "Repair-preservation block on deleted, structurally grounded nonimplementation assertion; semantics of documentation absence not independently proven.",
+    "score_version": "claims-confirmation-evaluation/1",
+    "gold_unchanged": true
+  },
+  "new_confirmation": {
+    "version": "claims-reliability-evaluation/1",
+    "method": "AI-assisted fact-first synthetic constraints; engineer authored inputs/constraints; model sees inputs only. Not human gold or author-blind evaluation.",
+    "cases_total": 7,
+    "complete": 5,
+    "criterion_matches": 28,
+    "criterion_total": 28,
+    "labelled_field_matches": 21,
+    "labelled_field_total": 23,
+    "false_certain_fields": 1,
+    "unnecessary_unknown": 1,
+    "constraint_projection_precision": {
+      "numerator": 16,
+      "denominator": 17
+    },
+    "constraint_projection_recall": {
+      "numerator": 16,
+      "denominator": 18
+    },
+    "projection_limit": "Selected independently specified known field constraints only; not exhaustive clinical fact precision/recall. Null expectations scored separately.",
+    "semantic_citation_precision": null,
+    "human_review_completed": false,
+    "clinical_expert_review_completed": false
+  },
+  "cases": [
+    {
+      "case_id": "REL-01",
+      "mode": "actual_Luna",
+      "complete": false,
+      "criterion_matches": 4,
+      "criterion_total": 4,
+      "execution_failed": false,
+      "calls": 1,
+      "field_mismatches": [
+        {
+          "source_id": "REL-01-LETTER",
+          "kind": "purpose",
+          "field": "target_date",
+          "expected": "2026-07-16",
+          "actual": [
+            null
+          ],
+          "correct": false,
+          "false_certainty": false,
+          "unnecessary_unknown": true
+        }
+      ]
+    },
+    {
+      "case_id": "REL-02",
+      "mode": "actual_Luna",
+      "complete": false,
+      "criterion_matches": 4,
+      "criterion_total": 4,
+      "execution_failed": false,
+      "calls": 2,
+      "field_mismatches": [
+        {
+          "source_id": "REL-02-TABLE",
+          "kind": "regimen_change",
+          "field": "temporal_status",
+          "expected": "planned",
+          "actual": [
+            "actual"
+          ],
+          "correct": false,
+          "false_certainty": true,
+          "unnecessary_unknown": false
+        }
+      ]
+    },
+    {
+      "case_id": "REL-03",
+      "mode": "actual_Luna",
+      "complete": true,
+      "criterion_matches": 4,
+      "criterion_total": 4,
+      "execution_failed": false,
+      "calls": 1,
+      "field_mismatches": []
+    },
+    {
+      "case_id": "REL-04",
+      "mode": "offline_structured",
+      "complete": true,
+      "criterion_matches": 4,
+      "criterion_total": 4,
+      "execution_failed": false,
+      "calls": 0,
+      "field_mismatches": []
+    },
+    {
+      "case_id": "REL-05",
+      "mode": "offline_structured",
+      "complete": true,
+      "criterion_matches": 4,
+      "criterion_total": 4,
+      "execution_failed": false,
+      "calls": 0,
+      "field_mismatches": []
+    },
+    {
+      "case_id": "REL-06",
+      "mode": "offline_structured",
+      "complete": true,
+      "criterion_matches": 4,
+      "criterion_total": 4,
+      "execution_failed": false,
+      "calls": 0,
+      "field_mismatches": []
+    },
+    {
+      "case_id": "REL-07",
+      "mode": "offline_structured",
+      "complete": true,
+      "criterion_matches": 4,
+      "criterion_total": 4,
+      "execution_failed": false,
+      "calls": 0,
+      "field_mismatches": []
+    }
+  ],
+  "measured_resource_usage": {
+    "real_calls": 4,
+    "repairs": 1,
+    "input_tokens": 69431,
+    "output_tokens": 5176,
+    "cached_tokens": 0,
+    "provider_seconds": 59.92021299991757,
+    "total_run_seconds": 61.61551050026901,
+    "parse_failures": 0,
+    "transport_retries": 0,
+    "cost_usd": null,
+    "backend_snapshot": "unavailable",
+    "cli": "0.159.3",
+    "model": "gpt-6-luna",
+    "reasoning": "high",
+    "application_cache_hit": false
+  },
+  "binding": {
+    "citation_occurrences": 627,
+    "position_failures": 0,
+    "wrong_patient_inclusions": 0,
+    "semantic_precision": null
+  },
+  "semantic_review": {
+    "method": "AI-assisted source/assertion audit; not independent human review",
+    "assertions_reviewed": 12,
+    "unlabelled_risks": [
+      "established-background inference from monitoring language",
+      "background planned temporal role"
+    ],
+    "label_dispute": "REL-02 actual nonimplementation versus planned discussion; strict scores preserved",
+    "human_review_completed": false
+  },
+  "ledger": {
+    "path": "artifacts\\claims-review\\live-budget.json",
+    "before": 13,
+    "after": 17,
+    "limit": 20,
+    "remaining": 3,
+    "prior_records_preserved": true,
+    "before_sha256": "6eef08acefc05f3434cf6c17a47cc6bd6b0eda6af9b793e8f7c1e71ea3bf8712",
+    "after_sha256": "0a1bdec19319cab161d4bfc731f8ded0565617e19b70f37baa0b19ef74fd9eb7"
+  },
+  "freeze": {
+    "created_at": "2026-10-09T16:48:16.587928+00:00",
+    "sha256": "8cc33dfa33e38c32a319de5e83de18bdc36d43a215d7c18ca7f12add0f039125",
+    "expected_sha256": "5975da03fe853567af9f5a6894439740e98701f8b5bc041016283342b93252c8",
+    "sealed_at": "2026-10-09T16:49:21.618003+00:00",
+    "seal_sha256": "e598ef18afd87819d146fd4082ba26636654a6139fd03b7d1321b508a229d32f",
+    "expected_evaluator_open": "2026-10-09T16:49:47.766660+00:00",
+    "predictions_sha256": {
+      "REL-01.json": "c93889dbc7a9d8fde960e20ca144d8375ae71f52c45c4747982709a7e457014c",
+      "REL-02.json": "651d73c3104e8c5f2690fdc2ba921e23c0e0ad4c9b6044890f194c70605df111",
+      "REL-03.json": "cf78345af71a40d14895567252ab9a6360205585b2453b84384d7b352765b6de",
+      "REL-04.json": "4caa9e09b8137f96e54eb18deeec7e934213e25e02cf85d087423cb6195b3139",
+      "REL-05.json": "0ad8311eac3207e70a585d5c11c12f73d95fbd260a39d9ee3dabd6ef2622c72e",
+      "REL-06.json": "63175253089838d749247e126f0d75630c87d30b870a51ba066ef303c998e4ef",
+      "REL-07.json": "722c2e19fbb1da1e14ff4a1a07aaaa5141df9166981d779950a98fa6da5d482f"
+    }
+  },
+  "calls": [
+    {
+      "call": 14,
+      "purpose": "claims_review_note_extraction",
+      "status": "completed",
+      "prompt_sha256": "844d6f8f5a82adfd0a8078960d18a17502d102fd93e9371bb604575891ddfae7",
+      "schema_sha256": "0aa19e99bfe5741281d27fc6fa0df325923490936914735f670aef7205653f27",
+      "answer_sha256": "aa53622bdc9c45700a91ab8fab048e3ae3580468839d1bf51c6496b4218a348a",
+      "seconds": 15.507865500170738,
+      "path": "artifacts\\claims-review\\live-calls\\call-014"
+    },
+    {
+      "call": 15,
+      "purpose": "claims_review_note_extraction",
+      "status": "completed",
+      "prompt_sha256": "6ce37afbdd53cf3d5304cad38db08fda00ffb412e74ce4f665334c9edbce671c",
+      "schema_sha256": "4ced9361dc85f2b2f295e1c59b5dc413bb88ceaf68875c1e92d7c8a8256cbc41",
+      "answer_sha256": "14236639755d8d3f0744bd6d7d0ab2aa0708a9c1587bc275555047d986db852e",
+      "seconds": 18.629055899800733,
+      "path": "artifacts\\claims-review\\live-calls\\call-015"
+    },
+    {
+      "call": 16,
+      "purpose": "claims_review_note_extraction",
+      "status": "completed",
+      "prompt_sha256": "c3e8bb6dda24813008d66ee9e0391947352f54ce98f9099ec2981b57eec03708",
+      "schema_sha256": "4ced9361dc85f2b2f295e1c59b5dc413bb88ceaf68875c1e92d7c8a8256cbc41",
+      "answer_sha256": "a34b206478fe7feaf01998d42b870422eb25eb7796259ed3cf6b76595f39998d",
+      "seconds": 10.21336349984631,
+      "path": "artifacts\\claims-review\\live-calls\\call-016"
+    },
+    {
+      "call": 17,
+      "purpose": "claims_review_note_extraction",
+      "status": "completed",
+      "prompt_sha256": "052879351103cf31ba96777a9c0a2f9bb0f6782d0869f7cc4b68a12a7ebed8f8",
+      "schema_sha256": "49515b20e4b3f0a2cbdbfab87c75ac919222a934f702f9bf463bb2342d97e09b",
+      "answer_sha256": "3fda8e25971614004694508f7ad4290573ddd8459fddd82d1e0c44ba2649ae9a",
+      "seconds": 15.50209329999052,
+      "path": "artifacts\\claims-review\\live-calls\\call-017"
+    }
+  ],
+  "installed_cli": {
+    "passed": true,
+    "module_path": "artifacts\\reliability-round-01\\installed\\clinical_intelligence\\claims_review\\review.py",
+    "criterion_states": {
+      "MONITORING_CONTEXT": "SUPPORTED",
+      "TEST_TIMELINE": "SUPPORTED",
+      "SHORT_INTERVAL_RATIONALE": "INSUFFICIENT_EVIDENCE",
+      "ORDER_INTENT": "SUPPORTED"
+    },
+    "model_calls": 0
+  },
+  "wheel_sha256": "c51d58e2a8484e6da641b12412a2dc3ee7a132f980b23684712c9530f15f7fea",
+  "results_index": {
+    "freeze": "artifacts\\reliability-round-01\\new-confirmation\\freeze.json",
+    "predictions": "artifacts\\reliability-round-01\\new-confirmation\\predictions",
+    "evaluation": "artifacts\\reliability-round-01\\new-confirmation\\evaluation.json",
+    "semantic_review": "artifacts\\reliability-round-01\\semantic-review.json",
+    "exposed_replay": "artifacts\\reliability-round-01\\exposed-evaluation-final.json",
+    "tests": "artifacts\\reliability-round-01\\freeze-tests.txt",
+    "installed": "artifacts\\reliability-round-01\\installed-check.json",
+    "final_tests": "artifacts\\reliability-round-01\\delivery-tests.txt",
+    "final_installed": "artifacts\\reliability-round-01\\final-installed-check.json",
+    "post_confirmation_replay": "artifacts\\reliability-round-01\\post-confirmation-replay-check.json",
+    "new_call_audit": "artifacts\\reliability-round-01\\new-call-audit.json",
+    "historical_call_audit": "artifacts\\reliability-round-01\\historical-call-audit.json"
+  },
+  "unavailable": [
+    "Exhaustive clinical fact precision/recall",
+    "Full semantic citation precision",
+    "Human/clinical expert review",
+    "Large-population generalization",
+    "Repeated stability of new cases",
+    "Free-text-only amendment relationship extraction"
+  ],
+  "final_tests": {
+    "passed": 350,
+    "seconds": 4.08
+  },
+  "post_confirmation_program_fix": {
+    "version": "claims-review-structured/3",
+    "cause": "A known result plus null incorrectly produced result_conflicted=true",
+    "verification": "Independent offline partial-result counterexample; seven saved-response replays, no new live calls",
+    "criterion_states_unchanged": [
+      28,
+      28
+    ],
+    "clinical_field_cases_unchanged": [
+      7,
+      7
+    ],
+    "fresh_full_final_runtime_live": "NOT VERIFIED",
+    "facts_sha256": "0bdfdff3c094c89555fd76f020fcb15f0d9ea0c9b9a75e4dd2c8356e7d1b1ae4"
+  },
+  "final_installed_cli": {
+    "passed": true,
+    "module_path": "artifacts\\reliability-round-01\\final-installed\\clinical_intelligence\\claims_review\\facts.py",
+    "structured_version": "claims-review-structured/3",
+    "criterion_states": {
+      "MONITORING_CONTEXT": "SUPPORTED",
+      "TEST_TIMELINE": "SUPPORTED",
+      "SHORT_INTERVAL_RATIONALE": "NOT_APPLICABLE",
+      "ORDER_INTENT": "SUPPORTED"
+    },
+    "model_calls": 0
+  },
+  "final_wheel_sha256": "ad8bd733de934b597ccfa15197c25f4d45ef39b0290791d4ff2a5a7b2d4bef62",
+  "call_audit": {
+    "version": "claims-call-audit/1",
+    "new_cases": 7,
+    "historical_cases": 6,
+    "retains": [
+      "original_source",
+      "original_visible_response",
+      "exact_request_and_schema_hashes",
+      "runtime_errors_sent_to_repair",
+      "before_after_field_changes",
+      "normalized_facts",
+      "reconciliation_and_applicability",
+      "final_criteria_and_execution"
+    ],
+    "alignment_limit": "Kind/ordinal structural comparison; source-semantic correspondence requires review",
+    "new_audit_sha256": "08eed664b2e37649edeebf2aa6909b335252adb6d7524db2fc17d11e56f8e8cb",
+    "historical_audit_sha256": "584f62098c083051c4aa559125c7ceef47e44e0d815f618b1f902fdea3e572a3"
+  }
+}

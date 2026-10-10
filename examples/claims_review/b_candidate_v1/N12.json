@@ -1,0 +1,36 @@
+{
+  "schema_version": "claims-review-prep/0.1",
+  "case_id": "N12",
+  "claim": {
+    "claim_id": "CONSTRUCTED-N12",
+    "patient_id": "SYN-NEW-N12",
+    "encounter_id": "VISIT-N12",
+    "service_date": null,
+    "service_concept": "hba1c_monitoring",
+    "procedure_code": null,
+    "code_system": null,
+    "mapping_status": "constructed_demo",
+    "data_origin": "constructed_synthetic"
+  },
+  "review_context": {
+    "as_of": "2027-06-01",
+    "history_start": "2026-01-01",
+    "history_end": "2027-05-31",
+    "history_completeness": "not_asserted"
+  },
+  "sources": [
+    {
+      "source_id": "N12-NOTE",
+      "patient_id": "SYN-NEW-N12",
+      "encounter_id": "VISIT-N12",
+      "available_at": "2027-05-31",
+      "origin": "constructed_synthetic",
+      "source_kind": "synthetic_note",
+      "recorded_at": "2027-05-30",
+      "event_date": null,
+      "record_type": "note",
+      "event_link_id": null,
+      "content": "Family-history and chemistry discussion\nThe patient's sibling has established diabetes. A historical HbA1c result of 8.1 percent belongs to the sibling, not this patient.\nThe patient's own discussed laboratory result is thyroid testing; it is not hemoglobin A1c.\nGlycated albumin is mentioned in a general educational explanation and is not a patient HbA1c measurement.\nNo HbA1c order, result, or established-diabetes assessment for this patient is documented.\nThe clinician explained that information about a family member belongs in the family-history section rather than the patient's current laboratory history. The patient asked whether the relative's laboratory report should be filed with personal records. The clinician advised retaining its identity and not treating it as a result for this patient. The separate chemistry discussion did not change the analyte named on the patient's own report. Educational terminology can describe different glycated proteins without making them interchangeable measurements. This note contains no collection date, score or test-specific order for the patient that can be inferred from the relative's report. It also contains no signature declaration or authentication status. Missing documentation about the patient's diagnosis remains unknown."
+    }
+  ]
+}

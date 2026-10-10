@@ -1,0 +1,249 @@
+{
+  "phase": "raw-source-retrieval-and-portfolio/1",
+  "baseline_commit": "962342103a5387188bcda7a86029014fc8c7c778",
+  "frozen_code_commit": "814b1f81e8a2a174088598549c770e31ab9d6ba6",
+  "final_delivery_commit": "Commit containing this summary; git rev-parse HEAD records the exact delivery SHA.",
+  "versions": {
+    "retrieval": "claims-review-retrieval/0.1",
+    "note": "claims-review-note/2",
+    "rules": "claims-review-rules/2",
+    "benchmark": "retrieval-benchmark/1",
+    "packet_audit": "claims-packet-audit/1"
+  },
+  "baseline_regression": {
+    "passed": 290,
+    "seconds": 4.17,
+    "executed_this_phase": true
+  },
+  "final_offline_regression": {
+    "passed": 303,
+    "seconds": 3.74,
+    "new_tests": 13,
+    "actual_provider_calls": 0
+  },
+  "dataset": {
+    "sha256": "d61417b551e5b0997c33851b339c157421751f0ea68c18ea686ceb1850907c35",
+    "bytes": 5960866,
+    "members": 18,
+    "total_rows": 201657,
+    "retrieved_at": "2026-10-09T04:37:06.928880+00:00"
+  },
+  "retrieval": {
+    "version": "retrieval-benchmark/1",
+    "dataset_sha256": "d61417b551e5b0997c33851b339c157421751f0ea68c18ea686ceb1850907c35",
+    "oracle_method": "AI-assisted independent original-row inventory before retrieval execution; no human verification",
+    "human_reviewed": false,
+    "evaluation_type": "original_archive_retrieval_development_not_independent_confirmation",
+    "critical_source_task_pairs_retrieved": 26,
+    "critical_source_task_pairs_expected": 26,
+    "unique_critical_original_rows": 19,
+    "correlation_note": "Overlapping windows for one patient; source-task pairs are not independent patients.",
+    "passed": true,
+    "tasks": [
+      {
+        "task": "full_history",
+        "critical_recall_numerator": 19,
+        "critical_recall_denominator": 19,
+        "retrieval_misses": [],
+        "retrieval_false_positives": [],
+        "wrong_patient_inclusions": 0,
+        "source_availability_violations": 0,
+        "date_scope_violations": 0,
+        "duplicate_event_counting_errors": 0,
+        "uncertain_event_groups": 19,
+        "excluded_rows": 106768,
+        "associated_unverified_claim_rows": 63,
+        "retrieval_latency_seconds": 1.3634051999542862,
+        "review_status": "NEEDS_HUMAN_REVIEW",
+        "actual_provider_calls": 0,
+        "expected_candidate_count": 60,
+        "actual_candidate_count": 60
+      },
+      {
+        "task": "old_slice_window",
+        "critical_recall_numerator": 5,
+        "critical_recall_denominator": 5,
+        "retrieval_misses": [],
+        "retrieval_false_positives": [],
+        "wrong_patient_inclusions": 0,
+        "source_availability_violations": 0,
+        "date_scope_violations": 0,
+        "duplicate_event_counting_errors": 0,
+        "uncertain_event_groups": 5,
+        "excluded_rows": 106816,
+        "associated_unverified_claim_rows": 60,
+        "retrieval_latency_seconds": 1.4533998999977484,
+        "review_status": "NEEDS_HUMAN_REVIEW",
+        "actual_provider_calls": 0,
+        "expected_candidate_count": 15,
+        "actual_candidate_count": 15
+      },
+      {
+        "task": "tight_window",
+        "critical_recall_numerator": 2,
+        "critical_recall_denominator": 2,
+        "retrieval_misses": [],
+        "retrieval_false_positives": [],
+        "wrong_patient_inclusions": 0,
+        "source_availability_violations": 0,
+        "date_scope_violations": 0,
+        "duplicate_event_counting_errors": 0,
+        "uncertain_event_groups": 2,
+        "excluded_rows": 106824,
+        "associated_unverified_claim_rows": 60,
+        "retrieval_latency_seconds": 1.4153186000185087,
+        "review_status": "NEEDS_HUMAN_REVIEW",
+        "actual_provider_calls": 0,
+        "expected_candidate_count": 7,
+        "actual_candidate_count": 7
+      }
+    ],
+    "old_slice_results": 5,
+    "full_history_results": 19,
+    "additional_prior_rows": 14
+  },
+  "review": {
+    "status": "NEEDS_HUMAN_REVIEW",
+    "criteria": {
+      "MONITORING_CONTEXT": "INSUFFICIENT_EVIDENCE",
+      "TEST_TIMELINE": "INSUFFICIENT_EVIDENCE",
+      "SHORT_INTERVAL_RATIONALE": "INSUFFICIENT_EVIDENCE",
+      "ORDER_INTENT": "INSUFFICIENT_EVIDENCE"
+    },
+    "missing_target_performance": true,
+    "actual_result_records": 19,
+    "proved_independent_event_count": null,
+    "raw_snapshot_availability_only": true,
+    "original_ehr_availability": null,
+    "history_completeness": "not_asserted"
+  },
+  "citation_audit": {
+    "version": "claims-packet-audit/1",
+    "case_id": "RAW-HBA1C-001",
+    "checks": {
+      "input_identity": true,
+      "target_identity": true,
+      "fact_patient_source_binding": true,
+      "exact_citation_positions_and_binding": true,
+      "registry_policy_locators": true,
+      "supported_has_evidence": true,
+      "no_execution_failure": true
+    },
+    "passed": true,
+    "citation_occurrences": 1644,
+    "citation_position_failures": [],
+    "semantic_citation_precision": null,
+    "semantic_metric_status": "UNAVAILABLE: positions and registry membership do not certify meaning.",
+    "fact_coverage_precision_recall": null,
+    "independent_semantic_labels": false,
+    "human_review_completed": false,
+    "actual_provider_calls": 0
+  },
+  "fresh_saved_response_replay": {
+    "cases_passed": 5,
+    "cases_total": 5,
+    "actual_provider_calls": 0,
+    "original_responses_from": "Previous initial live round, not newly generated final-prompt answers."
+  },
+  "historical_live": {
+    "initial_cases_passed": 4,
+    "initial_cases_total": 5,
+    "rule_v2_replay": 5,
+    "targeted_final_prompt_DEV_002_passed": true,
+    "final_prompt_fresh_other_four_development_cases": "NOT VERIFIED"
+  },
+  "confirmation": {
+    "freeze_commit": "814b1f8",
+    "input_contents_opened": false,
+    "expected_contents_opened": false,
+    "checked": [
+      {
+        "case_id": "CONF-001",
+        "input_exists": false,
+        "expected_exists": false
+      },
+      {
+        "case_id": "CONF-002",
+        "input_exists": false,
+        "expected_exists": false
+      },
+      {
+        "case_id": "CONF-003",
+        "input_exists": false,
+        "expected_exists": false
+      },
+      {
+        "case_id": "CONF-004",
+        "input_exists": false,
+        "expected_exists": false
+      },
+      {
+        "case_id": "CONF-005",
+        "input_exists": false,
+        "expected_exists": false
+      },
+      {
+        "case_id": "CONF-006",
+        "input_exists": false,
+        "expected_exists": false
+      }
+    ],
+    "main_zip_sealed_members": [],
+    "status": "NOT_AVAILABLE_NOT_RUN"
+  },
+  "model_budget": {
+    "existing_limit": 20,
+    "historical_reserved_calls": 6,
+    "new_calls": 0,
+    "remaining_allowance": 14,
+    "historical_ledger_preserved": true,
+    "independent_final_prompt_confirmation": "NOT RUN: inputs/expected package unavailable"
+  },
+  "full_text_pilot": {
+    "status": "NOT RUN: no suitable HbA1c/diabetes-monitoring note in bounded two-bundle discovery",
+    "hba1c_keyword_notes": 0,
+    "scope": "35 + 108 original DocumentReference notes; second bundle keyword hits were old prediabetes, not target monitoring evidence. Not a corpus-wide absence claim.",
+    "human_review_completed": false,
+    "notes_decoded_and_keyword_screened": 143,
+    "provenance_manifest": "docs/coherent-feasibility.json"
+  },
+  "packaging": {
+    "wheel_sha256": "2c015331f28dbc4925572d017ef719cb1a561b01654f8586fac66eb7e06ab706",
+    "noneditable_install_verified": true,
+    "PYTHONPATH": null,
+    "source_checkout_cwd": false,
+    "installed_cli_commands_passed": 5,
+    "initial_install_attempt": "Failed due to sandbox temporary directory permissions; succeeded with workspace TEMP/TMP. No runtime code change."
+  },
+  "human_review_completed": false,
+  "clinical_expert_review_completed": false,
+  "semantic_citation_precision": null,
+  "false_certainty_and_unnecessary_unknown_rates": null,
+  "unavailable_metrics_reason": "No independent exhaustive semantic labels or available unseen confirmation inputs; positional audit and AI-assisted assertion review are reported separately.",
+  "runtime": {
+    "python": "3.12.14",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "backend_model_snapshot": "unavailable; no new inference",
+    "codex_cli": "0.159.3",
+    "configured_note_model": "gpt-6-luna",
+    "configured_note_reasoning": "high",
+    "actual_backend_this_phase": "not requested; no new model calls"
+  },
+  "local_results_index": {
+    "commands": "artifacts/raw-source/final-commands.json",
+    "retrieval": "artifacts/raw-source/final-retrieval.json",
+    "packet": "artifacts/raw-source/final-review.json",
+    "summary": "artifacts/raw-source/final-review.md",
+    "benchmark": "artifacts/raw-source/frozen-benchmark/summary.json",
+    "audit": "artifacts/raw-source/final-audit.json",
+    "replay": "artifacts/raw-source/replay-final/evaluation.json",
+    "installation": "artifacts/raw-source/installed-check.json",
+    "confirmation": "artifacts/raw-source/confirmation-availability.json",
+    "development_benchmark": "artifacts/raw-source/benchmark/summary.json"
+  },
+  "unchanged_baseline_components": [
+    "provider.py",
+    "claims_review/note_extractor.py",
+    "claims_review/resources/policy_registry.json"
+  ]
+}

@@ -3,7 +3,7 @@ from datetime import date
 from .contracts import Citation, EvidenceFact
 from .prepare import digest
 
-VERSION = 'claims-review-structured/1'
+VERSION = 'claims-review-structured/3'
 PURPOSES = {
     'routine monitoring of established type 2 diabetes': 'monitoring',
     'monitor response after the treatment change': 'monitoring',
@@ -103,6 +103,15 @@ def structured_facts(prepared):
 
 
 def test_timeline(case,prepared,facts):
+    from .relationships import reconcile
+    candidates={s['source_id']:s for s in prepared['source_candidates'] if s['source_kind']=='structured_record'}
+    # Keep linked, available out-of-window rows for honest conflict handling.
+    for group in prepared['explicit_event_groups']:
+        for member in group['members']:
+            source=next(s for s in case.sources if s.source_id==member['source_id'])
+            if source.source_kind=='structured_record':
+                candidates.setdefault(source.source_id,{**source.model_dump(mode='json'),'source_ref':member['source_ref']})
+    reconciliation=reconcile(list(candidates.values()))
     grouped={};by_id={s.source_id:s.model_dump(mode='json') for s in case.sources}
     for f in facts:
         if f.kind!='test_event':continue
@@ -126,6 +135,21 @@ def test_timeline(case,prepared,facts):
             if s['event_date'] is None:g['date_unknown']=True
             else:g['dates'].append(s['event_date'])
     for g in grouped.values():
-        g['dates']=sorted(set(g['dates']));g['conflicted']=len(g['dates'])>1
-        g['counted_as_tests']=1 if g['identity_explicit'] and not g['conflicted'] and not g['date_unknown'] else None
+        g['raw_dates']=sorted(set(g['dates']));derived_dates=[];unknown=False;relationship_unresolved=False
+        results=[]
+        for identifier in g['source_ids']:
+            view=reconciliation['derived'][identifier]
+            for value in view['event_date']['values']:
+                if value is None:unknown=True
+                else:derived_dates.append(value)
+            results.extend(view['content/value']['values'])
+            relationship_unresolved |= view['event_date']['status']=='UNRESOLVED'
+        g['dates']=sorted(set(derived_dates));g['date_unknown']=unknown
+        g['conflicted']=len(g['dates'])>1
+        g['result_values']=list({digest(v):v for v in results}.values())
+        g['result_unknown']=any(v is None for v in g['result_values'])
+        g['result_conflicted']=len([v for v in g['result_values'] if v is not None])>1
+        g['relationship_unresolved']=relationship_unresolved
+        g['reconciliation']={**reconciliation,'derived':{s:reconciliation['derived'][s] for s in g['source_ids']}}
+        g['counted_as_tests']=1 if g['identity_explicit'] and not g['conflicted'] and not g['date_unknown'] and not relationship_unresolved else None
     return list(grouped.values())

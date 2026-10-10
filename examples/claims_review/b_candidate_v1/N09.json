@@ -1,0 +1,36 @@
+{
+  "schema_version": "claims-review-prep/0.1",
+  "case_id": "N09",
+  "claim": {
+    "claim_id": "CONSTRUCTED-N09",
+    "patient_id": "SYN-NEW-N09",
+    "encounter_id": "VISIT-N09",
+    "service_date": null,
+    "service_concept": "hba1c_monitoring",
+    "procedure_code": null,
+    "code_system": null,
+    "mapping_status": "constructed_demo",
+    "data_origin": "constructed_synthetic"
+  },
+  "review_context": {
+    "as_of": "2027-06-01",
+    "history_start": "2026-01-01",
+    "history_end": "2027-05-31",
+    "history_completeness": "not_asserted"
+  },
+  "sources": [
+    {
+      "source_id": "N09-NOTE",
+      "patient_id": "SYN-NEW-N09",
+      "encounter_id": "VISIT-N09",
+      "available_at": "2027-05-31",
+      "origin": "constructed_synthetic",
+      "source_kind": "synthetic_note",
+      "recorded_at": "2027-05-30",
+      "event_date": null,
+      "record_type": "note",
+      "event_link_id": null,
+      "content": "Medication counseling note\nThis patient has established diabetes, currently active.\nThe patient has not begun the proposed medication adjustment; current nonimplementation is explicitly documented.\nDr. Nia Stone requests HbA1c monitoring with collection April 7, 2027.\nA prescription proposal and future discussion exist, but the source supplies no implemented adjustment or test-specific clinical rationale.\nNo signature or authentication status is documented for the request.\nThe counseling visit addressed how the patient could ask questions before deciding about a proposed change. The patient wished to speak again with the clinician and did not report beginning the adjustment. The note deliberately distinguishes that present state from an option discussed for the future. It does not assign an implementation date or document a change as the reason for the requested laboratory reassessment. The patient also asked how to organize the appointment instructions. Staff provided a paper checklist for practical planning. The checklist does not establish a result, a signature, an additional HbA1c order, or an independent test event. No prior specimen result is present in this note, and missing values must remain missing rather than being reconstructed from a usual care sequence."
+    }
+  ]
+}

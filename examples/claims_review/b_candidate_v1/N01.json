@@ -1,0 +1,36 @@
+{
+  "schema_version": "claims-review-prep/0.1",
+  "case_id": "N01",
+  "claim": {
+    "claim_id": "CONSTRUCTED-N01",
+    "patient_id": "SYN-NEW-N01",
+    "encounter_id": "VISIT-N01",
+    "service_date": null,
+    "service_concept": "hba1c_monitoring",
+    "procedure_code": null,
+    "code_system": null,
+    "mapping_status": "constructed_demo",
+    "data_origin": "constructed_synthetic"
+  },
+  "review_context": {
+    "as_of": "2027-06-01",
+    "history_start": "2026-01-01",
+    "history_end": "2027-05-31",
+    "history_completeness": "not_asserted"
+  },
+  "sources": [
+    {
+      "source_id": "N01-NOTE",
+      "patient_id": "SYN-NEW-N01",
+      "encounter_id": "VISIT-N01",
+      "available_at": "2027-05-31",
+      "origin": "constructed_synthetic",
+      "source_kind": "synthetic_note",
+      "recorded_at": "2027-05-30",
+      "event_date": null,
+      "record_type": "note",
+      "event_link_id": null,
+      "content": "Endocrinology follow-up\nCurrent assessment: established type 2 diabetes remains an active diagnosis for this patient.\nHistorical HbA1c result: 7.2 percent, specimen collected March 14, 2026.\nThe patient actually began the agreed medication adjustment on June 2, 2026.\nDr. Mara Kent issued the HbA1c monitoring order on June 6, 2026.\nThe collection appointment for that same HbA1c is July 9, 2026.\nIts purpose is monitoring the established disease; the documented reason for reassessment is the medication adjustment already implemented.\nSigned by Dr. Mara Kent on June 6, 2026. This signature authenticates the assessment and the monitoring order in this note.\nVisit narrative and patient priorities\nThe consultation took place in an outpatient setting where the patient and clinician reviewed how a follow-up plan would fit around work and transportation. The patient described a variable weekly schedule, with early shifts on some days and responsibility for collecting a child from school on others. These practical details were discussed to make the collection appointment achievable. They are not an additional laboratory order, and the appointment record does not establish that blood was collected. The patient preferred a morning visit at the nearby collection center rather than a visit at the main hospital. The preference was recorded without a promise that a particular appointment time would be available.\nMedication reconciliation process\nThe patient brought the current medication containers and a written list. The clinician checked that the list reflected what the patient said was being taken, rather than assuming that every old prescription remained active. The change described above is the only implemented adjustment documented in this note. No dose or medication name is supplied in the source, so the note cannot support a particular drug, dose escalation, or pharmacologic mechanism. The patient asked how to keep the list up to date after future visits. The clinician advised bringing the updated list to the next consultation and asking the dispensing pharmacy about discrepancies. This discussion is practical record maintenance, not another regimen change.\nHome routines and education\nDuring the education portion, the patient described uncertainty about organizing meal breaks during longer shifts. The discussion focused on setting aside time to eat and remembering which instructions belonged to which appointment. The note records no individualized dietary prescription or measured improvement from that discussion. The patient also described using a paper calendar. The clinician suggested marking the collection visit separately from the office follow-up so that the two were not confused. The patient repeated back the distinction. This account should not be turned into evidence that a test was performed, or that a future appointment has already occurred.\nCommunication and follow-up responsibilities\nThe clinic will make the order available to the collection center using its usual communication channel. That administrative process does not create a second independent HbA1c event. The patient was told to contact the office if transportation changes make attendance difficult. The note does not record cancellation, refusal, or withdrawal of the order. A later review visit will be arranged through the scheduling desk, but no date for that office encounter is supplied here. Nothing in the scheduling discussion determines the date of a future clinical result. The historical result above is retained as a result from its specimen date, not from today's signature.\nRecord limits\nThe history in this visit is a partial clinical narrative. It contains the stated prior result and the target collection plan, but it does not claim to list every test performed elsewhere. The clinician did not review an original longitudinal laboratory archive during this encounter. The patient's other care sites and older records are not identified. The note therefore does not establish completeness of the clinical record or a frequency-compliance conclusion. No billing code, insurer determination, authorization outcome, or payment decision is documented. The signature applies to this note's assessment and order; it is not an assertion of authority to amend an outside laboratory report."
+    }
+  ]
+}

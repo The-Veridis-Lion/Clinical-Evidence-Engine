@@ -1,0 +1,201 @@
+{
+  "version": "claims-reliability-synthetic/1",
+  "label_method": "AI-assisted fact-first constraints, not human or clinical-expert gold",
+  "cases": {
+    "REL-01": {
+      "criteria": {
+        "MONITORING_CONTEXT": "SUPPORTED",
+        "TEST_TIMELINE": "SUPPORTED",
+        "SHORT_INTERVAL_RATIONALE": "NOT_APPLICABLE",
+        "ORDER_INTENT": "SUPPORTED"
+      },
+      "facts": [
+        {
+          "source_id": "REL-01-LETTER",
+          "kind": "purpose",
+          "fields": {
+            "value": "monitoring",
+            "target_date": "2026-07-16",
+            "test_specific": true
+          }
+        },
+        {
+          "source_id": "REL-01-LETTER",
+          "kind": "order_intent",
+          "fields": {
+            "value": true,
+            "target_date": "2026-07-16",
+            "provider": "Dr. Mira Aster",
+            "authenticated": true
+          }
+        }
+      ],
+      "events": []
+    },
+    "REL-02": {
+      "criteria": {
+        "MONITORING_CONTEXT": "SUPPORTED",
+        "TEST_TIMELINE": "SUPPORTED",
+        "SHORT_INTERVAL_RATIONALE": "INSUFFICIENT_EVIDENCE",
+        "ORDER_INTENT": "INSUFFICIENT_EVIDENCE"
+      },
+      "facts": [
+        {
+          "source_id": "REL-02-TABLE",
+          "kind": "purpose",
+          "fields": {
+            "value": "monitoring",
+            "target_date": "2026-09-27"
+          }
+        },
+        {
+          "source_id": "REL-02-TABLE",
+          "kind": "regimen_change",
+          "fields": {
+            "value": false,
+            "temporal_status": "planned"
+          }
+        },
+        {
+          "source_id": "REL-02-TABLE",
+          "kind": "order_intent",
+          "fields": {
+            "value": true,
+            "provider": "Dr. Celia Fern",
+            "authenticated": false
+          }
+        }
+      ],
+      "events": []
+    },
+    "REL-03": {
+      "criteria": {
+        "MONITORING_CONTEXT": "NOT_EVALUATED",
+        "TEST_TIMELINE": "NOT_EVALUATED",
+        "SHORT_INTERVAL_RATIONALE": "NOT_EVALUATED",
+        "ORDER_INTENT": "NOT_EVALUATED"
+      },
+      "facts": [
+        {
+          "source_id": "REL-03-TARGET",
+          "kind": "test_event",
+          "fields": {
+            "value": 7.1,
+            "fact_date": null
+          }
+        },
+        {
+          "source_id": "REL-03-MEMO",
+          "kind": "purpose",
+          "fields": {
+            "value": "monitoring",
+            "target_date": null
+          }
+        },
+        {
+          "source_id": "REL-03-MEMO",
+          "kind": "order_intent",
+          "fields": {
+            "provider": null,
+            "authenticated": null,
+            "target_date": null
+          }
+        }
+      ],
+      "events": []
+    },
+    "REL-04": {
+      "criteria": {
+        "MONITORING_CONTEXT": "SUPPORTED",
+        "TEST_TIMELINE": "SUPPORTED",
+        "SHORT_INTERVAL_RATIONALE": "INSUFFICIENT_EVIDENCE",
+        "ORDER_INTENT": "SUPPORTED"
+      },
+      "facts": [],
+      "events": [
+        {
+          "event_key": "EVENT-REL-04-PRIOR",
+          "dates": [
+            "2026-08-06"
+          ],
+          "counted_as_tests": 1,
+          "conflicted": false
+        },
+        {
+          "event_key": "EVENT-REL-04-TARGET",
+          "dates": [
+            "2026-09-26"
+          ],
+          "counted_as_tests": 1
+        }
+      ]
+    },
+    "REL-05": {
+      "criteria": {
+        "MONITORING_CONTEXT": "SUPPORTED",
+        "TEST_TIMELINE": "CONFLICTED",
+        "SHORT_INTERVAL_RATIONALE": "CONFLICTED",
+        "ORDER_INTENT": "SUPPORTED"
+      },
+      "facts": [],
+      "events": [
+        {
+          "event_key": "EVENT-REL-05-PRIOR",
+          "dates": [
+            "2026-06-06",
+            "2026-08-06"
+          ],
+          "counted_as_tests": null,
+          "conflicted": true
+        }
+      ]
+    },
+    "REL-06": {
+      "criteria": {
+        "MONITORING_CONTEXT": "SUPPORTED",
+        "TEST_TIMELINE": "SUPPORTED",
+        "SHORT_INTERVAL_RATIONALE": "NOT_APPLICABLE",
+        "ORDER_INTENT": "SUPPORTED"
+      },
+      "facts": [
+        {
+          "source_id": "REL-06-PRIOR",
+          "kind": "test_event",
+          "fields": {
+            "value": 7.8
+          }
+        },
+        {
+          "source_id": "REL-06-RESULT-ADDENDUM",
+          "kind": "test_event",
+          "fields": {
+            "value": 6.4
+          }
+        }
+      ],
+      "events": [
+        {
+          "event_key": "EVENT-REL-06-PRIOR",
+          "dates": [
+            "2026-04-02"
+          ],
+          "result_values": [
+            6.4
+          ],
+          "result_conflicted": false,
+          "counted_as_tests": 1
+        }
+      ]
+    },
+    "REL-07": {
+      "criteria": {
+        "MONITORING_CONTEXT": "INSUFFICIENT_EVIDENCE",
+        "TEST_TIMELINE": "INSUFFICIENT_EVIDENCE",
+        "SHORT_INTERVAL_RATIONALE": "INSUFFICIENT_EVIDENCE",
+        "ORDER_INTENT": "INSUFFICIENT_EVIDENCE"
+      },
+      "facts": [],
+      "events": []
+    }
+  }
+}

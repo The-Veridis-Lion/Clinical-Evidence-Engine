@@ -8,10 +8,13 @@ from pathlib import Path
 from . import __version__
 from .contracts import Citation, CriterionResult, PolicyReference, ReviewPacket
 from .facts import structured_facts, test_timeline
-from .note_extractor import extract_note
+from .note_extractor import extract_note, PROMPT
+from .note_prompt_b import PROMPT_B
+from .config import DEFAULT_NOTE_PROMPT
 from .prepare import prepare_case, digest
+from .applicability import check as check_applicability
 
-RULE_VERSION='claims-review-rules/2'
+RULE_VERSION='claims-review-rules/3'
 BASELINE='54553dd36095d4d2047f30d66747031a75ecafa5'
 
 
@@ -33,6 +36,7 @@ def citations(facts):
 
 def bound_to_target(f,case,sources):
     if f.test_specific is not True:return False
+    if f.details.get('extraction')=='note' and f.details.get('test_mapping_supported') is not True:return False
     if f.target_date is not None:return f.target_date==case.claim.service_date
     s=sources[f.source_id]
     return case.claim.encounter_id is not None and s.encounter_id==case.claim.encounter_id
@@ -76,9 +80,10 @@ def evaluate(case,prepared,facts,notes,policy,mode,usage=None,requested_policy=N
     target=candidates[0] if len(candidates)==1 and not candidates[0]['conflicted'] and not candidates[0]['date_unknown'] else None
     target_date=case.claim.service_date if target else None
     conflicts=[e for e in timeline if e['conflicted']]
-    ambiguous=any(not e['identity_explicit'] or e['date_unknown'] for e in timeline) or len(candidates)>1
+    ambiguous=any(not e['identity_explicit'] or e['date_unknown'] or e['relationship_unresolved'] for e in timeline) or len(candidates)>1
     coverage=case.review_context.history_completeness=='complete_within_constructed_case' and target_date is not None and case.review_context.history_end>=target_date
-    unresolved=prepared['unresolved_source_metadata']
+    resolved_groups={e['event_key'] for e in timeline if not e['conflicted'] and not e['relationship_unresolved'] and not e['date_unknown']}
+    unresolved=[u for u in prepared['unresolved_source_metadata'] if not (u.get('reason')=='explicit_event_date_disagreement' and u.get('event_link_id') in resolved_groups)]
     timeline_refs=citations(actual)
     for event in timeline:
         for c in event['citations']:
@@ -153,6 +158,15 @@ def evaluate(case,prepared,facts,notes,policy,mode,usage=None,requested_policy=N
         for r in findings.values():
             r.status='NOT_EVALUATED';r.evidence_complete=False
             r.reason='Requested purpose, mapping or policy version is outside this monitoring demonstration; no coverage denial is issued.'
+    for rule in policy['criteria']:
+        finding=findings[rule['criterion_id']]
+        applicability=check_applicability(case,policy,rule,requested_policy)
+        finding.derivation['clinical_evidence_status']=finding.status
+        finding.derivation['applicability']=applicability
+        if not unsupported and applicability['status']=='UNRESOLVED':
+            finding.status='NOT_EVALUATED';finding.evidence_complete=False
+            finding.reason='Policy applicability unresolved; supported clinical facts remain in the packet.'
+            finding.gaps+=applicability['reasons']
     missing_target=target is None
     if missing_target:gaps.append('Actual target date/performance is not established by the constructed request.')
     if values!={'monitoring'} and not unsupported:gaps.append('Target monitoring purpose is missing, ambiguous or conflicted.')
@@ -163,7 +177,7 @@ def evaluate(case,prepared,facts,notes,policy,mode,usage=None,requested_policy=N
         gaps.append('Notes were not extracted in structured-only mode; this is not a full live review.')
     status='UNSUPPORTED_SCOPE' if unsupported else 'NEEDS_HUMAN_REVIEW' if (
         missing_target or failed or mode=='structured-only' and notes or
-        any(r.status in {'INSUFFICIENT_EVIDENCE','CONFLICTED','NOT_SUPPORTED'} for r in findings.values())) else 'EVIDENCE_READY_FOR_HUMAN_REVIEW'
+        any(r.status in {'INSUFFICIENT_EVIDENCE','CONFLICTED','NOT_SUPPORTED','NOT_EVALUATED'} for r in findings.values())) else 'EVIDENCE_READY_FOR_HUMAN_REVIEW'
     runtime={p.name:hashlib.sha256(p.read_bytes()).hexdigest() for p in Path(__file__).parent.glob('*.py')}
     runtime['provider.py']=hashlib.sha256((Path(__file__).parent.parent/'provider.py').read_bytes()).hexdigest()
     identity=dict(baseline_commit=BASELINE,rule_version=RULE_VERSION,policy_version=policy['registry_version'],policy_sha256=digest(policy),runtime_sha256=runtime,
@@ -171,22 +185,27 @@ def evaluate(case,prepared,facts,notes,policy,mode,usage=None,requested_policy=N
     return ReviewPacket(version=__version__,case_id=case.case_id,status=status,target=case.claim,review_context=case.review_context,
         preparation=prepared,facts=facts,criteria=[findings[r['criterion_id']] for r in policy['criteria']],timeline=timeline,gaps=gaps,
         execution={'preparation':'completed','structured_facts':'completed','note_extraction':'failed' if failed else 'not_run' if mode=='structured-only' else 'completed',
-            'note_sources':notes,'policy_evaluation':'not_evaluated_scope' if unsupported else 'completed','execution_failed':failed,
+            'note_sources':notes,'policy_evaluation':'not_evaluated_scope' if unsupported else 'applicability_unresolved' if any(r.status=='NOT_EVALUATED' for r in findings.values()) else 'completed','execution_failed':failed,
             'actual_provider_calls':(usage or {}).get('model_calls',0),'usage':usage,'cache_enabled':False,'application_cache_hit':False,'backend_model_snapshot':'unavailable','uses_expected':False},
         identity=identity,policy_review_status=policy['review_status'],human_review_completed=policy['human_review_completed'],clinical_expert_review_completed=policy['clinical_expert_review_completed'])
 
 
-def run_review(case,*,mode='structured-only',provider=None,input_label='case.json',usage=None,requested_policy=None):
+def run_review(case,*,mode='structured-only',provider=None,input_label='case.json',usage=None,requested_policy=None,note_prompt=DEFAULT_NOTE_PROMPT):
     if mode not in {'structured-only','live','fixture'}:raise ValueError('Unsupported review mode')
     if mode!='structured-only' and provider is None:raise ValueError('Note mode requires an explicitly injected provider')
     policy=load_policy();prepared=prepare_case(case,policy,input_label=input_label);facts=structured_facts(prepared);notes=[]
     for source in prepared['source_candidates']:
         if source['source_kind']!='synthetic_note':continue
         if mode=='structured-only':notes.append({'source_id':source['source_id'],'status':'not_run','calls':0,'repairs':0});continue
-        extracted,record=extract_note(provider,source,case.claim.model_dump(mode='json'),case.review_context.as_of)
+        extracted,record=extract_note(provider,source,case.claim.model_dump(mode='json'),case.review_context.as_of,prompt_variant=note_prompt)
         facts+=extracted;notes.append(record)
     actual_usage=usage() if callable(usage) else usage
-    return evaluate(case,prepared,facts,notes,policy,mode,actual_usage,requested_policy)
+    packet=evaluate(case,prepared,facts,notes,policy,mode,actual_usage,requested_policy)
+    selection={'note_prompt':note_prompt,'prompt_id':'claims-note-prompt-b/1' if note_prompt=='B' else 'claims-review-note/3',
+        'base_prompt_sha256':hashlib.sha256((PROMPT_B if note_prompt=='B' else PROMPT).encode()).hexdigest()}
+    packet.execution['note_prompt_selection']=selection
+    packet.identity['review_input_sha256']=digest({'prior_review_input_sha256':packet.identity['review_input_sha256'],**selection})
+    return packet
 
 
 def markdown(packet):
@@ -205,4 +224,37 @@ def markdown(packet):
         lines.append('Derivation: '+json.dumps(r['derivation'],ensure_ascii=False))
     lines += ['\n## Facts',json.dumps(p['facts'],ensure_ascii=False,indent=2),'\n## Timeline',json.dumps(p['timeline'],ensure_ascii=False,indent=2),
         '\n## Gaps']+['- '+g for g in p['gaps']]+['\n## Execution',json.dumps(p['execution'],indent=2),'\n## Version identity',json.dumps(p['identity'],indent=2)]
+    return '\n'.join(lines)+'\n'
+
+
+def concise_markdown(packet):
+    """Human packet summary; the complete JSON retains every source and field."""
+    lines=[f'# HbA1c evidence review: {packet.case_id}',f'\n**{packet.status}**',packet.decision_boundary,
+           f'\nPatient: {packet.target.patient_id}; constructed request: {packet.target.service_date}.',
+           f'As of: {packet.review_context.as_of}; history: {packet.review_context.history_start} to {packet.review_context.history_end}; completeness: {packet.review_context.history_completeness}.',
+           '\n## Four evidence criteria']
+    for r in packet.criteria:
+        lines += [f'\n### {r.criterion_id}: {r.status}',r.reason]
+        refs={}
+        for c in r.clinical_refs:
+            refs.setdefault(c.source_id,c)
+            if c.locator.endswith('/event_date'):refs[c.source_id]=c
+        for c in list(refs.values())[:4]:
+            loc=c.original_locator or {}
+            origin=f"{loc.get('source_file','')} data row {loc.get('data_record_number','')}; " if loc.get('source_file') else ''
+            evidence=c.quote if c.quote is not None else json.dumps(c.raw_value)
+            lines.append(f'- Clinical: {c.source_id}; {origin}{c.locator}: {evidence}')
+        if len(refs)>4:lines.append(f'- {len(refs)-4} additional source references retained in the full JSON.')
+        for p in r.policy_refs:lines.append(f'- Policy: [{p.source_id}]({p.official_url}), {p.source_version}; {p.locator}.')
+        for gap in r.gaps:lines.append('- Gap: '+gap)
+        if r.conflicts:lines.append('- Unresolved conflict: see the competing source dates below and full JSON.')
+    lines += ['\n## Actual result records (not independently proved event counts)', '| Source | Date | Original value |', '|---|---|---|']
+    for f in packet.facts:
+        if f.kind=='test_event':lines.append(f'| {f.source_id} | {f.fact_date} | {f.value} |')
+    if not any(f.kind=='test_event' for f in packet.facts):lines.append('| No actual result source established | unknown | unknown |')
+    lines += ['\n## Missing information and execution']+['- '+g for g in packet.gaps]
+    lines += [f'- Note extraction: {packet.execution["note_extraction"]}; real calls: {packet.execution["actual_provider_calls"]}; application cache: disabled.',
+              f'- Execution failure: {packet.execution["execution_failed"]}; human/clinical review: false.',
+              f'- Policy: {packet.identity["policy_version"]}; rules: {packet.identity["rule_version"]}.',
+              '- Full JSON retains raw fields, offsets, all source references, conflicts and execution provenance.']
     return '\n'.join(lines)+'\n'

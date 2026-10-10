@@ -1,0 +1,36 @@
+{
+  "schema_version": "claims-review-prep/0.1",
+  "case_id": "N02",
+  "claim": {
+    "claim_id": "CONSTRUCTED-N02",
+    "patient_id": "SYN-NEW-N02",
+    "encounter_id": "VISIT-N02",
+    "service_date": null,
+    "service_concept": "hba1c_monitoring",
+    "procedure_code": null,
+    "code_system": null,
+    "mapping_status": "constructed_demo",
+    "data_origin": "constructed_synthetic"
+  },
+  "review_context": {
+    "as_of": "2027-06-01",
+    "history_start": "2026-01-01",
+    "history_end": "2027-05-31",
+    "history_completeness": "not_asserted"
+  },
+  "sources": [
+    {
+      "source_id": "N02-NOTE",
+      "patient_id": "SYN-NEW-N02",
+      "encounter_id": "VISIT-N02",
+      "available_at": "2027-05-31",
+      "origin": "constructed_synthetic",
+      "source_kind": "synthetic_note",
+      "recorded_at": "2027-05-30",
+      "event_date": null,
+      "record_type": "note",
+      "event_link_id": null,
+      "content": "Discharge coordination addendum\nThe supplied discharge summary does not document whether diabetes is established; it does not state that the patient is disease-free.\nDr. Tomas Vale requests HbA1c for routine monitoring; collection is to occur August 4, 2026.\nThe suggested medication change has not been started as of this discussion.\nA future discussion of medication options is scheduled; no implementation has been arranged.\nThe discharge coordinator, RN Juno Price, transcribed the discussion. Dr. Tomas Vale is the requesting clinician, not the transcriber.\nThis transferred addendum is explicitly unsigned; no physician signature is present on the request.\nTransition discussion\nThis addendum describes a coordination conversation after a short inpatient stay. It is not the inpatient medical history and does not incorporate every page of the discharge packet. The coordinator reviewed the patient's practical questions about the next appointments, the telephone number for the outpatient office, and the difference between an office visit and a laboratory collection. The patient wanted a single written list of tasks because separate handouts had arrived from several departments. The coordinator prepared a plain-language schedule and asked the patient to keep the original documents rather than discarding them. No additional test or diagnosis is established by the production of that schedule.\nMedication questions\nThe patient had received a suggestion about a possible medication change during the stay. In this conversation, the patient described not having begun it. The coordinator documented the present state and the prospect of a future discussion, rather than treating a proposed prescription as an implemented treatment. The source does not supply the name of a drug, the dose, or an adjustment-start date. It also does not supply an HbA1c result. A reviewer cannot fill those details from a usual discharge practice or a model's clinical knowledge. No claim is made that discussion of options is itself a completed regimen change.\nRoles in the conversation\nThe coordinator's role was to record and communicate the plan attributed to the named physician. The coordinator did not independently issue an HbA1c order under a different name. A patient-facing explanation was added to help distinguish the upcoming collection from the follow-up call. The patient reported that a relative could provide transport on the collection day. That logistical report does not make the relative the ordering provider, the subject of the test, or the source of a diagnosis. The unsigned status of this transferred document remains explicit even though the names of the clinician and coordinator are legible.\nAccess and scheduling\nThe patient asked whether the collection could be performed near home. The coordinator explained that the collection center would confirm its opening hours directly. An office follow-up has not been assigned a date in this addendum. The source documents the stated collection date for the requested test and no other new HbA1c date. Telephone calls to the scheduling desk, receipt of appointment instructions, and messages to the outpatient team are administrative steps. They should not be counted as completed tests or independent clinical encounters merely because they appear beside a clinical request.\nInformation carried forward\nThe packet has spaces for a diagnosis list and for earlier laboratory results, but those spaces were not completed in the material supplied to the coordinator. Empty spaces do not amount to a negative diagnosis or a laboratory result of zero. The coordinator asked the receiving office to obtain any missing records through its ordinary process. The addendum does not certify that this process has been completed. It also does not authenticate earlier documents or amend another clinician's record. The absence of a score or result is preserved; no plausible value is entered in its place.\nBoundary of this addendum\nThis communication is useful for identifying a planned test, its stated purpose, the clinician to whom the request is attributed, and the present nonimplementation of a proposed change. It cannot establish actual test performance, the patient's complete disease history, or whether a later discussion will lead to a change. Those distinctions are part of the source itself, not a payment conclusion. No insurer criteria were applied during the conversation, and the note supplies no procedure or billing code. The patient was asked to keep this addendum with the other discharge materials until the receiving clinician had reviewed the complete packet."
+    }
+  ]
+}

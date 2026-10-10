@@ -1,0 +1,505 @@
+{
+  "version": "luna-bounded-ab-delivery/1",
+  "baseline_commit": "93384e21eb25a7014df96d5a7fe13ff06b8744bf",
+  "frozen_candidate_commit": "0ebb2cbb26e7da00cf715cb94e8c9472a6819b0f",
+  "stop": "BENCHMARK_INVALID",
+  "execution_stop": "COMPLETED",
+  "recommend_B": false,
+  "default_prompt": "A",
+  "start_utc": "2026-10-09T19:40:23+00:00",
+  "execution_deadline": "2026-10-09T21:00:23+00:00",
+  "delivery_deadline": "2026-10-09T21:10:23+00:00",
+  "scheduled_note_executions": 48,
+  "saved_note_executions": 48,
+  "provider_requests": 56,
+  "request_ceiling": 96,
+  "repairs": 8,
+  "transport_retries": 0,
+  "provider_or_parse_failures": 0,
+  "final_execution_failures": 0,
+  "model": "gpt-6-luna",
+  "reasoning": "high",
+  "cli_version": "codex-cli 0.159.3",
+  "actual_backend_snapshot": "unavailable",
+  "provider_seconds": 941.8613846004009,
+  "tokens": {
+    "input_tokens": 966368,
+    "output_tokens": 69026,
+    "cached_input_tokens": 56320
+  },
+  "calls_with_usage": 56,
+  "actual_cost_usd": "unavailable",
+  "old_ledger_count": 17,
+  "old_ledger_limit": 20,
+  "old_ledger_sha256": "0a1bdec19319cab161d4bfc731f8ded0565617e19b70f37baa0b19ef74fd9eb7",
+  "old_ledger_unchanged": true,
+  "evidence": "Real fresh source-only Luna calls; AI-assisted synthetic designer-nonblind constraints; not human/expert clinical validation",
+  "validity_issues": [
+    {
+      "code": "AMBIGUOUS_EXPECTED_TEST_DATE",
+      "impact": "Eight null field mismatches cannot be called proven unnecessary abstention."
+    },
+    {
+      "code": "VALUE_ENCODING_EQUIVALENCE_NOT_PREREGISTERED",
+      "impact": "Five strict value mismatches are not unsupported clinical facts."
+    },
+    {
+      "code": "PROPOSITION_MATCHER_CONTEXT_COLLISION",
+      "impact": "Apparent final-stage increases in wrong definite/binding counters are scorer artifacts, not demonstrated repair-created clinical errors."
+    },
+    {
+      "code": "NEGATION_SPLIT_MATCHING_DISPUTE",
+      "impact": "A purported extra temporal error is disputed; no after-the-fact rescoring."
+    }
+  ],
+  "strict_scores_valid_as_semantic_accuracy": false,
+  "rescored_after_freeze": false,
+  "mechanical_checks": {
+    "packet_position_audits_passed": 48,
+    "packet_total": 48,
+    "citation_occurrences": 675,
+    "wrong_patient_inclusions": 0,
+    "repairs": 8,
+    "grounded_first_rows_preserved": 38,
+    "grounded_first_rows_total": 38,
+    "semantic_citation_precision": "UNAVAILABLE",
+    "limits": "Positional checks and structural known-field preservation do not establish semantic truth."
+  },
+  "groups": {
+    "dev-A": {
+      "executions": 8,
+      "failures": 0,
+      "repairs": 0,
+      "calls": 8,
+      "seconds": 112.90168090048246,
+      "criterion_matches": 32,
+      "criterion_total": 32,
+      "first": {
+        "metrics": {
+          "required_total": 19,
+          "missing": 0,
+          "required_recalled": 19,
+          "supported_required": 18,
+          "field_total": 58,
+          "field_matches": 57,
+          "unnecessary_null": 0,
+          "wrong_definite": 1,
+          "binding_temporal_errors": 1,
+          "duplicate_assertions": 0,
+          "unsupported_extras": 0,
+          "unscored_extras": 19
+        },
+        "complete_selected_constraints": 7
+      },
+      "final": {
+        "metrics": {
+          "required_total": 19,
+          "missing": 0,
+          "required_recalled": 19,
+          "supported_required": 18,
+          "field_total": 58,
+          "field_matches": 57,
+          "unnecessary_null": 0,
+          "wrong_definite": 1,
+          "binding_temporal_errors": 1,
+          "duplicate_assertions": 0,
+          "unsupported_extras": 0,
+          "unscored_extras": 19
+        },
+        "complete_selected_constraints": 7
+      },
+      "repeats": {
+        "1": {
+          "executions": 8,
+          "first": {
+            "required_total": 19,
+            "missing": 0,
+            "required_recalled": 19,
+            "supported_required": 18,
+            "field_total": 58,
+            "field_matches": 57,
+            "unnecessary_null": 0,
+            "wrong_definite": 1,
+            "binding_temporal_errors": 1,
+            "duplicate_assertions": 0,
+            "unsupported_extras": 0,
+            "unscored_extras": 19
+          }
+        }
+      },
+      "length_strata": {
+        "short": {
+          "executions": 8,
+          "first": {
+            "required_total": 19,
+            "missing": 0,
+            "required_recalled": 19,
+            "supported_required": 18,
+            "field_total": 58,
+            "field_matches": 57,
+            "unnecessary_null": 0,
+            "wrong_definite": 1,
+            "binding_temporal_errors": 1,
+            "duplicate_assertions": 0,
+            "unsupported_extras": 0,
+            "unscored_extras": 19
+          }
+        }
+      }
+    },
+    "dev-B": {
+      "executions": 8,
+      "failures": 0,
+      "repairs": 0,
+      "calls": 8,
+      "seconds": 108.73416790016927,
+      "criterion_matches": 32,
+      "criterion_total": 32,
+      "first": {
+        "metrics": {
+          "required_total": 19,
+          "missing": 0,
+          "required_recalled": 19,
+          "supported_required": 17,
+          "field_total": 58,
+          "field_matches": 56,
+          "unnecessary_null": 1,
+          "wrong_definite": 1,
+          "binding_temporal_errors": 0,
+          "duplicate_assertions": 0,
+          "unsupported_extras": 0,
+          "unscored_extras": 13
+        },
+        "complete_selected_constraints": 6
+      },
+      "final": {
+        "metrics": {
+          "required_total": 19,
+          "missing": 0,
+          "required_recalled": 19,
+          "supported_required": 17,
+          "field_total": 58,
+          "field_matches": 56,
+          "unnecessary_null": 1,
+          "wrong_definite": 1,
+          "binding_temporal_errors": 0,
+          "duplicate_assertions": 0,
+          "unsupported_extras": 0,
+          "unscored_extras": 13
+        },
+        "complete_selected_constraints": 6
+      },
+      "repeats": {
+        "1": {
+          "executions": 8,
+          "first": {
+            "required_total": 19,
+            "missing": 0,
+            "required_recalled": 19,
+            "supported_required": 17,
+            "field_total": 58,
+            "field_matches": 56,
+            "unnecessary_null": 1,
+            "wrong_definite": 1,
+            "binding_temporal_errors": 0,
+            "duplicate_assertions": 0,
+            "unsupported_extras": 0,
+            "unscored_extras": 13
+          }
+        }
+      },
+      "length_strata": {
+        "short": {
+          "executions": 8,
+          "first": {
+            "required_total": 19,
+            "missing": 0,
+            "required_recalled": 19,
+            "supported_required": 17,
+            "field_total": 58,
+            "field_matches": 56,
+            "unnecessary_null": 1,
+            "wrong_definite": 1,
+            "binding_temporal_errors": 0,
+            "duplicate_assertions": 0,
+            "unsupported_extras": 0,
+            "unscored_extras": 13
+          }
+        }
+      }
+    },
+    "confirm-A": {
+      "executions": 16,
+      "failures": 0,
+      "repairs": 4,
+      "calls": 20,
+      "seconds": 329.4878402997274,
+      "criterion_matches": 64,
+      "criterion_total": 64,
+      "first": {
+        "metrics": {
+          "required_total": 36,
+          "missing": 0,
+          "required_recalled": 36,
+          "supported_required": 21,
+          "field_total": 116,
+          "field_matches": 101,
+          "unnecessary_null": 11,
+          "wrong_definite": 4,
+          "binding_temporal_errors": 2,
+          "duplicate_assertions": 0,
+          "unsupported_extras": 2,
+          "unscored_extras": 34
+        },
+        "complete_selected_constraints": 4
+      },
+      "final": {
+        "metrics": {
+          "required_total": 36,
+          "missing": 0,
+          "required_recalled": 36,
+          "supported_required": 21,
+          "field_total": 116,
+          "field_matches": 101,
+          "unnecessary_null": 11,
+          "wrong_definite": 10,
+          "binding_temporal_errors": 6,
+          "duplicate_assertions": 2,
+          "unsupported_extras": 2,
+          "unscored_extras": 33
+        },
+        "complete_selected_constraints": 4
+      },
+      "repeats": {
+        "1": {
+          "executions": 8,
+          "first": {
+            "required_total": 18,
+            "missing": 0,
+            "required_recalled": 18,
+            "supported_required": 11,
+            "field_total": 58,
+            "field_matches": 51,
+            "unnecessary_null": 5,
+            "wrong_definite": 2,
+            "binding_temporal_errors": 1,
+            "duplicate_assertions": 0,
+            "unsupported_extras": 1,
+            "unscored_extras": 21
+          }
+        },
+        "2": {
+          "executions": 8,
+          "first": {
+            "required_total": 18,
+            "missing": 0,
+            "required_recalled": 18,
+            "supported_required": 10,
+            "field_total": 58,
+            "field_matches": 50,
+            "unnecessary_null": 6,
+            "wrong_definite": 2,
+            "binding_temporal_errors": 1,
+            "duplicate_assertions": 0,
+            "unsupported_extras": 1,
+            "unscored_extras": 13
+          }
+        }
+      },
+      "length_strata": {
+        "long": {
+          "executions": 4,
+          "first": {
+            "required_total": 14,
+            "missing": 0,
+            "required_recalled": 14,
+            "supported_required": 8,
+            "field_total": 40,
+            "field_matches": 34,
+            "unnecessary_null": 6,
+            "wrong_definite": 0,
+            "binding_temporal_errors": 0,
+            "duplicate_assertions": 0,
+            "unsupported_extras": 0,
+            "unscored_extras": 7
+          }
+        },
+        "short": {
+          "executions": 12,
+          "first": {
+            "required_total": 22,
+            "missing": 0,
+            "required_recalled": 22,
+            "supported_required": 13,
+            "field_total": 76,
+            "field_matches": 67,
+            "unnecessary_null": 5,
+            "wrong_definite": 4,
+            "binding_temporal_errors": 2,
+            "duplicate_assertions": 0,
+            "unsupported_extras": 2,
+            "unscored_extras": 27
+          }
+        }
+      }
+    },
+    "confirm-B": {
+      "executions": 16,
+      "failures": 0,
+      "repairs": 4,
+      "calls": 20,
+      "seconds": 391.63060400029644,
+      "criterion_matches": 64,
+      "criterion_total": 64,
+      "first": {
+        "metrics": {
+          "required_total": 36,
+          "missing": 0,
+          "required_recalled": 36,
+          "supported_required": 29,
+          "field_total": 116,
+          "field_matches": 109,
+          "unnecessary_null": 5,
+          "wrong_definite": 3,
+          "binding_temporal_errors": 1,
+          "duplicate_assertions": 1,
+          "unsupported_extras": 2,
+          "unscored_extras": 37
+        },
+        "complete_selected_constraints": 8
+      },
+      "final": {
+        "metrics": {
+          "required_total": 36,
+          "missing": 0,
+          "required_recalled": 36,
+          "supported_required": 29,
+          "field_total": 116,
+          "field_matches": 109,
+          "unnecessary_null": 5,
+          "wrong_definite": 6,
+          "binding_temporal_errors": 3,
+          "duplicate_assertions": 2,
+          "unsupported_extras": 2,
+          "unscored_extras": 36
+        },
+        "complete_selected_constraints": 8
+      },
+      "repeats": {
+        "1": {
+          "executions": 8,
+          "first": {
+            "required_total": 18,
+            "missing": 0,
+            "required_recalled": 18,
+            "supported_required": 15,
+            "field_total": 58,
+            "field_matches": 55,
+            "unnecessary_null": 2,
+            "wrong_definite": 2,
+            "binding_temporal_errors": 1,
+            "duplicate_assertions": 1,
+            "unsupported_extras": 1,
+            "unscored_extras": 17
+          }
+        },
+        "2": {
+          "executions": 8,
+          "first": {
+            "required_total": 18,
+            "missing": 0,
+            "required_recalled": 18,
+            "supported_required": 14,
+            "field_total": 58,
+            "field_matches": 54,
+            "unnecessary_null": 3,
+            "wrong_definite": 1,
+            "binding_temporal_errors": 0,
+            "duplicate_assertions": 0,
+            "unsupported_extras": 1,
+            "unscored_extras": 20
+          }
+        }
+      },
+      "length_strata": {
+        "long": {
+          "executions": 4,
+          "first": {
+            "required_total": 14,
+            "missing": 0,
+            "required_recalled": 14,
+            "supported_required": 13,
+            "field_total": 40,
+            "field_matches": 39,
+            "unnecessary_null": 1,
+            "wrong_definite": 1,
+            "binding_temporal_errors": 1,
+            "duplicate_assertions": 1,
+            "unsupported_extras": 0,
+            "unscored_extras": 8
+          }
+        },
+        "short": {
+          "executions": 12,
+          "first": {
+            "required_total": 22,
+            "missing": 0,
+            "required_recalled": 22,
+            "supported_required": 16,
+            "field_total": 76,
+            "field_matches": 70,
+            "unnecessary_null": 4,
+            "wrong_definite": 2,
+            "binding_temporal_errors": 0,
+            "duplicate_assertions": 0,
+            "unsupported_extras": 2,
+            "unscored_extras": 29
+          }
+        }
+      }
+    }
+  },
+  "local_artifact_root": "artifacts/luna-bounded-ab-round-01",
+  "local_index": "result-index.json",
+  "local_complete_audit": "call-audit.json",
+  "local_AI_review": "ai-semantic-review.json",
+  "freeze_sha256": "71582b6a61a64f02275b48d8da32bbb825a08cbb9ae1495cb1a05baafac4d93b",
+  "seal_sha256": "1a3f475fb69ab27f25d76d07607afc2446b21235b93aef3d24f7c5586d657cfb",
+  "prompt_sha256": {
+    "A": "33141f2af8a9132de2b10627e54b5233712a36731acb66a58083287e6f182f36",
+    "B": "75f41454540a7279e5496fa193ee2b49f8a8d0722056e71f76e308269794bfe4"
+  },
+  "input_sha256": {
+    "CONFIRM-01.json": "9a244712043c0e3809ddfea95283be092d8d814cd7878f22cbf651df3be2c0b2",
+    "CONFIRM-02.json": "7a7bf5f6e3f1c54fa5733f22c5d4944c6373773720e7b68b0bc61c51d4b0163f",
+    "CONFIRM-03.json": "a4e4390234cc8617932dc8268d2afa82bdc042e193b2804beefc56ce414f9997",
+    "CONFIRM-04.json": "261b03f9a6323b9fc8b0dff36246e061109dbc7f337e709c2a8207554d005d17",
+    "CONFIRM-05.json": "da04c4f774ebaf7ba902120725d89f14b791727e0c059e35c525033b3d556a84",
+    "CONFIRM-06.json": "ddbe90ed117f673ac47fb13df767f544f9586026c0966dd92194ed710c74fa21",
+    "CONFIRM-07.json": "f8e8d9ac0fcdde24d619201326e3b896e174e2229bc224174c3ed8f0406462a5",
+    "CONFIRM-08.json": "91261e02280f9ff0feacab833259db925cd5bd043ac837e6baf1c0b1b2386b4d",
+    "DEV-01.json": "a7ebb08cf3875d60b109267ec8a9091eeb2c5465a3f07e522669b528e0b16342",
+    "DEV-02.json": "682c5777b4a117d087d2215c5a03e70b1da38185aa009d7c2da10c266a4fbe5c",
+    "DEV-03.json": "badc1fd06db70e3e0644a704fdfaedfbc36d0b431ba9cfa35b47919244c8d5f7",
+    "DEV-04.json": "ce2a56c18101ff75095faf7276097e71761f59744abe7cff524daae79c072bee",
+    "DEV-05.json": "c730f9eeb65ab13073adad52008933dbfec53ec87fdddca4305e2daf3a2bde0b",
+    "DEV-06.json": "d4ce22acfbf867ee2a86775503656fddf6938f31359323043f8f463ac77467e4",
+    "DEV-07.json": "a4e39ed64ab2df4325020749c10abd0e6aa96ec18236cdccefdbbc60faae0223",
+    "DEV-08.json": "aec91bb881f33048476330760e857e95c3045fb9953f7ddcaa07bd5eb5e4117c"
+  },
+  "expected_sha256": "33f4534441a627fe6f5f5aa278f63e1680c51803386ea1b976a0dec29fabcfe3",
+  "tests": {
+    "pre_freeze_targeted_passed": 73,
+    "pre_freeze_seconds": 0.49,
+    "delivery_targeted_passed": 6,
+    "delivery_seconds": 0.07
+  },
+  "limitations": [
+    "Frozen labels and matcher have confirmed semantic defects; aggregate scores cannot establish a winner.",
+    "Partial source-semantic AI audit, exhaustive semantic precision unavailable.",
+    "Requested-date conflict not represented as a downstream criterion conflict.",
+    "Test-mention value and event/subject identity remain underspecified.",
+    "First-value protection and signature lexical scope risks remain unchanged."
+  ],
+  "runner_termination_verified": true
+}
