@@ -2,9 +2,19 @@
 
 **An evidence-first Python backend that turns fragmented synthetic clinical records into auditable, source-linked evidence reviews.**
 
-The current workflow focuses on **HbA1c monitoring**: retrieving relevant history, extracting supported facts from clinical notes, reconciling corrections and conflicts, and reporting what can—or cannot—be established. It prepares evidence for **further review**, not automatic claim approval or denial.
+The primary workflow starts with **original Synthea claims across all exported service types**. It identifies charge items, links structured clinical records through source keys and explicit composite matches, and produces traceable evidence packets. It prepares evidence for further review without automatic approval, denial, or payment recommendations. The existing **HbA1c monitoring** review remains a separate specialized workflow.
 
-## What It Does
+## Original Claim Workflow — Zero Model Calls
+
+```sh
+python -m clinical_intelligence claims inventory --archive /path/to/synthea_sample_data_csv_latest.zip --output artifacts/claim-inventory.json
+python -m clinical_intelligence claims packet --archive /path/to/synthea_sample_data_csv_latest.zip --claim-id cc3eac4a-34a7-9a15-b0e6-038869c0c457 --output artifacts/original-claim.json
+python -m clinical_intelligence claims batch --archive /path/to/synthea_sample_data_csv_latest.zip --split docs/general-claims/split.json --output artifacts/original-claims
+```
+
+The general `claim-evidence/1` contract accepts original service codes without a code whitelist. `CHARGE` rows remain separate items; financial transactions and clinical events remain distinct. Original codes and CSV rows are preserved, and unknown linkage stays explicit. Unsupported services receive `POLICY_NOT_EVALUATED`. See [commands and contracts](docs/general-claims/workflow.md), the [frozen patient partition](docs/general-claims/split.json), and [measured archive results](docs/general-claims/results.md).
+
+## Specialized HbA1c Workflow
 
 - **Retrieval with provenance:** filters original Synthea CSV records by patient, code, and date while retaining original values, row locations, hashes, and exclusions.
 - **Evidence-grounded extraction:** combines deterministic structured-data parsing with typed GPT-6 Luna extraction for selected notes; unknown values stay `null`, and proposed passages must pass source-position checks.
@@ -31,18 +41,17 @@ These are reader-facing labels; serialized status codes are defined in the versi
 
 ```mermaid
 flowchart LR
-    A[Synthetic records and notes] --> B[Patient / code / date retrieval]
-    B --> C[Structured facts and typed note extraction]
-    C --> D[Source grounding and field-level reconciliation]
-    D --> E[Policy prerequisites and deterministic criteria]
-    E --> F[Cited JSON / Markdown review packet]
+    A[Original Synthea claim] --> B[Indexed claim / patient / encounter joins]
+    B --> C[Separate original charge items]
+    C --> D[Service candidates and bounded clinical context]
+    D --> E[Source-linked evidence packet]
+    E --> F[Explicit supported policy adapter only]
+    G[Specialized HbA1c request and notes] --> H[Existing extraction and scoped policy module]
 ```
 
 **The LLM proposes note facts; deterministic code handles record identity, amendments, applicability, and evidence-state rules.** Original evidence is preserved separately from the derived view. [Engineering case study](docs/engineering-case-study.md).
 
 The note validator checks only schema/types, input identity, ISO date syntax and exact source references. Passing validation does not certify clinical correctness. Luna interprets clinical meaning; existing downstream review rules evaluate the retained evidence separately.
-
-**Possible next step — targeted model escalation:** when critical evidence is missing, conflicting, or fails grounding checks, a more capable second-pass model could review the relevant original sources before the case is routed onward. This is a design direction, **not an implemented fallback**; any revised assertions would still need source validation.
 
 ## Validation Snapshot
 
