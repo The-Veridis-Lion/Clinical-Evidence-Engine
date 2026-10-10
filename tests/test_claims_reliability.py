@@ -80,7 +80,7 @@ def test_signature_declarations_remain_provider_scoped():
 def test_repair_cannot_silently_discard_independently_valid_facts():
     c=case(2);s=source(c)
     valid=assertion(s,'diabetes_context',True)
-    bad=assertion(s,'order_intent',True,provider='Invented author')
+    bad=assertion(s,'order_intent',True,test_specific='true')
     identity=dict(patient_id=s['patient_id'],source_id=s['source_id'])
     p=FixtureProvider({**identity,'facts':[valid,bad]},{**identity,'facts':[]})
     facts,record=extract_note(p,s,c.claim.model_dump(mode='json'),c.review_context.as_of)

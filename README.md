@@ -40,6 +40,8 @@ flowchart LR
 
 **The LLM proposes note facts; deterministic code handles record identity, amendments, applicability, and evidence-state rules.** Original evidence is preserved separately from the derived view. [Engineering case study](docs/engineering-case-study.md).
 
+The note validator checks only schema/types, input identity, ISO date syntax and exact source references. Passing validation does not certify clinical correctness. Luna interprets clinical meaning; existing downstream review rules evaluate the retained evidence separately.
+
 **Possible next step — targeted model escalation:** when critical evidence is missing, conflicting, or fails grounding checks, a more capable second-pass model could review the relevant original sources before the case is routed onward. This is a design direction, **not an implemented fallback**; any revised assertions would still need source validation.
 
 ## Validation Snapshot

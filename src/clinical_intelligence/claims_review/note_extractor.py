@@ -1,15 +1,14 @@
-"""Narrow note contract with source-scoped validation and one bounded repair."""
+"""Structural/source-integrity validation and one bounded note repair."""
 import json
-import re
 from pathlib import Path
 from typing import Protocol
-from datetime import datetime, timezone
+from datetime import date, datetime, timezone
 from pydantic import ValidationError
 from .contracts import Citation, EvidenceFact, NoteProposal
 from .prepare import digest
 from .config import DEFAULT_NOTE_PROMPT
 from .facts import source_key
-from .grounding import terminology, supports_monitoring_test, explicit_dates, provider_grounded, authentication
+from .grounding import terminology, supports_monitoring_test, explicit_dates
 
 VERSION='claims-review-note/3'
 PROMPT='''Extract source-supported HbA1c review facts only. No tools, files, clinical diagnosis,
@@ -65,13 +64,13 @@ class RuntimeValidationError(ValueError):pass
 def preserves(original,final):
     """Allow citation augmentation, paraphrase and filling unknowns, not erasure.
 
-    Positional grounding remains a necessary, not sufficient, semantic check.
+    Structural validation does not verify clinical correctness.
     """
     for candidate in final:
         if not set(original['span_ids']) <= set(candidate['span_ids']):continue
         known={k:v for k,v in original.items() if k not in {'statement','span_ids'} and v is not None
                and not (k in {'date_role','temporal_status'} and v=='unknown')}
-        if all(candidate[k]==v for k,v in known.items()):return True
+        if all(type(candidate[k]) is type(v) and candidate[k]==v for k,v in known.items()):return True
     return False
 
 
@@ -88,6 +87,11 @@ def note_request(source,claim,*,prompt_variant=DEFAULT_NOTE_PROMPT):
 
 
 def validate_proposal(raw,source,as_of):
+    """Check schema, identity, date syntax and exact citations, never meaning.
+
+    as_of is retained for callers; clinical temporal applicability belongs to
+    downstream review. Kind-specific value types/enums are structural constraints.
+    """
     errors=[];proposal=None;anchors={a['span_id']:a for a in source['line_anchors']}
     try:proposal=NoteProposal.model_validate_json(json.dumps(raw,allow_nan=False))
     except (ValidationError,ValueError,TypeError) as error:errors.append(str(error))
@@ -101,30 +105,25 @@ def validate_proposal(raw,source,as_of):
             if isinstance(ids,list):
                 for identifier in ids:
                     if not isinstance(identifier,str) or identifier not in anchors:errors.append(f'fact {index}: unknown span ID {identifier!r}')
+            for field in ['fact_date','target_date']:
+                value=row.get(field)
+                if value is not None:
+                    try:
+                        if not isinstance(value,str) or date.fromisoformat(value).isoformat()!=value:
+                            raise ValueError('Expected YYYY-MM-DD')
+                    except (TypeError,ValueError):errors.append(f'fact {index}: {field} must be a valid YYYY-MM-DD date or null')
     if proposal:
         for i,fact in enumerate(proposal.facts):
             selected=[anchors[s] for s in fact.span_ids if s in anchors]
-            text='\n'.join(a['quote'] for a in selected)
             for anchor in selected:
-                if source['content'][anchor['start']:anchor['end']]!=anchor['quote']:errors.append(f'fact {i}: anchor slice mismatch')
-            for field in ['fact_date','target_date']:
-                value=getattr(fact,field)
-                if value is not None and value.isoformat() not in {d['date'] for d in explicit_dates(text)}:errors.append(f'fact {i}: {field} lacks an explicit date in its cited context')
-            if fact.fact_date and fact.fact_date>as_of and fact.temporal_status in {'actual','historical'}:errors.append(f'fact {i}: future date cannot be actual/historical support as_of')
-            if fact.provider and not provider_grounded(fact.provider,text):errors.append(f'fact {i}: provider attribution lacks verbatim linked evidence')
-            if fact.authenticated is True and (not fact.provider or authentication(fact.provider,text) is None):
-                errors.append(f'fact {i}: authentication needs applicable signature context and provider')
-            if fact.authenticated is True and fact.provider and authentication(fact.provider,text) is False:
-                errors.append(f'fact {i}: competing/negative authentication needs separate, applicable evidence')
-            # Unknown vocabulary is a mapping uncertainty, not a repair command
-            # to erase a potentially grounded fact. It cannot bind downstream.
-            if fact.test_specific is True and not supports_monitoring_test(text) and supports_monitoring_test(source['content']):
-                errors.append(f'fact {i}: test specificity needs the supporting named-test span already present in the source; preserve the fact and add its context')
+                start,end=anchor.get('start'),anchor.get('end')
+                if (type(start) is not int or type(end) is not int
+                    or not 0<=start<=end<=len(source['content'])
+                    or source['content'][start:end]!=anchor.get('quote')):
+                    errors.append(f'fact {i}: anchor slice mismatch')
             if fact.kind=='purpose' and fact.value not in {'monitoring','screening','initial_diagnosis',None}:errors.append(f'fact {i}: invalid purpose value')
             if fact.kind=='clinical_rationale' and fact.value is not False and fact.value not in {'implemented_change','altered_control_event','uncontrolled_diabetes',None}:errors.append(f'fact {i}: invalid rationale value')
             if fact.kind in {'diabetes_context','regimen_change','order_intent'} and fact.value is not None and not isinstance(fact.value,bool):errors.append(f'fact {i}: this assertion requires boolean or null')
-            if fact.kind=='order_intent' and fact.value is False and not re.search(r'cancel|withdraw|refus|do not order|not ordered',text,re.I):
-                errors.append(f'fact {i}: absent order paperwork is not affirmative contrary order intent')
     if errors:raise RuntimeValidationError('\n'.join(dict.fromkeys(errors)))
     return proposal
 
@@ -138,7 +137,7 @@ def adapt(proposal,source):
         body=a.model_dump(exclude={'span_ids'});body['citations']=citations
         text='\n'.join(anchors[s]['quote'] for s in a.span_ids)
         f=EvidenceFact(fact_id='pending',patient_id=source['patient_id'],source_id=source['source_id'],
-            event_link_id=source['event_link_id'],details={'extraction':'note','semantic_validation':'Source binding/grounding checks; not a general semantic proof.',
+            event_link_id=source['event_link_id'],details={'extraction':'note','structural_validation':'Schema, identity, date format and exact source references only; clinical correctness is not verified.',
                 'terminology':terminology(text),'test_mapping_supported':supports_monitoring_test(text),
                 'explicit_dates':explicit_dates(text)},**body)
         facts.append(f.model_copy(update={'fact_id':digest(f.model_dump(mode='json',exclude={'fact_id'}))[:24]}))

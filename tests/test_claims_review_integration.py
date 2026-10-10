@@ -176,7 +176,7 @@ def test_required_fields_are_nullable_and_strict():
 def test_repair_collects_binding_and_schema_errors_then_salvages_valid_facts():
     c = case(2);s = source(c);bad = proposal(c)
     bad['source_id'] = 'WRONG';bad['facts'][0]['value'] = {};bad['facts'][0]['span_ids'] = ['UNKNOWN']
-    final = proposal(c);final['facts'][-1]['provider'] = 'Fabricated signer'
+    final = proposal(c);final['facts'][-1]['authenticated'] = 'true'
     p = FixtureProvider(bad, final)
     facts, record = extract_note(p, s, c.claim.model_dump(mode='json'), c.review_context.as_of)
     assert record['status'] == 'failed' and record['repairs'] == 1 and len(p.requests) == 2
@@ -192,19 +192,18 @@ def test_provider_failure_preserves_structured_facts_and_no_retries():
     assert any(f.kind == 'test_event' for f in r.facts)
 
 
-def test_missing_paperwork_cannot_be_negative_intent():
+def test_validator_does_not_judge_negative_intent_from_missing_paperwork():
     c = case(3);s = source(c);raw = proposal(c);raw['facts'][-1]['value'] = False
-    with pytest.raises(RuntimeValidationError, match='not affirmative'):
-        validate_proposal(raw, s, c.review_context.as_of)
+    assert validate_proposal(raw, s, c.review_context.as_of).facts[-1].value is False
 
 
-def test_unrelated_or_negative_signature_and_uncited_date_cannot_be_support():
+def test_validator_does_not_judge_signature_scope_or_date_support():
     c = case(2);s = source(c);raw = proposal(c)
     raw['facts'][-1]['span_ids'] = [s['line_anchors'][1]['span_id']]
     raw['facts'][-1]['target_date'] = '2026-09-23'
-    with pytest.raises(RuntimeValidationError) as error:
-        validate_proposal(raw, s, c.review_context.as_of)
-    assert 'signature context' in str(error.value) and 'explicit date' in str(error.value)
+    result = validate_proposal(raw, s, c.review_context.as_of)
+    assert result.facts[-1].authenticated is True
+    assert result.facts[-1].target_date == date(2026, 9, 23)
 
 
 def test_unicode_repeated_lines_have_distinct_exact_offsets():
@@ -303,13 +302,13 @@ def test_future_target_and_requested_date_cannot_manufacture_performance():
     assert statuses(r)['TEST_TIMELINE'] == 'NOT_EVALUATED' and r.status == 'NEEDS_HUMAN_REVIEW'
 
 
-def test_negative_signature_is_rejected_when_claimed_positive():
+def test_validator_does_not_judge_authentication_polarity():
     c = changed(case(2), lambda b: b['sources'][3].update(content='HbA1c for 2026-09-22. Not signed by Dr. Simulated Provider.'))
     s = source(c)
     fact = assertion(source(case(2)), 'order_intent', True, test_specific=True, target_date='2026-09-22',
                      provider='Dr. Simulated Provider', authenticated=True, span_ids=[s['line_anchors'][0]['span_id']])
-    with pytest.raises(RuntimeValidationError, match='negative authentication'):
-        validate_proposal(dict(patient_id=s['patient_id'], source_id=s['source_id'], facts=[fact]), s, c.review_context.as_of)
+    result = validate_proposal(dict(patient_id=s['patient_id'], source_id=s['source_id'], facts=[fact]), s, c.review_context.as_of)
+    assert result.facts[0].authenticated is True
 
 
 @pytest.mark.parametrize('rationale_time', ['planned', 'unknown'])
