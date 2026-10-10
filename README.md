@@ -2,7 +2,7 @@
 
 **An evidence-first Python backend that turns fragmented synthetic clinical records into auditable, source-linked evidence reviews.**
 
-The current workflow focuses on **HbA1c monitoring**: retrieving relevant history, extracting supported facts from clinical notes, reconciling corrections and conflicts, and reporting what can—or cannot—be established. It supports **human review**, not automatic claim approval or denial.
+The current workflow focuses on **HbA1c monitoring**: retrieving relevant history, extracting supported facts from clinical notes, reconciling corrections and conflicts, and reporting what can—or cannot—be established. It prepares evidence for **further review**, not automatic claim approval or denial.
 
 ## What It Does
 
@@ -13,15 +13,17 @@ The current workflow focuses on **HbA1c monitoring**: retrieving relevant histor
 
 ## See It in Action
 
-**A retrieved result is not the same as sufficient evidence.** In the [original-archive example](examples/claims_review/raw/review-summary.md), the engine finds historical HbA1c measurements but cannot establish the requested test's purpose, complete history, or provider intent. Rather than inventing those facts, it returns:
+**A retrieved result is not the same as sufficient evidence.** In the [original-archive example](examples/claims_review/raw/review-summary.md), the engine finds historical HbA1c measurements but cannot establish the requested test's purpose, complete history, or provider intent. A reader-friendly summary of the generated packet is:
 
 ```text
-Monitoring context        INSUFFICIENT_EVIDENCE
-Test timeline             INSUFFICIENT_EVIDENCE
-Short-interval rationale  INSUFFICIENT_EVIDENCE
-Order intent              INSUFFICIENT_EVIDENCE
-Overall                   NEEDS_HUMAN_REVIEW
+Monitoring context        Insufficient evidence
+Test timeline             Insufficient evidence
+Short-interval rationale  Insufficient evidence
+Order intent              Insufficient evidence
+Overall                   Needs review
 ```
+
+These are reader-facing labels; serialized status codes are defined in the versioned [review contract](docs/claims-review-contract.md).
 
 **A correction is not overwritten by a later copy.** In the constructed [REL-04 case](examples/claims_review/reliability_v1/README.md), an authenticated amendment changes an HbA1c event date from **June 6 to August 6, 2026**. A subsequently received copy containing June 6 does not reverse the amendment. With unknown amendment authority (`REL-05`), the system retains uncertainty instead. [Mechanism and validation details](docs/reliability-delivery.md).
 
@@ -38,14 +40,16 @@ flowchart LR
 
 **The LLM proposes note facts; deterministic code handles record identity, amendments, applicability, and evidence-state rules.** Original evidence is preserved separately from the derived view. [Engineering case study](docs/engineering-case-study.md).
 
+**Possible next step — targeted model escalation:** when critical evidence is missing, conflicting, or fails grounding checks, a more capable second-pass model could review the relevant original sources before the case is routed onward. This is a design direction, **not an implemented fallback**; any revised assertions would still need source validation.
+
 ## Validation Snapshot
 
 - **389 offline regression tests passed** in the documented release check. Live provider/network dispatch was blocked; this is a software test result, not clinical accuracy.
 - **26/26 expected retrieval source-task pairs** were found across three overlapping windows **for one synthetic patient** (19 unique HbA1c rows). Not a population-wide recall score.
-- **5/7 new synthetic cases** met all predefined case constraints; the live-note subset met **1/3**. A separate earlier reserved confirmation met **3/6** complete cases. Criterion-state matches alone can hide field-level errors.
+- **Complete-case validation remains mixed:** small synthetic evaluations identified missing fields and semantic inconsistencies even when criterion-level outcomes matched. The [full case counts and failure analysis](docs/reliability-delivery.md) are preserved in the evaluation reports.
 - **20.15 seconds** and **$0.00301 estimated model cost** per workflow, averaged over 24 sequential runs on 12 constructed notes. Neither is production throughput or an observed bill.
 
-These bounded tests do **not** establish semantic citation accuracy, exhaustive clinical fact precision/recall, or real-patient performance. See [reliability results](docs/reliability-delivery.md), [original confirmation](docs/confirmation-delivery.md), and [measurement details](docs/release-measurements.md).
+These bounded tests do **not** establish semantic citation accuracy, exhaustive clinical fact precision/recall, or real-patient performance. The original [reserved confirmation](docs/confirmation-delivery.md) and [measurement details](docs/release-measurements.md) remain available for inspection.
 
 ## Quick Start — No Model Calls
 
@@ -88,7 +92,7 @@ clinical --db artifacts/demo.sqlite query --patient DEMO-CEDAR --family utilizat
 | --- | --- |
 | Complete output example | [Source-linked review packet](examples/claims_review/raw/review-summary.md) |
 | Architecture and trade-offs | [Engineering case study](docs/engineering-case-study.md) |
-| Reliability, errors, correction cases | [Reliability report](docs/reliability-delivery.md) |
+| Reliability, errors, correction cases | [Reliability report](docs/reliability-delivery.md) · [Reserved confirmation](docs/confirmation-delivery.md) |
 | Retrieval verification | [Original-source report](docs/raw-source-delivery.md) |
 | Exact latency, cost, note lengths, tokens | [Measurement report](docs/release-measurements.md) |
 | A/B prompts and historical scoring limits | [Prompt comparison](docs/luna-ab-posthoc-reanalysis.md) · [Prospective follow-up](docs/b-candidate-new-validation.md) |
