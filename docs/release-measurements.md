@@ -1,8 +1,7 @@
 # Measured Note Size and B-Only Inference Cost
 
 These are historical saved-request measurements, not new model calls. The unit is
-one document workflow, including existing repair. The notes are AI-assisted,
-constructed synthetic sources, not original patient records.
+one document workflow, including existing repair. The notes are constructed synthetic sources, not original patient records.
 
 ## Verified Workload
 
