@@ -1,6 +1,6 @@
 # Semantic contract v1 — scoped source statements
 
-This contract is an AI-assisted engineering review, not human annotation or clinical expert review. It preserves source facts separately from countability; code retains responsibility for arithmetic and reconciliation.
+This contract is an non-independent engineering review, not human annotation or clinical expert review. It preserves source facts separately from countability; code retains responsibility for arithmetic and reconciliation.
 
 | Field / layer | Scope and evidence | Unknown / negation |
 |---|---|---|

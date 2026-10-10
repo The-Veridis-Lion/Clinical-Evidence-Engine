@@ -1,6 +1,6 @@
 # Source-to-criterion verification, 2026-10-09
 
-AI-assisted source review only. Registry remains `draft_ai_reviewed`;
+non-independent source review only. Registry remains `draft_ai_reviewed`;
 `human_review_completed=false`, `clinical_expert_review_completed=false`.
 No registry semantics or executable policy rules were changed in this phase.
 

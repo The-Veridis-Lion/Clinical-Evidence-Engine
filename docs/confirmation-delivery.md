@@ -48,7 +48,7 @@ was unavailable. Every original workflow attempt is included.
 Automatic conformance: **3/6**, overall-state match **4/6**, criterion-state match
 **16/24**. The denominator includes eight NOT_EVALUATED scope expectations; there are
 sixteen ordinary criterion expectations. The five live-note cases passed **2/5**;
-the structured-only case passed **1/1**. These are AI-assisted synthetic constraints,
+the structured-only case passed **1/1**. These are non-independent synthetic constraints,
 not human/clinical expert labels, exhaustive fact matching or production accuracy.
 
 False SUPPORTED against original constraints: **1**, CONF-003 monitoring scope. Its
@@ -58,7 +58,7 @@ failures, timeouts and wrong-patient inclusions observed: **0**. Automated audit
 **0 failures in 612 citation occurrences**, with repeated references counted separately.
 Position/source ownership checks do not establish semantic precision.
 
-Direct AI-assisted source/visible-response review examined all original fact constraints,
+Direct non-independent source/visible-response review examined all original fact constraints,
 including positive authenticated intent, unstarted plans, preserved undated result,
 targeted amendment, signature scope, patient isolation and diagnostic purpose. Findings
 are in the [machine summary](confirmation-validation.json). Two residual field concerns:

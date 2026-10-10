@@ -24,7 +24,7 @@ An old attachment excluding new contact in the same mixed packet was a reproduce
 
 In semantic-stability-v1, D108 repeats 7/8 initially contained clinical facts but omitted an appointment ID and paraphrased a literal disposition. The old fail-fast repair saw only the first error; the complete document was ultimately lost. Its many FNs are an end-to-end failure, not separate clinical omissions. The final two real repair replays received both runtime errors together: **one call each, both accepted**. These validate targeted repair of saved proposals, not two new complete extractions. Historical failure scores remain unchanged, and validator acceptance is not proof of all semantic correctness.
 
-All annotation/dispute reviews were **AI-assisted engineering reviews**, without human annotation, clinical-expert confirmation, or clinical validation. Original gold, scores, and sealed results remain preserved. The previous sealed set has been discussed and is no longer unseen data.
+All annotation/dispute reviews were **non-independent engineering reviews**, without human annotation, clinical-expert confirmation, or clinical validation. Original gold, scores, and sealed results remain preserved. The previous sealed set has been discussed and is no longer unseen data.
 
 ## Comparison
 
@@ -103,7 +103,7 @@ python -m clinical_intelligence --db artifacts/previous-new.sqlite process --inp
 
 `previous` restores the previous generation contract while retaining this round's deterministic fixes. For complete old code, use starting commit 861f260 in a separate checkout/worktree; do not reset the current branch.
 
-Publishable synthetic facts, texts, and splits are in `tests/fixtures/uncertainty/`. Facts/constraints preceded text construction and received AI-assisted evidence checking. Development conflict pairs stay grouped; confirmation has different patients/templates and was not used for debugging before freeze. Generation receives only source text and allowed generic instructions/examples; repair receives runtime information, without gold or scores.
+Publishable synthetic facts, texts, and splits are in `tests/fixtures/uncertainty/`. Facts/constraints preceded text construction and received non-independent evidence checking. Development conflict pairs stay grouped; confirmation has different patients/templates and was not used for debugging before freeze. Generation receives only source text and allowed generic instructions/examples; repair receives runtime information, without gold or scores.
 
 ```powershell
 # Reproduction entry points; future execution calls Luna. Not run during delivery.

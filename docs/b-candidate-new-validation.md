@@ -22,7 +22,7 @@ one maximum repair, reconciliation and rules. CLI version was `codex-cli 0.159.3
 the actual backend model snapshot remains unavailable.
 
 The bounded local inventory found no qualified, unused, complete HbA1c notes.
-All twelve new sources are **constructed_synthetic**, AI-assisted and author-nonblind,
+All twelve new sources are **constructed_synthetic**, non-independent and author-nonblind,
 not original EHR notes or clinical validation. Four multisection notes have
 647-707 words; the other eight have 155-215 words. Ten contain substantive target
 content; two are administrative or other-subject/analyte controls. The full text
