@@ -159,16 +159,15 @@ complete CMS medical-necessity rule. Known limitations include source/subject
 confusion, unsupported definite values, unnecessary unknowns, restrictive
 validator/repair behavior, and unresolved event linkage. No real-patient
 validation, autonomous adjudication, compliance certification, or production
-scalability is claimed. [Portfolio summary](docs/portfolio-summary.md) and
-[case study](docs/engineering-case-study.md) describe the demonstrated work.
+scalability is claimed. See the [technical design and evaluation](docs/engineering-case-study.md)
+for architecture, measurements, and known failure modes.
 
 ## License and Contact
 
 Source-available under [PolyForm Noncommercial 1.0.0](LICENSE.md); commercial use
 requires separate permission. Preserve [NOTICE](NOTICE) and
 [third-party notices](THIRD_PARTY_NOTICES.md). This is not represented as
-OSI-approved open source. AI coding assistance and AI-assisted synthetic review
-are distinguished from human verification and runtime inference.
+OSI-approved open source.
 
 Required Notice: Copyright (c) 2026 The-Veridis-Lion
 

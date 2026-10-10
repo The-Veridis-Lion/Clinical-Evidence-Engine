@@ -83,7 +83,7 @@ label or denominator was edited after outputs were seen.
 All 627 repeated citation occurrences passed positional/hash/patient/source checks;
 wrong-patient inclusions 0. These are repeated references, not independent semantic
 assertions. Full semantic citation precision remains **UNAVAILABLE**. A separate
-AI-assisted 12-assertion source audit also identified unlabelled semantic risks;
+non-independent 12-assertion source audit also identified unlabelled semantic risks;
 human and clinical-expert review remain false.
 
 Actual use: gpt-6-luna/high, CLI 0.159.3, timeout 180 s, tools disabled, ephemeral
@@ -130,7 +130,7 @@ Failures are retained and separated:
   is an unnecessary field abstention, never reported as full document success.
 - REL-02: value=false correctly preserves nonimplementation, while temporal_status
   is actual rather than the frozen planned label. Current nonimplementation and
-  future discussion are both source-supported roles. AI-assisted review flags a
+  future discussion are both source-supported roles. non-independent review flags a
   representation dispute; the strict mismatch remains, without calling it proven
   incorrect clinical certainty or changing expectations.
 - REL-02 extra background assertion: routine monitoring language is promoted to

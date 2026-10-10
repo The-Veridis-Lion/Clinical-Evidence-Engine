@@ -12,7 +12,7 @@ responses and both historical ledgers remain unchanged.
 
 The revised analysis shows a bounded benefit for B on the decidable confirmation
 fields, with mixed development results. It does not establish generalization or
-justify a default switch. Labels are AI-assisted; the reviewer had previously
+justify a default switch. Labels are non-independent; the reviewer had previously
 seen outputs. Source-only review views reduce presentation bias but are not
 blinding. No human or clinical-expert review occurred.
 
@@ -108,7 +108,7 @@ from the headline selected-field counts. No new required-field error is
 demonstrated by these saved transitions. Old receipt/temporal mismatch counters
 also contained matcher artifacts; these are not attributed to repair.
 
-Final extra classifications, from limited automatic checks and AI-assisted source
+Final extra classifications, from limited automatic checks and non-independent source
 constraints, are:
 
 | Group | Supported in scope | Supported out of scope | Unsupported | Unresolved |

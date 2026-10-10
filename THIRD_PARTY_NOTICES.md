@@ -15,8 +15,8 @@ Apache-2.0; hosted inference has separate service terms and operator authenticat
 
 ## Claims review example sources
 
-The five claims-review development cases are AI-assisted fact-first synthetic engineering
-fixtures supplied in the preparation package; no human or clinical validation is claimed.
+The claims-review development cases are constructed synthetic engineering fixtures,
+not original patient records or clinically validated benchmarks.
 The small unmodified CSV slice comes from the official Synthea/SyntheticMass sample at
 https://synthetichealth.github.io/downloads.html. Archive and original-row provenance
 are preserved in examples/claims_review/synthea/source_manifest.json. The wrapper request
@@ -28,9 +28,8 @@ software mechanism for generating synthetic patients and the synthetic electroni
 care record," Journal of the American Medical Informatics Association 25(3), 2018,
 230–238, https://doi.org/10.1093/jamia/ocx079.
 
-The preparation package was AI-assisted user-requested engineering material. Original
-package reports and manifest remain local. CMS full documents, code tables and CPT
-descriptions are not bundled; the draft registry retains links and limited paraphrases.
+CMS full documents, code tables and CPT descriptions are not bundled;
+the draft registry retains links and limited paraphrases.
 
 ## LangExtract health-use notice
 

@@ -30,7 +30,7 @@ A remains the CLI default; `--note-prompt B` is explicit and experimental.
 Eight development notes each ran A/B once; eight new confirmation notes each ran
 A/B twice. Different patients/template families across splits; mechanisms intentionally
 overlap. There are two longer mixed-paragraph confirmation packets (851 and 732
-characters). These are **AI-assisted fact-first constructed mechanism tests**, with
+characters). These are **non-independent fact-first constructed mechanism tests**, with
 a nonblind designer, not original clinical notes, human gold or expert validation.
 The schema, code, 16 inputs, labels, prompts, scorer and seed `20261009` were hashed
 before inference. All feasible confirmation repeats were saved/sealed before the
@@ -111,7 +111,7 @@ No corrected headline score or after-the-fact adoption decision is manufactured.
 
 ## Traceable observations and remaining failures
 
-These are AI-assisted qualitative inspections, not a replacement benchmark:
+These are non-independent qualitative inspections, not a replacement benchmark:
 
 - In the longer dispersed-order packet, A leaves the purpose date null in both
   repeats and the order date null in one; B fills the order date in both and the
@@ -143,7 +143,7 @@ grounded but semantically unsupported value. These risks were inspected, not cha
 
 **48/48 positional packet audits pass, 675 repeated citation occurrences verified,
 zero wrong-patient inclusions.** This is not semantic citation precision, which remains
-UNAVAILABLE. Partial semantic review is AI-assisted; human/expert review is false.
+UNAVAILABLE. Partial semantic review is non-independent; human/expert review is false.
 The schema still has no event/subject reference, and `test_mention.value` has multiple
 reasonable encodings. Those boundaries are documented rather than redesigned.
 

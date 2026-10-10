@@ -1,12 +1,12 @@
 # Critical source-assertion review
 
-Review method: AI-assisted direct reading of original CSV fields and runtime objects.
+Review method: non-independent direct reading of original CSV fields and runtime objects.
 No human/clinical expert participated. This small purposeful review is not an
 independent exhaustive gold set; no semantic precision percentage is reported.
 Dataset SHA: `d61417b551e5b0997c33851b339c157421751f0ea68c18ea686ceb1850907c35`.
 All following sources bind to patient `7af6b271-f16d-21e1-882a-7bff71005a7b`.
 
-| Assertion reviewed | Inspectable source | Runtime meaning | AI-assisted finding / scope |
+| Assertion reviewed | Inspectable source | Runtime meaning | non-independent finding / scope |
 |---|---|---|---|
 | A prior HbA1c result exists on 2017-02-14, value 5.9% | observations.csv data row 8765: CODE=4548-4, DATE=2017-02-14T22:51:41Z, VALUE=5.9, UNITS=% | actual test_event, printed date, original string value | Supported as a source result. No inference of target purpose, authentication or independent event count. |
 | Diabetes background is recorded, not proven current activity | conditions.csv row 712: CODE=44054006, START=2000-11-14, STOP empty | historical diabetes_context=true, current_activity=null | The coded diagnosis supports background. Blank STOP interpretation is not independently validated here; current-activity abstention may underuse exporter semantics. Retained as a limitation, not silently rescored. |

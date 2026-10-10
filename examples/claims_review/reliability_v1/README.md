@@ -1,8 +1,7 @@
 # Fact-first synthetic confirmation v1
 
 Seven newly authored mechanism examples. Expected constraints were established
-from declared synthetic facts before prose and before model inference. Text was
-AI-assisted checked against those facts; no human or clinical-expert gold.
+from declared synthetic facts before prose and before model inference. These are non-independent engineering reference labels, not clinician-annotated gold.
 Do not use them as unseen confirmation after this run.
 
 | Input | Distinct mechanism | Mode |

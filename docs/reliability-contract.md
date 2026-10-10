@@ -92,7 +92,7 @@ that a larger schema hierarchy or classifier improves quality within this budget
 
 ## Evaluation boundary
 
-New `reliability_v1` materials are fact-first AI-assisted synthetic labels, authored
+New `reliability_v1` materials are fact-first non-independent synthetic labels, authored
 separately from inference and frozen before predictions. The engineer knows those
 constraints, so this is new-material confirmation, not author-blind or human gold.
 The model receives only source/context/general instructions. Three note cases and
@@ -104,7 +104,7 @@ The six original exposed cases remain regression, never new holdout. Historical
 scores and gold are not overwritten. Field constraints include unknown expectations;
 known-value projection precision/recall, false certainty, unnecessary unknown and
 execution failures are separate. Neither selected constraints nor exact offset checks
-are exhaustive clinical semantic accuracy. Citation semantic review is AI-assisted;
+are exhaustive clinical semantic accuracy. Citation semantic review is non-independent;
 full semantic precision remains unavailable without independent exhaustive labels.
 
 ## Separate post-confirmation program correction

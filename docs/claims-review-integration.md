@@ -64,12 +64,12 @@ marked rationale planned/change actual and passed. Prompt causal benefit is not 
 
 Initial criterion false support: 0; unnecessary criterion abstention: 1, caused by
 the rule defect. Conformance does not measure exhaustive field precision/recall.
-AI-assisted source review found residual field issues: initial DEV-001 labeled current
+non-independent source review found residual field issues: initial DEV-001 labeled current
 diabetes historical and an order-issued date requested_test; initial DEV-003 omitted
 fact_date despite storing the literal specimen date in target_date. Final DEV-002 purpose
 target_date remained null despite an explicit date elsewhere in context; supplied
 encounter/test binding still supported it. These are not claimed universally fixed.
-No expected/gold was changed. Review was AI-assisted, not human or clinical review.
+No expected/gold was changed. Review was non-independent, not human or clinical review.
 
 DEV-003 retains 7.1/date 2026-09-25 and 6.9/date null; the later order and future schedule
 cannot resolve the review. Missing paperwork is unknown, not cancellation. DEV-004 retains

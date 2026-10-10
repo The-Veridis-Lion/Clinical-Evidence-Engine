@@ -62,7 +62,7 @@ Missing clinician sources produce INSUFFICIENT_EVIDENCE, not fabricated notes.
 
 ## Evaluation and freeze
 
-The original-row oracle was an AI-assisted direct CSV inventory made before runtime
+The original-row oracle was an non-independent direct CSV inventory made before runtime
 retrieval, not copied from its output. Fixed clinical row IDs and a separate original
 CSV join determine expected encounter context. Three overlapping windows for one
 patient measure retrieval, not independent clinical accuracy. Synthetic mechanism
@@ -73,7 +73,7 @@ that these phenomena are natively annotated in the downloaded corpus.
 The packet audit checks positions, source identity/hash, availability, pointer source
 ownership, declared policy locators and execution errors. It does not infer semantic
 support, exhaustive fact recall, unnecessary unknowns or clinical correctness. A
-separate AI-assisted assertion review records meaning and scope; no human or expert
+separate non-independent assertion review records meaning and scope; no human or expert
 review is claimed. Independent semantic citation precision remains unavailable.
 
 Freeze code, contracts, tests and evaluators before opening confirmation inputs or
