@@ -3,7 +3,7 @@
 Starting commit: `a194ac6c56c3b947be9dd362db441b8070cf5161`.
 The six former confirmation cases are exposed regression material. Historical
 gold, predictions, 3/6 complete conformance and 16/24 states remain immutable.
-Review method: AI-assisted code/source/visible-response inspection, not human or
+Review method: non-independent code/source/visible-response inspection, not human or
 clinical-expert review. The persistent ledger contains 13 of 20 allocations.
 
 | Mechanism | Earliest incorrect stage | Propagation / evidence |

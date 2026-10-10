@@ -49,7 +49,7 @@ Latest may change; the benchmark refuses a changed archive.
 | Independent confirmation | NOT AVAILABLE / NOT RUN, 0/6 executed | Six input and six expected files absent |
 | New Luna calls / tokens | 0 / 0 | Existing ledger remains 6/20, 14 available |
 
-The original-row oracle was an AI-assisted direct CSV inventory before runtime
+The original-row oracle was an non-independent direct CSV inventory before runtime
 retrieval; fixed source IDs and independently read CSV references define context.
 It is not human gold. Original tasks test patient isolation, irrelevant code/window
 exclusion, ambiguous linkage and absent target performance. Original availability is
@@ -68,7 +68,7 @@ events. A downloaded archive is not a complete real clinical record.
 ## Citation meaning and error attribution
 
 [The assertion review](raw-source-semantic-review.md) examines critical source meanings
-individually. It is AI-assisted and separate from position checks. Independent semantic
+individually. It is non-independent and separate from position checks. Independent semantic
 citation precision, exhaustive clinical fact precision/recall, false-certainty rate and
 unnecessary-unknown rate are **UNAVAILABLE** without independent semantic labels.
 Zero SUPPORTED findings in this missing-source example is not an accuracy score.
