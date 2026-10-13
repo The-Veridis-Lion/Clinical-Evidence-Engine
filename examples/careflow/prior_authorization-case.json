@@ -1,0 +1,218 @@
+{
+  "schema_version": "careflow-case/1",
+  "case_id": "CF-PA-001",
+  "request": {
+    "request_id": "PA-B",
+    "patient_id": "SYN-CF-B",
+    "encounter_id": "ENC-A",
+    "request_type": "prior_authorization",
+    "service_code": "specialty-consult",
+    "code_system": "careflow-demo",
+    "requested_service_date": "2026-11-01",
+    "ruleset_id": "careflow-pa",
+    "ruleset_version": "1.0.0"
+  },
+  "review_as_of": "2026-10-13",
+  "sources": [
+    {
+      "source_id": "doc-dbe37f401576f7c6",
+      "patient_id": "SYN-CF-B",
+      "encounter_id": "ENC-A",
+      "available_at": "2026-10-10",
+      "origin": "constructed_synthetic",
+      "source_kind": "structured_record",
+      "recorded_at": "2026-10-09",
+      "event_date": "2026-10-09",
+      "record_type": "order",
+      "event_link_id": null,
+      "content": {
+        "statement": "Provider requests specialty consultation for PA-B.",
+        "documented": true
+      }
+    },
+    {
+      "source_id": "doc-32847b7b9dacb01e",
+      "patient_id": "SYN-CF-B",
+      "encounter_id": "ENC-A",
+      "available_at": "2026-10-10",
+      "origin": "constructed_synthetic",
+      "source_kind": "structured_record",
+      "recorded_at": "2026-10-09",
+      "event_date": "2026-10-09",
+      "record_type": "order",
+      "event_link_id": null,
+      "content": {
+        "statement": "Reason for PA-B: persistent symptoms requiring specialist evaluation.",
+        "documented": true
+      }
+    },
+    {
+      "source_id": "doc-5efd6ca12ccd910e",
+      "patient_id": "SYN-CF-B",
+      "encounter_id": "ENC-A",
+      "available_at": "2026-10-10",
+      "origin": "constructed_synthetic",
+      "source_kind": "structured_record",
+      "recorded_at": "2026-10-09",
+      "event_date": "2026-10-09",
+      "record_type": "order",
+      "event_link_id": null,
+      "content": {
+        "statement": "No investigation result is required for PA-B in this constructed request.",
+        "documented": false
+      }
+    },
+    {
+      "source_id": "doc-3a47d927c1cedaab",
+      "patient_id": "SYN-CF-B",
+      "encounter_id": "ENC-A",
+      "available_at": "2026-10-10",
+      "origin": "constructed_synthetic",
+      "source_kind": "structured_record",
+      "recorded_at": "2026-10-09",
+      "event_date": "2026-10-09",
+      "record_type": "order",
+      "event_link_id": null,
+      "content": {
+        "statement": "Prior therapy documentation is not required for PA-B.",
+        "documented": false
+      }
+    },
+    {
+      "source_id": "doc-8cf5e5112acdf0ba",
+      "patient_id": "SYN-CF-B",
+      "encounter_id": "ENC-A",
+      "available_at": "2026-10-10",
+      "origin": "constructed_synthetic",
+      "source_kind": "structured_record",
+      "recorded_at": "2026-10-09",
+      "event_date": "2026-10-09",
+      "record_type": "order",
+      "event_link_id": null,
+      "content": {
+        "statement": "PA request form for PA-B is attached.",
+        "documented": true
+      }
+    },
+    {
+      "source_id": "doc-f6234458491c54af",
+      "patient_id": "SYN-CF-B",
+      "encounter_id": "ENC-A",
+      "available_at": "2026-10-10",
+      "origin": "constructed_synthetic",
+      "source_kind": "structured_record",
+      "recorded_at": "2026-10-09",
+      "event_date": "2026-10-09",
+      "record_type": "order",
+      "event_link_id": null,
+      "content": {
+        "statement": "Constructed payer request identifier for PA-B: DEMO-PLAN. This is not eligibility verification.",
+        "documented": true
+      }
+    }
+  ],
+  "facts": [
+    {
+      "fact_id": "fact-dbe37f401576f7c6",
+      "patient_id": "SYN-CF-B",
+      "request_id": "PA-B",
+      "service_code": "specialty-consult",
+      "code_system": "careflow-demo",
+      "requirement": "request_intent",
+      "assertion": true,
+      "statement": "Provider requests specialty consultation for PA-B.",
+      "evidence": [
+        {
+          "source_id": "doc-dbe37f401576f7c6",
+          "field": "statement"
+        }
+      ],
+      "interpretation_origin": "structured_mapping"
+    },
+    {
+      "fact_id": "fact-32847b7b9dacb01e",
+      "patient_id": "SYN-CF-B",
+      "request_id": "PA-B",
+      "service_code": "specialty-consult",
+      "code_system": "careflow-demo",
+      "requirement": "referral_reason",
+      "assertion": true,
+      "statement": "Reason for PA-B: persistent symptoms requiring specialist evaluation.",
+      "evidence": [
+        {
+          "source_id": "doc-32847b7b9dacb01e",
+          "field": "statement"
+        }
+      ],
+      "interpretation_origin": "structured_mapping"
+    },
+    {
+      "fact_id": "fact-5efd6ca12ccd910e",
+      "patient_id": "SYN-CF-B",
+      "request_id": "PA-B",
+      "service_code": "specialty-consult",
+      "code_system": "careflow-demo",
+      "requirement": "investigation_required",
+      "assertion": false,
+      "statement": "No investigation result is required for PA-B in this constructed request.",
+      "evidence": [
+        {
+          "source_id": "doc-5efd6ca12ccd910e",
+          "field": "statement"
+        }
+      ],
+      "interpretation_origin": "structured_mapping"
+    },
+    {
+      "fact_id": "fact-3a47d927c1cedaab",
+      "patient_id": "SYN-CF-B",
+      "request_id": "PA-B",
+      "service_code": "specialty-consult",
+      "code_system": "careflow-demo",
+      "requirement": "therapy_required",
+      "assertion": false,
+      "statement": "Prior therapy documentation is not required for PA-B.",
+      "evidence": [
+        {
+          "source_id": "doc-3a47d927c1cedaab",
+          "field": "statement"
+        }
+      ],
+      "interpretation_origin": "structured_mapping"
+    },
+    {
+      "fact_id": "fact-8cf5e5112acdf0ba",
+      "patient_id": "SYN-CF-B",
+      "request_id": "PA-B",
+      "service_code": "specialty-consult",
+      "code_system": "careflow-demo",
+      "requirement": "pa_form",
+      "assertion": true,
+      "statement": "PA request form for PA-B is attached.",
+      "evidence": [
+        {
+          "source_id": "doc-8cf5e5112acdf0ba",
+          "field": "statement"
+        }
+      ],
+      "interpretation_origin": "structured_mapping"
+    },
+    {
+      "fact_id": "fact-f6234458491c54af",
+      "patient_id": "SYN-CF-B",
+      "request_id": "PA-B",
+      "service_code": "specialty-consult",
+      "code_system": "careflow-demo",
+      "requirement": "payer_context",
+      "assertion": true,
+      "statement": "Constructed payer request identifier for PA-B: DEMO-PLAN. This is not eligibility verification.",
+      "evidence": [
+        {
+          "source_id": "doc-f6234458491c54af",
+          "field": "statement"
+        }
+      ],
+      "interpretation_origin": "structured_mapping"
+    }
+  ]
+}

@@ -1,0 +1,200 @@
+{
+  "schema_version": "careflow-case/1",
+  "case_id": "CF-CORRECTION-001",
+  "request": {
+    "request_id": "REF-CORRECTION",
+    "patient_id": "SYN-CF-CORRECTION",
+    "encounter_id": "ENC-A",
+    "request_type": "referral",
+    "service_code": "specialty-consult",
+    "code_system": "careflow-demo",
+    "requested_service_date": "2026-11-01",
+    "ruleset_id": "careflow-referral",
+    "ruleset_version": "1.0.0"
+  },
+  "review_as_of": "2026-10-13",
+  "sources": [
+    {
+      "source_id": "doc-b8ca69991b7abf48",
+      "patient_id": "SYN-CF-CORRECTION",
+      "encounter_id": "ENC-A",
+      "available_at": "2026-10-10",
+      "origin": "constructed_synthetic",
+      "source_kind": "synthetic_note",
+      "recorded_at": "2026-10-09",
+      "event_date": "2026-10-09",
+      "record_type": "note",
+      "event_link_id": null,
+      "content": "Provider requests specialty consultation for REF-CORRECTION."
+    },
+    {
+      "source_id": "doc-007717ef15f82a64",
+      "patient_id": "SYN-CF-CORRECTION",
+      "encounter_id": "ENC-A",
+      "available_at": "2026-10-10",
+      "origin": "constructed_synthetic",
+      "source_kind": "synthetic_note",
+      "recorded_at": "2026-10-09",
+      "event_date": "2026-10-09",
+      "record_type": "note",
+      "event_link_id": null,
+      "content": "Reason for REF-CORRECTION: persistent symptoms requiring specialist evaluation."
+    },
+    {
+      "source_id": "doc-649af0caf46f5e65",
+      "patient_id": "SYN-CF-CORRECTION",
+      "encounter_id": "ENC-A",
+      "available_at": "2026-10-10",
+      "origin": "constructed_synthetic",
+      "source_kind": "synthetic_note",
+      "recorded_at": "2026-10-09",
+      "event_date": "2026-10-09",
+      "record_type": "note",
+      "event_link_id": null,
+      "content": "No investigation result is required for REF-CORRECTION in this constructed request."
+    },
+    {
+      "source_id": "doc-36b37fcd19ff534a",
+      "patient_id": "SYN-CF-CORRECTION",
+      "encounter_id": "ENC-A",
+      "available_at": "2026-10-10",
+      "origin": "constructed_synthetic",
+      "source_kind": "synthetic_note",
+      "recorded_at": "2026-10-09",
+      "event_date": "2026-10-09",
+      "record_type": "note",
+      "event_link_id": null,
+      "content": "Prior therapy documentation is not required for REF-CORRECTION."
+    },
+    {
+      "source_id": "doc-086a9af79f3b4699",
+      "patient_id": "SYN-CF-CORRECTION",
+      "encounter_id": "ENC-A",
+      "available_at": "2026-10-10",
+      "origin": "constructed_synthetic",
+      "source_kind": "synthetic_note",
+      "recorded_at": "2026-10-09",
+      "event_date": "2026-10-09",
+      "record_type": "note",
+      "event_link_id": null,
+      "content": "Destination for REF-CORRECTION: specialty clinic."
+    },
+    {
+      "source_id": "doc-40ee7175e8d1617f",
+      "patient_id": "SYN-CF-CORRECTION",
+      "encounter_id": "ENC-A",
+      "available_at": "2026-10-10",
+      "origin": "constructed_synthetic",
+      "source_kind": "synthetic_note",
+      "recorded_at": "2026-10-09",
+      "event_date": "2026-10-09",
+      "record_type": "note",
+      "event_link_id": null,
+      "content": "Original attachment record: the clinical summary was absent."
+    }
+  ],
+  "facts": [
+    {
+      "fact_id": "fact-b8ca69991b7abf48",
+      "patient_id": "SYN-CF-CORRECTION",
+      "request_id": "REF-CORRECTION",
+      "service_code": "specialty-consult",
+      "code_system": "careflow-demo",
+      "requirement": "request_intent",
+      "assertion": true,
+      "statement": "Provider requests specialty consultation for REF-CORRECTION.",
+      "evidence": [
+        {
+          "source_id": "doc-b8ca69991b7abf48",
+          "span_id": "doc-b8ca69991b7abf48:L001"
+        }
+      ],
+      "interpretation_origin": "human"
+    },
+    {
+      "fact_id": "fact-007717ef15f82a64",
+      "patient_id": "SYN-CF-CORRECTION",
+      "request_id": "REF-CORRECTION",
+      "service_code": "specialty-consult",
+      "code_system": "careflow-demo",
+      "requirement": "referral_reason",
+      "assertion": true,
+      "statement": "Reason for REF-CORRECTION: persistent symptoms requiring specialist evaluation.",
+      "evidence": [
+        {
+          "source_id": "doc-007717ef15f82a64",
+          "span_id": "doc-007717ef15f82a64:L001"
+        }
+      ],
+      "interpretation_origin": "human"
+    },
+    {
+      "fact_id": "fact-649af0caf46f5e65",
+      "patient_id": "SYN-CF-CORRECTION",
+      "request_id": "REF-CORRECTION",
+      "service_code": "specialty-consult",
+      "code_system": "careflow-demo",
+      "requirement": "investigation_required",
+      "assertion": false,
+      "statement": "No investigation result is required for REF-CORRECTION in this constructed request.",
+      "evidence": [
+        {
+          "source_id": "doc-649af0caf46f5e65",
+          "span_id": "doc-649af0caf46f5e65:L001"
+        }
+      ],
+      "interpretation_origin": "human"
+    },
+    {
+      "fact_id": "fact-36b37fcd19ff534a",
+      "patient_id": "SYN-CF-CORRECTION",
+      "request_id": "REF-CORRECTION",
+      "service_code": "specialty-consult",
+      "code_system": "careflow-demo",
+      "requirement": "therapy_required",
+      "assertion": false,
+      "statement": "Prior therapy documentation is not required for REF-CORRECTION.",
+      "evidence": [
+        {
+          "source_id": "doc-36b37fcd19ff534a",
+          "span_id": "doc-36b37fcd19ff534a:L001"
+        }
+      ],
+      "interpretation_origin": "human"
+    },
+    {
+      "fact_id": "fact-086a9af79f3b4699",
+      "patient_id": "SYN-CF-CORRECTION",
+      "request_id": "REF-CORRECTION",
+      "service_code": "specialty-consult",
+      "code_system": "careflow-demo",
+      "requirement": "destination",
+      "assertion": true,
+      "statement": "Destination for REF-CORRECTION: specialty clinic.",
+      "evidence": [
+        {
+          "source_id": "doc-086a9af79f3b4699",
+          "span_id": "doc-086a9af79f3b4699:L001"
+        }
+      ],
+      "interpretation_origin": "human"
+    },
+    {
+      "fact_id": "fact-40ee7175e8d1617f",
+      "patient_id": "SYN-CF-CORRECTION",
+      "request_id": "REF-CORRECTION",
+      "service_code": "specialty-consult",
+      "code_system": "careflow-demo",
+      "requirement": "clinical_summary",
+      "assertion": false,
+      "statement": "Original attachment record: the clinical summary was absent.",
+      "evidence": [
+        {
+          "source_id": "doc-40ee7175e8d1617f",
+          "span_id": "doc-40ee7175e8d1617f:L001"
+        }
+      ],
+      "interpretation_origin": "human"
+    }
+  ]
+}

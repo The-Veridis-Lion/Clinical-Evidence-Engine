@@ -1,0 +1,68 @@
+{
+  "expected_revision": 1,
+  "sources": [
+    {
+      "source_id": "doc-4d00e9180b9b6143",
+      "patient_id": "SYN-CF-CORRECTION",
+      "encounter_id": "ENC-A",
+      "available_at": "2026-10-10",
+      "origin": "constructed_synthetic",
+      "source_kind": "structured_record",
+      "recorded_at": "2026-10-09",
+      "event_date": "2026-10-09",
+      "record_type": "order",
+      "event_link_id": null,
+      "content": {
+        "statement": "Authenticated amendment: a request-specific summary is now attached.",
+        "documented": true,
+        "amendment_authority_confirmed": true,
+        "amends_fact_id": "fact-40ee7175e8d1617f",
+        "amendment_scope": "assertion"
+      },
+      "availability_basis": "explicit_case_metadata",
+      "original_locator": null
+    }
+  ],
+  "facts": [
+    {
+      "fact_id": "fact-4d00e9180b9b6143",
+      "patient_id": "SYN-CF-CORRECTION",
+      "request_id": "REF-CORRECTION",
+      "service_code": "specialty-consult",
+      "code_system": "careflow-demo",
+      "requirement": "clinical_summary",
+      "assertion": true,
+      "statement": "Authenticated amendment: a request-specific summary is now attached.",
+      "evidence": [
+        {
+          "source_id": "doc-4d00e9180b9b6143",
+          "span_id": null,
+          "field": "statement"
+        }
+      ],
+      "interpretation_origin": "structured_mapping",
+      "amends_fact_id": "fact-40ee7175e8d1617f",
+      "authority_ref": {
+        "source_id": "doc-4d00e9180b9b6143",
+        "span_id": null,
+        "field": "amendment_authority_confirmed"
+      }
+    }
+  ],
+  "review": {
+    "reviewer_id": "constructed-ai-review-fixture",
+    "reviewer_type": "advanced_ai",
+    "model": "scripted-offline-fixture",
+    "model_version": "1",
+    "basis_revision": 1,
+    "basis_packet_sha256": "497928091def998505ffb1f1b9516567d2d969747dcc3e06be2802fe35f84cf3",
+    "fact_ids": [
+      "fact-40ee7175e8d1617f"
+    ],
+    "judgment": "PROPOSE_CORRECTION",
+    "reason": "Constructed demo opinion: independent corrective evidence explicitly amends the absent attachment assertion.",
+    "proposed_actions": [
+      "Recompute the deterministic documentation checks from the new evidence."
+    ]
+  }
+}

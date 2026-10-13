@@ -1,0 +1,115 @@
+[
+  {
+    "ruleset_id": "careflow-referral",
+    "version": "1.0.0",
+    "request_type": "referral",
+    "status": "synthetic_project_checklist",
+    "requirements_authority": "CareFlow demo documentation specification; no insurer policy authority.",
+    "rules": [
+      {
+        "rule_id": "CF-DOC-001",
+        "version": "1.0.0",
+        "requirement": "request_intent",
+        "description": "Request-specific provider intent is documented.",
+        "trigger_requirement": null
+      },
+      {
+        "rule_id": "CF-DOC-002",
+        "version": "1.0.0",
+        "requirement": "referral_reason",
+        "description": "The requested service has a documented clinical reason.",
+        "trigger_requirement": null
+      },
+      {
+        "rule_id": "CF-DOC-003",
+        "version": "1.0.0",
+        "requirement": "clinical_summary",
+        "description": "A request-specific clinical summary is available.",
+        "trigger_requirement": null
+      },
+      {
+        "rule_id": "CF-DOC-004",
+        "version": "1.0.0",
+        "requirement": "investigation_result",
+        "description": "Attach results when the documented request requires an investigation.",
+        "trigger_requirement": "investigation_required"
+      },
+      {
+        "rule_id": "CF-DOC-005",
+        "version": "1.0.0",
+        "requirement": "therapy_completed",
+        "description": "Attach documented prior therapy when the request explicitly requires it.",
+        "trigger_requirement": "therapy_required"
+      },
+      {
+        "rule_id": "CF-REF-001",
+        "version": "1.0.0",
+        "requirement": "destination",
+        "description": "Referral destination is documented.",
+        "trigger_requirement": null
+      }
+    ],
+    "boundary": "Documentation readiness only; no medical approval, payment eligibility or compliance certification.",
+    "sha256": "ed68d9f0d7f48a59db27065a644ac39a55c7c4a360c1bb905663e64056f246c8"
+  },
+  {
+    "ruleset_id": "careflow-pa",
+    "version": "1.0.0",
+    "request_type": "prior_authorization",
+    "status": "synthetic_project_checklist",
+    "requirements_authority": "CareFlow demo documentation specification; no insurer policy authority.",
+    "rules": [
+      {
+        "rule_id": "CF-DOC-001",
+        "version": "1.0.0",
+        "requirement": "request_intent",
+        "description": "Request-specific provider intent is documented.",
+        "trigger_requirement": null
+      },
+      {
+        "rule_id": "CF-DOC-002",
+        "version": "1.0.0",
+        "requirement": "referral_reason",
+        "description": "The requested service has a documented clinical reason.",
+        "trigger_requirement": null
+      },
+      {
+        "rule_id": "CF-DOC-003",
+        "version": "1.0.0",
+        "requirement": "clinical_summary",
+        "description": "A request-specific clinical summary is available.",
+        "trigger_requirement": null
+      },
+      {
+        "rule_id": "CF-DOC-004",
+        "version": "1.0.0",
+        "requirement": "investigation_result",
+        "description": "Attach results when the documented request requires an investigation.",
+        "trigger_requirement": "investigation_required"
+      },
+      {
+        "rule_id": "CF-DOC-005",
+        "version": "1.0.0",
+        "requirement": "therapy_completed",
+        "description": "Attach documented prior therapy when the request explicitly requires it.",
+        "trigger_requirement": "therapy_required"
+      },
+      {
+        "rule_id": "CF-PA-001",
+        "version": "1.0.0",
+        "requirement": "pa_form",
+        "description": "A request-specific PA form is available.",
+        "trigger_requirement": null
+      },
+      {
+        "rule_id": "CF-PA-002",
+        "version": "1.0.0",
+        "requirement": "payer_context",
+        "description": "The supplied payer/request identifiers are documented.",
+        "trigger_requirement": null
+      }
+    ],
+    "boundary": "Documentation readiness only; no medical approval, payment eligibility or compliance certification.",
+    "sha256": "73850a73cacb35188f20026cff0dc880262ad39ed63c514b6c66620fdd6a6b50"
+  }
+]

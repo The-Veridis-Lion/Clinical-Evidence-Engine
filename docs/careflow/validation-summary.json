@@ -1,0 +1,22 @@
+{
+  "tests": 637,
+  "passed": 637,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "existing_tests": 465,
+  "careflow_tests": 172,
+  "pytest_seconds": 6.047,
+  "before_http_fix": {
+    "passed": 636,
+    "failed": 1
+  },
+  "research_model_calls": 0,
+  "actual_product_model_calls": 0,
+  "optional_ai_test_callbacks": "offline scripts only; reservations tested separately per synthetic case",
+  "clinical_accuracy_measured": false,
+  "holdout_used": false,
+  "suite_sha256": "e771c8692f66b7a98fa76afbbc3a0eb2798953f5f3837f60a9bea7c5e55e28ac",
+  "baseline_commit": "f91768e303564715cf2ab962e22a51be8fe267b4",
+  "existing_src_or_tests_modified": 0
+}

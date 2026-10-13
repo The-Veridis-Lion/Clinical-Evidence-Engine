@@ -1,0 +1,57 @@
+{
+  "expected_revision": 1,
+  "sources": [
+    {
+      "source_id": "doc-2c3b2c11918d20cf",
+      "patient_id": "SYN-CF-B",
+      "encounter_id": "ENC-A",
+      "available_at": "2026-10-10",
+      "origin": "constructed_synthetic",
+      "source_kind": "structured_record",
+      "recorded_at": "2026-10-09",
+      "event_date": "2026-10-09",
+      "record_type": "order",
+      "event_link_id": null,
+      "content": {
+        "statement": "Clinical summary for PA-B: symptoms, relevant history and examination documented.",
+        "documented": true
+      },
+      "availability_basis": "explicit_case_metadata",
+      "original_locator": null
+    }
+  ],
+  "facts": [
+    {
+      "fact_id": "fact-2c3b2c11918d20cf",
+      "patient_id": "SYN-CF-B",
+      "request_id": "PA-B",
+      "service_code": "specialty-consult",
+      "code_system": "careflow-demo",
+      "requirement": "clinical_summary",
+      "assertion": true,
+      "statement": "Clinical summary for PA-B: symptoms, relevant history and examination documented.",
+      "evidence": [
+        {
+          "source_id": "doc-2c3b2c11918d20cf",
+          "span_id": null,
+          "field": "statement"
+        }
+      ],
+      "interpretation_origin": "structured_mapping",
+      "amends_fact_id": null,
+      "authority_ref": null
+    }
+  ],
+  "review": {
+    "reviewer_id": "demo-document-intake",
+    "reviewer_type": "human",
+    "model": null,
+    "model_version": null,
+    "basis_revision": 1,
+    "basis_packet_sha256": "c9129f3c40facc6d21721598614a4ee362033bd4a02e59ebbde896ee49e9682e",
+    "fact_ids": [],
+    "judgment": "AGREE",
+    "reason": "New request-specific summary received; retain the original gap report.",
+    "proposed_actions": []
+  }
+}

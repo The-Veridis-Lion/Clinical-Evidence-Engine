@@ -1,0 +1,137 @@
+{
+  "archive_sha256": "d61417b551e5b0997c33851b339c157421751f0ea68c18ea686ceb1850907c35",
+  "partition": "development",
+  "patient_count": 3,
+  "case_count": 6,
+  "results": [
+    {
+      "case_id": "CF-SYNTHEA-1-referral",
+      "patient_id": "d537941e-1fb7-9868-939a-a26252da8be1",
+      "request_type": "referral",
+      "before": "NEEDS_EVIDENCE",
+      "after": "DOCUMENTATION_READY",
+      "native_source_count": 4,
+      "original_verification": {
+        "version": "claims-review-archive-verification/1",
+        "mode": "verified_archive",
+        "original_archive_reverified": true,
+        "archive_sha256": "d61417b551e5b0997c33851b339c157421751f0ea68c18ea686ceb1850907c35",
+        "verified_source_count": 4,
+        "scope": "All supplied clinical CSV source content, row bytes, locators, patient/encounter and printed event dates.",
+        "availability_and_event_link_metadata_verified": false,
+        "retrieval_completeness_verified": false,
+        "official_origin_authenticated": false
+      },
+      "audit_verified": true,
+      "original_documentary_assertions_created": 0
+    },
+    {
+      "case_id": "CF-SYNTHEA-1-prior_authorization",
+      "patient_id": "d537941e-1fb7-9868-939a-a26252da8be1",
+      "request_type": "prior_authorization",
+      "before": "NEEDS_EVIDENCE",
+      "after": "DOCUMENTATION_READY",
+      "native_source_count": 4,
+      "original_verification": {
+        "version": "claims-review-archive-verification/1",
+        "mode": "verified_archive",
+        "original_archive_reverified": true,
+        "archive_sha256": "d61417b551e5b0997c33851b339c157421751f0ea68c18ea686ceb1850907c35",
+        "verified_source_count": 4,
+        "scope": "All supplied clinical CSV source content, row bytes, locators, patient/encounter and printed event dates.",
+        "availability_and_event_link_metadata_verified": false,
+        "retrieval_completeness_verified": false,
+        "official_origin_authenticated": false
+      },
+      "audit_verified": true,
+      "original_documentary_assertions_created": 0
+    },
+    {
+      "case_id": "CF-SYNTHEA-2-referral",
+      "patient_id": "2fb99851-6f31-04a6-be96-6fef4663e208",
+      "request_type": "referral",
+      "before": "NEEDS_EVIDENCE",
+      "after": "DOCUMENTATION_READY",
+      "native_source_count": 60,
+      "original_verification": {
+        "version": "claims-review-archive-verification/1",
+        "mode": "verified_archive",
+        "original_archive_reverified": true,
+        "archive_sha256": "d61417b551e5b0997c33851b339c157421751f0ea68c18ea686ceb1850907c35",
+        "verified_source_count": 60,
+        "scope": "All supplied clinical CSV source content, row bytes, locators, patient/encounter and printed event dates.",
+        "availability_and_event_link_metadata_verified": false,
+        "retrieval_completeness_verified": false,
+        "official_origin_authenticated": false
+      },
+      "audit_verified": true,
+      "original_documentary_assertions_created": 0
+    },
+    {
+      "case_id": "CF-SYNTHEA-2-prior_authorization",
+      "patient_id": "2fb99851-6f31-04a6-be96-6fef4663e208",
+      "request_type": "prior_authorization",
+      "before": "NEEDS_EVIDENCE",
+      "after": "DOCUMENTATION_READY",
+      "native_source_count": 60,
+      "original_verification": {
+        "version": "claims-review-archive-verification/1",
+        "mode": "verified_archive",
+        "original_archive_reverified": true,
+        "archive_sha256": "d61417b551e5b0997c33851b339c157421751f0ea68c18ea686ceb1850907c35",
+        "verified_source_count": 60,
+        "scope": "All supplied clinical CSV source content, row bytes, locators, patient/encounter and printed event dates.",
+        "availability_and_event_link_metadata_verified": false,
+        "retrieval_completeness_verified": false,
+        "official_origin_authenticated": false
+      },
+      "audit_verified": true,
+      "original_documentary_assertions_created": 0
+    },
+    {
+      "case_id": "CF-SYNTHEA-3-referral",
+      "patient_id": "ccaa0537-4e7f-99d8-8b79-c7c94c749579",
+      "request_type": "referral",
+      "before": "NEEDS_EVIDENCE",
+      "after": "DOCUMENTATION_READY",
+      "native_source_count": 3,
+      "original_verification": {
+        "version": "claims-review-archive-verification/1",
+        "mode": "verified_archive",
+        "original_archive_reverified": true,
+        "archive_sha256": "d61417b551e5b0997c33851b339c157421751f0ea68c18ea686ceb1850907c35",
+        "verified_source_count": 3,
+        "scope": "All supplied clinical CSV source content, row bytes, locators, patient/encounter and printed event dates.",
+        "availability_and_event_link_metadata_verified": false,
+        "retrieval_completeness_verified": false,
+        "official_origin_authenticated": false
+      },
+      "audit_verified": true,
+      "original_documentary_assertions_created": 0
+    },
+    {
+      "case_id": "CF-SYNTHEA-3-prior_authorization",
+      "patient_id": "ccaa0537-4e7f-99d8-8b79-c7c94c749579",
+      "request_type": "prior_authorization",
+      "before": "NEEDS_EVIDENCE",
+      "after": "DOCUMENTATION_READY",
+      "native_source_count": 3,
+      "original_verification": {
+        "version": "claims-review-archive-verification/1",
+        "mode": "verified_archive",
+        "original_archive_reverified": true,
+        "archive_sha256": "d61417b551e5b0997c33851b339c157421751f0ea68c18ea686ceb1850907c35",
+        "verified_source_count": 3,
+        "scope": "All supplied clinical CSV source content, row bytes, locators, patient/encounter and printed event dates.",
+        "availability_and_event_link_metadata_verified": false,
+        "retrieval_completeness_verified": false,
+        "official_origin_authenticated": false
+      },
+      "audit_verified": true,
+      "original_documentary_assertions_created": 0
+    }
+  ],
+  "research_model_calls": 0,
+  "product_model_calls": 0,
+  "scope": "Source preservation and lifecycle test; requests and supplementary documents are constructed. No clinical accuracy or recall estimate."
+}

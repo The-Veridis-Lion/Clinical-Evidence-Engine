@@ -1,0 +1,170 @@
+{
+  "schema_version": "careflow-case/1",
+  "case_id": "CF-REF-001",
+  "request": {
+    "request_id": "REF-A",
+    "patient_id": "SYN-CF-A",
+    "encounter_id": "ENC-A",
+    "request_type": "referral",
+    "service_code": "specialty-consult",
+    "code_system": "careflow-demo",
+    "requested_service_date": "2026-11-01",
+    "ruleset_id": "careflow-referral",
+    "ruleset_version": "1.0.0"
+  },
+  "review_as_of": "2026-10-13",
+  "sources": [
+    {
+      "source_id": "doc-2d3da32fe73ce8ef",
+      "patient_id": "SYN-CF-A",
+      "encounter_id": "ENC-A",
+      "available_at": "2026-10-10",
+      "origin": "constructed_synthetic",
+      "source_kind": "synthetic_note",
+      "recorded_at": "2026-10-09",
+      "event_date": "2026-10-09",
+      "record_type": "note",
+      "event_link_id": null,
+      "content": "Provider requests specialty consultation for REF-A."
+    },
+    {
+      "source_id": "doc-58f71a57f8ac3a99",
+      "patient_id": "SYN-CF-A",
+      "encounter_id": "ENC-A",
+      "available_at": "2026-10-10",
+      "origin": "constructed_synthetic",
+      "source_kind": "synthetic_note",
+      "recorded_at": "2026-10-09",
+      "event_date": "2026-10-09",
+      "record_type": "note",
+      "event_link_id": null,
+      "content": "Reason for REF-A: persistent symptoms requiring specialist evaluation."
+    },
+    {
+      "source_id": "doc-0c7152a778a03a35",
+      "patient_id": "SYN-CF-A",
+      "encounter_id": "ENC-A",
+      "available_at": "2026-10-10",
+      "origin": "constructed_synthetic",
+      "source_kind": "synthetic_note",
+      "recorded_at": "2026-10-09",
+      "event_date": "2026-10-09",
+      "record_type": "note",
+      "event_link_id": null,
+      "content": "No investigation result is required for REF-A in this constructed request."
+    },
+    {
+      "source_id": "doc-f53ddd3b2dfb4ad1",
+      "patient_id": "SYN-CF-A",
+      "encounter_id": "ENC-A",
+      "available_at": "2026-10-10",
+      "origin": "constructed_synthetic",
+      "source_kind": "synthetic_note",
+      "recorded_at": "2026-10-09",
+      "event_date": "2026-10-09",
+      "record_type": "note",
+      "event_link_id": null,
+      "content": "Prior therapy documentation is not required for REF-A."
+    },
+    {
+      "source_id": "doc-28b5ad56f92d1923",
+      "patient_id": "SYN-CF-A",
+      "encounter_id": "ENC-A",
+      "available_at": "2026-10-10",
+      "origin": "constructed_synthetic",
+      "source_kind": "synthetic_note",
+      "recorded_at": "2026-10-09",
+      "event_date": "2026-10-09",
+      "record_type": "note",
+      "event_link_id": null,
+      "content": "Destination for REF-A: specialty clinic."
+    }
+  ],
+  "facts": [
+    {
+      "fact_id": "fact-2d3da32fe73ce8ef",
+      "patient_id": "SYN-CF-A",
+      "request_id": "REF-A",
+      "service_code": "specialty-consult",
+      "code_system": "careflow-demo",
+      "requirement": "request_intent",
+      "assertion": true,
+      "statement": "Provider requests specialty consultation for REF-A.",
+      "evidence": [
+        {
+          "source_id": "doc-2d3da32fe73ce8ef",
+          "span_id": "doc-2d3da32fe73ce8ef:L001"
+        }
+      ],
+      "interpretation_origin": "human"
+    },
+    {
+      "fact_id": "fact-58f71a57f8ac3a99",
+      "patient_id": "SYN-CF-A",
+      "request_id": "REF-A",
+      "service_code": "specialty-consult",
+      "code_system": "careflow-demo",
+      "requirement": "referral_reason",
+      "assertion": true,
+      "statement": "Reason for REF-A: persistent symptoms requiring specialist evaluation.",
+      "evidence": [
+        {
+          "source_id": "doc-58f71a57f8ac3a99",
+          "span_id": "doc-58f71a57f8ac3a99:L001"
+        }
+      ],
+      "interpretation_origin": "human"
+    },
+    {
+      "fact_id": "fact-0c7152a778a03a35",
+      "patient_id": "SYN-CF-A",
+      "request_id": "REF-A",
+      "service_code": "specialty-consult",
+      "code_system": "careflow-demo",
+      "requirement": "investigation_required",
+      "assertion": false,
+      "statement": "No investigation result is required for REF-A in this constructed request.",
+      "evidence": [
+        {
+          "source_id": "doc-0c7152a778a03a35",
+          "span_id": "doc-0c7152a778a03a35:L001"
+        }
+      ],
+      "interpretation_origin": "human"
+    },
+    {
+      "fact_id": "fact-f53ddd3b2dfb4ad1",
+      "patient_id": "SYN-CF-A",
+      "request_id": "REF-A",
+      "service_code": "specialty-consult",
+      "code_system": "careflow-demo",
+      "requirement": "therapy_required",
+      "assertion": false,
+      "statement": "Prior therapy documentation is not required for REF-A.",
+      "evidence": [
+        {
+          "source_id": "doc-f53ddd3b2dfb4ad1",
+          "span_id": "doc-f53ddd3b2dfb4ad1:L001"
+        }
+      ],
+      "interpretation_origin": "human"
+    },
+    {
+      "fact_id": "fact-28b5ad56f92d1923",
+      "patient_id": "SYN-CF-A",
+      "request_id": "REF-A",
+      "service_code": "specialty-consult",
+      "code_system": "careflow-demo",
+      "requirement": "destination",
+      "assertion": true,
+      "statement": "Destination for REF-A: specialty clinic.",
+      "evidence": [
+        {
+          "source_id": "doc-28b5ad56f92d1923",
+          "span_id": "doc-28b5ad56f92d1923:L001"
+        }
+      ],
+      "interpretation_origin": "human"
+    }
+  ]
+}
