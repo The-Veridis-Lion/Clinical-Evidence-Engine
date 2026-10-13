@@ -19,7 +19,9 @@ def state(facts):
 
 def evaluate(case, *, revision=1):
     rules, manifest = ruleset(case.request.ruleset_id, case.request.ruleset_version, case.request.request_type)
-    facts, excluded, resolution = prepare(case)
+    from .mapping import map_clinical, mapping_manifest, VERSION as MAPPING_VERSION
+    mapped, mapping_decisions = map_clinical(case) if case.clinical_bindings else ([], [])
+    facts, excluded, resolution = prepare(case, mapped)
     unresolved = []
     for requirement in sorted({f['requirement'] for f in facts}):
         relevant = [f for f in facts if f['requirement'] == requirement]
@@ -36,6 +38,10 @@ def evaluate(case, *, revision=1):
         trigger_value = True if not rule.trigger_requirement else (
             True if trigger_state == 'SUPPORTED' else False if trigger_state == 'NOT_SUPPORTED' else None)
         status = state(support)
+        if status == 'SUPPORTED' and any(d.get('required_target_incomplete') and d['binding']['requirement'] == rule.requirement
+                and any(not any(v is not None for v in f['effective_assertions']) for f in support
+                        if f['fact_id'] in d['derived_fact_ids']) for d in mapping_decisions):
+            status = 'INSUFFICIENT_EVIDENCE'
         reason = {
             'SUPPORTED': 'Traceable assertions support the required document or fact.',
             'NOT_SUPPORTED': 'Explicit contrary evidence is documented; this is not an absence inference.',
@@ -115,4 +121,7 @@ def evaluate(case, *, revision=1):
             'upstream_extraction_model_calls': None,
             'upstream_accounting': 'External shared extraction ledger; unknown here is not zero.',
         })
+    if case.clinical_bindings:
+        packet['clinical_mapping'] = {'version': MAPPING_VERSION, 'manifest': mapping_manifest(), 'decisions': mapping_decisions,
+                                      'derived_fact_ids': [f.fact_id for f in mapped]}
     return {**packet, 'packet_sha256': digest(packet)}

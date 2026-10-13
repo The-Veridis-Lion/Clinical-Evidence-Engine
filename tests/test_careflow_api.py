@@ -100,6 +100,30 @@ def test_http_clinical_context_is_reviewable_and_does_not_fill_material_gap(api,
     assert api('GET', route + '/audit')[1]['verified']
 
 
+@pytest.mark.parametrize('kind', ['referral', 'prior_authorization'])
+def test_http_source_backed_binding_updates_material_and_retains_original_gap(api, kind):
+    from copy import deepcopy
+    from test_careflow_mapping import clinical_request
+    raw = clinical_request(kind, 'HTTP-MAPPED-' + kind, 'therapy_completed')
+    binding = raw.pop('clinical_bindings')
+    new_source = raw['sources'].pop()
+    status, before = api('POST', '/v1/cases', raw)
+    assert status == 201
+    assert next(c['status'] for c in before['checks'] if c['requirement'] == 'therapy_completed') == 'INSUFFICIENT_EVIDENCE'
+    clinical_id = before['clinical_context'][0]['facts'][0]['context_fact_id']
+    review = {'reviewer_id': 'automated-intake-fixture', 'reviewer_type': 'advanced_ai', 'model': 'offline-fixture', 'model_version': '1',
+        'basis_revision': 1, 'basis_packet_sha256': before['packet_sha256'], 'fact_ids': [clinical_id],
+        'judgment': 'AGREE', 'reason': 'New request-scope attachment received for existing clinical evidence.'}
+    route = '/v1/cases/' + quote(raw['case_id'], safe='')
+    status, after = api('POST', route + '/evidence', {'expected_revision': 1, 'sources': [new_source], 'facts': [],
+        'clinical_bindings': binding, 'review': review})
+    assert status == 201
+    assert next(c['status'] for c in after['checks'] if c['requirement'] == 'therapy_completed') == 'SUPPORTED'
+    assert api('GET', route + '?revision=1')[1] == before
+    assert api('GET', route + '/audit')[1]['verified']
+    assert 'Clinical evidence mapping' in api('GET', route + '/report')[1]
+
+
 def test_report_preserves_unicode_offsets_raw_fields_and_excluded_evidence():
     raw = referral_case(patient='患者-报告', request='请求-报告')
     extra = supplemental('clinical_summary', True, '原文：```<script>内容|断言</script>。\n第二行。',

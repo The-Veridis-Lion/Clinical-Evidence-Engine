@@ -97,6 +97,8 @@ def extract_document(record, cache_root, ledger, *, provider=None):
             raw_response, usage = provider.dispatch(document, folder)
         except Exception as exc:
             # Provider timeout has uncertain delivery; never blindly replay it.
+            if (folder / 'usage.json').exists():
+                usage = json.loads((folder / 'usage.json').read_text(encoding='utf-8'))
             status = 'UNRESOLVED_DISPATCH' if 'timeout' in str(exc).casefold() else 'UPSTREAM_FAILURE'
             ledger.finish(token, status, error=f'{type(exc).__name__}: {exc}', usage=usage)
             write_once(folder / 'failure.json', (canonical({'status': status, 'error_type': type(exc).__name__,

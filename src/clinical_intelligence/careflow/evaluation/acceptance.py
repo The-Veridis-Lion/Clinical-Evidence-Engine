@@ -108,6 +108,9 @@ def verify_packet(packet):
                         and len(packet['checks']) == len(known))]
     rule_checks += [bool(c['rule_id'] in known and c['rule_version'] == known[c['rule_id']]['version']
                          and c['criterion_id'] == c['rule_id']) for c in packet['checks']]
+    if packet.get('clinical_mapping'):
+        from ..mapping import mapping_manifest
+        rule_checks.append(packet['clinical_mapping'].get('manifest') == mapping_manifest())
     return {'source_checks': source_checks, 'rule_checks': rule_checks}
 
 

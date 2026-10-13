@@ -1,63 +1,63 @@
 # CareFlow 实际运行进度
 
-更新：2026-10-13 12:02 UTC（纽约08:02）。当前 turn 中实际开发；没有虚构后台计算。
-长期方向与冻结验收：docs/CAREFLOW_READINESS_ENGINE.md、AGENTS.md。
+更新：2026-10-13 14:34 UTC（纽约10:34）。此文件记录实际工作，不是后台运行承诺。
+方向合同：AGENTS.md、docs/CAREFLOW_READINESS_ENGINE.md。全部四项继续授权。
 
-## 已实现的 Referral / PA 功能
+## 当前实现和验证
 
-独立 feature/careflow-readiness worktree。v1 产品提交287feb3；原有临床事实/对话
-模块的逐字复用作为独立兼容提交441f66f。请求、五态材料检查、1.0.0规则、原文
-引用、JSON/Markdown、HTTP/CLI、human/advanced_ai审核、新证据修正重算、
-SQLite revisions和审计均可运行。已有ACI10病例/469条事实在20个Referral/PA
-case中实际重放；事实只作clinical context，不填补缺失材料，全部NEEDS_EVIDENCE，
-审计全部通过。最新完整回归755 passed / 0 failed / 0 skipped，含实际本机HTTP。
+PR #3 共享修复独立提交90adea7已推送，远端确认该SHA；PR #4本地d54fa9f无冲突集成。
+共享483项、集成773项测试通过。原始claim按source-row核对完整覆盖，缺失/空白/
+歧义患者明确保留。共享ZIP入口在读取任何成员前检查成员、总量、数量和压缩
+档案界限，包括非CSV。未编辑Copilot工作目录。
 
-本轮实现提交c7a8936已推送；草稿PR #4已创建并附加到当前任务：
-https://github.com/The-Veridis-Lion/Clinical-Evidence-Engine/pull/4 。它基于仍open的
-PR #3，当前依赖head仍f91768e。没有合并、部署或购买资源。测试/数据缺口在
-PR描述中明确披露；不能将草稿发布等同于最终验收完成。
+临床映射要求显式原始来源patient/request/service/code-system binding；保留
+ClinicalFact ID、原文、主体和时间。诊断不生成PA表单/意图，计划不算完成，诊断性
+procedure不算既往治疗，未知目标不会被其他完成目标掩盖。映射规则独立版本/哈希，
+审核意见不覆盖确定性结果，有依据的修正可重算。56项映射测试通过。
 
-## 评分与冻结数据
+真实HTTP映射工作流两种请求均已运行：原文→首次真实Luna输出→绑定→规则
+→JSON/Markdown→API→SQLite历史/审计。复用2份有效输出，额外模型调用0；
+请求intake为明确构造fixture，不是保险审批或医生签字。
 
-材料规格在候选运行前冻结：6个已有Synthea development患者，26种机制×两请求
-类型×两来源形式，共624构造场景；3患者/312场景为材料dev，另3患者/312场景
-保留。它们不是624个独立真实临床病例。开发集2,028个criterion，五态macro-F1
-100%，严重false Ready 0，整体错误0；来源2,076/2,076、规则2,340/2,340机械通过。
-最终候选未封存，保留集未执行，不能声明新合同验收完成。
+最新完整回归833 passed / 0 failed / 0 skipped（11.159秒），报告current-regression.xml。
+随后新增批处理保护相关11项通过，完整新回归待运行。保留2项中间失败报告。
+冻结材料dev重新执行：312场景/2028检查，五态macro-F1=100%，缺失/冲突误判
+Ready=0，整体错误0，来源2076/2076，规则2340/2340。不是临床抽取准确率。
 
-ACN固定revision前1,500完整行合并为1,204病例组；dev200组/768文档，holdout200组/
-708文档，reserve804组。ACI67组中dev47、holdout20；旧10缓存病例只进dev。
-公开文本保留集未运行。源核查抽取Precision/Recall尚未测量。ACN生成summary
-不能作为独立医学正确答案；两个数据集都不提供可靠PA批准/材料完整性金标。
+## 数据、调用和实际阻塞
 
-## 真实模型调用与来源问题
+ACI dev47/hold20，ACN dev200/hold200分组保持原冻结。开发抽取固定范围ACI47
+文档+ACN400全文/对话代表文档，共447；已原样复用ACI10缓存/469 facts，ACN2份
+有效输出仍可复用。原summary格式问题、分母与历史结果保留。
 
-Luna/high：2次product_extraction，成功2、失败0、额外重试0；研究调用0。
-Sol实际外部审核调用0。固定dev首组全文56 facts、对话32 facts，首次输出机械
-有效；88条机械有效事实不能说成88条临床正确事实。共享SQLite调度/账本已实现
-并记录真实调用；参与者global≤50、项目≤25。另一项目尚未接入，不能声称强制
-覆盖其全部调用。有效首次输出不可因语义分数不佳重采样，失败/响应/usage均保留。
-PR #3两项共享P2仍未解决；CareFlow归档适配有解压边界，未改共享实现。
+14:30账本检查点：47 attempts；Luna产品2成功、0失败/重试；Sol研究45，其中39次
+本地schema路径失败、4次后续上游失败、2次停止后的不确定派发；研究重试29。
+45次usage未知，不能写0；有效Sol转录0。原事件/错误保留，研究45/100全部计数，
+没有重新分类规避额度。参考转录连续无收益已停止，检查点无悬挂reservation。
+当前另有两份未抽取ACI开发文档的Luna通道检查实际运行中，结束后更新账本；
+以上为检查点数字，不能当最新最终统计。
+
+公开文本source-checked Precision/Recall/F1未测量。参考转录没有可靠产出，不能
+把空参考集算为满分或完整医学准确率。ACI笔记/ACN生成summary不是独立医生金标。
+最终材料及公开文本Holdout均未预约/运行，候选尚未最终封存。
 
 ## Sol 决策与下一项
 
-保留原始抽取合同/提示，逐字复用。临床事实绑定原始source index，保留assertion/
-temporality/experiencer和quotes；材料状态由独立确定性规则产生。修复范围外
-amendment影响原事实、单位大小写/布尔数字误等价、结构修复改变有效事实三个
-通用机制；跨患者/Referral/PA/条件验证，保留失败前后记录。下一项：可复现抽取
-入口、缓存完整性、reference-first差异流程和产品重放；不改参考或分母。
+保留已通过跨患者/文档/请求/条件测试的共享修复和临床映射。批处理连续两份
+上游文档失败停止新派发，未运行文档保留分母；wrapper按首个有效原响应重构
+校验，失败usage回收，每次运行报告追加保存。相关11项通过。
+停止无产出的20文档Sol转录路线，核对原Luna通道可用性后执行447文档批处理，
+再完成评分范围清楚的reference-first差异和源审核。Task1/2及共享实现稳定前
+不启用最终holdout，不更改原参考或评分追求数字。
 
-## 可恢复运行
+## 可恢复检查点
 
-应用30分钟heartbeat careflow只报告实际新增工作，不自动进行模型实验。依赖
-Codex应用运行，不保证持续后台计算。若执行结束，以此文件、提交、冻结manifest、
-原始attempt及共享账本恢复；没有运行的时段不能冒充进展。
-
-最新检查点（第15轮）：缓存原响应/账本重构、clinical context bundle机械核查、
-抽取/重放CLI和API已通过，ACN88 facts真实缓存重放两请求，均NEEDS_EVIDENCE、
-来源/规则/audit有效，额外调用0。差异审核不再按列表顺序强配多事实，也不能
-给新快照复用旧意见；2失败固定测试修复，全仓755通过。原标签inventory保存
-全部1500 raw summary/hash：1128严格有效、372失败；354仅诊断可读、18未解析，
-诊断结果未用于评分。测试报告：docs/careflow/evaluation-v2/TEST_REPORT.md。
-下一项实际工作：冻结跨类别的结构化源参考映射、接入仅差异的Sol源核查，分别
-报告原始与silver辅助指标；最终保留集继续封存。没有完成全部目标，不虚报完成。
+独立feature/careflow-readiness worktree；共享修复目录claims-shared-fixes。
+真实API入口：python -m clinical_intelligence.careflow --db NEW.sqlite http-workflow
+--case CASE.json --update UPDATE.json --output NEW_DIRECTORY。
+实际输入/报告：artifacts/careflow-completion-v3/actual-mapped-e2e/；CLI重放：
+artifacts/careflow-completion-v3/reproducible-mapped-api/。
+账本：../artifacts/model-scheduling/careflow-copilot-calls.sqlite；研究原始日志：
+artifacts/careflow-completion-v3/references-development/calls/。
+30分钟heartbeat只报告实际工作，不发起模型实验。未合并main、部署或购买。
+尚未达到完整产品验收；继续任务2/3，环境无法执行时保留明确恢复点。

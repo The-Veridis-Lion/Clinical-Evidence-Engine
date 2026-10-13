@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="4" skipped="0" tests="4" time="0.502" timestamp="2026-10-13T09:54:16.039123-04:00" hostname="iSATiS"><testcase classname="tests.test_careflow_mapping" name="test_completed_diagnostic_procedure_does_not_prove_therapeutic_course[diagnostic-referral]" time="0.003"><failure message="AssertionError: assert 'SUPPORTED' == 'INSUFFICIENT_EVIDENCE'&#10;  &#10;  - INSUFFICIENT_EVIDENCE&#10;  + SUPPORTED">kind = 'referral', purpose = 'diagnostic'
+
+    @pytest.mark.parametrize('kind', ['referral', 'prior_authorization'])
+    @pytest.mark.parametrize('purpose', ['diagnostic', 'unknown'])
+    def test_completed_diagnostic_procedure_does_not_prove_therapeutic_course(kind, purpose):
+        raw = clinical_request(kind, 'PURPOSE-' + kind, 'therapy_completed', category='procedure', status='performed')
+        raw['clinical_bindings'][0]['clinical_purpose'] = purpose
+        raw['sources'][-1]['content']['clinical_binding'] = deepcopy(raw['clinical_bindings'][0])
+&gt;       assert check(raw, 'therapy_completed')[0] == 'INSUFFICIENT_EVIDENCE'
+E       AssertionError: assert 'SUPPORTED' == 'INSUFFICIENT_EVIDENCE'
+E         
+E         - INSUFFICIENT_EVIDENCE
+E         + SUPPORTED
+
+tests\test_careflow_mapping.py:154: AssertionError</failure></testcase><testcase classname="tests.test_careflow_mapping" name="test_completed_diagnostic_procedure_does_not_prove_therapeutic_course[diagnostic-prior_authorization]" time="0.002"><failure message="AssertionError: assert 'SUPPORTED' == 'INSUFFICIENT_EVIDENCE'&#10;  &#10;  - INSUFFICIENT_EVIDENCE&#10;  + SUPPORTED">kind = 'prior_authorization', purpose = 'diagnostic'
+
+    @pytest.mark.parametrize('kind', ['referral', 'prior_authorization'])
+    @pytest.mark.parametrize('purpose', ['diagnostic', 'unknown'])
+    def test_completed_diagnostic_procedure_does_not_prove_therapeutic_course(kind, purpose):
+        raw = clinical_request(kind, 'PURPOSE-' + kind, 'therapy_completed', category='procedure', status='performed')
+        raw['clinical_bindings'][0]['clinical_purpose'] = purpose
+        raw['sources'][-1]['content']['clinical_binding'] = deepcopy(raw['clinical_bindings'][0])
+&gt;       assert check(raw, 'therapy_completed')[0] == 'INSUFFICIENT_EVIDENCE'
+E       AssertionError: assert 'SUPPORTED' == 'INSUFFICIENT_EVIDENCE'
+E         
+E         - INSUFFICIENT_EVIDENCE
+E         + SUPPORTED
+
+tests\test_careflow_mapping.py:154: AssertionError</failure></testcase><testcase classname="tests.test_careflow_mapping" name="test_completed_diagnostic_procedure_does_not_prove_therapeutic_course[unknown-referral]" time="0.002"><failure message="AssertionError: assert 'SUPPORTED' == 'INSUFFICIENT_EVIDENCE'&#10;  &#10;  - INSUFFICIENT_EVIDENCE&#10;  + SUPPORTED">kind = 'referral', purpose = 'unknown'
+
+    @pytest.mark.parametrize('kind', ['referral', 'prior_authorization'])
+    @pytest.mark.parametrize('purpose', ['diagnostic', 'unknown'])
+    def test_completed_diagnostic_procedure_does_not_prove_therapeutic_course(kind, purpose):
+        raw = clinical_request(kind, 'PURPOSE-' + kind, 'therapy_completed', category='procedure', status='performed')
+        raw['clinical_bindings'][0]['clinical_purpose'] = purpose
+        raw['sources'][-1]['content']['clinical_binding'] = deepcopy(raw['clinical_bindings'][0])
+&gt;       assert check(raw, 'therapy_completed')[0] == 'INSUFFICIENT_EVIDENCE'
+E       AssertionError: assert 'SUPPORTED' == 'INSUFFICIENT_EVIDENCE'
+E         
+E         - INSUFFICIENT_EVIDENCE
+E         + SUPPORTED
+
+tests\test_careflow_mapping.py:154: AssertionError</failure></testcase><testcase classname="tests.test_careflow_mapping" name="test_completed_diagnostic_procedure_does_not_prove_therapeutic_course[unknown-prior_authorization]" time="0.002"><failure message="AssertionError: assert 'SUPPORTED' == 'INSUFFICIENT_EVIDENCE'&#10;  &#10;  - INSUFFICIENT_EVIDENCE&#10;  + SUPPORTED">kind = 'prior_authorization', purpose = 'unknown'
+
+    @pytest.mark.parametrize('kind', ['referral', 'prior_authorization'])
+    @pytest.mark.parametrize('purpose', ['diagnostic', 'unknown'])
+    def test_completed_diagnostic_procedure_does_not_prove_therapeutic_course(kind, purpose):
+        raw = clinical_request(kind, 'PURPOSE-' + kind, 'therapy_completed', category='procedure', status='performed')
+        raw['clinical_bindings'][0]['clinical_purpose'] = purpose
+        raw['sources'][-1]['content']['clinical_binding'] = deepcopy(raw['clinical_bindings'][0])
+&gt;       assert check(raw, 'therapy_completed')[0] == 'INSUFFICIENT_EVIDENCE'
+E       AssertionError: assert 'SUPPORTED' == 'INSUFFICIENT_EVIDENCE'
+E         
+E         - INSUFFICIENT_EVIDENCE
+E         + SUPPORTED
+
+tests\test_careflow_mapping.py:154: AssertionError</failure></testcase></testsuite></testsuites>

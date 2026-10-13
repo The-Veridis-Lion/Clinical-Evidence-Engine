@@ -35,7 +35,7 @@ class CareFlow:
         original, packet = self.store.load(conn, case_id, review.basis_revision)
         if review.basis_packet_sha256 != packet['packet_sha256']:
             raise ValueError('Review packet hash does not match its basis revision')
-        known = {f['fact_id'] for f in original['facts']}
+        known = {f['fact_id'] for f in packet['facts'] + packet['excluded_facts']}
         known.update(f['context_fact_id'] for c in packet.get('clinical_context', []) for f in c['facts'])
         if not set(review.fact_ids) <= known:
             raise ValueError('Review cites facts absent from the reviewed revision')
@@ -57,6 +57,7 @@ class CareFlow:
             known_sources = {s['source_id'] for s in current['sources']}
             known_facts = {f['fact_id'] for f in current['facts']}
             known_facts.update(f['context_fact_id'] for c in previous.get('clinical_context', []) for f in c['facts'])
+            known_facts.update(f['fact_id'] for f in previous['facts'] + previous['excluded_facts'])
             new_sources = {s.source_id for s in update.sources}
             seen_content = {digest({'patient_id': s['patient_id'], 'content': s['content']}) for s in current['sources']}
             content_by_id = {s.source_id: digest({'patient_id': s.patient_id, 'content': s.content}) for s in update.sources}
@@ -74,12 +75,22 @@ class CareFlow:
                         raise ValueError('Correction review must cite the original fact ID')
                     if update.review.judgment != 'PROPOSE_CORRECTION':
                         raise ValueError('An amendment requires a reasoned correction review')
+            if update.clinical_bindings:
+                known_bindings = {b['binding_id'] for b in current.get('clinical_bindings', [])}
+                if known_bindings & {b.binding_id for b in update.clinical_bindings}:
+                    raise ValueError('Existing clinical binding cannot be overwritten')
+                for binding in update.clinical_bindings:
+                    if binding.binding_source_id not in new_sources or content_by_id[binding.binding_source_id] in seen_content:
+                        raise ValueError('Clinical associations need genuinely new scope evidence')
             revised = Case.model_validate_json(json.dumps({
                 **current, 'sources': current['sources'] + [s.model_dump(mode='json') for s in update.sources],
                 'facts': current['facts'] + [f.model_dump(mode='json') for f in update.facts],
                 **({'clinical_context': current.get('clinical_context', []) +
                                        [c.model_dump(mode='json') for c in update.clinical_context]}
                    if current.get('clinical_context') or update.clinical_context else {}),
+                **({'clinical_bindings': current.get('clinical_bindings', []) +
+                    [b.model_dump(mode='json') for b in update.clinical_bindings]}
+                   if current.get('clinical_bindings') or update.clinical_bindings else {}),
             }))
             packet = evaluate(revised, revision=previous['revision'] + 1)
             # Invalid new evidence is retained, with explicit exclusions and gaps.
@@ -90,6 +101,8 @@ class CareFlow:
                 'revision': packet['revision'], 'input_sha256': packet['input_sha256'],
                 'packet_sha256': packet['packet_sha256'], 'ruleset_sha256': packet['ruleset']['sha256'],
                 'added_fact_ids': [f.fact_id for f in update.facts], 'added_source_ids': sorted(new_sources),
+                **({'added_binding_ids': [b.binding_id for b in update.clinical_bindings]}
+                   if update.clinical_bindings else {}),
                 'reviewer': update.review.model_dump(mode='json'),
                 'reevaluated_rule_ids': [c['rule_id'] for c in packet['checks']],
             })

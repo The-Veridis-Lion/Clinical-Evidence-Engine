@@ -6,6 +6,15 @@ log and relevant historical experiment logs. Check direction and frozen acceptan
 criteria, then update the logs after actual validation.
 This instruction applies to this isolated CareFlow worktree.
 
+Latest authorized completion scope: finish clinical evidence -> readiness mapping,
+evaluate all frozen ACI47/ACN200 development groups, then seal the stable candidate
+and execute the separate one-use material/public holdouts. Fix PR #3 unassigned
+claim coverage and decompression bounds in independent shared commits before that
+seal, integrate PR #4 without overwriting Copilot work, and report every measured
+denominator/failure. These four tasks are already authorized; do not wait for a new
+prompt between them. Historical755 tests/material scores are checkpoints, not a
+new acceptance run. Source-review extra assertions absent from references too.
+
 Every improvement must solve a generalizable evidence-processing,
 deterministic-rule, or workflow problem. Never introduce patient IDs, document IDs,
 case IDs, fixture phrases, or failure-specific exceptions into product logic.

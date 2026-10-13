@@ -47,10 +47,10 @@ def available(source, case):
     return None
 
 
-def prepare(case):
+def prepare(case, extra_facts=()):
     sources = {s.source_id: source_dict(s, i) for i, s in enumerate(case.sources)}
     facts, excluded, projected = [], [], []
-    for i, fact in enumerate(case.facts):
+    for i, fact in enumerate([*case.facts, *extra_facts]):
         reason = None
         request = case.request
         if fact.patient_id != request.patient_id:

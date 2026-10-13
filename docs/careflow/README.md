@@ -8,9 +8,10 @@ reviewer opinions, correction reasons and a verifiable audit chain.
 
 This branch is `feature/careflow-readiness`, based on unmerged
 [PR #3](https://github.com/The-Veridis-Lion/Clinical-Evidence-Engine/pull/3),
-head `f91768e`. Its `claims_engine` is an explicit dependency. No shared engine,
-prompt, policy, historical test or Copilot file was modified. The two outstanding
-PR #3 issues and integration boundaries are recorded in
+shared repair head `90adea7`. Its `claims_engine` is an explicit dependency. The two
+shared safety fixes were isolated and integrated; prompts, policy, historical
+scores and Copilot files remain unchanged. Current mapping and evaluation status is in
+[the v3 checkpoint](completion-v3/README.md). Integration boundaries are recorded in
 [the maintained project contract](../CAREFLOW_READINESS_ENGINE.md).
 
 ## Run without a model or network

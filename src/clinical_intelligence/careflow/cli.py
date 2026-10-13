@@ -36,6 +36,8 @@ def main(argv=None):
     p.add_argument('--output', required=True); p.add_argument('--ledger', required=True); p.add_argument('--groups', type=int, required=True)
     p = sub.add_parser('replay-extraction'); p.add_argument('--frozen', required=True); p.add_argument('--extraction', required=True)
     p.add_argument('--ledger', required=True); p.add_argument('--output', required=True); p.add_argument('--received-at', required=True)
+    p = sub.add_parser('http-workflow'); p.add_argument('--case', required=True); p.add_argument('--update', required=True)
+    p.add_argument('--output', required=True)
     args = parser.parse_args(argv)
     try:
         if args.command == 'serve':
@@ -60,6 +62,9 @@ def main(argv=None):
         elif args.command == 'replay-extraction':
             from .replay import replay_development
             result = replay_development(args.frozen, args.extraction, args.ledger, args.db, args.output, received_at=args.received_at)
+        elif args.command == 'http-workflow':
+            from .workflow import run_http_workflow
+            result = run_http_workflow(args.db, args.output, args.case, args.update)
         elif args.command == 'synthea-demo':
             from .demo import run_synthea_demo
             result = run_synthea_demo(args.db, args.output, args.archive, args.split)

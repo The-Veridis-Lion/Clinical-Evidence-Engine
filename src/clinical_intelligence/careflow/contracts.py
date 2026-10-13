@@ -33,6 +33,21 @@ class ClinicalContext(Contract):
     extraction: Extraction
 
 
+class ClinicalBinding(Contract):
+    """Explicit intake/order association, independently grounded from existence."""
+    schema_version: Literal['careflow-clinical-binding/1'] = 'careflow-clinical-binding/1'
+    binding_id: Identifier
+    binding_source_id: Identifier
+    patient_id: Identifier
+    request_id: Identifier
+    service_code: Identifier
+    code_system: Identifier
+    requirement: Requirement
+    clinical_fact_ids: list[Identifier] = Field(min_length=1)
+    document_role: Literal['clinical_summary'] | None = None
+    clinical_purpose: Literal['therapeutic', 'diagnostic', 'unknown'] = 'unknown'
+
+
 class Request(Contract):
     request_id: Identifier
     patient_id: Identifier
@@ -88,6 +103,7 @@ class Case(Contract):
     sources: list[Source]
     facts: list[Fact]
     clinical_context: list[ClinicalContext] = Field(default_factory=list, exclude_if=lambda value: not value)
+    clinical_bindings: list[ClinicalBinding] = Field(default_factory=list, exclude_if=lambda value: not value)
 
     @model_validator(mode='after')
     def unique_ids_and_references(self):
@@ -97,6 +113,19 @@ class Case(Contract):
                 raise ValueError(f'Duplicate {kind}')
         sources = {s.source_id for s in self.sources}
         facts = {f.fact_id: f for f in self.facts}
+        if self.clinical_context:
+            from .clinical_context import validate_context_sources
+            validate_context_sources(self)
+        if self.clinical_bindings:
+            if len({b.binding_id for b in self.clinical_bindings}) != len(self.clinical_bindings):
+                raise ValueError('Duplicate clinical binding identity')
+            if any(b.binding_source_id not in sources for b in self.clinical_bindings):
+                raise ValueError('Clinical binding references an unknown scope source')
+            from .mapping import map_clinical
+            derived, _ = map_clinical(self)
+            if facts.keys() & {f.fact_id for f in derived}:
+                raise ValueError('Supplied fact identity collides with a derived clinical mapping')
+            facts.update((f.fact_id, f) for f in derived)
         for fact in self.facts:
             refs = fact.evidence + ([fact.authority_ref] if fact.authority_ref else [])
             if any(ref.source_id not in sources for ref in refs):
@@ -111,9 +140,6 @@ class Case(Contract):
                 old_sources = {r.source_id for r in original.evidence}
                 if any(r.source_id in old_sources for r in fact.evidence):
                     raise ValueError('A correction requires independent source evidence')
-        if self.clinical_context:
-            from .clinical_context import validate_context_sources
-            validate_context_sources(self)
         return self
 
 
@@ -143,6 +169,13 @@ class Review(Contract):
 class EvidenceUpdate(Contract):
     expected_revision: int = Field(ge=1)
     sources: list[Source] = Field(min_length=1)
-    facts: list[Fact] = Field(min_length=1)
+    facts: list[Fact] = Field(default_factory=list)
     review: Review
     clinical_context: list[ClinicalContext] = Field(default_factory=list, exclude_if=lambda value: not value)
+    clinical_bindings: list[ClinicalBinding] = Field(default_factory=list, exclude_if=lambda value: not value)
+
+    @model_validator(mode='after')
+    def meaningful_update(self):
+        if not (self.facts or self.clinical_context or self.clinical_bindings):
+            raise ValueError('Evidence update needs assertions, clinical facts or source-backed bindings')
+        return self

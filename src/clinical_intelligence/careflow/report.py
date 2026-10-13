@@ -37,6 +37,8 @@ def markdown(packet, reviews=()):
     out.append('\n## Evidence gaps\n')
     out.append(literal(packet['gaps'], 'json') if packet['gaps'] else 'No missing requirements under this exact checklist.\n')
     out.append('## Assertions and exact evidence\n')
+    if packet.get('clinical_mapping'):
+        out += ['## Clinical evidence mapping\n', literal(packet['clinical_mapping'], 'json')]
     for fact in packet['facts'] + packet['excluded_facts']:
         label = 'EXCLUDED: ' + fact['reason'] if 'reason' in fact else fact['reconciliation_status']
         out += [f"### {cell(fact['fact_id'])} — {fact['requirement']} — {label}\n",
