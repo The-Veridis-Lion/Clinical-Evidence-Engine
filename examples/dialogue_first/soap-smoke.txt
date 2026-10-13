@@ -1,0 +1,4 @@
+Subjective: Patient reports trouble sleeping for two weeks. Denies headache.
+Objective: Temperature 36.8 C measured today.
+Assessment: Sleep disturbance. Cause uncertain.
+Plan: Discuss sleep hygiene. Follow up in two weeks.

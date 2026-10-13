@@ -1,0 +1,92 @@
+{
+  "case_id": "CF-CORRECTION-001",
+  "verified": true,
+  "errors": [],
+  "events": [
+    {
+      "case_id": "CF-CORRECTION-001",
+      "event_type": "CASE_CREATED",
+      "payload": {
+        "input_sha256": "a2ff68c2faf779d5101d2d7a67836d21d4ab9739281cc09a145f0b65bad34362",
+        "packet_sha256": "497928091def998505ffb1f1b9516567d2d969747dcc3e06be2802fe35f84cf3",
+        "revision": 1,
+        "ruleset_sha256": "ed68d9f0d7f48a59db27065a644ac39a55c7c4a360c1bb905663e64056f246c8"
+      },
+      "previous_sha256": null,
+      "sequence": 1,
+      "timestamp": "2026-10-13T09:53:59.591032+00:00",
+      "event_sha256": "11d8ffe63e0471626fed1c80f747ee0511890657af9beb1d4661729cec6c3cbe"
+    },
+    {
+      "case_id": "CF-CORRECTION-001",
+      "event_type": "REVIEW_RECORDED",
+      "payload": {
+        "basis_packet_sha256": "497928091def998505ffb1f1b9516567d2d969747dcc3e06be2802fe35f84cf3",
+        "basis_revision": 1,
+        "fact_ids": [
+          "fact-40ee7175e8d1617f"
+        ],
+        "judgment": "PROPOSE_CORRECTION",
+        "model": "scripted-offline-fixture",
+        "model_version": "1",
+        "proposed_actions": [
+          "Recompute the deterministic documentation checks from the new evidence."
+        ],
+        "reason": "Constructed demo opinion: independent corrective evidence explicitly amends the absent attachment assertion.",
+        "reviewer_id": "constructed-ai-review-fixture",
+        "reviewer_type": "advanced_ai"
+      },
+      "previous_sha256": "11d8ffe63e0471626fed1c80f747ee0511890657af9beb1d4661729cec6c3cbe",
+      "sequence": 2,
+      "timestamp": "2026-10-13T09:53:59.595033+00:00",
+      "event_sha256": "d7f7e5ae196a34c9ee1f79f84a405576c676c98a262bc3dbe96163385b694437"
+    },
+    {
+      "case_id": "CF-CORRECTION-001",
+      "event_type": "FACT_CORRECTED",
+      "payload": {
+        "added_fact_ids": [
+          "fact-4d00e9180b9b6143"
+        ],
+        "added_source_ids": [
+          "doc-4d00e9180b9b6143"
+        ],
+        "input_sha256": "8c1bebad2464b1f191435633bbf0221ad5410da70058da6cdd7b03a149b08fe7",
+        "packet_sha256": "227c0aa5ea30ddd6de52ef8a6368a6ecea81e8e8ce0666d97a0f03285aef5d43",
+        "reevaluated_rule_ids": [
+          "CF-DOC-001",
+          "CF-DOC-002",
+          "CF-DOC-003",
+          "CF-DOC-004",
+          "CF-DOC-005",
+          "CF-REF-001"
+        ],
+        "reviewer": {
+          "basis_packet_sha256": "497928091def998505ffb1f1b9516567d2d969747dcc3e06be2802fe35f84cf3",
+          "basis_revision": 1,
+          "fact_ids": [
+            "fact-40ee7175e8d1617f"
+          ],
+          "judgment": "PROPOSE_CORRECTION",
+          "model": "scripted-offline-fixture",
+          "model_version": "1",
+          "proposed_actions": [
+            "Recompute the deterministic documentation checks from the new evidence."
+          ],
+          "reason": "Constructed demo opinion: independent corrective evidence explicitly amends the absent attachment assertion.",
+          "reviewer_id": "constructed-ai-review-fixture",
+          "reviewer_type": "advanced_ai"
+        },
+        "revision": 2,
+        "ruleset_sha256": "ed68d9f0d7f48a59db27065a644ac39a55c7c4a360c1bb905663e64056f246c8"
+      },
+      "previous_sha256": "d7f7e5ae196a34c9ee1f79f84a405576c676c98a262bc3dbe96163385b694437",
+      "sequence": 3,
+      "timestamp": "2026-10-13T09:53:59.596031+00:00",
+      "event_sha256": "86e655c5215261e46cf5be0e91e09733069f1cf10a56d5a24ffe895a3c4700e9"
+    }
+  ],
+  "head_sha256": "86e655c5215261e46cf5be0e91e09733069f1cf10a56d5a24ffe895a3c4700e9",
+  "revision_count": 2,
+  "integrity_limit": "Local hash-chain verification, not an external signature or tamper-proof ledger."
+}

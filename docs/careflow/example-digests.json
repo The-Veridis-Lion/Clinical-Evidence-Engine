@@ -1,0 +1,85 @@
+{
+  "hash_encoding": "UTF-8 with LF line endings; normalize CRLF before verification",
+  "files": {
+    "examples/careflow/correction-after.json": {
+      "utf8_lf_bytes": 36226,
+      "sha256": "b628f448f65c9a0e388dc283e7f8f022bac017b3c934ea8d2346763ec2526660"
+    },
+    "examples/careflow/correction-audit.json": {
+      "utf8_lf_bytes": 3688,
+      "sha256": "ff1431c833703b22b32c14010a145150dcb3f174469a710cd2ab23a01875e8ec"
+    },
+    "examples/careflow/correction-before.json": {
+      "utf8_lf_bytes": 27237,
+      "sha256": "34067bc7b4debf6622ebf9eca65392ad0dfb3828e9b0459715d5db13b5164f2c"
+    },
+    "examples/careflow/correction-case.json": {
+      "utf8_lf_bytes": 6554,
+      "sha256": "3d3de421e35b358e7b3c60201f083654085b82d4b112287f5bd5382ccea0540e"
+    },
+    "examples/careflow/correction-report.md": {
+      "utf8_lf_bytes": 20666,
+      "sha256": "e10ace010688f4aef1776532c6302993cdc2f73fd9b8bacd1602204fe2bb3955"
+    },
+    "examples/careflow/correction-update.json": {
+      "utf8_lf_bytes": 2216,
+      "sha256": "77f25568a594d7168d58a32bdd1d4b60cd6d06f46313e69df06030e0f7e6781f"
+    },
+    "examples/careflow/prior_authorization-after.json": {
+      "utf8_lf_bytes": 31329,
+      "sha256": "2e5c67c8273ab95588fb14d432194e1932670b14572a85d6474cbdfa57389e07"
+    },
+    "examples/careflow/prior_authorization-audit.json": {
+      "utf8_lf_bytes": 3224,
+      "sha256": "7282a3600cdb15e9b5129a825043123d4187ff6393a6196d383ce626120e93fd"
+    },
+    "examples/careflow/prior_authorization-before.json": {
+      "utf8_lf_bytes": 28533,
+      "sha256": "30b7bb775c1924a30b54119539e1a86ffd916f4c3e655adb1175ad37e9137e5b"
+    },
+    "examples/careflow/prior_authorization-case.json": {
+      "utf8_lf_bytes": 6672,
+      "sha256": "ef61a06b27cdea9f3454f74d3b24c5154865e1738d2e72833f9249d41c24a750"
+    },
+    "examples/careflow/prior_authorization-report.md": {
+      "utf8_lf_bytes": 16013,
+      "sha256": "d715484d189c1f146ba25c07d56b4cae19eb1bd51a3f1e191b3215f69a06f96f"
+    },
+    "examples/careflow/prior_authorization-update.json": {
+      "utf8_lf_bytes": 1726,
+      "sha256": "f973cc6e0c9621a1ae6810af006f3afcd2216d1483a72adcb09724995815b44a"
+    },
+    "examples/careflow/referral-after.json": {
+      "utf8_lf_bytes": 26668,
+      "sha256": "8342030253ec70e3149f866047c0cde991ebdac0364e318437638540772b9c52"
+    },
+    "examples/careflow/referral-audit.json": {
+      "utf8_lf_bytes": 3206,
+      "sha256": "188d7154e8283a6357ce571f22de00b3dfe9a2c7f667be0a8d6b3e2ab32bffcc"
+    },
+    "examples/careflow/referral-before.json": {
+      "utf8_lf_bytes": 23943,
+      "sha256": "7d7c230eb8a9ef0b20ca0071f8680500fd7e926e3554f73ccb9adcebccc5429d"
+    },
+    "examples/careflow/referral-case.json": {
+      "utf8_lf_bytes": 5304,
+      "sha256": "e8c9844a5fb8480dc3c95d51ed065bfca9d064f70dd50dfa9fa203a8c06b3548"
+    },
+    "examples/careflow/referral-report.md": {
+      "utf8_lf_bytes": 13594,
+      "sha256": "6eacd6f9b43c2f85a626aac8fe83a71e2e2db33cf607f6668255ed10f2c6bc25"
+    },
+    "examples/careflow/referral-update.json": {
+      "utf8_lf_bytes": 1669,
+      "sha256": "4029e84f8df1ad7b26f6cb7f63ad564af2376ea454b39a33e61b736d78f9db24"
+    },
+    "examples/careflow/rules.json": {
+      "utf8_lf_bytes": 4116,
+      "sha256": "3ac25e5aabb6284ae4bfbf36fae5fa7aad2b24b977037742de332dae91c86235"
+    },
+    "examples/careflow/summary.json": {
+      "utf8_lf_bytes": 600,
+      "sha256": "9bc684683df6990204e3a343bc7673a422043c7446547f1eab46d3bf2834debb"
+    }
+  }
+}

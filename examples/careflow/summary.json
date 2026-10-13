@@ -1,0 +1,26 @@
+[
+  {
+    "case_id": "CF-REF-001",
+    "before": "NEEDS_EVIDENCE",
+    "after": "DOCUMENTATION_READY",
+    "audit_verified": true,
+    "model_calls": {
+      "research_model_calls": 0,
+      "product_model_calls": 0,
+      "failed_product_reviews": 0,
+      "incomplete_product_reviews": 0
+    }
+  },
+  {
+    "case_id": "CF-PA-001",
+    "before": "NEEDS_EVIDENCE",
+    "after": "DOCUMENTATION_READY",
+    "audit_verified": true,
+    "model_calls": {
+      "research_model_calls": 0,
+      "product_model_calls": 0,
+      "failed_product_reviews": 0,
+      "incomplete_product_reviews": 0
+    }
+  }
+]

@@ -1,0 +1,435 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="14" skipped="0" tests="14" time="0.827" timestamp="2026-10-13T08:52:42.708909-04:00" hostname="iSATiS"><testcase classname="tests.test_claims_shared_safety" name="test_all_claims_roundtrip_preserves_unassigned_original_rows[P1-blank]" time="0.047"><failure message="ValueError: CLAIM_COVERAGE_MISMATCH">tmp_path = WindowsPath('D:/Codex/Take Home Excerise/claims-shared-fixes/.work/p2-before/test_all_claims_roundtrip_pres0')
+linkage = 'blank', patient = 'P1'
+
+    @pytest.mark.parametrize('linkage', ['blank', 'absent', 'ambiguous'])
+    @pytest.mark.parametrize('patient', ['P1', 'P2'])
+    def test_all_claims_roundtrip_preserves_unassigned_original_rows(tmp_path, linkage, patient):
+        path = archive(tmp_path)
+        patients = [{'Id': 'P1'}, {'Id': 'P2'}]
+        if linkage == 'ambiguous':
+            patients.append({'Id': patient})
+        replace_table(path, 'patients.csv', patients)
+        claims = [{'Id': 'CLAIM-A', 'PATIENTID': 'P1', 'APPOINTMENTID': 'E1'},
+                  {'Id': 'CLAIM-B', 'PATIENTID': 'P2', 'APPOINTMENTID': 'E2'},
+                  {'Id': 'CLAIM-UNASSIGNED', 'PATIENTID': '' if linkage == 'blank' else 'UNKNOWN' if linkage == 'absent' else patient,
+                   'APPOINTMENTID': ''}]
+        replace_table(path, 'claims.csv', claims)
+        index = ArchiveIndex(path)
+        split = create_split(index, tmp_path / 'split.json')
+        summary, ledger = process(index, split, output=tmp_path / 'batch')
+        assert summary['metrics']['accounted_claim_rows'] == 3
+&gt;       report = verify_saved(path, tmp_path / 'batch', split)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_claims_shared_safety.py:46: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+archive_path = WindowsPath('D:/Codex/Take Home Excerise/claims-shared-fixes/.work/p2-before/test_all_claims_roundtrip_pres0/source.zip')
+batch_path = WindowsPath('D:/Codex/Take Home Excerise/claims-shared-fixes/.work/p2-before/test_all_claims_roundtrip_pres0/batch')
+split = {'schema_version': 'claim-patient-split/1', 'archive_sha256': '5bd230486870eae4845d03dcf5ceea6bc656e22472b6ddb6dce253b4d7a02491', 'seed': 20261010, 'algorithm': 'sort by SHA256 of UTF-8 seed:original_patient_id; then patient_id', ...}
+partition = None
+
+    def verify_saved(archive_path, batch_path, split, *, partition=None):
+        started = perf_counter()
+        archive_path, batch_path = Path(archive_path), Path(batch_path)
+        archive_sha = sha(archive_path.read_bytes())
+        if split["archive_sha256"] != archive_sha:
+            raise ValueError("VERIFICATION_ARCHIVE_MISMATCH")
+        manifest = json.loads((batch_path / "output-manifest.json").read_text())
+        if manifest["archive_sha256"] != archive_sha:
+            raise ValueError("OUTPUT_ARCHIVE_MISMATCH")
+        for name, value in manifest["files"].items():
+            if Path(name).name != name:
+                raise ValueError("INVALID_OUTPUT_MEMBER")
+            raw = (batch_path / name).read_bytes()
+            if sha(raw) != value["sha256"] or len(raw) != value["bytes"]:
+                raise ValueError(f"OUTPUT_DIGEST_MISMATCH:{name}")
+        partitions = partition_map(split)
+        expected_ids = {cid for key, entries in split["partitions"].items() if not partition or key == partition
+                        for e in entries for cid in e["claim_ids"]}
+        with gzip.open(batch_path / "packets.jsonl.gz", "rt", encoding="utf-8") as f:
+            packets = [ClaimPacket.model_validate_json(line) for line in f]
+        packets = [p for p in packets if not partition or partitions.get(p.patient_id) == partition]
+        failures = json.loads((batch_path / "failures.json").read_text())
+        failures = [v for v in failures if not partition or partitions.get(v["patient_id"]) == partition]
+        seen = Counter([p.claim_id for p in packets] + [v["claim_id"] for v in failures])
+        if set(seen) != expected_ids or any(count != 1 for count in seen.values()):
+&gt;           raise ValueError("CLAIM_COVERAGE_MISMATCH")
+E           ValueError: CLAIM_COVERAGE_MISMATCH
+
+src\clinical_intelligence\claims_engine\verification.py:40: ValueError</failure></testcase><testcase classname="tests.test_claims_shared_safety" name="test_all_claims_roundtrip_preserves_unassigned_original_rows[P1-absent]" time="0.037"><failure message="ValueError: CLAIM_COVERAGE_MISMATCH">tmp_path = WindowsPath('D:/Codex/Take Home Excerise/claims-shared-fixes/.work/p2-before/test_all_claims_roundtrip_pres1')
+linkage = 'absent', patient = 'P1'
+
+    @pytest.mark.parametrize('linkage', ['blank', 'absent', 'ambiguous'])
+    @pytest.mark.parametrize('patient', ['P1', 'P2'])
+    def test_all_claims_roundtrip_preserves_unassigned_original_rows(tmp_path, linkage, patient):
+        path = archive(tmp_path)
+        patients = [{'Id': 'P1'}, {'Id': 'P2'}]
+        if linkage == 'ambiguous':
+            patients.append({'Id': patient})
+        replace_table(path, 'patients.csv', patients)
+        claims = [{'Id': 'CLAIM-A', 'PATIENTID': 'P1', 'APPOINTMENTID': 'E1'},
+                  {'Id': 'CLAIM-B', 'PATIENTID': 'P2', 'APPOINTMENTID': 'E2'},
+                  {'Id': 'CLAIM-UNASSIGNED', 'PATIENTID': '' if linkage == 'blank' else 'UNKNOWN' if linkage == 'absent' else patient,
+                   'APPOINTMENTID': ''}]
+        replace_table(path, 'claims.csv', claims)
+        index = ArchiveIndex(path)
+        split = create_split(index, tmp_path / 'split.json')
+        summary, ledger = process(index, split, output=tmp_path / 'batch')
+        assert summary['metrics']['accounted_claim_rows'] == 3
+&gt;       report = verify_saved(path, tmp_path / 'batch', split)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_claims_shared_safety.py:46: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+archive_path = WindowsPath('D:/Codex/Take Home Excerise/claims-shared-fixes/.work/p2-before/test_all_claims_roundtrip_pres1/source.zip')
+batch_path = WindowsPath('D:/Codex/Take Home Excerise/claims-shared-fixes/.work/p2-before/test_all_claims_roundtrip_pres1/batch')
+split = {'schema_version': 'claim-patient-split/1', 'archive_sha256': '0675b918f17c692fb8a101396c24bd78966f0bb4faae43e51fbcab58984b28aa', 'seed': 20261010, 'algorithm': 'sort by SHA256 of UTF-8 seed:original_patient_id; then patient_id', ...}
+partition = None
+
+    def verify_saved(archive_path, batch_path, split, *, partition=None):
+        started = perf_counter()
+        archive_path, batch_path = Path(archive_path), Path(batch_path)
+        archive_sha = sha(archive_path.read_bytes())
+        if split["archive_sha256"] != archive_sha:
+            raise ValueError("VERIFICATION_ARCHIVE_MISMATCH")
+        manifest = json.loads((batch_path / "output-manifest.json").read_text())
+        if manifest["archive_sha256"] != archive_sha:
+            raise ValueError("OUTPUT_ARCHIVE_MISMATCH")
+        for name, value in manifest["files"].items():
+            if Path(name).name != name:
+                raise ValueError("INVALID_OUTPUT_MEMBER")
+            raw = (batch_path / name).read_bytes()
+            if sha(raw) != value["sha256"] or len(raw) != value["bytes"]:
+                raise ValueError(f"OUTPUT_DIGEST_MISMATCH:{name}")
+        partitions = partition_map(split)
+        expected_ids = {cid for key, entries in split["partitions"].items() if not partition or key == partition
+                        for e in entries for cid in e["claim_ids"]}
+        with gzip.open(batch_path / "packets.jsonl.gz", "rt", encoding="utf-8") as f:
+            packets = [ClaimPacket.model_validate_json(line) for line in f]
+        packets = [p for p in packets if not partition or partitions.get(p.patient_id) == partition]
+        failures = json.loads((batch_path / "failures.json").read_text())
+        failures = [v for v in failures if not partition or partitions.get(v["patient_id"]) == partition]
+        seen = Counter([p.claim_id for p in packets] + [v["claim_id"] for v in failures])
+        if set(seen) != expected_ids or any(count != 1 for count in seen.values()):
+&gt;           raise ValueError("CLAIM_COVERAGE_MISMATCH")
+E           ValueError: CLAIM_COVERAGE_MISMATCH
+
+src\clinical_intelligence\claims_engine\verification.py:40: ValueError</failure></testcase><testcase classname="tests.test_claims_shared_safety" name="test_all_claims_roundtrip_preserves_unassigned_original_rows[P1-ambiguous]" time="0.038"><failure message="ValueError: CLAIM_COVERAGE_MISMATCH">tmp_path = WindowsPath('D:/Codex/Take Home Excerise/claims-shared-fixes/.work/p2-before/test_all_claims_roundtrip_pres2')
+linkage = 'ambiguous', patient = 'P1'
+
+    @pytest.mark.parametrize('linkage', ['blank', 'absent', 'ambiguous'])
+    @pytest.mark.parametrize('patient', ['P1', 'P2'])
+    def test_all_claims_roundtrip_preserves_unassigned_original_rows(tmp_path, linkage, patient):
+        path = archive(tmp_path)
+        patients = [{'Id': 'P1'}, {'Id': 'P2'}]
+        if linkage == 'ambiguous':
+            patients.append({'Id': patient})
+        replace_table(path, 'patients.csv', patients)
+        claims = [{'Id': 'CLAIM-A', 'PATIENTID': 'P1', 'APPOINTMENTID': 'E1'},
+                  {'Id': 'CLAIM-B', 'PATIENTID': 'P2', 'APPOINTMENTID': 'E2'},
+                  {'Id': 'CLAIM-UNASSIGNED', 'PATIENTID': '' if linkage == 'blank' else 'UNKNOWN' if linkage == 'absent' else patient,
+                   'APPOINTMENTID': ''}]
+        replace_table(path, 'claims.csv', claims)
+        index = ArchiveIndex(path)
+        split = create_split(index, tmp_path / 'split.json')
+        summary, ledger = process(index, split, output=tmp_path / 'batch')
+        assert summary['metrics']['accounted_claim_rows'] == 3
+&gt;       report = verify_saved(path, tmp_path / 'batch', split)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_claims_shared_safety.py:46: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+archive_path = WindowsPath('D:/Codex/Take Home Excerise/claims-shared-fixes/.work/p2-before/test_all_claims_roundtrip_pres2/source.zip')
+batch_path = WindowsPath('D:/Codex/Take Home Excerise/claims-shared-fixes/.work/p2-before/test_all_claims_roundtrip_pres2/batch')
+split = {'schema_version': 'claim-patient-split/1', 'archive_sha256': '628747151f0ebfc84c4dafbab7f24a4ba101dd858d68a670fef023e877673fda', 'seed': 20261010, 'algorithm': 'sort by SHA256 of UTF-8 seed:original_patient_id; then patient_id', ...}
+partition = None
+
+    def verify_saved(archive_path, batch_path, split, *, partition=None):
+        started = perf_counter()
+        archive_path, batch_path = Path(archive_path), Path(batch_path)
+        archive_sha = sha(archive_path.read_bytes())
+        if split["archive_sha256"] != archive_sha:
+            raise ValueError("VERIFICATION_ARCHIVE_MISMATCH")
+        manifest = json.loads((batch_path / "output-manifest.json").read_text())
+        if manifest["archive_sha256"] != archive_sha:
+            raise ValueError("OUTPUT_ARCHIVE_MISMATCH")
+        for name, value in manifest["files"].items():
+            if Path(name).name != name:
+                raise ValueError("INVALID_OUTPUT_MEMBER")
+            raw = (batch_path / name).read_bytes()
+            if sha(raw) != value["sha256"] or len(raw) != value["bytes"]:
+                raise ValueError(f"OUTPUT_DIGEST_MISMATCH:{name}")
+        partitions = partition_map(split)
+        expected_ids = {cid for key, entries in split["partitions"].items() if not partition or key == partition
+                        for e in entries for cid in e["claim_ids"]}
+        with gzip.open(batch_path / "packets.jsonl.gz", "rt", encoding="utf-8") as f:
+            packets = [ClaimPacket.model_validate_json(line) for line in f]
+        packets = [p for p in packets if not partition or partitions.get(p.patient_id) == partition]
+        failures = json.loads((batch_path / "failures.json").read_text())
+        failures = [v for v in failures if not partition or partitions.get(v["patient_id"]) == partition]
+        seen = Counter([p.claim_id for p in packets] + [v["claim_id"] for v in failures])
+        if set(seen) != expected_ids or any(count != 1 for count in seen.values()):
+&gt;           raise ValueError("CLAIM_COVERAGE_MISMATCH")
+E           ValueError: CLAIM_COVERAGE_MISMATCH
+
+src\clinical_intelligence\claims_engine\verification.py:40: ValueError</failure></testcase><testcase classname="tests.test_claims_shared_safety" name="test_all_claims_roundtrip_preserves_unassigned_original_rows[P2-blank]" time="0.021"><failure message="ValueError: CLAIM_COVERAGE_MISMATCH">tmp_path = WindowsPath('D:/Codex/Take Home Excerise/claims-shared-fixes/.work/p2-before/test_all_claims_roundtrip_pres3')
+linkage = 'blank', patient = 'P2'
+
+    @pytest.mark.parametrize('linkage', ['blank', 'absent', 'ambiguous'])
+    @pytest.mark.parametrize('patient', ['P1', 'P2'])
+    def test_all_claims_roundtrip_preserves_unassigned_original_rows(tmp_path, linkage, patient):
+        path = archive(tmp_path)
+        patients = [{'Id': 'P1'}, {'Id': 'P2'}]
+        if linkage == 'ambiguous':
+            patients.append({'Id': patient})
+        replace_table(path, 'patients.csv', patients)
+        claims = [{'Id': 'CLAIM-A', 'PATIENTID': 'P1', 'APPOINTMENTID': 'E1'},
+                  {'Id': 'CLAIM-B', 'PATIENTID': 'P2', 'APPOINTMENTID': 'E2'},
+                  {'Id': 'CLAIM-UNASSIGNED', 'PATIENTID': '' if linkage == 'blank' else 'UNKNOWN' if linkage == 'absent' else patient,
+                   'APPOINTMENTID': ''}]
+        replace_table(path, 'claims.csv', claims)
+        index = ArchiveIndex(path)
+        split = create_split(index, tmp_path / 'split.json')
+        summary, ledger = process(index, split, output=tmp_path / 'batch')
+        assert summary['metrics']['accounted_claim_rows'] == 3
+&gt;       report = verify_saved(path, tmp_path / 'batch', split)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_claims_shared_safety.py:46: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+archive_path = WindowsPath('D:/Codex/Take Home Excerise/claims-shared-fixes/.work/p2-before/test_all_claims_roundtrip_pres3/source.zip')
+batch_path = WindowsPath('D:/Codex/Take Home Excerise/claims-shared-fixes/.work/p2-before/test_all_claims_roundtrip_pres3/batch')
+split = {'schema_version': 'claim-patient-split/1', 'archive_sha256': '5bd230486870eae4845d03dcf5ceea6bc656e22472b6ddb6dce253b4d7a02491', 'seed': 20261010, 'algorithm': 'sort by SHA256 of UTF-8 seed:original_patient_id; then patient_id', ...}
+partition = None
+
+    def verify_saved(archive_path, batch_path, split, *, partition=None):
+        started = perf_counter()
+        archive_path, batch_path = Path(archive_path), Path(batch_path)
+        archive_sha = sha(archive_path.read_bytes())
+        if split["archive_sha256"] != archive_sha:
+            raise ValueError("VERIFICATION_ARCHIVE_MISMATCH")
+        manifest = json.loads((batch_path / "output-manifest.json").read_text())
+        if manifest["archive_sha256"] != archive_sha:
+            raise ValueError("OUTPUT_ARCHIVE_MISMATCH")
+        for name, value in manifest["files"].items():
+            if Path(name).name != name:
+                raise ValueError("INVALID_OUTPUT_MEMBER")
+            raw = (batch_path / name).read_bytes()
+            if sha(raw) != value["sha256"] or len(raw) != value["bytes"]:
+                raise ValueError(f"OUTPUT_DIGEST_MISMATCH:{name}")
+        partitions = partition_map(split)
+        expected_ids = {cid for key, entries in split["partitions"].items() if not partition or key == partition
+                        for e in entries for cid in e["claim_ids"]}
+        with gzip.open(batch_path / "packets.jsonl.gz", "rt", encoding="utf-8") as f:
+            packets = [ClaimPacket.model_validate_json(line) for line in f]
+        packets = [p for p in packets if not partition or partitions.get(p.patient_id) == partition]
+        failures = json.loads((batch_path / "failures.json").read_text())
+        failures = [v for v in failures if not partition or partitions.get(v["patient_id"]) == partition]
+        seen = Counter([p.claim_id for p in packets] + [v["claim_id"] for v in failures])
+        if set(seen) != expected_ids or any(count != 1 for count in seen.values()):
+&gt;           raise ValueError("CLAIM_COVERAGE_MISMATCH")
+E           ValueError: CLAIM_COVERAGE_MISMATCH
+
+src\clinical_intelligence\claims_engine\verification.py:40: ValueError</failure></testcase><testcase classname="tests.test_claims_shared_safety" name="test_all_claims_roundtrip_preserves_unassigned_original_rows[P2-absent]" time="0.021"><failure message="ValueError: CLAIM_COVERAGE_MISMATCH">tmp_path = WindowsPath('D:/Codex/Take Home Excerise/claims-shared-fixes/.work/p2-before/test_all_claims_roundtrip_pres4')
+linkage = 'absent', patient = 'P2'
+
+    @pytest.mark.parametrize('linkage', ['blank', 'absent', 'ambiguous'])
+    @pytest.mark.parametrize('patient', ['P1', 'P2'])
+    def test_all_claims_roundtrip_preserves_unassigned_original_rows(tmp_path, linkage, patient):
+        path = archive(tmp_path)
+        patients = [{'Id': 'P1'}, {'Id': 'P2'}]
+        if linkage == 'ambiguous':
+            patients.append({'Id': patient})
+        replace_table(path, 'patients.csv', patients)
+        claims = [{'Id': 'CLAIM-A', 'PATIENTID': 'P1', 'APPOINTMENTID': 'E1'},
+                  {'Id': 'CLAIM-B', 'PATIENTID': 'P2', 'APPOINTMENTID': 'E2'},
+                  {'Id': 'CLAIM-UNASSIGNED', 'PATIENTID': '' if linkage == 'blank' else 'UNKNOWN' if linkage == 'absent' else patient,
+                   'APPOINTMENTID': ''}]
+        replace_table(path, 'claims.csv', claims)
+        index = ArchiveIndex(path)
+        split = create_split(index, tmp_path / 'split.json')
+        summary, ledger = process(index, split, output=tmp_path / 'batch')
+        assert summary['metrics']['accounted_claim_rows'] == 3
+&gt;       report = verify_saved(path, tmp_path / 'batch', split)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_claims_shared_safety.py:46: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+archive_path = WindowsPath('D:/Codex/Take Home Excerise/claims-shared-fixes/.work/p2-before/test_all_claims_roundtrip_pres4/source.zip')
+batch_path = WindowsPath('D:/Codex/Take Home Excerise/claims-shared-fixes/.work/p2-before/test_all_claims_roundtrip_pres4/batch')
+split = {'schema_version': 'claim-patient-split/1', 'archive_sha256': '0675b918f17c692fb8a101396c24bd78966f0bb4faae43e51fbcab58984b28aa', 'seed': 20261010, 'algorithm': 'sort by SHA256 of UTF-8 seed:original_patient_id; then patient_id', ...}
+partition = None
+
+    def verify_saved(archive_path, batch_path, split, *, partition=None):
+        started = perf_counter()
+        archive_path, batch_path = Path(archive_path), Path(batch_path)
+        archive_sha = sha(archive_path.read_bytes())
+        if split["archive_sha256"] != archive_sha:
+            raise ValueError("VERIFICATION_ARCHIVE_MISMATCH")
+        manifest = json.loads((batch_path / "output-manifest.json").read_text())
+        if manifest["archive_sha256"] != archive_sha:
+            raise ValueError("OUTPUT_ARCHIVE_MISMATCH")
+        for name, value in manifest["files"].items():
+            if Path(name).name != name:
+                raise ValueError("INVALID_OUTPUT_MEMBER")
+            raw = (batch_path / name).read_bytes()
+            if sha(raw) != value["sha256"] or len(raw) != value["bytes"]:
+                raise ValueError(f"OUTPUT_DIGEST_MISMATCH:{name}")
+        partitions = partition_map(split)
+        expected_ids = {cid for key, entries in split["partitions"].items() if not partition or key == partition
+                        for e in entries for cid in e["claim_ids"]}
+        with gzip.open(batch_path / "packets.jsonl.gz", "rt", encoding="utf-8") as f:
+            packets = [ClaimPacket.model_validate_json(line) for line in f]
+        packets = [p for p in packets if not partition or partitions.get(p.patient_id) == partition]
+        failures = json.loads((batch_path / "failures.json").read_text())
+        failures = [v for v in failures if not partition or partitions.get(v["patient_id"]) == partition]
+        seen = Counter([p.claim_id for p in packets] + [v["claim_id"] for v in failures])
+        if set(seen) != expected_ids or any(count != 1 for count in seen.values()):
+&gt;           raise ValueError("CLAIM_COVERAGE_MISMATCH")
+E           ValueError: CLAIM_COVERAGE_MISMATCH
+
+src\clinical_intelligence\claims_engine\verification.py:40: ValueError</failure></testcase><testcase classname="tests.test_claims_shared_safety" name="test_all_claims_roundtrip_preserves_unassigned_original_rows[P2-ambiguous]" time="0.039"><failure message="ValueError: CLAIM_COVERAGE_MISMATCH">tmp_path = WindowsPath('D:/Codex/Take Home Excerise/claims-shared-fixes/.work/p2-before/test_all_claims_roundtrip_pres5')
+linkage = 'ambiguous', patient = 'P2'
+
+    @pytest.mark.parametrize('linkage', ['blank', 'absent', 'ambiguous'])
+    @pytest.mark.parametrize('patient', ['P1', 'P2'])
+    def test_all_claims_roundtrip_preserves_unassigned_original_rows(tmp_path, linkage, patient):
+        path = archive(tmp_path)
+        patients = [{'Id': 'P1'}, {'Id': 'P2'}]
+        if linkage == 'ambiguous':
+            patients.append({'Id': patient})
+        replace_table(path, 'patients.csv', patients)
+        claims = [{'Id': 'CLAIM-A', 'PATIENTID': 'P1', 'APPOINTMENTID': 'E1'},
+                  {'Id': 'CLAIM-B', 'PATIENTID': 'P2', 'APPOINTMENTID': 'E2'},
+                  {'Id': 'CLAIM-UNASSIGNED', 'PATIENTID': '' if linkage == 'blank' else 'UNKNOWN' if linkage == 'absent' else patient,
+                   'APPOINTMENTID': ''}]
+        replace_table(path, 'claims.csv', claims)
+        index = ArchiveIndex(path)
+        split = create_split(index, tmp_path / 'split.json')
+        summary, ledger = process(index, split, output=tmp_path / 'batch')
+        assert summary['metrics']['accounted_claim_rows'] == 3
+&gt;       report = verify_saved(path, tmp_path / 'batch', split)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_claims_shared_safety.py:46: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+archive_path = WindowsPath('D:/Codex/Take Home Excerise/claims-shared-fixes/.work/p2-before/test_all_claims_roundtrip_pres5/source.zip')
+batch_path = WindowsPath('D:/Codex/Take Home Excerise/claims-shared-fixes/.work/p2-before/test_all_claims_roundtrip_pres5/batch')
+split = {'schema_version': 'claim-patient-split/1', 'archive_sha256': '0a8dbebe1909b7a19a296360794b10648388d1cdc18de7996e39182209850c38', 'seed': 20261010, 'algorithm': 'sort by SHA256 of UTF-8 seed:original_patient_id; then patient_id', ...}
+partition = None
+
+    def verify_saved(archive_path, batch_path, split, *, partition=None):
+        started = perf_counter()
+        archive_path, batch_path = Path(archive_path), Path(batch_path)
+        archive_sha = sha(archive_path.read_bytes())
+        if split["archive_sha256"] != archive_sha:
+            raise ValueError("VERIFICATION_ARCHIVE_MISMATCH")
+        manifest = json.loads((batch_path / "output-manifest.json").read_text())
+        if manifest["archive_sha256"] != archive_sha:
+            raise ValueError("OUTPUT_ARCHIVE_MISMATCH")
+        for name, value in manifest["files"].items():
+            if Path(name).name != name:
+                raise ValueError("INVALID_OUTPUT_MEMBER")
+            raw = (batch_path / name).read_bytes()
+            if sha(raw) != value["sha256"] or len(raw) != value["bytes"]:
+                raise ValueError(f"OUTPUT_DIGEST_MISMATCH:{name}")
+        partitions = partition_map(split)
+        expected_ids = {cid for key, entries in split["partitions"].items() if not partition or key == partition
+                        for e in entries for cid in e["claim_ids"]}
+        with gzip.open(batch_path / "packets.jsonl.gz", "rt", encoding="utf-8") as f:
+            packets = [ClaimPacket.model_validate_json(line) for line in f]
+        packets = [p for p in packets if not partition or partitions.get(p.patient_id) == partition]
+        failures = json.loads((batch_path / "failures.json").read_text())
+        failures = [v for v in failures if not partition or partitions.get(v["patient_id"]) == partition]
+        seen = Counter([p.claim_id for p in packets] + [v["claim_id"] for v in failures])
+        if set(seen) != expected_ids or any(count != 1 for count in seen.values()):
+&gt;           raise ValueError("CLAIM_COVERAGE_MISMATCH")
+E           ValueError: CLAIM_COVERAGE_MISMATCH
+
+src\clinical_intelligence\claims_engine\verification.py:40: ValueError</failure></testcase><testcase classname="tests.test_claims_shared_safety" name="test_every_shared_entry_rejects_oversized_members_before_decompression[index-clinical.csv]" time="0.002"><failure message="ImportError: cannot import name 'archive_bounds' from 'clinical_intelligence' (D:\Codex\Take Home Excerise\claims-shared-fixes\src\clinical_intelligence\__init__.py)">tmp_path = WindowsPath('D:/Codex/Take Home Excerise/claims-shared-fixes/.work/p2-before/test_every_shared_entry_reject0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x00000205D3779520&gt;
+member_kind = 'clinical.csv', entry = 'index'
+
+    @pytest.mark.parametrize('member_kind', ['clinical.csv', 'non-clinical.bin'])
+    @pytest.mark.parametrize('entry', ['index', 'saved-verifier', 'retrieval', 'source-verifier'])
+    def test_every_shared_entry_rejects_oversized_members_before_decompression(tmp_path, monkeypatch, member_kind, entry):
+&gt;       from clinical_intelligence import archive_bounds
+E       ImportError: cannot import name 'archive_bounds' from 'clinical_intelligence' (D:\Codex\Take Home Excerise\claims-shared-fixes\src\clinical_intelligence\__init__.py)
+
+tests\test_claims_shared_safety.py:57: ImportError</failure></testcase><testcase classname="tests.test_claims_shared_safety" name="test_every_shared_entry_rejects_oversized_members_before_decompression[index-non-clinical.bin]" time="0.002"><failure message="ImportError: cannot import name 'archive_bounds' from 'clinical_intelligence' (D:\Codex\Take Home Excerise\claims-shared-fixes\src\clinical_intelligence\__init__.py)">tmp_path = WindowsPath('D:/Codex/Take Home Excerise/claims-shared-fixes/.work/p2-before/test_every_shared_entry_reject1')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x00000205D3778170&gt;
+member_kind = 'non-clinical.bin', entry = 'index'
+
+    @pytest.mark.parametrize('member_kind', ['clinical.csv', 'non-clinical.bin'])
+    @pytest.mark.parametrize('entry', ['index', 'saved-verifier', 'retrieval', 'source-verifier'])
+    def test_every_shared_entry_rejects_oversized_members_before_decompression(tmp_path, monkeypatch, member_kind, entry):
+&gt;       from clinical_intelligence import archive_bounds
+E       ImportError: cannot import name 'archive_bounds' from 'clinical_intelligence' (D:\Codex\Take Home Excerise\claims-shared-fixes\src\clinical_intelligence\__init__.py)
+
+tests\test_claims_shared_safety.py:57: ImportError</failure></testcase><testcase classname="tests.test_claims_shared_safety" name="test_every_shared_entry_rejects_oversized_members_before_decompression[saved-verifier-clinical.csv]" time="0.002"><failure message="ImportError: cannot import name 'archive_bounds' from 'clinical_intelligence' (D:\Codex\Take Home Excerise\claims-shared-fixes\src\clinical_intelligence\__init__.py)">tmp_path = WindowsPath('D:/Codex/Take Home Excerise/claims-shared-fixes/.work/p2-before/test_every_shared_entry_reject2')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x00000205D3745AC0&gt;
+member_kind = 'clinical.csv', entry = 'saved-verifier'
+
+    @pytest.mark.parametrize('member_kind', ['clinical.csv', 'non-clinical.bin'])
+    @pytest.mark.parametrize('entry', ['index', 'saved-verifier', 'retrieval', 'source-verifier'])
+    def test_every_shared_entry_rejects_oversized_members_before_decompression(tmp_path, monkeypatch, member_kind, entry):
+&gt;       from clinical_intelligence import archive_bounds
+E       ImportError: cannot import name 'archive_bounds' from 'clinical_intelligence' (D:\Codex\Take Home Excerise\claims-shared-fixes\src\clinical_intelligence\__init__.py)
+
+tests\test_claims_shared_safety.py:57: ImportError</failure></testcase><testcase classname="tests.test_claims_shared_safety" name="test_every_shared_entry_rejects_oversized_members_before_decompression[saved-verifier-non-clinical.bin]" time="0.002"><failure message="ImportError: cannot import name 'archive_bounds' from 'clinical_intelligence' (D:\Codex\Take Home Excerise\claims-shared-fixes\src\clinical_intelligence\__init__.py)">tmp_path = WindowsPath('D:/Codex/Take Home Excerise/claims-shared-fixes/.work/p2-before/test_every_shared_entry_reject3')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x00000205D3746180&gt;
+member_kind = 'non-clinical.bin', entry = 'saved-verifier'
+
+    @pytest.mark.parametrize('member_kind', ['clinical.csv', 'non-clinical.bin'])
+    @pytest.mark.parametrize('entry', ['index', 'saved-verifier', 'retrieval', 'source-verifier'])
+    def test_every_shared_entry_rejects_oversized_members_before_decompression(tmp_path, monkeypatch, member_kind, entry):
+&gt;       from clinical_intelligence import archive_bounds
+E       ImportError: cannot import name 'archive_bounds' from 'clinical_intelligence' (D:\Codex\Take Home Excerise\claims-shared-fixes\src\clinical_intelligence\__init__.py)
+
+tests\test_claims_shared_safety.py:57: ImportError</failure></testcase><testcase classname="tests.test_claims_shared_safety" name="test_every_shared_entry_rejects_oversized_members_before_decompression[retrieval-clinical.csv]" time="0.002"><failure message="ImportError: cannot import name 'archive_bounds' from 'clinical_intelligence' (D:\Codex\Take Home Excerise\claims-shared-fixes\src\clinical_intelligence\__init__.py)">tmp_path = WindowsPath('D:/Codex/Take Home Excerise/claims-shared-fixes/.work/p2-before/test_every_shared_entry_reject4')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x00000205D37457F0&gt;
+member_kind = 'clinical.csv', entry = 'retrieval'
+
+    @pytest.mark.parametrize('member_kind', ['clinical.csv', 'non-clinical.bin'])
+    @pytest.mark.parametrize('entry', ['index', 'saved-verifier', 'retrieval', 'source-verifier'])
+    def test_every_shared_entry_rejects_oversized_members_before_decompression(tmp_path, monkeypatch, member_kind, entry):
+&gt;       from clinical_intelligence import archive_bounds
+E       ImportError: cannot import name 'archive_bounds' from 'clinical_intelligence' (D:\Codex\Take Home Excerise\claims-shared-fixes\src\clinical_intelligence\__init__.py)
+
+tests\test_claims_shared_safety.py:57: ImportError</failure></testcase><testcase classname="tests.test_claims_shared_safety" name="test_every_shared_entry_rejects_oversized_members_before_decompression[retrieval-non-clinical.bin]" time="0.002"><failure message="ImportError: cannot import name 'archive_bounds' from 'clinical_intelligence' (D:\Codex\Take Home Excerise\claims-shared-fixes\src\clinical_intelligence\__init__.py)">tmp_path = WindowsPath('D:/Codex/Take Home Excerise/claims-shared-fixes/.work/p2-before/test_every_shared_entry_reject5')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x00000205D3745490&gt;
+member_kind = 'non-clinical.bin', entry = 'retrieval'
+
+    @pytest.mark.parametrize('member_kind', ['clinical.csv', 'non-clinical.bin'])
+    @pytest.mark.parametrize('entry', ['index', 'saved-verifier', 'retrieval', 'source-verifier'])
+    def test_every_shared_entry_rejects_oversized_members_before_decompression(tmp_path, monkeypatch, member_kind, entry):
+&gt;       from clinical_intelligence import archive_bounds
+E       ImportError: cannot import name 'archive_bounds' from 'clinical_intelligence' (D:\Codex\Take Home Excerise\claims-shared-fixes\src\clinical_intelligence\__init__.py)
+
+tests\test_claims_shared_safety.py:57: ImportError</failure></testcase><testcase classname="tests.test_claims_shared_safety" name="test_every_shared_entry_rejects_oversized_members_before_decompression[source-verifier-clinical.csv]" time="0.002"><failure message="ImportError: cannot import name 'archive_bounds' from 'clinical_intelligence' (D:\Codex\Take Home Excerise\claims-shared-fixes\src\clinical_intelligence\__init__.py)">tmp_path = WindowsPath('D:/Codex/Take Home Excerise/claims-shared-fixes/.work/p2-before/test_every_shared_entry_reject6')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x00000205D3746DE0&gt;
+member_kind = 'clinical.csv', entry = 'source-verifier'
+
+    @pytest.mark.parametrize('member_kind', ['clinical.csv', 'non-clinical.bin'])
+    @pytest.mark.parametrize('entry', ['index', 'saved-verifier', 'retrieval', 'source-verifier'])
+    def test_every_shared_entry_rejects_oversized_members_before_decompression(tmp_path, monkeypatch, member_kind, entry):
+&gt;       from clinical_intelligence import archive_bounds
+E       ImportError: cannot import name 'archive_bounds' from 'clinical_intelligence' (D:\Codex\Take Home Excerise\claims-shared-fixes\src\clinical_intelligence\__init__.py)
+
+tests\test_claims_shared_safety.py:57: ImportError</failure></testcase><testcase classname="tests.test_claims_shared_safety" name="test_every_shared_entry_rejects_oversized_members_before_decompression[source-verifier-non-clinical.bin]" time="0.002"><failure message="ImportError: cannot import name 'archive_bounds' from 'clinical_intelligence' (D:\Codex\Take Home Excerise\claims-shared-fixes\src\clinical_intelligence\__init__.py)">tmp_path = WindowsPath('D:/Codex/Take Home Excerise/claims-shared-fixes/.work/p2-before/test_every_shared_entry_reject7')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x00000205D36CA840&gt;
+member_kind = 'non-clinical.bin', entry = 'source-verifier'
+
+    @pytest.mark.parametrize('member_kind', ['clinical.csv', 'non-clinical.bin'])
+    @pytest.mark.parametrize('entry', ['index', 'saved-verifier', 'retrieval', 'source-verifier'])
+    def test_every_shared_entry_rejects_oversized_members_before_decompression(tmp_path, monkeypatch, member_kind, entry):
+&gt;       from clinical_intelligence import archive_bounds
+E       ImportError: cannot import name 'archive_bounds' from 'clinical_intelligence' (D:\Codex\Take Home Excerise\claims-shared-fixes\src\clinical_intelligence\__init__.py)
+
+tests\test_claims_shared_safety.py:57: ImportError</failure></testcase></testsuite></testsuites>

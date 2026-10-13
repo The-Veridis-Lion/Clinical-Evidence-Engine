@@ -1,0 +1,850 @@
+{
+  "schema_version": "careflow-review-packet/1",
+  "case_id": "CF-CORRECTION-001",
+  "revision": 1,
+  "request": {
+    "request_id": "REF-CORRECTION",
+    "patient_id": "SYN-CF-CORRECTION",
+    "encounter_id": "ENC-A",
+    "request_type": "referral",
+    "service_code": "specialty-consult",
+    "code_system": "careflow-demo",
+    "requested_service_date": "2026-11-01",
+    "ruleset_id": "careflow-referral",
+    "ruleset_version": "1.0.0"
+  },
+  "review_as_of": "2026-10-13",
+  "readiness": "NOT_SUPPORTED",
+  "ruleset": {
+    "ruleset_id": "careflow-referral",
+    "version": "1.0.0",
+    "request_type": "referral",
+    "status": "synthetic_project_checklist",
+    "requirements_authority": "CareFlow demo documentation specification; no insurer policy authority.",
+    "rules": [
+      {
+        "rule_id": "CF-DOC-001",
+        "version": "1.0.0",
+        "requirement": "request_intent",
+        "description": "Request-specific provider intent is documented.",
+        "trigger_requirement": null
+      },
+      {
+        "rule_id": "CF-DOC-002",
+        "version": "1.0.0",
+        "requirement": "referral_reason",
+        "description": "The requested service has a documented clinical reason.",
+        "trigger_requirement": null
+      },
+      {
+        "rule_id": "CF-DOC-003",
+        "version": "1.0.0",
+        "requirement": "clinical_summary",
+        "description": "A request-specific clinical summary is available.",
+        "trigger_requirement": null
+      },
+      {
+        "rule_id": "CF-DOC-004",
+        "version": "1.0.0",
+        "requirement": "investigation_result",
+        "description": "Attach results when the documented request requires an investigation.",
+        "trigger_requirement": "investigation_required"
+      },
+      {
+        "rule_id": "CF-DOC-005",
+        "version": "1.0.0",
+        "requirement": "therapy_completed",
+        "description": "Attach documented prior therapy when the request explicitly requires it.",
+        "trigger_requirement": "therapy_required"
+      },
+      {
+        "rule_id": "CF-REF-001",
+        "version": "1.0.0",
+        "requirement": "destination",
+        "description": "Referral destination is documented.",
+        "trigger_requirement": null
+      }
+    ],
+    "boundary": "Documentation readiness only; no medical approval, payment eligibility or compliance certification.",
+    "sha256": "ed68d9f0d7f48a59db27065a644ac39a55c7c4a360c1bb905663e64056f246c8"
+  },
+  "checks": [
+    {
+      "criterion_id": "CF-DOC-001",
+      "criterion_role": "documentation_requirement",
+      "status": "SUPPORTED",
+      "reason": "Traceable assertions support the required document or fact.",
+      "clinical_refs": [
+        {
+          "patient_id": "SYN-CF-CORRECTION",
+          "source_id": "doc-b8ca69991b7abf48",
+          "source_sha256": "2cbe8e238fb7f6ab0bb290b96604906b85c702b214fa543afe04645bbf99bf40",
+          "method": "unicode_line_anchor",
+          "locator": "doc-b8ca69991b7abf48:L001",
+          "quote": "Provider requests specialty consultation for REF-CORRECTION.",
+          "start": 0,
+          "end": 60,
+          "raw_value": null,
+          "original_locator": null
+        }
+      ],
+      "policy_refs": [],
+      "gaps": [],
+      "conflicts": [],
+      "derivation": {
+        "trigger": true,
+        "trigger_status": "SUPPORTED"
+      },
+      "evidence_complete": true,
+      "rule_id": "CF-DOC-001",
+      "rule_version": "1.0.0",
+      "requirement": "request_intent",
+      "description": "Request-specific provider intent is documented.",
+      "trigger_condition": "always",
+      "fact_ids": [
+        "fact-b8ca69991b7abf48"
+      ],
+      "review_questions": []
+    },
+    {
+      "criterion_id": "CF-DOC-002",
+      "criterion_role": "documentation_requirement",
+      "status": "SUPPORTED",
+      "reason": "Traceable assertions support the required document or fact.",
+      "clinical_refs": [
+        {
+          "patient_id": "SYN-CF-CORRECTION",
+          "source_id": "doc-007717ef15f82a64",
+          "source_sha256": "7be14ff9620b08f4376dc98263c40e31f5d7ca96680bd8a8985b4763044d4740",
+          "method": "unicode_line_anchor",
+          "locator": "doc-007717ef15f82a64:L001",
+          "quote": "Reason for REF-CORRECTION: persistent symptoms requiring specialist evaluation.",
+          "start": 0,
+          "end": 79,
+          "raw_value": null,
+          "original_locator": null
+        }
+      ],
+      "policy_refs": [],
+      "gaps": [],
+      "conflicts": [],
+      "derivation": {
+        "trigger": true,
+        "trigger_status": "SUPPORTED"
+      },
+      "evidence_complete": true,
+      "rule_id": "CF-DOC-002",
+      "rule_version": "1.0.0",
+      "requirement": "referral_reason",
+      "description": "The requested service has a documented clinical reason.",
+      "trigger_condition": "always",
+      "fact_ids": [
+        "fact-007717ef15f82a64"
+      ],
+      "review_questions": []
+    },
+    {
+      "criterion_id": "CF-DOC-003",
+      "criterion_role": "documentation_requirement",
+      "status": "NOT_SUPPORTED",
+      "reason": "Explicit contrary evidence is documented; this is not an absence inference.",
+      "clinical_refs": [
+        {
+          "patient_id": "SYN-CF-CORRECTION",
+          "source_id": "doc-40ee7175e8d1617f",
+          "source_sha256": "b1c95df199f2b264a31d034c3755cd86b479f0bd824e5373160d9f7c94bbd7a1",
+          "method": "unicode_line_anchor",
+          "locator": "doc-40ee7175e8d1617f:L001",
+          "quote": "Original attachment record: the clinical summary was absent.",
+          "start": 0,
+          "end": 60,
+          "raw_value": null,
+          "original_locator": null
+        }
+      ],
+      "policy_refs": [],
+      "gaps": [],
+      "conflicts": [],
+      "derivation": {
+        "trigger": true,
+        "trigger_status": "SUPPORTED"
+      },
+      "evidence_complete": false,
+      "rule_id": "CF-DOC-003",
+      "rule_version": "1.0.0",
+      "requirement": "clinical_summary",
+      "description": "A request-specific clinical summary is available.",
+      "trigger_condition": "always",
+      "fact_ids": [
+        "fact-40ee7175e8d1617f"
+      ],
+      "review_questions": [
+        "Is the explicit contrary assertion for clinical_summary still correct? Supply new evidence for any correction."
+      ]
+    },
+    {
+      "criterion_id": "CF-DOC-004",
+      "criterion_role": "documentation_requirement",
+      "status": "NOT_APPLICABLE",
+      "reason": "Source-linked explicit false trigger establishes inapplicability.",
+      "clinical_refs": [
+        {
+          "patient_id": "SYN-CF-CORRECTION",
+          "source_id": "doc-649af0caf46f5e65",
+          "source_sha256": "46688af16de35a5d6a4ca21c326836750d781fe8a9974302b1754e6fdf071b4a",
+          "method": "unicode_line_anchor",
+          "locator": "doc-649af0caf46f5e65:L001",
+          "quote": "No investigation result is required for REF-CORRECTION in this constructed request.",
+          "start": 0,
+          "end": 83,
+          "raw_value": null,
+          "original_locator": null
+        }
+      ],
+      "policy_refs": [],
+      "gaps": [],
+      "conflicts": [],
+      "derivation": {
+        "trigger": false,
+        "trigger_status": "NOT_SUPPORTED"
+      },
+      "evidence_complete": true,
+      "rule_id": "CF-DOC-004",
+      "rule_version": "1.0.0",
+      "requirement": "investigation_result",
+      "description": "Attach results when the documented request requires an investigation.",
+      "trigger_condition": "investigation_required == true",
+      "fact_ids": [
+        "fact-649af0caf46f5e65"
+      ],
+      "review_questions": []
+    },
+    {
+      "criterion_id": "CF-DOC-005",
+      "criterion_role": "documentation_requirement",
+      "status": "NOT_APPLICABLE",
+      "reason": "Source-linked explicit false trigger establishes inapplicability.",
+      "clinical_refs": [
+        {
+          "patient_id": "SYN-CF-CORRECTION",
+          "source_id": "doc-36b37fcd19ff534a",
+          "source_sha256": "d9d0fe7d3ddb469db2044aba7b969513588e945fadbddcb9ef6ad096a5995e28",
+          "method": "unicode_line_anchor",
+          "locator": "doc-36b37fcd19ff534a:L001",
+          "quote": "Prior therapy documentation is not required for REF-CORRECTION.",
+          "start": 0,
+          "end": 63,
+          "raw_value": null,
+          "original_locator": null
+        }
+      ],
+      "policy_refs": [],
+      "gaps": [],
+      "conflicts": [],
+      "derivation": {
+        "trigger": false,
+        "trigger_status": "NOT_SUPPORTED"
+      },
+      "evidence_complete": true,
+      "rule_id": "CF-DOC-005",
+      "rule_version": "1.0.0",
+      "requirement": "therapy_completed",
+      "description": "Attach documented prior therapy when the request explicitly requires it.",
+      "trigger_condition": "therapy_required == true",
+      "fact_ids": [
+        "fact-36b37fcd19ff534a"
+      ],
+      "review_questions": []
+    },
+    {
+      "criterion_id": "CF-REF-001",
+      "criterion_role": "documentation_requirement",
+      "status": "SUPPORTED",
+      "reason": "Traceable assertions support the required document or fact.",
+      "clinical_refs": [
+        {
+          "patient_id": "SYN-CF-CORRECTION",
+          "source_id": "doc-086a9af79f3b4699",
+          "source_sha256": "ac33cc5ecd9bb3b608c564e8b12265e23de20e1ebec6f91ce01ac74a8b436dfb",
+          "method": "unicode_line_anchor",
+          "locator": "doc-086a9af79f3b4699:L001",
+          "quote": "Destination for REF-CORRECTION: specialty clinic.",
+          "start": 0,
+          "end": 49,
+          "raw_value": null,
+          "original_locator": null
+        }
+      ],
+      "policy_refs": [],
+      "gaps": [],
+      "conflicts": [],
+      "derivation": {
+        "trigger": true,
+        "trigger_status": "SUPPORTED"
+      },
+      "evidence_complete": true,
+      "rule_id": "CF-REF-001",
+      "rule_version": "1.0.0",
+      "requirement": "destination",
+      "description": "Referral destination is documented.",
+      "trigger_condition": "always",
+      "fact_ids": [
+        "fact-086a9af79f3b4699"
+      ],
+      "review_questions": []
+    }
+  ],
+  "facts": [
+    {
+      "fact_id": "fact-b8ca69991b7abf48",
+      "patient_id": "SYN-CF-CORRECTION",
+      "request_id": "REF-CORRECTION",
+      "service_code": "specialty-consult",
+      "code_system": "careflow-demo",
+      "requirement": "request_intent",
+      "assertion": true,
+      "statement": "Provider requests specialty consultation for REF-CORRECTION.",
+      "evidence": [
+        {
+          "source_id": "doc-b8ca69991b7abf48",
+          "span_id": "doc-b8ca69991b7abf48:L001",
+          "field": null
+        }
+      ],
+      "interpretation_origin": "human",
+      "amends_fact_id": null,
+      "authority_ref": null,
+      "citations": [
+        {
+          "patient_id": "SYN-CF-CORRECTION",
+          "source_id": "doc-b8ca69991b7abf48",
+          "source_sha256": "2cbe8e238fb7f6ab0bb290b96604906b85c702b214fa543afe04645bbf99bf40",
+          "method": "unicode_line_anchor",
+          "locator": "doc-b8ca69991b7abf48:L001",
+          "quote": "Provider requests specialty consultation for REF-CORRECTION.",
+          "start": 0,
+          "end": 60,
+          "raw_value": null,
+          "original_locator": null
+        }
+      ],
+      "assertion_status": "ASSERTED_PRESENT",
+      "grounding_errors": [],
+      "fact_sha256": "79e1f9ac830882e3c423e1ae1a08d52a3a9f9595354b2f75638c72a5c53026be",
+      "effective_assertions": [
+        true
+      ],
+      "reconciliation_status": "ORIGINAL",
+      "related_fact_ids": [
+        "fact-b8ca69991b7abf48"
+      ]
+    },
+    {
+      "fact_id": "fact-007717ef15f82a64",
+      "patient_id": "SYN-CF-CORRECTION",
+      "request_id": "REF-CORRECTION",
+      "service_code": "specialty-consult",
+      "code_system": "careflow-demo",
+      "requirement": "referral_reason",
+      "assertion": true,
+      "statement": "Reason for REF-CORRECTION: persistent symptoms requiring specialist evaluation.",
+      "evidence": [
+        {
+          "source_id": "doc-007717ef15f82a64",
+          "span_id": "doc-007717ef15f82a64:L001",
+          "field": null
+        }
+      ],
+      "interpretation_origin": "human",
+      "amends_fact_id": null,
+      "authority_ref": null,
+      "citations": [
+        {
+          "patient_id": "SYN-CF-CORRECTION",
+          "source_id": "doc-007717ef15f82a64",
+          "source_sha256": "7be14ff9620b08f4376dc98263c40e31f5d7ca96680bd8a8985b4763044d4740",
+          "method": "unicode_line_anchor",
+          "locator": "doc-007717ef15f82a64:L001",
+          "quote": "Reason for REF-CORRECTION: persistent symptoms requiring specialist evaluation.",
+          "start": 0,
+          "end": 79,
+          "raw_value": null,
+          "original_locator": null
+        }
+      ],
+      "assertion_status": "ASSERTED_PRESENT",
+      "grounding_errors": [],
+      "fact_sha256": "c4c143d80d8927c8d7148b18491f35e557b09b97efb0451f66b9b7049e0fffae",
+      "effective_assertions": [
+        true
+      ],
+      "reconciliation_status": "ORIGINAL",
+      "related_fact_ids": [
+        "fact-007717ef15f82a64"
+      ]
+    },
+    {
+      "fact_id": "fact-649af0caf46f5e65",
+      "patient_id": "SYN-CF-CORRECTION",
+      "request_id": "REF-CORRECTION",
+      "service_code": "specialty-consult",
+      "code_system": "careflow-demo",
+      "requirement": "investigation_required",
+      "assertion": false,
+      "statement": "No investigation result is required for REF-CORRECTION in this constructed request.",
+      "evidence": [
+        {
+          "source_id": "doc-649af0caf46f5e65",
+          "span_id": "doc-649af0caf46f5e65:L001",
+          "field": null
+        }
+      ],
+      "interpretation_origin": "human",
+      "amends_fact_id": null,
+      "authority_ref": null,
+      "citations": [
+        {
+          "patient_id": "SYN-CF-CORRECTION",
+          "source_id": "doc-649af0caf46f5e65",
+          "source_sha256": "46688af16de35a5d6a4ca21c326836750d781fe8a9974302b1754e6fdf071b4a",
+          "method": "unicode_line_anchor",
+          "locator": "doc-649af0caf46f5e65:L001",
+          "quote": "No investigation result is required for REF-CORRECTION in this constructed request.",
+          "start": 0,
+          "end": 83,
+          "raw_value": null,
+          "original_locator": null
+        }
+      ],
+      "assertion_status": "ASSERTED_ABSENT",
+      "grounding_errors": [],
+      "fact_sha256": "9bf7d658b4fe0025b0bae97f6a65c18ecee4afe86ec621ddb94123f6e2182930",
+      "effective_assertions": [
+        false
+      ],
+      "reconciliation_status": "ORIGINAL",
+      "related_fact_ids": [
+        "fact-649af0caf46f5e65"
+      ]
+    },
+    {
+      "fact_id": "fact-36b37fcd19ff534a",
+      "patient_id": "SYN-CF-CORRECTION",
+      "request_id": "REF-CORRECTION",
+      "service_code": "specialty-consult",
+      "code_system": "careflow-demo",
+      "requirement": "therapy_required",
+      "assertion": false,
+      "statement": "Prior therapy documentation is not required for REF-CORRECTION.",
+      "evidence": [
+        {
+          "source_id": "doc-36b37fcd19ff534a",
+          "span_id": "doc-36b37fcd19ff534a:L001",
+          "field": null
+        }
+      ],
+      "interpretation_origin": "human",
+      "amends_fact_id": null,
+      "authority_ref": null,
+      "citations": [
+        {
+          "patient_id": "SYN-CF-CORRECTION",
+          "source_id": "doc-36b37fcd19ff534a",
+          "source_sha256": "d9d0fe7d3ddb469db2044aba7b969513588e945fadbddcb9ef6ad096a5995e28",
+          "method": "unicode_line_anchor",
+          "locator": "doc-36b37fcd19ff534a:L001",
+          "quote": "Prior therapy documentation is not required for REF-CORRECTION.",
+          "start": 0,
+          "end": 63,
+          "raw_value": null,
+          "original_locator": null
+        }
+      ],
+      "assertion_status": "ASSERTED_ABSENT",
+      "grounding_errors": [],
+      "fact_sha256": "5db7032a7e343a7b6ad3bc27f8c6483d360fca8fbf6377c8e47b568d9ee84f9e",
+      "effective_assertions": [
+        false
+      ],
+      "reconciliation_status": "ORIGINAL",
+      "related_fact_ids": [
+        "fact-36b37fcd19ff534a"
+      ]
+    },
+    {
+      "fact_id": "fact-086a9af79f3b4699",
+      "patient_id": "SYN-CF-CORRECTION",
+      "request_id": "REF-CORRECTION",
+      "service_code": "specialty-consult",
+      "code_system": "careflow-demo",
+      "requirement": "destination",
+      "assertion": true,
+      "statement": "Destination for REF-CORRECTION: specialty clinic.",
+      "evidence": [
+        {
+          "source_id": "doc-086a9af79f3b4699",
+          "span_id": "doc-086a9af79f3b4699:L001",
+          "field": null
+        }
+      ],
+      "interpretation_origin": "human",
+      "amends_fact_id": null,
+      "authority_ref": null,
+      "citations": [
+        {
+          "patient_id": "SYN-CF-CORRECTION",
+          "source_id": "doc-086a9af79f3b4699",
+          "source_sha256": "ac33cc5ecd9bb3b608c564e8b12265e23de20e1ebec6f91ce01ac74a8b436dfb",
+          "method": "unicode_line_anchor",
+          "locator": "doc-086a9af79f3b4699:L001",
+          "quote": "Destination for REF-CORRECTION: specialty clinic.",
+          "start": 0,
+          "end": 49,
+          "raw_value": null,
+          "original_locator": null
+        }
+      ],
+      "assertion_status": "ASSERTED_PRESENT",
+      "grounding_errors": [],
+      "fact_sha256": "eed0cc610173dd65256b525332f51df044bd888e91b003d6423b067f1db5d725",
+      "effective_assertions": [
+        true
+      ],
+      "reconciliation_status": "ORIGINAL",
+      "related_fact_ids": [
+        "fact-086a9af79f3b4699"
+      ]
+    },
+    {
+      "fact_id": "fact-40ee7175e8d1617f",
+      "patient_id": "SYN-CF-CORRECTION",
+      "request_id": "REF-CORRECTION",
+      "service_code": "specialty-consult",
+      "code_system": "careflow-demo",
+      "requirement": "clinical_summary",
+      "assertion": false,
+      "statement": "Original attachment record: the clinical summary was absent.",
+      "evidence": [
+        {
+          "source_id": "doc-40ee7175e8d1617f",
+          "span_id": "doc-40ee7175e8d1617f:L001",
+          "field": null
+        }
+      ],
+      "interpretation_origin": "human",
+      "amends_fact_id": null,
+      "authority_ref": null,
+      "citations": [
+        {
+          "patient_id": "SYN-CF-CORRECTION",
+          "source_id": "doc-40ee7175e8d1617f",
+          "source_sha256": "b1c95df199f2b264a31d034c3755cd86b479f0bd824e5373160d9f7c94bbd7a1",
+          "method": "unicode_line_anchor",
+          "locator": "doc-40ee7175e8d1617f:L001",
+          "quote": "Original attachment record: the clinical summary was absent.",
+          "start": 0,
+          "end": 60,
+          "raw_value": null,
+          "original_locator": null
+        }
+      ],
+      "assertion_status": "ASSERTED_ABSENT",
+      "grounding_errors": [],
+      "fact_sha256": "6e3fac30c24c1efae6d4d5d484d805c93885f452d6e40a7cb49bd27a2dd08ccc",
+      "effective_assertions": [
+        false
+      ],
+      "reconciliation_status": "ORIGINAL",
+      "related_fact_ids": [
+        "fact-40ee7175e8d1617f"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "doc-b8ca69991b7abf48",
+      "patient_id": "SYN-CF-CORRECTION",
+      "encounter_id": "ENC-A",
+      "available_at": "2026-10-10",
+      "origin": "constructed_synthetic",
+      "source_kind": "synthetic_note",
+      "recorded_at": "2026-10-09",
+      "event_date": "2026-10-09",
+      "record_type": "note",
+      "event_link_id": null,
+      "content": "Provider requests specialty consultation for REF-CORRECTION.",
+      "availability_basis": "explicit_case_metadata",
+      "original_locator": null
+    },
+    {
+      "source_id": "doc-007717ef15f82a64",
+      "patient_id": "SYN-CF-CORRECTION",
+      "encounter_id": "ENC-A",
+      "available_at": "2026-10-10",
+      "origin": "constructed_synthetic",
+      "source_kind": "synthetic_note",
+      "recorded_at": "2026-10-09",
+      "event_date": "2026-10-09",
+      "record_type": "note",
+      "event_link_id": null,
+      "content": "Reason for REF-CORRECTION: persistent symptoms requiring specialist evaluation.",
+      "availability_basis": "explicit_case_metadata",
+      "original_locator": null
+    },
+    {
+      "source_id": "doc-649af0caf46f5e65",
+      "patient_id": "SYN-CF-CORRECTION",
+      "encounter_id": "ENC-A",
+      "available_at": "2026-10-10",
+      "origin": "constructed_synthetic",
+      "source_kind": "synthetic_note",
+      "recorded_at": "2026-10-09",
+      "event_date": "2026-10-09",
+      "record_type": "note",
+      "event_link_id": null,
+      "content": "No investigation result is required for REF-CORRECTION in this constructed request.",
+      "availability_basis": "explicit_case_metadata",
+      "original_locator": null
+    },
+    {
+      "source_id": "doc-36b37fcd19ff534a",
+      "patient_id": "SYN-CF-CORRECTION",
+      "encounter_id": "ENC-A",
+      "available_at": "2026-10-10",
+      "origin": "constructed_synthetic",
+      "source_kind": "synthetic_note",
+      "recorded_at": "2026-10-09",
+      "event_date": "2026-10-09",
+      "record_type": "note",
+      "event_link_id": null,
+      "content": "Prior therapy documentation is not required for REF-CORRECTION.",
+      "availability_basis": "explicit_case_metadata",
+      "original_locator": null
+    },
+    {
+      "source_id": "doc-086a9af79f3b4699",
+      "patient_id": "SYN-CF-CORRECTION",
+      "encounter_id": "ENC-A",
+      "available_at": "2026-10-10",
+      "origin": "constructed_synthetic",
+      "source_kind": "synthetic_note",
+      "recorded_at": "2026-10-09",
+      "event_date": "2026-10-09",
+      "record_type": "note",
+      "event_link_id": null,
+      "content": "Destination for REF-CORRECTION: specialty clinic.",
+      "availability_basis": "explicit_case_metadata",
+      "original_locator": null
+    },
+    {
+      "source_id": "doc-40ee7175e8d1617f",
+      "patient_id": "SYN-CF-CORRECTION",
+      "encounter_id": "ENC-A",
+      "available_at": "2026-10-10",
+      "origin": "constructed_synthetic",
+      "source_kind": "synthetic_note",
+      "recorded_at": "2026-10-09",
+      "event_date": "2026-10-09",
+      "record_type": "note",
+      "event_link_id": null,
+      "content": "Original attachment record: the clinical summary was absent.",
+      "availability_basis": "explicit_case_metadata",
+      "original_locator": null
+    }
+  ],
+  "excluded_facts": [],
+  "source_screening": [
+    {
+      "source_id": "doc-b8ca69991b7abf48",
+      "availability_scope_issue": null,
+      "referenced_by_fact_ids": [
+        "fact-b8ca69991b7abf48"
+      ]
+    },
+    {
+      "source_id": "doc-007717ef15f82a64",
+      "availability_scope_issue": null,
+      "referenced_by_fact_ids": [
+        "fact-007717ef15f82a64"
+      ]
+    },
+    {
+      "source_id": "doc-649af0caf46f5e65",
+      "availability_scope_issue": null,
+      "referenced_by_fact_ids": [
+        "fact-649af0caf46f5e65"
+      ]
+    },
+    {
+      "source_id": "doc-36b37fcd19ff534a",
+      "availability_scope_issue": null,
+      "referenced_by_fact_ids": [
+        "fact-36b37fcd19ff534a"
+      ]
+    },
+    {
+      "source_id": "doc-086a9af79f3b4699",
+      "availability_scope_issue": null,
+      "referenced_by_fact_ids": [
+        "fact-086a9af79f3b4699"
+      ]
+    },
+    {
+      "source_id": "doc-40ee7175e8d1617f",
+      "availability_scope_issue": null,
+      "referenced_by_fact_ids": [
+        "fact-40ee7175e8d1617f"
+      ]
+    }
+  ],
+  "source_relationships": {
+    "version": "claims-review-relationships/1",
+    "relationships": [],
+    "derived": {
+      "fact-b8ca69991b7abf48": {
+        "content/value": {
+          "values": [
+            true
+          ],
+          "status": "ORIGINAL",
+          "source_ids": [
+            "fact-b8ca69991b7abf48"
+          ]
+        },
+        "event_date": {
+          "values": [
+            null
+          ],
+          "status": "ORIGINAL",
+          "source_ids": [
+            "fact-b8ca69991b7abf48"
+          ]
+        }
+      },
+      "fact-007717ef15f82a64": {
+        "content/value": {
+          "values": [
+            true
+          ],
+          "status": "ORIGINAL",
+          "source_ids": [
+            "fact-007717ef15f82a64"
+          ]
+        },
+        "event_date": {
+          "values": [
+            null
+          ],
+          "status": "ORIGINAL",
+          "source_ids": [
+            "fact-007717ef15f82a64"
+          ]
+        }
+      },
+      "fact-649af0caf46f5e65": {
+        "content/value": {
+          "values": [
+            false
+          ],
+          "status": "ORIGINAL",
+          "source_ids": [
+            "fact-649af0caf46f5e65"
+          ]
+        },
+        "event_date": {
+          "values": [
+            null
+          ],
+          "status": "ORIGINAL",
+          "source_ids": [
+            "fact-649af0caf46f5e65"
+          ]
+        }
+      },
+      "fact-36b37fcd19ff534a": {
+        "content/value": {
+          "values": [
+            false
+          ],
+          "status": "ORIGINAL",
+          "source_ids": [
+            "fact-36b37fcd19ff534a"
+          ]
+        },
+        "event_date": {
+          "values": [
+            null
+          ],
+          "status": "ORIGINAL",
+          "source_ids": [
+            "fact-36b37fcd19ff534a"
+          ]
+        }
+      },
+      "fact-086a9af79f3b4699": {
+        "content/value": {
+          "values": [
+            true
+          ],
+          "status": "ORIGINAL",
+          "source_ids": [
+            "fact-086a9af79f3b4699"
+          ]
+        },
+        "event_date": {
+          "values": [
+            null
+          ],
+          "status": "ORIGINAL",
+          "source_ids": [
+            "fact-086a9af79f3b4699"
+          ]
+        }
+      },
+      "fact-40ee7175e8d1617f": {
+        "content/value": {
+          "values": [
+            false
+          ],
+          "status": "ORIGINAL",
+          "source_ids": [
+            "fact-40ee7175e8d1617f"
+          ]
+        },
+        "event_date": {
+          "values": [
+            null
+          ],
+          "status": "ORIGINAL",
+          "source_ids": [
+            "fact-40ee7175e8d1617f"
+          ]
+        }
+      }
+    },
+    "authority_limit": "Explicit source declarations only; signature authenticity/provider credentials not independently verified."
+  },
+  "gaps": [],
+  "unresolved_conflicts": [],
+  "review_route": {
+    "recommended": true,
+    "reasons": [
+      "CF-DOC-003:NOT_SUPPORTED"
+    ],
+    "reviewer_types": [
+      "human",
+      "advanced_ai"
+    ],
+    "mandatory": false
+  },
+  "input_sha256": "a2ff68c2faf779d5101d2d7a67836d21d4ab9739281cc09a145f0b65bad34362",
+  "execution": {
+    "research_model_calls": 0,
+    "product_model_calls": 0,
+    "note_extraction": "supplied_assertions_only",
+    "deterministic_rules": true
+  },
+  "decision_boundary": "Documentation readiness only; no medical approval, payment eligibility or compliance certification.",
+  "interpretation_limit": "Exact provenance validates location, not clinical interpretation or signature authenticity. Supplied assertions require independent human or advanced-AI review when warranted.",
+  "packet_sha256": "497928091def998505ffb1f1b9516567d2d969747dcc3e06be2802fe35f84cf3"
+}

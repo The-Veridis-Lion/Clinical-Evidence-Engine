@@ -1,0 +1,48 @@
+{
+  "schema_version": "careflow-public-corpus-freeze/2",
+  "model_calls": 0,
+  "acn": {
+    "document_count": 4500,
+    "original_case_groups": 1500,
+    "isolated_groups": 1204,
+    "manifest_sha256": "271cdc58247b35260adad1fe181c275f98b4113488a1c51da82892e9a4738ec2"
+  },
+  "aci": {
+    "document_count": 67,
+    "original_case_groups": 67,
+    "isolated_groups": 67,
+    "manifest_sha256": "2b43d9f00603f7cd067a9d72ad8d71e66755b045ffa0b5b5eaa332325733b56c"
+  },
+  "partitions": {
+    "acn": {
+      "development": {
+        "groups": 200,
+        "documents": 768
+      },
+      "holdout": {
+        "groups": 200,
+        "documents": 708
+      },
+      "reserve": {
+        "groups": 804,
+        "documents": 3024
+      }
+    },
+    "aci": {
+      "development": {
+        "groups": 47,
+        "documents": 47
+      },
+      "holdout": {
+        "groups": 20,
+        "documents": 20
+      },
+      "reserve": {
+        "groups": 0,
+        "documents": 0
+      }
+    }
+  },
+  "evaluation_status": "FROZEN_NOT_EVALUATED",
+  "boundary": "No PA labels created. Extraction and readiness reports are separate; public-source references require source review."
+}

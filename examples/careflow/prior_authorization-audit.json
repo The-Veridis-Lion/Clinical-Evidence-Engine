@@ -1,0 +1,85 @@
+{
+  "case_id": "CF-PA-001",
+  "verified": true,
+  "errors": [],
+  "events": [
+    {
+      "case_id": "CF-PA-001",
+      "event_type": "CASE_CREATED",
+      "payload": {
+        "input_sha256": "36d94cbb68a10b5039aea4ce475818a05e809aaa0b9b6c35a70684fe580175cb",
+        "packet_sha256": "c9129f3c40facc6d21721598614a4ee362033bd4a02e59ebbde896ee49e9682e",
+        "revision": 1,
+        "ruleset_sha256": "73850a73cacb35188f20026cff0dc880262ad39ed63c514b6c66620fdd6a6b50"
+      },
+      "previous_sha256": null,
+      "sequence": 1,
+      "timestamp": "2026-10-13T09:52:02.742838+00:00",
+      "event_sha256": "5bc9c8b6ebff566e0ab9f9af8f3a28ed05adea7bcce2e3e2fbaf8f165301bb0b"
+    },
+    {
+      "case_id": "CF-PA-001",
+      "event_type": "REVIEW_RECORDED",
+      "payload": {
+        "basis_packet_sha256": "c9129f3c40facc6d21721598614a4ee362033bd4a02e59ebbde896ee49e9682e",
+        "basis_revision": 1,
+        "fact_ids": [],
+        "judgment": "AGREE",
+        "model": null,
+        "model_version": null,
+        "proposed_actions": [],
+        "reason": "New request-specific summary received; retain the original gap report.",
+        "reviewer_id": "demo-document-intake",
+        "reviewer_type": "human"
+      },
+      "previous_sha256": "5bc9c8b6ebff566e0ab9f9af8f3a28ed05adea7bcce2e3e2fbaf8f165301bb0b",
+      "sequence": 2,
+      "timestamp": "2026-10-13T09:52:02.746839+00:00",
+      "event_sha256": "53f18c6c0328f14495ad470120966f25f31a91e57d2d6673562bd3f3ce7a0f6c"
+    },
+    {
+      "case_id": "CF-PA-001",
+      "event_type": "EVIDENCE_ADDED",
+      "payload": {
+        "added_fact_ids": [
+          "fact-2c3b2c11918d20cf"
+        ],
+        "added_source_ids": [
+          "doc-2c3b2c11918d20cf"
+        ],
+        "input_sha256": "6fd781175e82f3394d58c51c84da2a0b988dea7c45b7a3cdb1d027c0d5e54ef0",
+        "packet_sha256": "5b7d8615a7d0a3ebd2687cd02a0e834b8fc7b0f691a0473bcd11ad58a6a1ce95",
+        "reevaluated_rule_ids": [
+          "CF-DOC-001",
+          "CF-DOC-002",
+          "CF-DOC-003",
+          "CF-DOC-004",
+          "CF-DOC-005",
+          "CF-PA-001",
+          "CF-PA-002"
+        ],
+        "reviewer": {
+          "basis_packet_sha256": "c9129f3c40facc6d21721598614a4ee362033bd4a02e59ebbde896ee49e9682e",
+          "basis_revision": 1,
+          "fact_ids": [],
+          "judgment": "AGREE",
+          "model": null,
+          "model_version": null,
+          "proposed_actions": [],
+          "reason": "New request-specific summary received; retain the original gap report.",
+          "reviewer_id": "demo-document-intake",
+          "reviewer_type": "human"
+        },
+        "revision": 2,
+        "ruleset_sha256": "73850a73cacb35188f20026cff0dc880262ad39ed63c514b6c66620fdd6a6b50"
+      },
+      "previous_sha256": "53f18c6c0328f14495ad470120966f25f31a91e57d2d6673562bd3f3ce7a0f6c",
+      "sequence": 3,
+      "timestamp": "2026-10-13T09:52:02.746839+00:00",
+      "event_sha256": "0a706a6507bd1cdca7a58340f396191ca83f68a5335f80211fa13884d8bb1048"
+    }
+  ],
+  "head_sha256": "0a706a6507bd1cdca7a58340f396191ca83f68a5335f80211fa13884d8bb1048",
+  "revision_count": 2,
+  "integrity_limit": "Local hash-chain verification, not an external signature or tamper-proof ledger."
+}

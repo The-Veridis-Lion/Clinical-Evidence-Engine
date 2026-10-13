@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="10" skipped="0" tests="32" time="0.833" timestamp="2026-10-13T07:37:43.256396-04:00" hostname="iSATiS"><testcase classname="tests.test_careflow_extraction" name="test_valid_extraction_is_cached_even_if_reference_changes" time="0.031" /><testcase classname="tests.test_careflow_extraction" name="test_mechanical_repair_preserves_original_attempts" time="0.033" /><testcase classname="tests.test_careflow_extraction" name="test_structural_retry_cannot_change_previously_valid_clinical_facts" time="0.044" /><testcase classname="tests.test_careflow_extraction" name="test_corrupt_cache_is_rejected_without_resampling[concept]" time="0.034"><failure message="Failed: DID NOT RAISE ValueError">tmp_path = WindowsPath('D:/Codex/Take Home Excerise/careflow-readiness/.work/cache-reference-before/test_corrupt_cache_is_rejected0')
+mutation = 'concept'
+
+    @pytest.mark.parametrize('mutation', ['concept', 'quote', 'document', 'attempt'])
+    def test_corrupt_cache_is_rejected_without_resampling(tmp_path, mutation):
+        provider = Provider()
+        ledger = CallLedger(tmp_path / 'calls.sqlite')
+        extract_document(record(), tmp_path / 'cache', ledger, provider=provider)
+        path = next((tmp_path / 'cache').rglob('result.json'))
+        saved = json.loads(path.read_text(encoding='utf-8'))
+        if mutation == 'concept':
+            saved['extraction']['facts'][0]['concept'] = 'invented diagnosis'
+        elif mutation == 'quote':
+            saved['extraction']['facts'][0]['evidence']['quote'] = 'invented evidence'
+        elif mutation == 'document':
+            saved['document']['document_id'] = 'OTHER-SOURCE'
+        else:
+            saved['attempt'] = 3
+        path.write_text(json.dumps(saved), encoding='utf-8')
+&gt;       with pytest.raises(ValueError, match='[Cc]ache'):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE ValueError
+
+tests\test_careflow_extraction.py:80: Failed</failure></testcase><testcase classname="tests.test_careflow_extraction" name="test_corrupt_cache_is_rejected_without_resampling[quote]" time="0.034"><failure message="Failed: DID NOT RAISE ValueError">tmp_path = WindowsPath('D:/Codex/Take Home Excerise/careflow-readiness/.work/cache-reference-before/test_corrupt_cache_is_rejected1')
+mutation = 'quote'
+
+    @pytest.mark.parametrize('mutation', ['concept', 'quote', 'document', 'attempt'])
+    def test_corrupt_cache_is_rejected_without_resampling(tmp_path, mutation):
+        provider = Provider()
+        ledger = CallLedger(tmp_path / 'calls.sqlite')
+        extract_document(record(), tmp_path / 'cache', ledger, provider=provider)
+        path = next((tmp_path / 'cache').rglob('result.json'))
+        saved = json.loads(path.read_text(encoding='utf-8'))
+        if mutation == 'concept':
+            saved['extraction']['facts'][0]['concept'] = 'invented diagnosis'
+        elif mutation == 'quote':
+            saved['extraction']['facts'][0]['evidence']['quote'] = 'invented evidence'
+        elif mutation == 'document':
+            saved['document']['document_id'] = 'OTHER-SOURCE'
+        else:
+            saved['attempt'] = 3
+        path.write_text(json.dumps(saved), encoding='utf-8')
+&gt;       with pytest.raises(ValueError, match='[Cc]ache'):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE ValueError
+
+tests\test_careflow_extraction.py:80: Failed</failure></testcase><testcase classname="tests.test_careflow_extraction" name="test_corrupt_cache_is_rejected_without_resampling[document]" time="0.032"><failure message="Failed: DID NOT RAISE ValueError">tmp_path = WindowsPath('D:/Codex/Take Home Excerise/careflow-readiness/.work/cache-reference-before/test_corrupt_cache_is_rejected2')
+mutation = 'document'
+
+    @pytest.mark.parametrize('mutation', ['concept', 'quote', 'document', 'attempt'])
+    def test_corrupt_cache_is_rejected_without_resampling(tmp_path, mutation):
+        provider = Provider()
+        ledger = CallLedger(tmp_path / 'calls.sqlite')
+        extract_document(record(), tmp_path / 'cache', ledger, provider=provider)
+        path = next((tmp_path / 'cache').rglob('result.json'))
+        saved = json.loads(path.read_text(encoding='utf-8'))
+        if mutation == 'concept':
+            saved['extraction']['facts'][0]['concept'] = 'invented diagnosis'
+        elif mutation == 'quote':
+            saved['extraction']['facts'][0]['evidence']['quote'] = 'invented evidence'
+        elif mutation == 'document':
+            saved['document']['document_id'] = 'OTHER-SOURCE'
+        else:
+            saved['attempt'] = 3
+        path.write_text(json.dumps(saved), encoding='utf-8')
+&gt;       with pytest.raises(ValueError, match='[Cc]ache'):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE ValueError
+
+tests\test_careflow_extraction.py:80: Failed</failure></testcase><testcase classname="tests.test_careflow_extraction" name="test_corrupt_cache_is_rejected_without_resampling[attempt]" time="0.033"><failure message="Failed: DID NOT RAISE ValueError">tmp_path = WindowsPath('D:/Codex/Take Home Excerise/careflow-readiness/.work/cache-reference-before/test_corrupt_cache_is_rejected3')
+mutation = 'attempt'
+
+    @pytest.mark.parametrize('mutation', ['concept', 'quote', 'document', 'attempt'])
+    def test_corrupt_cache_is_rejected_without_resampling(tmp_path, mutation):
+        provider = Provider()
+        ledger = CallLedger(tmp_path / 'calls.sqlite')
+        extract_document(record(), tmp_path / 'cache', ledger, provider=provider)
+        path = next((tmp_path / 'cache').rglob('result.json'))
+        saved = json.loads(path.read_text(encoding='utf-8'))
+        if mutation == 'concept':
+            saved['extraction']['facts'][0]['concept'] = 'invented diagnosis'
+        elif mutation == 'quote':
+            saved['extraction']['facts'][0]['evidence']['quote'] = 'invented evidence'
+        elif mutation == 'document':
+            saved['document']['document_id'] = 'OTHER-SOURCE'
+        else:
+            saved['attempt'] = 3
+        path.write_text(json.dumps(saved), encoding='utf-8')
+&gt;       with pytest.raises(ValueError, match='[Cc]ache'):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE ValueError
+
+tests\test_careflow_extraction.py:80: Failed</failure></testcase><testcase classname="tests.test_careflow_clinical_context" name="test_public_clinical_facts_are_preserved_reviewable_and_context_only[symptom-referral]" time="0.003" /><testcase classname="tests.test_careflow_clinical_context" name="test_public_clinical_facts_are_preserved_reviewable_and_context_only[symptom-prior_authorization]" time="0.002" /><testcase classname="tests.test_careflow_clinical_context" name="test_public_clinical_facts_are_preserved_reviewable_and_context_only[diagnosis-referral]" time="0.001" /><testcase classname="tests.test_careflow_clinical_context" name="test_public_clinical_facts_are_preserved_reviewable_and_context_only[diagnosis-prior_authorization]" time="0.002" /><testcase classname="tests.test_careflow_clinical_context" name="test_public_clinical_facts_are_preserved_reviewable_and_context_only[medication-referral]" time="0.001" /><testcase classname="tests.test_careflow_clinical_context" name="test_public_clinical_facts_are_preserved_reviewable_and_context_only[medication-prior_authorization]" time="0.002" /><testcase classname="tests.test_careflow_clinical_context" name="test_public_clinical_facts_are_preserved_reviewable_and_context_only[treatment-referral]" time="0.001" /><testcase classname="tests.test_careflow_clinical_context" name="test_public_clinical_facts_are_preserved_reviewable_and_context_only[treatment-prior_authorization]" time="0.002" /><testcase classname="tests.test_careflow_clinical_context" name="test_public_clinical_facts_are_preserved_reviewable_and_context_only[laboratory_result-referral]" time="0.002" /><testcase classname="tests.test_careflow_clinical_context" name="test_public_clinical_facts_are_preserved_reviewable_and_context_only[laboratory_result-prior_authorization]" time="0.002" /><testcase classname="tests.test_careflow_clinical_context" name="test_public_clinical_facts_are_preserved_reviewable_and_context_only[other-referral]" time="0.002" /><testcase classname="tests.test_careflow_clinical_context" name="test_public_clinical_facts_are_preserved_reviewable_and_context_only[other-prior_authorization]" time="0.002" /><testcase classname="tests.test_careflow_clinical_context" name="test_bad_clinical_quote_or_document_binding_is_rejected_before_ready[referral]" time="0.001" /><testcase classname="tests.test_careflow_clinical_context" name="test_bad_clinical_quote_or_document_binding_is_rejected_before_ready[prior_authorization]" time="0.001" /><testcase classname="tests.test_careflow_clinical_context" name="test_other_patient_clinical_context_is_not_associated[referral]" time="0.001" /><testcase classname="tests.test_careflow_clinical_context" name="test_other_patient_clinical_context_is_not_associated[prior_authorization]" time="0.001" /><testcase classname="tests.test_careflow_clinical_context" name="test_empty_context_preserves_original_case_and_packet_hashes" time="0.001" /><testcase classname="tests.test_careflow_clinical_context" name="test_advanced_reviewer_can_cite_clinical_context_fact_ids[referral]" time="0.021" /><testcase classname="tests.test_careflow_clinical_context" name="test_advanced_reviewer_can_cite_clinical_context_fact_ids[prior_authorization]" time="0.020" /><testcase classname="tests.test_careflow_clinical_context" name="test_packet_verifier_includes_clinical_context[quote-referral]" time="0.002"><failure message="assert not True&#10; +  where True = all([True, True, True, True, True])">kind = 'referral', mutation = 'quote'
+
+    @pytest.mark.parametrize('kind', ['referral', 'prior_authorization'])
+    @pytest.mark.parametrize('mutation', ['quote', 'context_fact_id', 'source_sha256'])
+    def test_packet_verifier_includes_clinical_context(kind, mutation):
+        from clinical_intelligence.careflow.evaluation.acceptance import verify_packet
+        packet = evaluate(Case.model_validate_json(json.dumps(clinical_case(kind))))
+        assert all(verify_packet(packet)['source_checks'])
+        context = packet['clinical_context'][0]
+        if mutation == 'quote':
+            context['facts'][0]['evidence']['quote'] = 'fabricated'
+        elif mutation == 'context_fact_id':
+            context['facts'][0]['context_fact_id'] = 'another-fact'
+        else:
+            context['source_sha256'] = 'another-source'
+&gt;       assert not all(verify_packet(packet)['source_checks'])
+E       assert not True
+E        +  where True = all([True, True, True, True, True])
+
+tests\test_careflow_clinical_context.py:108: AssertionError</failure></testcase><testcase classname="tests.test_careflow_clinical_context" name="test_packet_verifier_includes_clinical_context[quote-prior_authorization]" time="0.001"><failure message="assert not True&#10; +  where True = all([True, True, True, True, True, True])">kind = 'prior_authorization', mutation = 'quote'
+
+    @pytest.mark.parametrize('kind', ['referral', 'prior_authorization'])
+    @pytest.mark.parametrize('mutation', ['quote', 'context_fact_id', 'source_sha256'])
+    def test_packet_verifier_includes_clinical_context(kind, mutation):
+        from clinical_intelligence.careflow.evaluation.acceptance import verify_packet
+        packet = evaluate(Case.model_validate_json(json.dumps(clinical_case(kind))))
+        assert all(verify_packet(packet)['source_checks'])
+        context = packet['clinical_context'][0]
+        if mutation == 'quote':
+            context['facts'][0]['evidence']['quote'] = 'fabricated'
+        elif mutation == 'context_fact_id':
+            context['facts'][0]['context_fact_id'] = 'another-fact'
+        else:
+            context['source_sha256'] = 'another-source'
+&gt;       assert not all(verify_packet(packet)['source_checks'])
+E       assert not True
+E        +  where True = all([True, True, True, True, True, True])
+
+tests\test_careflow_clinical_context.py:108: AssertionError</failure></testcase><testcase classname="tests.test_careflow_clinical_context" name="test_packet_verifier_includes_clinical_context[context_fact_id-referral]" time="0.001"><failure message="assert not True&#10; +  where True = all([True, True, True, True, True])">kind = 'referral', mutation = 'context_fact_id'
+
+    @pytest.mark.parametrize('kind', ['referral', 'prior_authorization'])
+    @pytest.mark.parametrize('mutation', ['quote', 'context_fact_id', 'source_sha256'])
+    def test_packet_verifier_includes_clinical_context(kind, mutation):
+        from clinical_intelligence.careflow.evaluation.acceptance import verify_packet
+        packet = evaluate(Case.model_validate_json(json.dumps(clinical_case(kind))))
+        assert all(verify_packet(packet)['source_checks'])
+        context = packet['clinical_context'][0]
+        if mutation == 'quote':
+            context['facts'][0]['evidence']['quote'] = 'fabricated'
+        elif mutation == 'context_fact_id':
+            context['facts'][0]['context_fact_id'] = 'another-fact'
+        else:
+            context['source_sha256'] = 'another-source'
+&gt;       assert not all(verify_packet(packet)['source_checks'])
+E       assert not True
+E        +  where True = all([True, True, True, True, True])
+
+tests\test_careflow_clinical_context.py:108: AssertionError</failure></testcase><testcase classname="tests.test_careflow_clinical_context" name="test_packet_verifier_includes_clinical_context[context_fact_id-prior_authorization]" time="0.001"><failure message="assert not True&#10; +  where True = all([True, True, True, True, True, True])">kind = 'prior_authorization', mutation = 'context_fact_id'
+
+    @pytest.mark.parametrize('kind', ['referral', 'prior_authorization'])
+    @pytest.mark.parametrize('mutation', ['quote', 'context_fact_id', 'source_sha256'])
+    def test_packet_verifier_includes_clinical_context(kind, mutation):
+        from clinical_intelligence.careflow.evaluation.acceptance import verify_packet
+        packet = evaluate(Case.model_validate_json(json.dumps(clinical_case(kind))))
+        assert all(verify_packet(packet)['source_checks'])
+        context = packet['clinical_context'][0]
+        if mutation == 'quote':
+            context['facts'][0]['evidence']['quote'] = 'fabricated'
+        elif mutation == 'context_fact_id':
+            context['facts'][0]['context_fact_id'] = 'another-fact'
+        else:
+            context['source_sha256'] = 'another-source'
+&gt;       assert not all(verify_packet(packet)['source_checks'])
+E       assert not True
+E        +  where True = all([True, True, True, True, True, True])
+
+tests\test_careflow_clinical_context.py:108: AssertionError</failure></testcase><testcase classname="tests.test_careflow_clinical_context" name="test_packet_verifier_includes_clinical_context[source_sha256-referral]" time="0.001"><failure message="assert not True&#10; +  where True = all([True, True, True, True, True])">kind = 'referral', mutation = 'source_sha256'
+
+    @pytest.mark.parametrize('kind', ['referral', 'prior_authorization'])
+    @pytest.mark.parametrize('mutation', ['quote', 'context_fact_id', 'source_sha256'])
+    def test_packet_verifier_includes_clinical_context(kind, mutation):
+        from clinical_intelligence.careflow.evaluation.acceptance import verify_packet
+        packet = evaluate(Case.model_validate_json(json.dumps(clinical_case(kind))))
+        assert all(verify_packet(packet)['source_checks'])
+        context = packet['clinical_context'][0]
+        if mutation == 'quote':
+            context['facts'][0]['evidence']['quote'] = 'fabricated'
+        elif mutation == 'context_fact_id':
+            context['facts'][0]['context_fact_id'] = 'another-fact'
+        else:
+            context['source_sha256'] = 'another-source'
+&gt;       assert not all(verify_packet(packet)['source_checks'])
+E       assert not True
+E        +  where True = all([True, True, True, True, True])
+
+tests\test_careflow_clinical_context.py:108: AssertionError</failure></testcase><testcase classname="tests.test_careflow_clinical_context" name="test_packet_verifier_includes_clinical_context[source_sha256-prior_authorization]" time="0.001"><failure message="assert not True&#10; +  where True = all([True, True, True, True, True, True])">kind = 'prior_authorization', mutation = 'source_sha256'
+
+    @pytest.mark.parametrize('kind', ['referral', 'prior_authorization'])
+    @pytest.mark.parametrize('mutation', ['quote', 'context_fact_id', 'source_sha256'])
+    def test_packet_verifier_includes_clinical_context(kind, mutation):
+        from clinical_intelligence.careflow.evaluation.acceptance import verify_packet
+        packet = evaluate(Case.model_validate_json(json.dumps(clinical_case(kind))))
+        assert all(verify_packet(packet)['source_checks'])
+        context = packet['clinical_context'][0]
+        if mutation == 'quote':
+            context['facts'][0]['evidence']['quote'] = 'fabricated'
+        elif mutation == 'context_fact_id':
+            context['facts'][0]['context_fact_id'] = 'another-fact'
+        else:
+            context['source_sha256'] = 'another-source'
+&gt;       assert not all(verify_packet(packet)['source_checks'])
+E       assert not True
+E        +  where True = all([True, True, True, True, True, True])
+
+tests\test_careflow_clinical_context.py:108: AssertionError</failure></testcase></testsuite></testsuites>

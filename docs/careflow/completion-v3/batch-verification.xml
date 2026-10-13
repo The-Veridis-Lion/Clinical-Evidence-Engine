@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="2" skipped="0" tests="11" time="1.111" timestamp="2026-10-13T10:31:12.124492-04:00" hostname="iSATiS"><testcase classname="tests.test_careflow_batch" name="test_transport_stop_preserves_full_cohort_and_failed_usage" time="0.068" /><testcase classname="tests.test_careflow_batch" name="test_result_wrapper_cannot_replace_first_accepted_output[concept]" time="0.159"><failure message="ValueError: Frozen artifact differs: D:\Codex\Take Home Excerise\careflow-readiness\.work\batch-verification-1\test_result_wrapper_cannot_rep0\output\batch-summary.json">tmp_path = WindowsPath('D:/Codex/Take Home Excerise/careflow-readiness/.work/batch-verification-1/test_result_wrapper_cannot_rep0')
+mutation = 'concept'
+
+    @pytest.mark.parametrize('mutation', ['concept', 'polarity'])
+    def test_result_wrapper_cannot_replace_first_accepted_output(tmp_path, mutation):
+        provider = Provider()
+        options = dict(workers=1, provider=provider)
+        run_batch(records(), tmp_path/'output', tmp_path/'cache', tmp_path/'calls.sqlite', **options)
+        path = next((tmp_path/'output/results').glob('*.json'))
+        value = json.loads(path.read_text())
+        value['extraction']['facts'][0][mutation] = 'invented diagnosis' if mutation == 'concept' else 'present'
+        path.write_text(json.dumps(value))
+        # The immutable convenience wrapper disagrees with reconstructed model output.
+&gt;       summary = run_batch(records(), tmp_path/'output', tmp_path/'cache', tmp_path/'calls.sqlite', **options)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_careflow_batch.py:62: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\clinical_intelligence\careflow\evaluation\batch.py:151: in run_batch
+    write_once(root / 'batch-summary.json', (canonical(summary) + '\n').encode('utf-8'))
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+path = WindowsPath('D:/Codex/Take Home Excerise/careflow-readiness/.work/batch-verification-1/test_result_wrapper_cannot_rep0/output/batch-summary.json')
+content = b'{"call_statistics":{"attempts":4,"failures":0,"limits":{"global_limit":50,"project_limit":25,"research_attempt_cap":...ng":"Separate frozen reference/source review; structural validity is not semantic correctness.","valid_documents":3}\n'
+
+    def write_once(path, content):
+        path = Path(path)
+        path.parent.mkdir(parents=True, exist_ok=True)
+        if path.exists():
+            if path.read_bytes() != content:
+&gt;               raise ValueError('Frozen artifact differs: ' + str(path))
+E               ValueError: Frozen artifact differs: D:\Codex\Take Home Excerise\careflow-readiness\.work\batch-verification-1\test_result_wrapper_cannot_rep0\output\batch-summary.json
+
+src\clinical_intelligence\careflow\evaluation\corpus.py:24: ValueError</failure></testcase><testcase classname="tests.test_careflow_batch" name="test_result_wrapper_cannot_replace_first_accepted_output[polarity]" time="0.088"><failure message="ValueError: Frozen artifact differs: D:\Codex\Take Home Excerise\careflow-readiness\.work\batch-verification-1\test_result_wrapper_cannot_rep1\output\batch-summary.json">tmp_path = WindowsPath('D:/Codex/Take Home Excerise/careflow-readiness/.work/batch-verification-1/test_result_wrapper_cannot_rep1')
+mutation = 'polarity'
+
+    @pytest.mark.parametrize('mutation', ['concept', 'polarity'])
+    def test_result_wrapper_cannot_replace_first_accepted_output(tmp_path, mutation):
+        provider = Provider()
+        options = dict(workers=1, provider=provider)
+        run_batch(records(), tmp_path/'output', tmp_path/'cache', tmp_path/'calls.sqlite', **options)
+        path = next((tmp_path/'output/results').glob('*.json'))
+        value = json.loads(path.read_text())
+        value['extraction']['facts'][0][mutation] = 'invented diagnosis' if mutation == 'concept' else 'present'
+        path.write_text(json.dumps(value))
+        # The immutable convenience wrapper disagrees with reconstructed model output.
+&gt;       summary = run_batch(records(), tmp_path/'output', tmp_path/'cache', tmp_path/'calls.sqlite', **options)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_careflow_batch.py:62: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\clinical_intelligence\careflow\evaluation\batch.py:151: in run_batch
+    write_once(root / 'batch-summary.json', (canonical(summary) + '\n').encode('utf-8'))
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+path = WindowsPath('D:/Codex/Take Home Excerise/careflow-readiness/.work/batch-verification-1/test_result_wrapper_cannot_rep1/output/batch-summary.json')
+content = b'{"call_statistics":{"attempts":4,"failures":0,"limits":{"global_limit":50,"project_limit":25,"research_attempt_cap":...ng":"Separate frozen reference/source review; structural validity is not semantic correctness.","valid_documents":3}\n'
+
+    def write_once(path, content):
+        path = Path(path)
+        path.parent.mkdir(parents=True, exist_ok=True)
+        if path.exists():
+            if path.read_bytes() != content:
+&gt;               raise ValueError('Frozen artifact differs: ' + str(path))
+E               ValueError: Frozen artifact differs: D:\Codex\Take Home Excerise\careflow-readiness\.work\batch-verification-1\test_result_wrapper_cannot_rep1\output\batch-summary.json
+
+src\clinical_intelligence\careflow\evaluation\corpus.py:24: ValueError</failure></testcase><testcase classname="tests.test_careflow_batch" name="test_valid_sources_reused_without_semantic_resampling" time="0.065" /><testcase classname="tests.test_careflow_extraction" name="test_valid_extraction_is_cached_even_if_reference_changes" time="0.028" /><testcase classname="tests.test_careflow_extraction" name="test_mechanical_repair_preserves_original_attempts" time="0.031" /><testcase classname="tests.test_careflow_extraction" name="test_structural_retry_cannot_change_previously_valid_clinical_facts" time="0.036" /><testcase classname="tests.test_careflow_extraction" name="test_corrupt_cache_is_rejected_without_resampling[concept]" time="0.029" /><testcase classname="tests.test_careflow_extraction" name="test_corrupt_cache_is_rejected_without_resampling[quote]" time="0.030" /><testcase classname="tests.test_careflow_extraction" name="test_corrupt_cache_is_rejected_without_resampling[document]" time="0.027" /><testcase classname="tests.test_careflow_extraction" name="test_corrupt_cache_is_rejected_without_resampling[attempt]" time="0.028" /></testsuite></testsuites>
