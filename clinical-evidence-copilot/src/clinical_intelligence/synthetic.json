@@ -1,0 +1,230 @@
+[
+  {
+    "name": "cedar_attendance.txt",
+    "patient": {
+      "patient_id": "DEMO-CEDAR",
+      "name": "Cedar Example"
+    },
+    "declared_id": "DEMO-ATTENDANCE",
+    "text": "SYNTHETIC ENGINEERING FIXTURE — NOT A REAL PATIENT\nPatient ID: DEMO-CEDAR | Name: Cedar Example | Document ID: DEMO-ATTENDANCE\nSigned attendance ledger for LAB-G7 on 2026-04-06: Cedar was present for delivered group care from 09:12 to 10:46. Entered 2026-04-06 at 11:04.\n",
+    "claims": [
+      {
+        "statement": "Signed attendance ledger for LAB-G7 on 2026-04-06: Cedar was present for delivered group care from 09:12 to 10:46. Entered 2026-04-06 at 11:04.",
+        "quote": "Signed attendance ledger for LAB-G7 on 2026-04-06: Cedar was present for delivered group care from 09:12 to 10:46. Entered 2026-04-06 at 11:04.",
+        "kind": "service",
+        "encounter_ref": "LAB-G7",
+        "service_date": "2026-04-06",
+        "service_type": "group",
+        "evidence_kind": "attendance",
+        "signed": true,
+        "delivered": true,
+        "patient_present": true,
+        "actual_intervals": [
+          {
+            "start": "09:12",
+            "end": "10:46"
+          }
+        ],
+        "recorded_at": "2026-04-06T11:04"
+      }
+    ]
+  },
+  {
+    "name": "cedar_activity.txt",
+    "patient": {
+      "patient_id": "DEMO-CEDAR",
+      "name": "Cedar Example"
+    },
+    "declared_id": "DEMO-ACTIVITY",
+    "text": "SYNTHETIC ENGINEERING FIXTURE — NOT A REAL PATIENT\nPatient ID: DEMO-CEDAR | Name: Cedar Example | Document ID: DEMO-ACTIVITY\nFacilitator signed LAB-G7 activity record dated 2026-04-06. Group care was delivered with Cedar present; no therapeutic activity occurred during the equipment pause from 09:41 to 09:49.\n",
+    "claims": [
+      {
+        "statement": "Facilitator signed LAB-G7 activity record dated 2026-04-06. Group care was delivered with Cedar present; no therapeutic activity occurred during the equipment pause from 09:41 to 09:49.",
+        "quote": "Facilitator signed LAB-G7 activity record dated 2026-04-06. Group care was delivered with Cedar present; no therapeutic activity occurred during the equipment pause from 09:41 to 09:49.",
+        "kind": "service",
+        "encounter_ref": "LAB-G7",
+        "service_date": "2026-04-06",
+        "service_type": "group",
+        "evidence_kind": "clinical",
+        "signed": true,
+        "delivered": true,
+        "patient_present": true,
+        "breaks": [
+          {
+            "start": "09:41",
+            "end": "09:49"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "cedar_correction.txt",
+    "patient": {
+      "patient_id": "DEMO-CEDAR",
+      "name": "Cedar Example"
+    },
+    "declared_id": "DEMO-AMENDMENT",
+    "text": "SYNTHETIC ENGINEERING FIXTURE — NOT A REAL PATIENT\nPatient ID: DEMO-CEDAR | Name: Cedar Example | Document ID: DEMO-AMENDMENT\nSigned amendment entered 2026-04-07 at 08:13: for LAB-G7 on 2026-04-06 in DEMO-ATTENDANCE, replace departure 10:46 with 10:31. Arrival remains 09:12.\n",
+    "claims": [
+      {
+        "statement": "Signed amendment entered 2026-04-07 at 08:13: for LAB-G7 on 2026-04-06 in DEMO-ATTENDANCE, replace departure 10:46 with 10:31. Arrival remains 09:12.",
+        "quote": "Signed amendment entered 2026-04-07 at 08:13: for LAB-G7 on 2026-04-06 in DEMO-ATTENDANCE, replace departure 10:46 with 10:31. Arrival remains 09:12.",
+        "kind": "relationship",
+        "relation": "corrects",
+        "signed": true,
+        "target_encounter": "LAB-G7",
+        "target_document_ref": "DEMO-ATTENDANCE",
+        "service_date": "2026-04-06",
+        "field": "departure",
+        "replacement_time": "10:31",
+        "original_time": "10:46",
+        "recorded_at": "2026-04-07T08:13"
+      }
+    ]
+  },
+  {
+    "name": "cedar_retransmission.txt",
+    "patient": {
+      "patient_id": "DEMO-CEDAR",
+      "name": "Cedar Example"
+    },
+    "declared_id": "DEMO-RESENT",
+    "text": "SYNTHETIC ENGINEERING FIXTURE — NOT A REAL PATIENT\nPatient ID: DEMO-CEDAR | Name: Cedar Example | Document ID: DEMO-RESENT\nArchive transmission received 2026-04-10 at 16:02 repeats DEMO-ATTENDANCE for LAB-G7 on 2026-04-06: signed delivered group attendance with Cedar present from 09:12 to 10:46. This is a copy of the earlier ledger, not a new amendment.\n",
+    "claims": [
+      {
+        "statement": "Archive transmission received 2026-04-10 at 16:02 repeats DEMO-ATTENDANCE for LAB-G7 on 2026-04-06: signed delivered group attendance with Cedar present from 09:12 to 10:46. This is a copy of the earlier ledger, not a new amendment.",
+        "quote": "Archive transmission received 2026-04-10 at 16:02 repeats DEMO-ATTENDANCE for LAB-G7 on 2026-04-06: signed delivered group attendance with Cedar present from 09:12 to 10:46. This is a copy of the earlier ledger, not a new amendment.",
+        "kind": "service",
+        "encounter_ref": "LAB-G7",
+        "service_date": "2026-04-06",
+        "service_type": "group",
+        "evidence_kind": "retransmission",
+        "signed": true,
+        "delivered": true,
+        "patient_present": true,
+        "actual_intervals": [
+          {
+            "start": "09:12",
+            "end": "10:46"
+          }
+        ],
+        "recorded_at": "2026-04-10T16:02"
+      },
+      {
+        "statement": "Archive transmission received 2026-04-10 at 16:02 repeats DEMO-ATTENDANCE for LAB-G7 on 2026-04-06: signed delivered group attendance with Cedar present from 09:12 to 10:46. This is a copy of the earlier ledger, not a new amendment.",
+        "quote": "Archive transmission received 2026-04-10 at 16:02 repeats DEMO-ATTENDANCE for LAB-G7 on 2026-04-06: signed delivered group attendance with Cedar present from 09:12 to 10:46. This is a copy of the earlier ledger, not a new amendment.",
+        "kind": "relationship",
+        "relation": "retransmits",
+        "target_encounter": "LAB-G7",
+        "target_document_ref": "DEMO-ATTENDANCE",
+        "service_date": "2026-04-06",
+        "field": "record"
+      }
+    ]
+  },
+  {
+    "name": "cedar_duration_a.txt",
+    "patient": {
+      "patient_id": "DEMO-CEDAR",
+      "name": "Cedar Example"
+    },
+    "declared_id": "DEMO-DURATION-A",
+    "text": "SYNTHETIC ENGINEERING FIXTURE — NOT A REAL PATIENT\nPatient ID: DEMO-CEDAR | Name: Cedar Example | Document ID: DEMO-DURATION-A\nSigned clinician A record: LAB-I8 individual psychotherapy on 2026-04-08 was delivered with Cedar present; patient treatment duration was 37 minutes.\n",
+    "claims": [
+      {
+        "statement": "Signed clinician A record: LAB-I8 individual psychotherapy on 2026-04-08 was delivered with Cedar present; patient treatment duration was 37 minutes.",
+        "quote": "Signed clinician A record: LAB-I8 individual psychotherapy on 2026-04-08 was delivered with Cedar present; patient treatment duration was 37 minutes.",
+        "kind": "service",
+        "encounter_ref": "LAB-I8",
+        "service_date": "2026-04-08",
+        "service_type": "individual",
+        "evidence_kind": "clinical",
+        "signed": true,
+        "delivered": true,
+        "patient_present": true,
+        "reported_minutes": 37
+      }
+    ]
+  },
+  {
+    "name": "cedar_duration_b.txt",
+    "patient": {
+      "patient_id": "DEMO-CEDAR",
+      "name": "Cedar Example"
+    },
+    "declared_id": "DEMO-DURATION-B",
+    "text": "SYNTHETIC ENGINEERING FIXTURE — NOT A REAL PATIENT\nPatient ID: DEMO-CEDAR | Name: Cedar Example | Document ID: DEMO-DURATION-B\nSigned clinician B record: LAB-I8 individual psychotherapy on 2026-04-08 was delivered with Cedar present; patient treatment duration was 49 minutes. No correction relationship is asserted.\n",
+    "claims": [
+      {
+        "statement": "Signed clinician B record: LAB-I8 individual psychotherapy on 2026-04-08 was delivered with Cedar present; patient treatment duration was 49 minutes. No correction relationship is asserted.",
+        "quote": "Signed clinician B record: LAB-I8 individual psychotherapy on 2026-04-08 was delivered with Cedar present; patient treatment duration was 49 minutes. No correction relationship is asserted.",
+        "kind": "service",
+        "encounter_ref": "LAB-I8",
+        "service_date": "2026-04-08",
+        "service_type": "individual",
+        "evidence_kind": "clinical",
+        "signed": true,
+        "delivered": true,
+        "patient_present": true,
+        "reported_minutes": 49
+      }
+    ]
+  },
+  {
+    "name": "cedar_plan.txt",
+    "patient": {
+      "patient_id": "DEMO-CEDAR",
+      "name": "Cedar Example"
+    },
+    "declared_id": "DEMO-PLAN",
+    "text": "SYNTHETIC ENGINEERING FIXTURE — NOT A REAL PATIENT\nPatient ID: DEMO-CEDAR | Name: Cedar Example | Document ID: DEMO-PLAN\nSigned participation plan LAB-PLAN effective 2026-04-06 through 2026-04-12 requires at least 2 days and 115 patient-present minutes of individual or group therapy per Monday–Sunday week.\n",
+    "claims": [
+      {
+        "statement": "Signed participation plan LAB-PLAN effective 2026-04-06 through 2026-04-12 requires at least 2 days and 115 patient-present minutes of individual or group therapy per Monday–Sunday week.",
+        "quote": "Signed participation plan LAB-PLAN effective 2026-04-06 through 2026-04-12 requires at least 2 days and 115 patient-present minutes of individual or group therapy per Monday–Sunday week.",
+        "kind": "plan",
+        "plan_ref": "LAB-PLAN",
+        "effective_start": "2026-04-06",
+        "effective_end": "2026-04-12",
+        "required_days": 2,
+        "required_minutes": 115,
+        "service_types": [
+          "individual",
+          "group"
+        ],
+        "signed": true
+      }
+    ]
+  },
+  {
+    "name": "juniper_visit.txt",
+    "patient": {
+      "patient_id": "DEMO-JUNIPER",
+      "name": "Juniper Example"
+    },
+    "declared_id": "DEMO-JUNIPER-VISIT",
+    "text": "SYNTHETIC ENGINEERING FIXTURE — NOT A REAL PATIENT\nPatient ID: DEMO-JUNIPER | Name: Juniper Example | Document ID: DEMO-JUNIPER-VISIT\nJuniper attended signed delivered individual psychotherapy LAB-G7 on 2026-04-06 with actual patient contact from 15:03 to 15:26, totaling 23 minutes.\n",
+    "claims": [
+      {
+        "statement": "Juniper attended signed delivered individual psychotherapy LAB-G7 on 2026-04-06 with actual patient contact from 15:03 to 15:26, totaling 23 minutes.",
+        "quote": "Juniper attended signed delivered individual psychotherapy LAB-G7 on 2026-04-06 with actual patient contact from 15:03 to 15:26, totaling 23 minutes.",
+        "kind": "service",
+        "encounter_ref": "LAB-G7",
+        "service_date": "2026-04-06",
+        "service_type": "individual",
+        "evidence_kind": "clinical",
+        "signed": true,
+        "delivered": true,
+        "patient_present": true,
+        "actual_intervals": [
+          {
+            "start": "15:03",
+            "end": "15:26"
+          }
+        ],
+        "reported_minutes": 23
+      }
+    ]
+  }
+]

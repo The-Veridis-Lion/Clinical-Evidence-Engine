@@ -1,0 +1,126 @@
+{
+  "_embedded" : {
+    "terms" : [ {
+      "iri" : "http://purl.obolibrary.org/obo/HP_0001742",
+      "lang" : "en",
+      "description" : [ "Reduced ability to pass air through the nasal cavity often leading to mouth breathing." ],
+      "synonyms" : [ "Blockage of nose", "Congestion of nose", "Nasal blockage", "Nasal obstruction", "Obstruction of nose", "Stuffy nose" ],
+      "annotation" : {
+        "id" : [ "HP:0001742" ]
+      },
+      "label" : "Nasal congestion",
+      "ontology_name" : "hp",
+      "ontology_prefix" : "HP",
+      "ontology_iri" : "http://purl.obolibrary.org/obo/hp/hp-international.owl",
+      "is_obsolete" : false,
+      "term_replaced_by" : null,
+      "is_defining_ontology" : true,
+      "has_children" : false,
+      "is_root" : false,
+      "short_form" : "HP_0001742",
+      "obo_id" : "HP:0001742",
+      "in_subset" : null,
+      "obo_definition_citation" : [ {
+        "definition" : "Reduced ability to pass air through the nasal cavity often leading to mouth breathing.",
+        "oboXrefs" : [ {
+          "database" : null,
+          "id" : "https://orcid.org/0000-0002-0736-9199",
+          "description" : null,
+          "url" : "https://orcid.org/0000-0002-0736-9199"
+        } ]
+      } ],
+      "obo_xref" : null,
+      "obo_synonym" : [ {
+        "name" : "Blockage of nose",
+        "scope" : "hasExactSynonym",
+        "type" : "layperson term",
+        "xrefs" : [ {
+          "database" : null,
+          "id" : "https://orcid.org/0000-0001-5889-4463",
+          "description" : null,
+          "url" : "https://orcid.org/0000-0001-5889-4463"
+        } ]
+      }, {
+        "name" : "Nasal blockage",
+        "scope" : "hasExactSynonym",
+        "type" : "layperson term",
+        "xrefs" : [ {
+          "database" : null,
+          "id" : "https://orcid.org/0000-0001-5889-4463",
+          "description" : null,
+          "url" : "https://orcid.org/0000-0001-5889-4463"
+        } ]
+      }, {
+        "name" : "Nasal obstruction",
+        "scope" : "hasExactSynonym",
+        "type" : "layperson term",
+        "xrefs" : [ ]
+      }, {
+        "name" : "Obstruction of nose",
+        "scope" : "hasExactSynonym",
+        "type" : "layperson term",
+        "xrefs" : [ {
+          "database" : null,
+          "id" : "https://orcid.org/0000-0001-5889-4463",
+          "description" : null,
+          "url" : "https://orcid.org/0000-0001-5889-4463"
+        } ]
+      }, {
+        "name" : "Stuffy nose",
+        "scope" : "hasExactSynonym",
+        "type" : "layperson term",
+        "xrefs" : [ {
+          "database" : null,
+          "id" : "http://www.entnet.org/content/stuffy-nose",
+          "description" : null,
+          "url" : "http://www.entnet.org/content/stuffy-nose"
+        } ]
+      }, {
+        "name" : "Congestion of nose",
+        "scope" : "hasNarrowSynonym",
+        "type" : "layperson term",
+        "xrefs" : [ {
+          "database" : null,
+          "id" : "https://orcid.org/0000-0001-5889-4463",
+          "description" : null,
+          "url" : "https://orcid.org/0000-0001-5889-4463"
+        } ]
+      } ],
+      "is_preferred_root" : false,
+      "_links" : {
+        "self" : {
+          "href" : "http://www.ebi.ac.uk/ols4/api/ontologies/hp/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FHP_0001742?lang=en"
+        },
+        "parents" : {
+          "href" : "http://www.ebi.ac.uk/ols4/api/ontologies/hp/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FHP_0001742/parents"
+        },
+        "ancestors" : {
+          "href" : "http://www.ebi.ac.uk/ols4/api/ontologies/hp/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FHP_0001742/ancestors"
+        },
+        "hierarchicalParents" : {
+          "href" : "http://www.ebi.ac.uk/ols4/api/ontologies/hp/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FHP_0001742/hierarchicalParents"
+        },
+        "hierarchicalAncestors" : {
+          "href" : "http://www.ebi.ac.uk/ols4/api/ontologies/hp/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FHP_0001742/hierarchicalAncestors"
+        },
+        "jstree" : {
+          "href" : "http://www.ebi.ac.uk/ols4/api/ontologies/hp/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FHP_0001742/jstree"
+        },
+        "graph" : {
+          "href" : "http://www.ebi.ac.uk/ols4/api/ontologies/hp/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FHP_0001742/graph"
+        }
+      }
+    } ]
+  },
+  "_links" : {
+    "self" : {
+      "href" : "http://www.ebi.ac.uk/ols4/api/ontologies/hp/terms?obo_id=HP:0001742"
+    }
+  },
+  "page" : {
+    "size" : 1,
+    "totalElements" : 1,
+    "totalPages" : 1,
+    "number" : 0
+  }
+}

@@ -1,0 +1,82 @@
+{
+  "_embedded" : {
+    "terms" : [ {
+      "iri" : "http://purl.obolibrary.org/obo/HP_0100749",
+      "lang" : "en",
+      "description" : [ "An unpleasant sensation characterized by physical discomfort (such as pricking, throbbing, or aching) localized to the chest." ],
+      "synonyms" : [ "Chest discomfort", "Thoracic pain", "Chest pain" ],
+      "annotation" : {
+        "Creator" : [ "https://orcid.org/0009-0006-4530-3154" ],
+        "Date" : [ "2011-06-06T06:36:48Z" ],
+        "id" : [ "HP:0100749" ]
+      },
+      "label" : "Chest pain",
+      "ontology_name" : "hp",
+      "ontology_prefix" : "HP",
+      "ontology_iri" : "http://purl.obolibrary.org/obo/hp/hp-international.owl",
+      "is_obsolete" : false,
+      "term_replaced_by" : null,
+      "is_defining_ontology" : true,
+      "has_children" : true,
+      "is_root" : false,
+      "short_form" : "HP_0100749",
+      "obo_id" : "HP:0100749",
+      "in_subset" : null,
+      "obo_definition_citation" : null,
+      "obo_xref" : null,
+      "obo_synonym" : [ {
+        "name" : "Chest pain",
+        "scope" : "hasExactSynonym",
+        "type" : "layperson term",
+        "xrefs" : [ ]
+      } ],
+      "is_preferred_root" : false,
+      "_links" : {
+        "self" : {
+          "href" : "http://www.ebi.ac.uk/ols4/api/ontologies/hp/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FHP_0100749?lang=en"
+        },
+        "parents" : {
+          "href" : "http://www.ebi.ac.uk/ols4/api/ontologies/hp/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FHP_0100749/parents"
+        },
+        "ancestors" : {
+          "href" : "http://www.ebi.ac.uk/ols4/api/ontologies/hp/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FHP_0100749/ancestors"
+        },
+        "hierarchicalParents" : {
+          "href" : "http://www.ebi.ac.uk/ols4/api/ontologies/hp/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FHP_0100749/hierarchicalParents"
+        },
+        "hierarchicalAncestors" : {
+          "href" : "http://www.ebi.ac.uk/ols4/api/ontologies/hp/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FHP_0100749/hierarchicalAncestors"
+        },
+        "jstree" : {
+          "href" : "http://www.ebi.ac.uk/ols4/api/ontologies/hp/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FHP_0100749/jstree"
+        },
+        "children" : {
+          "href" : "http://www.ebi.ac.uk/ols4/api/ontologies/hp/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FHP_0100749/children"
+        },
+        "descendants" : {
+          "href" : "http://www.ebi.ac.uk/ols4/api/ontologies/hp/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FHP_0100749/descendants"
+        },
+        "hierarchicalChildren" : {
+          "href" : "http://www.ebi.ac.uk/ols4/api/ontologies/hp/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FHP_0100749/hierarchicalChildren"
+        },
+        "hierarchicalDescendants" : {
+          "href" : "http://www.ebi.ac.uk/ols4/api/ontologies/hp/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FHP_0100749/hierarchicalDescendants"
+        },
+        "graph" : {
+          "href" : "http://www.ebi.ac.uk/ols4/api/ontologies/hp/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FHP_0100749/graph"
+        }
+      }
+    } ]
+  },
+  "_links" : {
+    "self" : {
+      "href" : "http://www.ebi.ac.uk/ols4/api/ontologies/hp/terms?obo_id=HP:0100749"
+    }
+  },
+  "page" : {
+    "size" : 1,
+    "totalElements" : 1,
+    "totalPages" : 1,
+    "number" : 0
+  }
+}

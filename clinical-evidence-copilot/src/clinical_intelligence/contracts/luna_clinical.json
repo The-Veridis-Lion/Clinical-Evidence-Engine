@@ -1,0 +1,188 @@
+[
+  {
+    "text": "Patient: Juno Example | MRN: EX-P9 | Document ID: EX-D9\nFinal signed individual psychotherapy, February 23, 2026, filed under EX-E9. Patient contact 08:30 to 09:10, 40 minutes.\nJuno Example reports current anxiety and fragmented sleep.\nJuno Example denies current suicidal thoughts.\nLast week Juno Example completed sending a message to the supervisor; this real-world step has already occurred.\nJuno Example plans to telephone the supervisor tomorrow; the call has not been attempted.\nJuno Example says immediate anxiety eased during the exercise today.\nPartner says the partner currently feels anxious about providing reminders.\n",
+    "extractions": [
+      {
+        "kind": "patient",
+        "quote": "Patient: Juno Example | MRN: EX-P9 | Document ID: EX-D9",
+        "data": {
+          "patient_id": "EX-P9",
+          "name": "Juno Example",
+          "dob": null,
+          "declared_id": "EX-D9"
+        }
+      },
+      {
+        "kind": "service",
+        "quote": "Final signed individual psychotherapy, February 23, 2026, filed under EX-E9. Patient contact 08:30 to 09:10, 40 minutes.",
+        "data": {
+          "encounter_ref": "EX-E9",
+          "appointment_ref": null,
+          "service_date": "2026-02-23",
+          "service_type": "individual",
+          "evidence_kind": "clinical",
+          "signed": true,
+          "patient_present": true,
+          "delivered": true,
+          "actual_intervals": [
+            {
+              "start": "08:30",
+              "end": "09:10"
+            }
+          ],
+          "scheduled_intervals": [],
+          "unspecified_intervals": [],
+          "breaks": [],
+          "reported_minutes": 40
+        }
+      },
+      {
+        "kind": "observation",
+        "quote": "Juno Example reports current anxiety and fragmented sleep.",
+        "data": {
+          "statement": "Juno Example reports current anxiety and fragmented sleep.",
+          "recorded_at": null,
+          "observation_date": "2026-02-23",
+          "category": "symptom",
+          "reporter": "Juno Example",
+          "experiencer": "Juno Example",
+          "polarity": "present",
+          "temporality": "current"
+        }
+      },
+      {
+        "kind": "observation",
+        "quote": "Juno Example denies current suicidal thoughts.",
+        "data": {
+          "statement": "Juno Example denies current suicidal thoughts.",
+          "recorded_at": null,
+          "observation_date": "2026-02-23",
+          "category": "safety",
+          "reporter": "Juno Example",
+          "experiencer": "Juno Example",
+          "polarity": "absent",
+          "temporality": "current"
+        }
+      },
+      {
+        "kind": "observation",
+        "quote": "Last week Juno Example completed sending a message to the supervisor; this real-world step has already occurred.",
+        "data": {
+          "statement": "Last week Juno Example completed sending a message to the supervisor; this real-world step has already occurred.",
+          "recorded_at": null,
+          "observation_date": "2026-02-23",
+          "category": "function",
+          "reporter": "Juno Example",
+          "experiencer": "Juno Example",
+          "polarity": "present",
+          "temporality": "historical"
+        }
+      },
+      {
+        "kind": "observation",
+        "quote": "Juno Example plans to telephone the supervisor tomorrow; the call has not been attempted.",
+        "data": {
+          "statement": "Juno Example plans to telephone the supervisor tomorrow; the call has not been attempted.",
+          "recorded_at": null,
+          "observation_date": "2026-02-23",
+          "category": "function",
+          "reporter": "Juno Example",
+          "experiencer": "Juno Example",
+          "polarity": "present",
+          "temporality": "planned"
+        }
+      },
+      {
+        "kind": "observation",
+        "quote": "Juno Example says immediate anxiety eased during the exercise today.",
+        "data": {
+          "statement": "Juno Example says immediate anxiety eased during the exercise today.",
+          "recorded_at": null,
+          "observation_date": "2026-02-23",
+          "category": "response",
+          "reporter": "Juno Example",
+          "experiencer": "Juno Example",
+          "polarity": "present",
+          "temporality": "current"
+        }
+      },
+      {
+        "kind": "observation",
+        "quote": "Partner says the partner currently feels anxious about providing reminders.",
+        "data": {
+          "statement": "Partner says the partner currently feels anxious about providing reminders.",
+          "recorded_at": null,
+          "observation_date": "2026-02-23",
+          "category": "symptom",
+          "reporter": "partner",
+          "experiencer": "partner",
+          "polarity": "present",
+          "temporality": "current"
+        }
+      }
+    ]
+  },
+  {
+    "text": "Patient: Lane Example | MRN: EX-P10 | Document ID: EX-D10\nUnsigned desk export dated February 25, 2026; booking clocks are scheduled, not actual.\nEncounter | Date | Service | Booked | Status\nEX-E10 | 2026-02-24 | Individual psychotherapy | 11:00 to 11:45 | Completed\nEX-E11 | 2026-02-25 | Partner-only collateral | 14:00 to 14:30 | Completed\nEX-E11: Patient was absent; contact was with the partner only. No care was delivered to the patient.\n",
+    "extractions": [
+      {
+        "kind": "patient",
+        "quote": "Patient: Lane Example | MRN: EX-P10 | Document ID: EX-D10",
+        "data": {
+          "patient_id": "EX-P10",
+          "name": "Lane Example",
+          "dob": null,
+          "declared_id": "EX-D10"
+        }
+      },
+      {
+        "kind": "service",
+        "quote": "EX-E10 | 2026-02-24 | Individual psychotherapy | 11:00 to 11:45 | Completed",
+        "data": {
+          "encounter_ref": "EX-E10",
+          "appointment_ref": null,
+          "service_date": "2026-02-24",
+          "service_type": "individual",
+          "evidence_kind": "schedule",
+          "signed": false,
+          "patient_present": true,
+          "delivered": true,
+          "actual_intervals": [],
+          "scheduled_intervals": [
+            {
+              "start": "11:00",
+              "end": "11:45"
+            }
+          ],
+          "unspecified_intervals": [],
+          "breaks": [],
+          "reported_minutes": null
+        }
+      },
+      {
+        "kind": "service",
+        "quote": "EX-E11 | 2026-02-25 | Partner-only collateral | 14:00 to 14:30 | Completed",
+        "data": {
+          "encounter_ref": "EX-E11",
+          "appointment_ref": null,
+          "service_date": "2026-02-25",
+          "service_type": "collateral",
+          "evidence_kind": "schedule",
+          "signed": false,
+          "patient_present": false,
+          "delivered": false,
+          "actual_intervals": [],
+          "scheduled_intervals": [
+            {
+              "start": "14:00",
+              "end": "14:30"
+            }
+          ],
+          "unspecified_intervals": [],
+          "breaks": [],
+          "reported_minutes": null
+        }
+      }
+    ]
+  }
+]

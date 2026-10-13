@@ -1,0 +1,105 @@
+{
+  "_embedded" : {
+    "terms" : [ {
+      "iri" : "http://purl.obolibrary.org/obo/HP_0012735",
+      "lang" : "en",
+      "description" : [ "The European Respiratory Society Task Force recommended two possible definitions of cough: (1) A three-phase expulsive motor act characterized by an inspiratory effort (inspiratory phase) followed by a forced expiratory effort against a closed glottis (compressive phase) and then by opening of the glottis and rapid expiratory airflow (expulsive phase);and (2) A forced expiratory maneuver, usually against a closed glottis and associated with a characteristic sound. The term Cough or any of its more specific descendents can be modified by the terms Acute (HP:0011009), Subacute (HP:0011011), and Chronic (HP:0011010). In adults, an acute cough lasts less than 3 weeks, a subacute cough from 3 to 8 weeks, and a chronic cough longer than 8 weeks. In children aged less than 15 years a chronic cough is defined as a daily cough lasting for over 4 weeks.", "A sudden, audible expulsion of air from the lungs through a partially closed glottis, preceded by inhalation." ],
+      "synonyms" : [ "Cough", "Coughing" ],
+      "annotation" : {
+        "Creator" : [ "https://orcid.org/0000-0002-0736-9199" ],
+        "Date" : [ "2014-03-23T03:19:50Z" ],
+        "id" : [ "HP:0012735" ]
+      },
+      "label" : "Cough",
+      "ontology_name" : "hp",
+      "ontology_prefix" : "HP",
+      "ontology_iri" : "http://purl.obolibrary.org/obo/hp/hp-international.owl",
+      "is_obsolete" : false,
+      "term_replaced_by" : null,
+      "is_defining_ontology" : true,
+      "has_children" : true,
+      "is_root" : false,
+      "short_form" : "HP_0012735",
+      "obo_id" : "HP:0012735",
+      "in_subset" : null,
+      "obo_definition_citation" : [ {
+        "definition" : "A sudden, audible expulsion of air from the lungs through a partially closed glottis, preceded by inhalation.",
+        "oboXrefs" : [ {
+          "database" : null,
+          "id" : "https://orcid.org/0000-0002-0736-9199",
+          "description" : null,
+          "url" : "https://orcid.org/0000-0002-0736-9199"
+        }, {
+          "database" : "PMID",
+          "id" : "16428719",
+          "description" : null,
+          "url" : "https://pubmed.ncbi.nlm.nih.gov/16428719"
+        }, {
+          "database" : "PMID",
+          "id" : "17540788",
+          "description" : null,
+          "url" : "https://pubmed.ncbi.nlm.nih.gov/17540788"
+        } ]
+      } ],
+      "obo_xref" : null,
+      "obo_synonym" : [ {
+        "name" : "Cough",
+        "scope" : "hasExactSynonym",
+        "type" : "layperson term",
+        "xrefs" : [ ]
+      }, {
+        "name" : "Coughing",
+        "scope" : "hasExactSynonym",
+        "type" : "layperson term",
+        "xrefs" : [ ]
+      } ],
+      "is_preferred_root" : false,
+      "_links" : {
+        "self" : {
+          "href" : "http://www.ebi.ac.uk/ols4/api/ontologies/hp/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FHP_0012735?lang=en"
+        },
+        "parents" : {
+          "href" : "http://www.ebi.ac.uk/ols4/api/ontologies/hp/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FHP_0012735/parents"
+        },
+        "ancestors" : {
+          "href" : "http://www.ebi.ac.uk/ols4/api/ontologies/hp/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FHP_0012735/ancestors"
+        },
+        "hierarchicalParents" : {
+          "href" : "http://www.ebi.ac.uk/ols4/api/ontologies/hp/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FHP_0012735/hierarchicalParents"
+        },
+        "hierarchicalAncestors" : {
+          "href" : "http://www.ebi.ac.uk/ols4/api/ontologies/hp/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FHP_0012735/hierarchicalAncestors"
+        },
+        "jstree" : {
+          "href" : "http://www.ebi.ac.uk/ols4/api/ontologies/hp/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FHP_0012735/jstree"
+        },
+        "children" : {
+          "href" : "http://www.ebi.ac.uk/ols4/api/ontologies/hp/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FHP_0012735/children"
+        },
+        "descendants" : {
+          "href" : "http://www.ebi.ac.uk/ols4/api/ontologies/hp/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FHP_0012735/descendants"
+        },
+        "hierarchicalChildren" : {
+          "href" : "http://www.ebi.ac.uk/ols4/api/ontologies/hp/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FHP_0012735/hierarchicalChildren"
+        },
+        "hierarchicalDescendants" : {
+          "href" : "http://www.ebi.ac.uk/ols4/api/ontologies/hp/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FHP_0012735/hierarchicalDescendants"
+        },
+        "graph" : {
+          "href" : "http://www.ebi.ac.uk/ols4/api/ontologies/hp/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FHP_0012735/graph"
+        }
+      }
+    } ]
+  },
+  "_links" : {
+    "self" : {
+      "href" : "http://www.ebi.ac.uk/ols4/api/ontologies/hp/terms?obo_id=HP:0012735"
+    }
+  },
+  "page" : {
+    "size" : 1,
+    "totalElements" : 1,
+    "totalPages" : 1,
+    "number" : 0
+  }
+}

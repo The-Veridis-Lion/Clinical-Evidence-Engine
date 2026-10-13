@@ -1,0 +1,302 @@
+[
+  {
+    "case_id": "visit-001",
+    "patient_id": "SYN-TAYLOR",
+    "source": {
+      "document_id": "visit-001:source",
+      "text": "[patient] I have had a cough for four days.\n[patient] I do not have a fever.\n[patient] My mother has asthma.\n[patient] I have not started the antibiotic.\n[doctor] The medication list records current antibiotic use.\n[doctor] On examination, your lungs are clear.\n[doctor] This may be a viral respiratory illness.\n[doctor] We plan a chest X-ray tomorrow.\n[doctor] We discussed hydration.",
+      "sha256": "b2abba550adcfd82b910aacc259112d71f6cdb71006c5a0c6e383d173be8195e",
+      "input_kind": "dialogue",
+      "encounter_time": "2026-10-10",
+      "origin": "authored_synthetic_software_fixture",
+      "offset_unit": "unicode_code_points_end_exclusive"
+    },
+    "origin": "synthetic_authored_extraction; not model output or clinical labels",
+    "extraction": {
+      "document_id": "visit-001:source",
+      "facts": [
+        {
+          "category": "symptom",
+          "concept": "cough",
+          "original_term": "I have had a cough for four days.",
+          "polarity": "present",
+          "temporality": "current",
+          "experiencer": "patient",
+          "attributes": {
+            "severity": null,
+            "duration": "four days",
+            "value": null,
+            "unit": null
+          },
+          "assertion_basis": "patient_report",
+          "attribution_confidence": "context_supported",
+          "clinical_status": null,
+          "evidence": {
+            "quote": "I have had a cough for four days.",
+            "start": 10,
+            "end": 43
+          }
+        },
+        {
+          "category": "symptom",
+          "concept": "fever",
+          "original_term": "I do not have a fever.",
+          "polarity": "absent",
+          "temporality": "current",
+          "experiencer": "patient",
+          "attributes": null,
+          "assertion_basis": "patient_report",
+          "attribution_confidence": "context_supported",
+          "clinical_status": null,
+          "evidence": {
+            "quote": "I do not have a fever.",
+            "start": 54,
+            "end": 76
+          }
+        },
+        {
+          "category": "symptom",
+          "concept": "asthma",
+          "original_term": "My mother has asthma.",
+          "polarity": "present",
+          "temporality": "current",
+          "experiencer": "family",
+          "attributes": null,
+          "assertion_basis": "patient_report",
+          "attribution_confidence": "context_supported",
+          "clinical_status": null,
+          "evidence": {
+            "quote": "My mother has asthma.",
+            "start": 87,
+            "end": 108
+          }
+        },
+        {
+          "category": "medication",
+          "concept": "antibiotic use",
+          "original_term": "I have not started the antibiotic.",
+          "polarity": "absent",
+          "temporality": "current",
+          "experiencer": "patient",
+          "attributes": null,
+          "assertion_basis": "patient_report",
+          "attribution_confidence": "context_supported",
+          "clinical_status": "not started",
+          "evidence": {
+            "quote": "I have not started the antibiotic.",
+            "start": 119,
+            "end": 153
+          }
+        },
+        {
+          "category": "medication",
+          "concept": "antibiotic use",
+          "original_term": "The medication list records current antibiotic use.",
+          "polarity": "present",
+          "temporality": "current",
+          "experiencer": "patient",
+          "attributes": null,
+          "assertion_basis": "documented_history",
+          "attribution_confidence": "context_supported",
+          "clinical_status": "current use",
+          "evidence": {
+            "quote": "The medication list records current antibiotic use.",
+            "start": 163,
+            "end": 214
+          }
+        },
+        {
+          "category": "observation",
+          "concept": "clear lungs",
+          "original_term": "On examination, your lungs are clear.",
+          "polarity": "present",
+          "temporality": "current",
+          "experiencer": "patient",
+          "attributes": null,
+          "assertion_basis": "clinician_observation",
+          "attribution_confidence": "context_supported",
+          "clinical_status": null,
+          "evidence": {
+            "quote": "On examination, your lungs are clear.",
+            "start": 224,
+            "end": 261
+          }
+        },
+        {
+          "category": "diagnosis",
+          "concept": "viral respiratory illness",
+          "original_term": "This may be a viral respiratory illness.",
+          "polarity": "uncertain",
+          "temporality": "current",
+          "experiencer": "patient",
+          "attributes": null,
+          "assertion_basis": "clinician_assessment",
+          "attribution_confidence": "context_supported",
+          "clinical_status": "possible",
+          "evidence": {
+            "quote": "This may be a viral respiratory illness.",
+            "start": 271,
+            "end": 311
+          }
+        },
+        {
+          "category": "procedure",
+          "concept": "chest X-ray",
+          "original_term": "We plan a chest X-ray tomorrow.",
+          "polarity": "present",
+          "temporality": "planned",
+          "experiencer": "patient",
+          "attributes": null,
+          "assertion_basis": "clinician_assessment",
+          "attribution_confidence": "context_supported",
+          "clinical_status": "planned for tomorrow; not performed",
+          "evidence": {
+            "quote": "We plan a chest X-ray tomorrow.",
+            "start": 321,
+            "end": 352
+          }
+        },
+        {
+          "category": "treatment",
+          "concept": "hydration",
+          "original_term": "We discussed hydration.",
+          "polarity": "present",
+          "temporality": "current",
+          "experiencer": "patient",
+          "attributes": null,
+          "assertion_basis": "discussion",
+          "attribution_confidence": "context_supported",
+          "clinical_status": "discussed",
+          "evidence": {
+            "quote": "We discussed hydration.",
+            "start": 362,
+            "end": 385
+          }
+        }
+      ],
+      "relationships": []
+    }
+  },
+  {
+    "case_id": "visit-002",
+    "patient_id": "SYN-TAYLOR",
+    "source": {
+      "document_id": "visit-002:source",
+      "text": "S: Patient reports cough has resolved. Patient says the antibiotic was never started.\nO: Lungs are clear on auscultation.\nA: Possible viral respiratory illness remains the documented assessment.\nP: Imaging was not performed. Follow-up was discussed.",
+      "sha256": "c478b6d58c36b2973006600ecb21136b937793d99510f57ad05097627b6cf524",
+      "input_kind": "note",
+      "encounter_time": "2026-10-13",
+      "origin": "authored_synthetic_software_fixture",
+      "offset_unit": "unicode_code_points_end_exclusive"
+    },
+    "origin": "synthetic_authored_extraction; not model output or clinical labels",
+    "extraction": {
+      "document_id": "visit-002:source",
+      "facts": [
+        {
+          "category": "symptom",
+          "concept": "cough",
+          "original_term": "Patient reports cough has resolved.",
+          "polarity": "absent",
+          "temporality": "current",
+          "experiencer": "patient",
+          "attributes": null,
+          "assertion_basis": "patient_report",
+          "attribution_confidence": "context_supported",
+          "clinical_status": "resolved per patient",
+          "evidence": {
+            "quote": "Patient reports cough has resolved.",
+            "start": 3,
+            "end": 38
+          }
+        },
+        {
+          "category": "medication",
+          "concept": "antibiotic use",
+          "original_term": "Patient says the antibiotic was never started.",
+          "polarity": "absent",
+          "temporality": "current",
+          "experiencer": "patient",
+          "attributes": null,
+          "assertion_basis": "patient_report",
+          "attribution_confidence": "context_supported",
+          "clinical_status": "not started",
+          "evidence": {
+            "quote": "Patient says the antibiotic was never started.",
+            "start": 39,
+            "end": 85
+          }
+        },
+        {
+          "category": "observation",
+          "concept": "clear lungs",
+          "original_term": "Lungs are clear on auscultation.",
+          "polarity": "present",
+          "temporality": "current",
+          "experiencer": "patient",
+          "attributes": null,
+          "assertion_basis": "clinician_observation",
+          "attribution_confidence": "context_supported",
+          "clinical_status": null,
+          "evidence": {
+            "quote": "Lungs are clear on auscultation.",
+            "start": 89,
+            "end": 121
+          }
+        },
+        {
+          "category": "diagnosis",
+          "concept": "viral respiratory illness",
+          "original_term": "Possible viral respiratory illness remains the documented assessment.",
+          "polarity": "uncertain",
+          "temporality": "current",
+          "experiencer": "patient",
+          "attributes": null,
+          "assertion_basis": "clinician_assessment",
+          "attribution_confidence": "context_supported",
+          "clinical_status": "possible",
+          "evidence": {
+            "quote": "Possible viral respiratory illness remains the documented assessment.",
+            "start": 125,
+            "end": 194
+          }
+        },
+        {
+          "category": "procedure",
+          "concept": "chest X-ray",
+          "original_term": "Imaging was not performed.",
+          "polarity": "absent",
+          "temporality": "current",
+          "experiencer": "patient",
+          "attributes": null,
+          "assertion_basis": "documented_history",
+          "attribution_confidence": "context_supported",
+          "clinical_status": "not performed",
+          "evidence": {
+            "quote": "Imaging was not performed.",
+            "start": 198,
+            "end": 224
+          }
+        },
+        {
+          "category": "treatment",
+          "concept": "follow-up",
+          "original_term": "Follow-up was discussed.",
+          "polarity": "present",
+          "temporality": "current",
+          "experiencer": "patient",
+          "attributes": null,
+          "assertion_basis": "discussion",
+          "attribution_confidence": "context_supported",
+          "clinical_status": "discussed",
+          "evidence": {
+            "quote": "Follow-up was discussed.",
+            "start": 225,
+            "end": 249
+          }
+        }
+      ],
+      "relationships": []
+    }
+  }
+]

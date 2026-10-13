@@ -1,0 +1,18 @@
+[
+  {
+    "text": "Patient: Sage Example | MRN: EX-P4 | Document ID: EX-D4\nSigned plan EX-PLAN4 effective 2026-02-09 through 2026-02-27: at least 2 therapy days and 85 patient-present individual or group minutes per Monday-Sunday week.\nImported PHQ-9 form EX-Q4 completed by Sage Example on 2026-02-10, total score 8. Receipt was 2026-02-12 at 14:08; no new form or visit.\n",
+    "extractions": [
+      {"kind": "patient", "quote": "Patient: Sage Example | MRN: EX-P4 | Document ID: EX-D4", "data": {"patient_id": "EX-P4", "name": "Sage Example", "dob": null, "declared_id": "EX-D4"}},
+      {"kind": "plan", "quote": "Signed plan EX-PLAN4 effective 2026-02-09 through 2026-02-27: at least 2 therapy days and 85 patient-present individual or group minutes per Monday-Sunday week.", "data": {"statement": "Signed quantitative weekly plan", "recorded_at": null, "plan_ref": "EX-PLAN4", "effective_start": "2026-02-09", "effective_end": "2026-02-27", "required_days": 2, "required_minutes": 85, "service_types": ["individual", "group"], "week_basis": "monday_sunday", "signed": true}},
+      {"kind": "assessment", "quote": "Imported PHQ-9 form EX-Q4 completed by Sage Example on 2026-02-10, total score 8. Receipt was 2026-02-12 at 14:08; no new form or visit.", "data": {"statement": "Copied patient-completed PHQ-9", "recorded_at": "2026-02-12T14:08:00", "instrument": "PHQ-9", "assessment_date": "2026-02-10", "form_ref": "EX-Q4", "score": 8, "reporter": "Sage Example", "experiencer": "Sage Example", "copied": true}}
+    ]
+  },
+  {
+    "text": "Patient: Vale Example | MRN: EX-P5 | Document ID: EX-D5\nEncounter EX-E5 | 2026-02-16\nFinal signed group attendance: patient arrived 10:12 and departed 10:59. Scheduled 10:00 to 11:00.\nEncounter EX-E6 | 2026-02-17\nFinal signed group attendance: patient arrived 10:12 and departed 10:59. Scheduled 10:00 to 11:00.\n",
+    "extractions": [
+      {"kind": "patient", "quote": "Patient: Vale Example | MRN: EX-P5 | Document ID: EX-D5", "data": {"patient_id": "EX-P5", "name": "Vale Example", "dob": null, "declared_id": "EX-D5"}},
+      {"kind": "service", "quote": "Final signed group attendance: patient arrived 10:12 and departed 10:59. Scheduled 10:00 to 11:00.", "data": {"statement": "Signed patient attendance", "recorded_at": null, "encounter_ref": "EX-E5", "appointment_ref": null, "service_date": "2026-02-16", "service_type": "group", "evidence_kind": "attendance", "signed": true, "patient_present": true, "delivered": true, "actual_intervals": [{"start": "10:12", "end": "10:59"}], "scheduled_intervals": [{"start": "10:00", "end": "11:00"}], "breaks": [], "reported_minutes": null}},
+      {"kind": "service", "quote": "Final signed group attendance: patient arrived 10:12 and departed 10:59. Scheduled 10:00 to 11:00.", "data": {"statement": "Signed patient attendance", "recorded_at": null, "encounter_ref": "EX-E6", "appointment_ref": null, "service_date": "2026-02-17", "service_type": "group", "evidence_kind": "attendance", "signed": true, "patient_present": true, "delivered": true, "actual_intervals": [{"start": "10:12", "end": "10:59"}], "scheduled_intervals": [{"start": "10:00", "end": "11:00"}], "breaks": [], "reported_minutes": null}}
+    ]
+  }
+]

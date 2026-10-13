@@ -1,0 +1,10 @@
+{
+  "cough": {"hpo": "HP:0012735", "group": "cough", "concept": "cough", "aliases": ["coughs"]},
+  "dyspnea": {"hpo": "HP:0002094", "group": "dyspnea", "concept": "dyspnea", "exclude": ["Abnormal breathing", "Panting"], "aliases": ["breathlessness", "breathless", "breathing difficulties", "SOB", "DOE"]},
+  "fever": {"hpo": "HP:0001945", "group": "fever", "concept": "fever", "exclude": ["Hyperthermia"], "aliases": ["febrile", "fevers", "afebrile"], "negative_terms": ["afebrile"]},
+  "chest_pain": {"hpo": "HP:0100749", "group": "respiratory pain", "concept": "respiratory pain", "aliases": ["respiratory pain", "respiratory discomfort", "pleuritic pain"]},
+  "rhinorrhea": {"hpo": "HP:0031417", "group": "nasal symptoms", "concept": "rhinorrhea", "aliases": []},
+  "nasal_congestion": {"hpo": "HP:0001742", "group": "nasal symptoms", "concept": "nasal congestion", "aliases": ["nasal stuffiness"]},
+  "sneezing": {"hpo": "HP:0025095", "group": "nasal symptoms", "concept": "sneezing", "aliases": ["sneezing", "sneezes"]},
+  "nasal_symptoms": {"hpo": null, "group": "nasal symptoms", "concept": "nasal symptoms", "aliases": ["nasal symptoms"]}
+}

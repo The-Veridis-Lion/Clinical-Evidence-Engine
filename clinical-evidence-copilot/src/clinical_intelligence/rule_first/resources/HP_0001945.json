@@ -1,0 +1,93 @@
+{
+  "_embedded" : {
+    "terms" : [ {
+      "iri" : "http://purl.obolibrary.org/obo/HP_0001945",
+      "lang" : "en",
+      "description" : [ "Fever has been defined as a state of elevated core temperature, which is often, but not necessarily, part of the defensive responses of multicellular organisms (host) to the invasion of live (microorganisms) or inanimate matter recognized as pathogenic or alien by the host. The febrile response (of which fever is a component) is a complex physiologic reaction to disease, involving a cytokine-mediated rise in core temperature, generation of acute phase reactants, and activation of numerous physiologic, endocrinologic, and immunologic systems. The rise in temperature during fever is to be distinguished from that occurring during episodes of hyperthermia. Unlike fever, hyperthermia involves an unregulated rise in body temperature in which pyrogenic cytokines are not directly involved and against which standard antipyretics are ineffective. It represents a failure of thermoregulatory homeostasis, in which there is uncontrolled heat production, inadequate heat dissipation, or defective hypothalamic thermoregulation.", "Body temperature elevated above the normal range." ],
+      "synonyms" : [ "Hyperthermia", "Pyrexia", "Fever" ],
+      "annotation" : {
+        "id" : [ "HP:0001945" ]
+      },
+      "label" : "Fever",
+      "ontology_name" : "hp",
+      "ontology_prefix" : "HP",
+      "ontology_iri" : "http://purl.obolibrary.org/obo/hp/hp-international.owl",
+      "is_obsolete" : false,
+      "term_replaced_by" : null,
+      "is_defining_ontology" : true,
+      "has_children" : true,
+      "is_root" : false,
+      "short_form" : "HP_0001945",
+      "obo_id" : "HP:0001945",
+      "in_subset" : null,
+      "obo_definition_citation" : [ {
+        "definition" : "Body temperature elevated above the normal range.",
+        "oboXrefs" : [ {
+          "database" : null,
+          "id" : "https://orcid.org/0009-0006-4530-3154",
+          "description" : null,
+          "url" : "https://orcid.org/0009-0006-4530-3154"
+        }, {
+          "database" : "PMID",
+          "id" : "9759682",
+          "description" : null,
+          "url" : "https://pubmed.ncbi.nlm.nih.gov/9759682"
+        } ]
+      } ],
+      "obo_xref" : null,
+      "obo_synonym" : [ {
+        "name" : "Fever",
+        "scope" : "hasExactSynonym",
+        "type" : "layperson term",
+        "xrefs" : [ ]
+      } ],
+      "is_preferred_root" : false,
+      "_links" : {
+        "self" : {
+          "href" : "http://www.ebi.ac.uk/ols4/api/ontologies/hp/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FHP_0001945?lang=en"
+        },
+        "parents" : {
+          "href" : "http://www.ebi.ac.uk/ols4/api/ontologies/hp/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FHP_0001945/parents"
+        },
+        "ancestors" : {
+          "href" : "http://www.ebi.ac.uk/ols4/api/ontologies/hp/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FHP_0001945/ancestors"
+        },
+        "hierarchicalParents" : {
+          "href" : "http://www.ebi.ac.uk/ols4/api/ontologies/hp/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FHP_0001945/hierarchicalParents"
+        },
+        "hierarchicalAncestors" : {
+          "href" : "http://www.ebi.ac.uk/ols4/api/ontologies/hp/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FHP_0001945/hierarchicalAncestors"
+        },
+        "jstree" : {
+          "href" : "http://www.ebi.ac.uk/ols4/api/ontologies/hp/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FHP_0001945/jstree"
+        },
+        "children" : {
+          "href" : "http://www.ebi.ac.uk/ols4/api/ontologies/hp/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FHP_0001945/children"
+        },
+        "descendants" : {
+          "href" : "http://www.ebi.ac.uk/ols4/api/ontologies/hp/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FHP_0001945/descendants"
+        },
+        "hierarchicalChildren" : {
+          "href" : "http://www.ebi.ac.uk/ols4/api/ontologies/hp/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FHP_0001945/hierarchicalChildren"
+        },
+        "hierarchicalDescendants" : {
+          "href" : "http://www.ebi.ac.uk/ols4/api/ontologies/hp/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FHP_0001945/hierarchicalDescendants"
+        },
+        "graph" : {
+          "href" : "http://www.ebi.ac.uk/ols4/api/ontologies/hp/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FHP_0001945/graph"
+        }
+      }
+    } ]
+  },
+  "_links" : {
+    "self" : {
+      "href" : "http://www.ebi.ac.uk/ols4/api/ontologies/hp/terms?obo_id=HP:0001945"
+    }
+  },
+  "page" : {
+    "size" : 1,
+    "totalElements" : 1,
+    "totalPages" : 1,
+    "number" : 0
+  }
+}

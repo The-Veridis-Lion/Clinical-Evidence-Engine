@@ -1,0 +1,25 @@
+{
+  "engine_version": "evidence-verifier/1",
+  "implementation_sha256": {
+    "__init__.py": "43d2a773ce0f814c06928f27953457b42bbbf87532f207f653c4ed51e764e32a",
+    "coverage.py": "a2e33f67dccddedc80d71696320038aa5c6166eac514f7a5b3a3745b5f07c6e6",
+    "models.py": "ce7f877f88093bcec26b6e546d191bb6df1026ce93177b4bf7214b2676fe8418",
+    "verifier.py": "0753e451e742828b8f1e7373aa34233fee5b797ebb4731c114a83ff4978de1cb"
+  },
+  "calibrations": [
+    {
+      "calibration_id": "synthetic-explicit-symptom-20261013-v1",
+      "method": "bounded-source-grammar/1",
+      "categories": [
+        "symptom"
+      ],
+      "sample_count": 192,
+      "measured_precision": 1.0,
+      "minimum_precision": 0.95,
+      "reference_type": "synthetic_source_checked",
+      "data_sha256": "90a923340a5da427a8df7e6593835c57ce5ecd2873bc9db24cbaee58915de4dd",
+      "scope": "explicit-symptom-clause/1"
+    }
+  ],
+  "boundary": "Synthetic source checked finite symptom grammar; no independent clinical validation."
+}

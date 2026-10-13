@@ -1,0 +1,76 @@
+{
+  "_embedded" : {
+    "terms" : [ {
+      "iri" : "http://purl.obolibrary.org/obo/HP_0025095",
+      "lang" : "en",
+      "description" : [ "A sudden violent, spasmodic, audible expiration of breath through the nose and mouth." ],
+      "synonyms" : [ ],
+      "annotation" : {
+        "Creator" : [ "https://orcid.org/0000-0002-0736-9199" ],
+        "Date" : [ "2016-10-24T01:36:17Z" ]
+      },
+      "label" : "Sneeze",
+      "ontology_name" : "hp",
+      "ontology_prefix" : "HP",
+      "ontology_iri" : "http://purl.obolibrary.org/obo/hp/hp-international.owl",
+      "is_obsolete" : false,
+      "term_replaced_by" : null,
+      "is_defining_ontology" : true,
+      "has_children" : true,
+      "is_root" : false,
+      "short_form" : "HP_0025095",
+      "obo_id" : "HP:0025095",
+      "in_subset" : null,
+      "obo_definition_citation" : null,
+      "obo_xref" : null,
+      "obo_synonym" : null,
+      "is_preferred_root" : false,
+      "_links" : {
+        "self" : {
+          "href" : "http://www.ebi.ac.uk/ols4/api/ontologies/hp/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FHP_0025095?lang=en"
+        },
+        "parents" : {
+          "href" : "http://www.ebi.ac.uk/ols4/api/ontologies/hp/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FHP_0025095/parents"
+        },
+        "ancestors" : {
+          "href" : "http://www.ebi.ac.uk/ols4/api/ontologies/hp/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FHP_0025095/ancestors"
+        },
+        "hierarchicalParents" : {
+          "href" : "http://www.ebi.ac.uk/ols4/api/ontologies/hp/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FHP_0025095/hierarchicalParents"
+        },
+        "hierarchicalAncestors" : {
+          "href" : "http://www.ebi.ac.uk/ols4/api/ontologies/hp/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FHP_0025095/hierarchicalAncestors"
+        },
+        "jstree" : {
+          "href" : "http://www.ebi.ac.uk/ols4/api/ontologies/hp/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FHP_0025095/jstree"
+        },
+        "children" : {
+          "href" : "http://www.ebi.ac.uk/ols4/api/ontologies/hp/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FHP_0025095/children"
+        },
+        "descendants" : {
+          "href" : "http://www.ebi.ac.uk/ols4/api/ontologies/hp/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FHP_0025095/descendants"
+        },
+        "hierarchicalChildren" : {
+          "href" : "http://www.ebi.ac.uk/ols4/api/ontologies/hp/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FHP_0025095/hierarchicalChildren"
+        },
+        "hierarchicalDescendants" : {
+          "href" : "http://www.ebi.ac.uk/ols4/api/ontologies/hp/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FHP_0025095/hierarchicalDescendants"
+        },
+        "graph" : {
+          "href" : "http://www.ebi.ac.uk/ols4/api/ontologies/hp/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FHP_0025095/graph"
+        }
+      }
+    } ]
+  },
+  "_links" : {
+    "self" : {
+      "href" : "http://www.ebi.ac.uk/ols4/api/ontologies/hp/terms?obo_id=HP:0025095"
+    }
+  },
+  "page" : {
+    "size" : 1,
+    "totalElements" : 1,
+    "totalPages" : 1,
+    "number" : 0
+  }
+}

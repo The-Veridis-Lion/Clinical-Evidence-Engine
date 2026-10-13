@@ -1,0 +1,56 @@
+{
+  "languages" : [ "cs", "de", "dtp", "en", "es", "fr", "it", "ja", "nl", "nna", "pt", "tr", "tw", "zh" ],
+  "lang" : "en",
+  "ontologyId" : "hp",
+  "loaded" : "2026-10-09T10:52:06.877728602",
+  "updated" : "2026-10-09T10:52:06.877728602",
+  "status" : "LOADED",
+  "message" : "",
+  "version" : "2026-09-01",
+  "fileHash" : null,
+  "loadAttempts" : 0,
+  "numberOfTerms" : 32772,
+  "numberOfProperties" : 373,
+  "numberOfIndividuals" : 0,
+  "config" : {
+    "id" : "hp",
+    "versionIri" : "http://purl.obolibrary.org/obo/hp/releases/2026-09-01/hp-international.owl",
+    "namespace" : "hp",
+    "preferredPrefix" : "HP",
+    "title" : "Human Phenotype Ontology",
+    "description" : "The Human Phenotype Ontology (HPO) provides a standardized vocabulary of phenotypic abnormalities and clinical features encountered in human disease.",
+    "homepage" : "http://www.human-phenotype-ontology.org/",
+    "version" : "2026-09-01",
+    "mailingList" : "https://groups.io/g/human-phenotype-ontology",
+    "tracker" : "https://github.com/obophenotype/human-phenotype-ontology/issues/",
+    "logo" : null,
+    "creators" : [ ],
+    "annotations" : null,
+    "fileLocation" : "http://purl.obolibrary.org/obo/hp/hp-international.owl",
+    "oboSlims" : false,
+    "labelProperty" : "http://www.w3.org/2000/01/rdf-schema#label",
+    "definitionProperties" : [ ],
+    "synonymProperties" : [ ],
+    "hierarchicalProperties" : [ ],
+    "baseUris" : [ ],
+    "hiddenProperties" : [ ],
+    "preferredRootTerms" : [ ],
+    "isSkos" : false,
+    "allowDownload" : false
+  },
+  "baseUris" : [ ],
+  "_links" : {
+    "self" : {
+      "href" : "http://www.ebi.ac.uk/ols4/api/ontologies/hp?lang=en"
+    },
+    "terms" : {
+      "href" : "http://www.ebi.ac.uk/ols4/api/ontologies/hp/terms"
+    },
+    "properties" : {
+      "href" : "http://www.ebi.ac.uk/ols4/api/ontologies/hp/properties"
+    },
+    "individuals" : {
+      "href" : "http://www.ebi.ac.uk/ols4/api/ontologies/hp/individuals"
+    }
+  }
+}

@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools==80.10.2"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "clinical-evidence-verifier"
+version = "0.1.0"
+description = "Versioned source support and partial coverage verification"
+license = "LicenseRef-PolyForm-Noncommercial-1.0.0"
+license-files = ["LICENSE.md"]
+requires-python = ">=3.12"
+dependencies = ["pydantic==2.13.5"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+evidence_verification = ["resources/*.json"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]

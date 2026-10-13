@@ -1,0 +1,123 @@
+{
+  "_embedded" : {
+    "terms" : [ {
+      "iri" : "http://purl.obolibrary.org/obo/HP_0002094",
+      "lang" : "en",
+      "description" : [ "Difficult or labored breathing. Dyspnea is a subjective feeling only the patient can rate, e.g., on a Borg scale." ],
+      "synonyms" : [ "Abnormal breathing", "Breathing difficulty", "Difficult to breathe", "Difficulty breathing", "Dyspnoea", "Panting", "Shortness of breath", "Trouble breathing" ],
+      "annotation" : {
+        "id" : [ "HP:0002094" ]
+      },
+      "label" : "Dyspnea",
+      "ontology_name" : "hp",
+      "ontology_prefix" : "HP",
+      "ontology_iri" : "http://purl.obolibrary.org/obo/hp/hp-international.owl",
+      "is_obsolete" : false,
+      "term_replaced_by" : null,
+      "is_defining_ontology" : true,
+      "has_children" : true,
+      "is_root" : false,
+      "short_form" : "HP_0002094",
+      "obo_id" : "HP:0002094",
+      "in_subset" : null,
+      "obo_definition_citation" : [ {
+        "definition" : "Difficult or labored breathing. Dyspnea is a subjective feeling only the patient can rate, e.g., on a Borg scale.",
+        "oboXrefs" : [ {
+          "database" : null,
+          "id" : "https://orcid.org/0000-0002-0736-9199",
+          "description" : null,
+          "url" : "https://orcid.org/0000-0002-0736-9199"
+        }, {
+          "database" : "PMID",
+          "id" : "16914301",
+          "description" : null,
+          "url" : "https://pubmed.ncbi.nlm.nih.gov/16914301"
+        } ]
+      } ],
+      "obo_xref" : null,
+      "obo_synonym" : [ {
+        "name" : "Breathing difficulty",
+        "scope" : "hasExactSynonym",
+        "type" : "layperson term",
+        "xrefs" : [ ]
+      }, {
+        "name" : "Difficult to breathe",
+        "scope" : "hasExactSynonym",
+        "type" : "layperson term",
+        "xrefs" : [ ]
+      }, {
+        "name" : "Difficulty breathing",
+        "scope" : "hasExactSynonym",
+        "type" : "layperson term",
+        "xrefs" : [ ]
+      }, {
+        "name" : "Dyspnoea",
+        "scope" : "hasExactSynonym",
+        "type" : "UK spelling",
+        "xrefs" : [ ]
+      }, {
+        "name" : "Shortness of breath",
+        "scope" : "hasExactSynonym",
+        "type" : "layperson term",
+        "xrefs" : [ ]
+      }, {
+        "name" : "Trouble breathing",
+        "scope" : "hasExactSynonym",
+        "type" : "layperson term",
+        "xrefs" : [ ]
+      }, {
+        "name" : "Panting",
+        "scope" : "hasRelatedSynonym",
+        "type" : "layperson term",
+        "xrefs" : [ ]
+      } ],
+      "is_preferred_root" : false,
+      "_links" : {
+        "self" : {
+          "href" : "http://www.ebi.ac.uk/ols4/api/ontologies/hp/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FHP_0002094?lang=en"
+        },
+        "parents" : {
+          "href" : "http://www.ebi.ac.uk/ols4/api/ontologies/hp/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FHP_0002094/parents"
+        },
+        "ancestors" : {
+          "href" : "http://www.ebi.ac.uk/ols4/api/ontologies/hp/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FHP_0002094/ancestors"
+        },
+        "hierarchicalParents" : {
+          "href" : "http://www.ebi.ac.uk/ols4/api/ontologies/hp/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FHP_0002094/hierarchicalParents"
+        },
+        "hierarchicalAncestors" : {
+          "href" : "http://www.ebi.ac.uk/ols4/api/ontologies/hp/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FHP_0002094/hierarchicalAncestors"
+        },
+        "jstree" : {
+          "href" : "http://www.ebi.ac.uk/ols4/api/ontologies/hp/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FHP_0002094/jstree"
+        },
+        "children" : {
+          "href" : "http://www.ebi.ac.uk/ols4/api/ontologies/hp/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FHP_0002094/children"
+        },
+        "descendants" : {
+          "href" : "http://www.ebi.ac.uk/ols4/api/ontologies/hp/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FHP_0002094/descendants"
+        },
+        "hierarchicalChildren" : {
+          "href" : "http://www.ebi.ac.uk/ols4/api/ontologies/hp/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FHP_0002094/hierarchicalChildren"
+        },
+        "hierarchicalDescendants" : {
+          "href" : "http://www.ebi.ac.uk/ols4/api/ontologies/hp/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FHP_0002094/hierarchicalDescendants"
+        },
+        "graph" : {
+          "href" : "http://www.ebi.ac.uk/ols4/api/ontologies/hp/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FHP_0002094/graph"
+        }
+      }
+    } ]
+  },
+  "_links" : {
+    "self" : {
+      "href" : "http://www.ebi.ac.uk/ols4/api/ontologies/hp/terms?obo_id=HP:0002094"
+    }
+  },
+  "page" : {
+    "size" : 1,
+    "totalElements" : 1,
+    "totalPages" : 1,
+    "number" : 0
+  }
+}
