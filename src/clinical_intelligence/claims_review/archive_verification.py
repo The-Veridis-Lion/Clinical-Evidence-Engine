@@ -2,6 +2,7 @@
 import zipfile
 from pathlib import Path
 from .retrieval import records, sha, source_date, TYPES
+from ..archive_bounds import BoundedArchive
 
 VERSION = 'claims-review-archive-verification/1'
 
@@ -10,7 +11,8 @@ def verify_archive(retrieved, archive_path):
     path = Path(archive_path)
     if not path.is_file():
         raise ValueError('Original archive unavailable: original archive not reverified')
-    archive_sha = sha(path.read_bytes())
+    snapshot = BoundedArchive(path)
+    archive_sha = snapshot.snapshot_sha256
     if archive_sha != retrieved['archive']['sha256']:
         raise ValueError('Original archive SHA mismatch')
     sources = retrieved['case']['sources']
@@ -24,7 +26,7 @@ def verify_archive(retrieved, archive_path):
     manifest = {m['path']: m for m in retrieved['archive']['members']}
     if len(manifest) != len(retrieved['archive']['members']):
         raise ValueError('Duplicate manifest members')
-    with zipfile.ZipFile(path) as z:
+    with snapshot as z:
         if len(z.namelist()) != len(set(z.namelist())):
             raise ValueError('Duplicate original archive members')
         for name, selected in groups.items():

@@ -10,12 +10,14 @@ from time import perf_counter
 from ..claims_review.retrieval import records, sha
 from .contracts import ClaimPacket, SourceRow
 from .split import partition_map
+from ..archive_bounds import BoundedArchive
 
 
 def verify_saved(archive_path, batch_path, split, *, partition=None):
     started = perf_counter()
     archive_path, batch_path = Path(archive_path), Path(batch_path)
-    archive_sha = sha(archive_path.read_bytes())
+    snapshot = BoundedArchive(archive_path)
+    archive_sha = snapshot.snapshot_sha256
     if split["archive_sha256"] != archive_sha:
         raise ValueError("VERIFICATION_ARCHIVE_MISMATCH")
     manifest = json.loads((batch_path / "output-manifest.json").read_text())
@@ -28,15 +30,25 @@ def verify_saved(archive_path, batch_path, split, *, partition=None):
         if sha(raw) != value["sha256"] or len(raw) != value["bytes"]:
             raise ValueError(f"OUTPUT_DIGEST_MISMATCH:{name}")
     partitions = partition_map(split)
-    expected_ids = {cid for key, entries in split["partitions"].items() if not partition or key == partition
-                    for e in entries for cid in e["claim_ids"]}
+    # Original row identities, not just split IDs, account for unassigned claims
+    # and duplicate-ID processing failures without losing either original row.
+    with snapshot as z:
+        patient_counts = Counter(fields['Id'] for _, fields, _, _, _ in records(z.read('patients.csv')) if fields['Id'])
+        original_rows = {f'claims.csv:{number}': (fields['Id'], fields['PATIENTID'])
+                         for number, fields, _, _, _ in records(z.read('claims.csv'))}
+    expected_rows = {sid: identity for sid, identity in original_rows.items()
+                     if not partition or partitions.get(identity[1], 'unassigned') == partition}
+    expected_ids = {identity[0] for identity in expected_rows.values()}
     with gzip.open(batch_path / "packets.jsonl.gz", "rt", encoding="utf-8") as f:
         packets = [ClaimPacket.model_validate_json(line) for line in f]
-    packets = [p for p in packets if not partition or partitions.get(p.patient_id) == partition]
+    packets = [p for p in packets if not partition or partitions.get(p.patient_id, 'unassigned') == partition]
     failures = json.loads((batch_path / "failures.json").read_text())
-    failures = [v for v in failures if not partition or partitions.get(v["patient_id"]) == partition]
-    seen = Counter([p.claim_id for p in packets] + [v["claim_id"] for v in failures])
-    if set(seen) != expected_ids or any(count != 1 for count in seen.values()):
+    failures = [v for v in failures if not partition or partitions.get(v["patient_id"], 'unassigned') == partition]
+    accounted = [(p.claim_source_id, (p.claim_id, p.patient_id)) for p in packets]
+    accounted += [(v['claim_source_id'], (v['claim_id'], v['patient_id'])) for v in failures]
+    seen = Counter(sid for sid, _ in accounted)
+    if (set(seen) != set(expected_rows) or any(count != 1 for count in seen.values())
+            or any(expected_rows.get(sid) != identity for sid, identity in accounted)):
         raise ValueError("CLAIM_COVERAGE_MISMATCH")
     needed = set().union(*(p.referenced_sources() for p in packets))
     saved = {}
@@ -52,10 +64,11 @@ def verify_saved(archive_path, batch_path, split, *, partition=None):
     # Reparse original records independently from ingestion indexes.
     original = {}
     source_fields_checked = 0
-    original_patient_ids = set()
+    original_patient_ids = Counter()
     original_claims = {}
     original_transactions = {}
-    with zipfile.ZipFile(archive_path) as z:
+    # Reuse the compressed bytes from the original immutable snapshot.
+    with BoundedArchive(snapshot.snapshot_bytes) as z:
         for name in z.namelist():
             if not name.endswith(".csv"):
                 continue
@@ -64,7 +77,8 @@ def verify_saved(archive_path, batch_path, split, *, partition=None):
             for number, fields, start, end, row_sha in records(raw):
                 sid = f"{name}:{number}"
                 if name == "patients.csv":
-                    original_patient_ids.add(fields["Id"])
+                    if fields['Id']:
+                        original_patient_ids[fields['Id']] += 1
                 if name == "claims.csv":
                     original_claims[fields["Id"]] = fields["PATIENTID"]
                 if name == "claims_transactions.csv" and fields["CLAIMID"] in expected_ids:
@@ -86,7 +100,7 @@ def verify_saved(archive_path, batch_path, split, *, partition=None):
     if set(original) != needed:
         raise ValueError("ORIGINAL_SOURCE_MISSING")
     split_claims = {cid: e["patient_id"] for entries in split["partitions"].values() for e in entries for cid in e["claim_ids"]}
-    eligible_original_claims = {cid: pid for cid, pid in original_claims.items() if pid in original_patient_ids}
+    eligible_original_claims = {cid: pid for cid, pid in original_claims.items() if original_patient_ids[pid] == 1}
     if split_claims != eligible_original_claims:
         raise ValueError("SPLIT_SOURCE_IDENTITIES_MISMATCH")
     items_checked = 0
@@ -94,8 +108,11 @@ def verify_saved(archive_path, batch_path, split, *, partition=None):
         claim = original[packet.claim_source_id]
         if (packet.claim_id != claim["Id"] or packet.patient_id != claim["PATIENTID"]
             or packet.original_encounter_id != claim["APPOINTMENTID"] or packet.service_date != claim.get("SERVICEDATE", "")
-            or packet.partition != partitions.get(packet.patient_id)):
+            or packet.partition != partitions.get(packet.patient_id, 'unassigned')):
             raise ValueError("CLAIM_FIELD_MISMATCH")
+        count = original_patient_ids[packet.patient_id]
+        if packet.patient_status != ('LINKED' if count == 1 else 'AMBIGUOUS' if count > 1 else 'UNKNOWN'):
+            raise ValueError('PATIENT_LINKAGE_STATUS_MISMATCH')
         for sid in packet.referenced_sources():
             if saved[sid].patient_id is not None and saved[sid].patient_id != packet.patient_id:
                 raise ValueError("CROSS_PATIENT_EVIDENCE")
@@ -147,6 +164,7 @@ def verify_saved(archive_path, batch_path, split, *, partition=None):
     return {"status": "PASS", "partition": partition or "all", "archive_sha256": archive_sha,
         "split_sha256": sha(json.dumps(split, sort_keys=True, separators=(",", ":")).encode()),
         "accounted_claims": len(seen), "verified_packets": len(packets), "processing_failures": failures,
+        "unassigned_claim_rows": sum(pid not in partitions for _, pid in expected_rows.values()),
         "verified_service_items": items_checked, "verified_original_sources": len(original),
         "verified_original_fields": source_fields_checked, "cross_patient_evidence": 0,
         "unsupported_billing_mappings": 0, "verification_seconds": perf_counter()-started,

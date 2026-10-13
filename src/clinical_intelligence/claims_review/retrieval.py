@@ -12,6 +12,7 @@ from pydantic import model_validator
 from .contracts import Contract, ClaimInput, ReviewContext, CaseInput, SourceInput
 from .prepare import digest, prepare_case
 from .review import load_policy
+from ..archive_bounds import BoundedArchive
 
 VERSION = 'claims-review-retrieval/0.1'
 URL = 'https://synthetichealth.github.io/synthea-sample-data/downloads/latest/synthea_sample_data_csv_latest.zip'
@@ -53,7 +54,7 @@ def download(path):
                     'sha256': sha(raw), 'bytes': len(raw),
                     'last_modified': response.headers.get('Last-Modified'),
                     'etag': response.headers.get('ETag')}
-    with zipfile.ZipFile(io.BytesIO(raw)) as archive:
+    with BoundedArchive(raw) as archive:
         if sum(m.file_size for m in archive.infolist()) > 150_000_000:
             raise ValueError('Uncompressed archive exceeds this sample workflow bound')
     path.write_bytes(raw)
@@ -89,10 +90,11 @@ def source_date(value):
 def retrieve(path, query, *, snapshot_available_at=None, metadata=None):
     started = perf_counter()
     path = Path(path)
-    archive_sha = sha(path.read_bytes())
+    snapshot = BoundedArchive(path)
+    archive_sha = snapshot.snapshot_sha256
     overrides = metadata or {}
     discovered = []; excluded = []; auxiliary = []; members = []; encounters = set()
-    with zipfile.ZipFile(path) as archive:
+    with snapshot as archive:
         if sum(m.file_size for m in archive.infolist()) > 150_000_000:
             raise ValueError('Uncompressed archive exceeds sample workflow bound')
         names = archive.namelist()
