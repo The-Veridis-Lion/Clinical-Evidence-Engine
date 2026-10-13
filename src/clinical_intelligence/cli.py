@@ -28,10 +28,15 @@ def main(argv=None):
     for stream in (sys.stdout, sys.stderr):
         if hasattr(stream, "reconfigure"):
             stream.reconfigure(encoding="utf-8")
+    arguments = list(sys.argv[1:] if argv is None else argv)
+    if arguments and arguments[0] == "claims":
+        from .claims_engine.cli import main as claims_main
+        return claims_main(arguments[1:])
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--db", default="artifacts/clinical.sqlite")
     parser.add_argument("--output")
     commands = parser.add_subparsers(dest="command", required=True)
+    commands.add_parser("claims", help="Original-claim inventory, packets, batch processing and patient partitions (offline)")
     ingest = commands.add_parser("process")
     ingest.add_argument("--input", default="examples/synthetic/documents")
     ingest.add_argument("--model", default="gpt-6-luna")

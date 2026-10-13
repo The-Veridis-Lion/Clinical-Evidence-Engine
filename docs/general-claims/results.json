@@ -1,0 +1,255 @@
+{
+  "schema_version": "general-claims-measurement/1",
+  "measured_on": "2026-10-10",
+  "frozen_implementation_commit": "32c0c5b",
+  "baseline_commit": "8fcb665",
+  "archive_sha256": "d61417b551e5b0997c33851b339c157421751f0ea68c18ea686ceb1850907c35",
+  "archive_bytes": 5960866,
+  "full_batch": {
+    "schema_version": "claim-evidence/1",
+    "archive_sha256": "d61417b551e5b0997c33851b339c157421751f0ea68c18ea686ceb1850907c35",
+    "metrics": {
+      "original_claim_rows": 9421,
+      "processed_claims": 9421,
+      "claims_linked_to_patient": 9421,
+      "claims_linked_to_encounter": 9421,
+      "claims_with_charge_items": 9421,
+      "claims_with_identifiable_items": 9420,
+      "claims_with_all_items_identifiable": 9420,
+      "claims_with_supporting_service_records": 9420,
+      "claims_with_linkage_issues": 3130,
+      "claims_with_ambiguous_items": 1,
+      "claims_with_unresolved_items": 0,
+      "claims_with_missing_or_ambiguous_information": 9421,
+      "claims_with_unresolved_observation_association": 1904,
+      "items": 26854,
+      "identified_items": 26853,
+      "ambiguous_items": 1,
+      "unresolved_items": 0,
+      "source_linked_claims": 6291,
+      "processing_failures": 0,
+      "distinct_claim_bearing_patients": 108,
+      "accounted_claim_rows": 9421,
+      "duplicate_claim_ids": 0,
+      "orphan_transaction_rows": 0
+    },
+    "service_categories_items": {
+      "encounter": 5571,
+      "immunization": 1549,
+      "procedure": 15482,
+      "imaging": 402,
+      "medication": 3850
+    },
+    "service_categories_claims_nonexclusive": {
+      "encounter": 5571,
+      "immunization": 1072,
+      "procedure": 3955,
+      "imaging": 368,
+      "medication": 3850
+    },
+    "transaction_types": {
+      "CHARGE": 26854,
+      "PAYMENT": 32327,
+      "TRANSFEROUT": 12933,
+      "TRANSFERIN": 12933
+    },
+    "policy_status": {
+      "POLICY_NOT_EVALUATED": 9421
+    },
+    "failures": [],
+    "partitions": {
+      "reserve": {
+        "patients": 8,
+        "claims": 1981,
+        "service_items": {
+          "encounter": 733,
+          "immunization": 139,
+          "procedure": 2225,
+          "imaging": 53,
+          "medication": 1248
+        },
+        "claims_by_category_nonexclusive": {
+          "encounter": 733,
+          "immunization": 84,
+          "procedure": 551,
+          "imaging": 53,
+          "medication": 1248
+        }
+      },
+      "holdout": {
+        "patients": 50,
+        "claims": 3855,
+        "service_items": {
+          "encounter": 2496,
+          "immunization": 726,
+          "procedure": 6758,
+          "imaging": 172,
+          "medication": 1359
+        },
+        "claims_by_category_nonexclusive": {
+          "encounter": 2496,
+          "immunization": 498,
+          "procedure": 1781,
+          "imaging": 154,
+          "medication": 1359
+        }
+      },
+      "development": {
+        "patients": 50,
+        "claims": 3585,
+        "service_items": {
+          "encounter": 2342,
+          "medication": 1243,
+          "immunization": 684,
+          "procedure": 6499,
+          "imaging": 177
+        },
+        "claims_by_category_nonexclusive": {
+          "encounter": 2342,
+          "medication": 1243,
+          "immunization": 490,
+          "procedure": 1623,
+          "imaging": 161
+        }
+      }
+    },
+    "live_model_calls": 0,
+    "processing_seconds": 2.340258999960497,
+    "claims_per_second": 4025.622805065176,
+    "metric_scope": "Source linkage and structured review readiness only; no independent medical or payment accuracy labels.",
+    "documentation": "https://github.com/synthetichealth/synthea/wiki/CSV-File-Data-Dictionary"
+  },
+  "indexing_seconds": 2.910664599854499,
+  "source_verification": {
+    "accounted_claims": 9421,
+    "verified_packets": 9421,
+    "verified_service_items": 26854,
+    "verified_original_sources": 190051,
+    "verified_original_fields": 4008071,
+    "cross_patient_evidence": 0,
+    "unsupported_billing_mappings": 0
+  },
+  "issue_occurrences": {
+    "diagnosis_clinical_context_unresolved": 3137,
+    "source_stop_and_transaction_to_date_differ": 267,
+    "clinical_service_identity": 1
+  },
+  "claims_by_issue": {
+    "diagnosis_clinical_context_unresolved": 2957,
+    "source_stop_and_transaction_to_date_differ": 267,
+    "clinical_service_identity": 1
+  },
+  "service_systems": {
+    "http://snomed.info/sct": 21455,
+    "CVX": 1549,
+    "RxNorm": 3850
+  },
+  "distinct_original_charge_codes": 474,
+  "representative_packets": [
+    {
+      "category": "encounter",
+      "claim_id": "9a3814bb-f5b0-05f3-7b7b-f299158d98d5",
+      "claim_source_id": "claims.csv:81",
+      "packet": "packets/encounter.json",
+      "service_items": 1,
+      "identities": {
+        "COMPOSITE_MATCH_UNIQUE": 1
+      }
+    },
+    {
+      "category": "medication",
+      "claim_id": "9a3814bb-f5b0-05f3-0f10-810b30a6c86e",
+      "claim_source_id": "claims.csv:89",
+      "packet": "packets/medication.json",
+      "service_items": 1,
+      "identities": {
+        "COMPOSITE_MATCH_UNIQUE": 1
+      }
+    },
+    {
+      "category": "immunization",
+      "claim_id": "9a3814bb-f5b0-05f3-db8e-11e83efa1402",
+      "claim_source_id": "claims.csv:91",
+      "packet": "packets/immunization.json",
+      "service_items": 6,
+      "identities": {
+        "COMPOSITE_MATCH_UNIQUE": 6
+      }
+    },
+    {
+      "category": "procedure",
+      "claim_id": "9a3814bb-f5b0-05f3-a052-d2bb87b391e1",
+      "claim_source_id": "claims.csv:94",
+      "packet": "packets/procedure.json",
+      "service_items": 3,
+      "identities": {
+        "COMPOSITE_MATCH_UNIQUE": 3
+      }
+    },
+    {
+      "category": "imaging",
+      "claim_id": "9a3814bb-f5b0-05f3-1499-6d6acc6dae3c",
+      "claim_source_id": "claims.csv:121",
+      "packet": "packets/imaging.json",
+      "service_items": 9,
+      "identities": {
+        "COMPOSITE_MATCH_UNIQUE": 9
+      }
+    },
+    {
+      "category": "ambiguous_medication",
+      "claim_id": "35f80d0e-eaad-ef68-be2b-007c53365eb2",
+      "claim_source_id": "claims.csv:6148",
+      "packet": "packets/ambiguous_medication.json",
+      "service_items": 1,
+      "identities": {
+        "AMBIGUOUS": 1
+      }
+    }
+  ],
+  "protected_modules": {
+    "src/clinical_intelligence/claims_review/note_prompt_b.py": {
+      "baseline_git_blob": "bb4d4c7ec8140cc0391d21614f56f8fbce7a90cf",
+      "current_git_blob": "bb4d4c7ec8140cc0391d21614f56f8fbce7a90cf"
+    },
+    "src/clinical_intelligence/claims_review/note_extractor.py": {
+      "baseline_git_blob": "4ffa2fb3eef9ea8095cbd4560e101a5e65f199a7",
+      "current_git_blob": "4ffa2fb3eef9ea8095cbd4560e101a5e65f199a7"
+    },
+    "src/clinical_intelligence/claims_review/resources/policy_registry.json": {
+      "baseline_git_blob": "052a6734dbef2161bf58c3de4c525e0158a205a0",
+      "current_git_blob": "052a6734dbef2161bf58c3de4c525e0158a205a0"
+    },
+    "src/clinical_intelligence/claims_review/prepare.py": {
+      "baseline_git_blob": "efc6de0c4145652296d9a8dd6c7d20faa24b447e",
+      "current_git_blob": "efc6de0c4145652296d9a8dd6c7d20faa24b447e"
+    },
+    "src/clinical_intelligence/claims_review/contracts.py": {
+      "baseline_git_blob": "6d5db74909c637514ff335e2be208c43891b298c",
+      "current_git_blob": "6d5db74909c637514ff335e2be208c43891b298c"
+    },
+    "src/clinical_intelligence/claims_review/retrieval.py": {
+      "baseline_git_blob": "9137449cf9a387deffb869b7bae6ea7fea00f048",
+      "current_git_blob": "9137449cf9a387deffb869b7bae6ea7fea00f048"
+    }
+  },
+  "regression": {
+    "passed": 465,
+    "failed": 0,
+    "new_edge_regressions": 17,
+    "seconds": 4.54,
+    "command": "PYTHONPATH=src python -m pytest -q --basetemp=.work/pytest-frozen",
+    "required_live_model_calls": 0
+  },
+  "holdout_final_verification_attempts": 1,
+  "processing_failures": [],
+  "limits": [
+    "No independent clinical, claim approval or policy-compliance reference labels",
+    "No native claim policy adapter",
+    "Composite service matches are not original clinical-event foreign keys",
+    "Missing notes, orders, intent and original EHR availability remain missing"
+  ],
+  "local_batch_path": "artifacts/general-claims/full-frozen",
+  "committed_claim_index_sha256": "7632b4db995b04711c102c7c9ea7ed6ae319e740236b0fa5093e2e6767868b14",
+  "committed_ledger_format": "UTF-8 CSV with LF; values identical to original batch ledger"
+}
