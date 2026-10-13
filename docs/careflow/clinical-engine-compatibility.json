@@ -1,0 +1,107 @@
+{
+  "source_repository": "Clinical-Evidence-Engine",
+  "source_commit": "98095e924cb49b1e008b6ba6de9690da110df39e",
+  "operation": "byte-identical additive reuse; no shared pre-existing file changed",
+  "files": [
+    {
+      "path": "src/clinical_intelligence/clinical_notes/__init__.py",
+      "sha256": "453159e61a11139604dc6ce67bb32b16ecb778278f5480f68f953648978c3852",
+      "source_commit": "98095e924cb49b1e008b6ba6de9690da110df39e"
+    },
+    {
+      "path": "src/clinical_intelligence/clinical_notes/__main__.py",
+      "sha256": "4d88b8a39b50cf129f7823f1754f559a98fcf0c7f4994a1ca1739a9927b378d9",
+      "source_commit": "98095e924cb49b1e008b6ba6de9690da110df39e"
+    },
+    {
+      "path": "src/clinical_intelligence/clinical_notes/dataset.py",
+      "sha256": "e64b2e92fa1088be14d9180817edd4b76faa5a5830022c596beb9c43cd78cf5c",
+      "source_commit": "98095e924cb49b1e008b6ba6de9690da110df39e"
+    },
+    {
+      "path": "src/clinical_intelligence/clinical_notes/evaluation.py",
+      "sha256": "59e012ca754077629405b1601d09c9f92ddbc56ff2714a02cdd1ab51fba5c9bd",
+      "source_commit": "98095e924cb49b1e008b6ba6de9690da110df39e"
+    },
+    {
+      "path": "src/clinical_intelligence/clinical_notes/ledger.py",
+      "sha256": "da0dfea0651807749e758cf5811fac1815903386e1e6e5c29ab90765ccc824a6",
+      "source_commit": "98095e924cb49b1e008b6ba6de9690da110df39e"
+    },
+    {
+      "path": "src/clinical_intelligence/clinical_notes/normalization.py",
+      "sha256": "427eb83e8d829885299f8f57573601b7ccf426ae3c72714225cf95617fb8c621",
+      "source_commit": "98095e924cb49b1e008b6ba6de9690da110df39e"
+    },
+    {
+      "path": "src/clinical_intelligence/clinical_notes/prompt.py",
+      "sha256": "f20263e3e9e8fa38a2d2634a5239c9a7e2597dcdcc12b9915aa01c6cdf603d48",
+      "source_commit": "98095e924cb49b1e008b6ba6de9690da110df39e"
+    },
+    {
+      "path": "src/clinical_intelligence/clinical_notes/runner.py",
+      "sha256": "f272114ea4d267721b5fb86545b50158a5fa8012b7ed8d89d31339d7da205ce4",
+      "source_commit": "98095e924cb49b1e008b6ba6de9690da110df39e"
+    },
+    {
+      "path": "src/clinical_intelligence/clinical_notes/schema.py",
+      "sha256": "cec7c6531fd6e0d12c0ad430763f91f51e90ec5946a1122241162e579833b889",
+      "source_commit": "98095e924cb49b1e008b6ba6de9690da110df39e"
+    },
+    {
+      "path": "src/clinical_intelligence/clinical_notes/views.py",
+      "sha256": "48327048aa11a3bac459e99b8bc1064815d8de1a647b743a38d18f1268e76afb",
+      "source_commit": "98095e924cb49b1e008b6ba6de9690da110df39e"
+    },
+    {
+      "path": "src/clinical_intelligence/dialogue_first/__init__.py",
+      "sha256": "46c6b25227d6d5c1002662f2c4aff8116ff9955d3f760bdc55342e8ab3fe3bc6",
+      "source_commit": "98095e924cb49b1e008b6ba6de9690da110df39e"
+    },
+    {
+      "path": "src/clinical_intelligence/dialogue_first/__main__.py",
+      "sha256": "5b6883621801e0ed2caeee52cf1a6e1ca53f16a65f780203ffd5d4a9b1a6597f",
+      "source_commit": "98095e924cb49b1e008b6ba6de9690da110df39e"
+    },
+    {
+      "path": "src/clinical_intelligence/dialogue_first/contract.py",
+      "sha256": "50af191176aa596f88fbbecb429733a3917210816e4dd8db9499548d0c8d5024",
+      "source_commit": "98095e924cb49b1e008b6ba6de9690da110df39e"
+    },
+    {
+      "path": "src/clinical_intelligence/dialogue_first/dataset.py",
+      "sha256": "55323123ed0edf2ace0ad74599977b002d9cb321ef29238ec251eb00c15b6dcf",
+      "source_commit": "98095e924cb49b1e008b6ba6de9690da110df39e"
+    },
+    {
+      "path": "src/clinical_intelligence/dialogue_first/prompt.py",
+      "sha256": "a5881e7239140ff212b294b7fe1f1e7dd6f6e1cad12d21edf3c6ebe408a7e385",
+      "source_commit": "98095e924cb49b1e008b6ba6de9690da110df39e"
+    },
+    {
+      "path": "src/clinical_intelligence/dialogue_first/runtime.py",
+      "sha256": "1e46dad1e3bbab1fb4953aea4b5466697cb9aa8a3c4b9fdb139d40797caf3667",
+      "source_commit": "98095e924cb49b1e008b6ba6de9690da110df39e"
+    },
+    {
+      "path": "tests/test_dialogue_first.py",
+      "sha256": "3255ddbd354694c180ac171db4588d14c0a64aa29500554a19368754e0bf99ef",
+      "source_commit": "98095e924cb49b1e008b6ba6de9690da110df39e"
+    },
+    {
+      "path": "tools/dialogue_first_audit.py",
+      "sha256": "2986d8469a3843023f1ee17d373bd946b530e4c7a10e81bb5a69c2cfef94f9ec",
+      "source_commit": "98095e924cb49b1e008b6ba6de9690da110df39e"
+    },
+    {
+      "path": "tools/dialogue_first_revalidate.py",
+      "sha256": "7a52468cd6085e71373cbce5359314ad378274593de892c091d1c9079b4f0a28",
+      "source_commit": "98095e924cb49b1e008b6ba6de9690da110df39e"
+    },
+    {
+      "path": "examples/dialogue_first/soap-smoke.txt",
+      "sha256": "2aee4ff6ed4d7023db8215024f99846e1e452329305fad289e64f5444c6fcb06",
+      "source_commit": "98095e924cb49b1e008b6ba6de9690da110df39e"
+    }
+  ]
+}
