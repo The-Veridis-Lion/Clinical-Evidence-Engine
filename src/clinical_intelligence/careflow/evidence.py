@@ -111,11 +111,9 @@ def prepare(case):
             'source_ref': {'json_pointer': f'/facts/{i}'},
         })
     resolution = reconcile(projected)
-    # Unresolved/excluded amendments cannot silently leave the original supported.
-    blocked = {f['amends_fact_id'] for f in excluded if f['amends_fact_id']}
     for row in facts:
         state = resolution['derived'][row['fact_id']]['content/value']
         row['effective_assertions'] = state['values']
-        row['reconciliation_status'] = 'UNRESOLVED' if row['fact_id'] in blocked else state['status']
+        row['reconciliation_status'] = state['status']
         row['related_fact_ids'] = state['source_ids']
     return facts, excluded, resolution

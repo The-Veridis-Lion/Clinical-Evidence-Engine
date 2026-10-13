@@ -108,3 +108,31 @@ def test_unresolved_conflict_is_visible_even_when_requirement_is_inapplicable(ki
     packet = evaluate(model(Case, raw))
     assert next(c for c in packet['checks'] if c['requirement'] == 'investigation_result')['status'] == 'NOT_APPLICABLE'
     assert any(set(c['fact_ids']) == {'assertion-study', 'opposing-study-fact'} for c in packet['unresolved_conflicts'])
+
+
+@pytest.mark.parametrize('kind', ['referral', 'prior_authorization'])
+@pytest.mark.parametrize('exclusion', ['patient_mismatch', 'not_available_as_of', 'ungrounded_citation'])
+def test_excluded_amendment_cannot_change_an_in_scope_fact(kind, exclusion):
+    raw = independent_case(kind)
+    original = next(f for f in raw['facts'] if f['requirement'] == 'clinical_summary')
+    source = {'source_id': 'outside-amendment', 'patient_id': original['patient_id'], 'encounter_id': 'VISIT-5',
+              'available_at': '2025-12-02', 'origin': 'constructed_synthetic', 'source_kind': 'structured_record',
+              'recorded_at': '2025-12-01', 'event_date': None, 'record_type': 'order', 'event_link_id': None,
+              'content': {'statement': 'Summary explicitly absent in this corrective assertion.',
+                          'amendment_authority_confirmed': True, 'amends_fact_id': original['fact_id'],
+                          'amendment_scope': 'assertion'}}
+    amended = deepcopy(original)
+    amended.update(fact_id='outside-amendment-fact', assertion=False, amends_fact_id=original['fact_id'],
+                   authority_ref={'source_id': source['source_id'], 'field': 'amendment_authority_confirmed'},
+                   evidence=[{'source_id': source['source_id'], 'field': 'statement'}])
+    if exclusion == 'patient_mismatch':
+        source['patient_id'] = 'ANOTHER-PATIENT'
+    elif exclusion == 'not_available_as_of':
+        source['available_at'] = '2026-01-01'
+    else:
+        amended['evidence'][0]['field'] = 'nonexistent'
+    raw['sources'].append(source)
+    raw['facts'].append(amended)
+    packet = evaluate(model(Case, raw))
+    assert next(c for c in packet['checks'] if c['requirement'] == 'clinical_summary')['status'] == 'SUPPORTED'
+    assert packet['excluded_facts'][0]['reason'] == exclusion

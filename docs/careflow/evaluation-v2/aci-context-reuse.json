@@ -1,0 +1,210 @@
+{
+  "schema_version": "careflow-clinical-cache-reuse/2",
+  "encounters": 10,
+  "cases": 20,
+  "unique_original_facts": 469,
+  "model_calls": 0,
+  "results": [
+    {
+      "case_id": "CF-CACHE-D2N001-referral",
+      "document_id": "aci-bench:train:D2N001",
+      "request_type": "referral",
+      "clinical_facts": 41,
+      "clinical_relationships": 5,
+      "readiness": "NEEDS_EVIDENCE",
+      "audit_verified": true,
+      "raw_packet_sha256": "625c3acd7bf0161c9df347156528a7d7825c27fde332501a9097340b50de9bd6"
+    },
+    {
+      "case_id": "CF-CACHE-D2N001-prior_authorization",
+      "document_id": "aci-bench:train:D2N001",
+      "request_type": "prior_authorization",
+      "clinical_facts": 41,
+      "clinical_relationships": 5,
+      "readiness": "NEEDS_EVIDENCE",
+      "audit_verified": true,
+      "raw_packet_sha256": "707361d179f612b7f0699688eae6164122bdb02dfa0101bdad2971efc4ab3270"
+    },
+    {
+      "case_id": "CF-CACHE-D2N002-referral",
+      "document_id": "aci-bench:train:D2N002",
+      "request_type": "referral",
+      "clinical_facts": 48,
+      "clinical_relationships": 5,
+      "readiness": "NEEDS_EVIDENCE",
+      "audit_verified": true,
+      "raw_packet_sha256": "1f22a45b9116e8e2d28a358ae62495b806ca99870a6e72db487c8f75903c82ff"
+    },
+    {
+      "case_id": "CF-CACHE-D2N002-prior_authorization",
+      "document_id": "aci-bench:train:D2N002",
+      "request_type": "prior_authorization",
+      "clinical_facts": 48,
+      "clinical_relationships": 5,
+      "readiness": "NEEDS_EVIDENCE",
+      "audit_verified": true,
+      "raw_packet_sha256": "4342e7b8b92896191dbeabe63aedf59d76161e267fc455891e0c64fd06a2079a"
+    },
+    {
+      "case_id": "CF-CACHE-D2N003-referral",
+      "document_id": "aci-bench:train:D2N003",
+      "request_type": "referral",
+      "clinical_facts": 39,
+      "clinical_relationships": 3,
+      "readiness": "NEEDS_EVIDENCE",
+      "audit_verified": true,
+      "raw_packet_sha256": "5dbd0058611a6c267280a87f7e6dde0c5907b6b828969fa9da943f0465b6de1d"
+    },
+    {
+      "case_id": "CF-CACHE-D2N003-prior_authorization",
+      "document_id": "aci-bench:train:D2N003",
+      "request_type": "prior_authorization",
+      "clinical_facts": 39,
+      "clinical_relationships": 3,
+      "readiness": "NEEDS_EVIDENCE",
+      "audit_verified": true,
+      "raw_packet_sha256": "201059241b5fe580e82fde3367d8c094653379001c61cb3c9eeb9b0b1e3c076f"
+    },
+    {
+      "case_id": "CF-CACHE-D2N021-referral",
+      "document_id": "aci-bench:train:D2N021",
+      "request_type": "referral",
+      "clinical_facts": 65,
+      "clinical_relationships": 4,
+      "readiness": "NEEDS_EVIDENCE",
+      "audit_verified": true,
+      "raw_packet_sha256": "554d1fb3709f1a75dbb8f0613e76abcadd4a0a2d75f3a92dc6419ac464367a9a"
+    },
+    {
+      "case_id": "CF-CACHE-D2N021-prior_authorization",
+      "document_id": "aci-bench:train:D2N021",
+      "request_type": "prior_authorization",
+      "clinical_facts": 65,
+      "clinical_relationships": 4,
+      "readiness": "NEEDS_EVIDENCE",
+      "audit_verified": true,
+      "raw_packet_sha256": "95c7354a84b6022de07f4d714c4c83c3eb5ca084ee91cef2f5e21a770c75ee6e"
+    },
+    {
+      "case_id": "CF-CACHE-D2N022-referral",
+      "document_id": "aci-bench:train:D2N022",
+      "request_type": "referral",
+      "clinical_facts": 82,
+      "clinical_relationships": 2,
+      "readiness": "NEEDS_EVIDENCE",
+      "audit_verified": true,
+      "raw_packet_sha256": "2c8ab81e03336cd541d6a411e822346c93905d94ebaf36a6f46b032143c17967"
+    },
+    {
+      "case_id": "CF-CACHE-D2N022-prior_authorization",
+      "document_id": "aci-bench:train:D2N022",
+      "request_type": "prior_authorization",
+      "clinical_facts": 82,
+      "clinical_relationships": 2,
+      "readiness": "NEEDS_EVIDENCE",
+      "audit_verified": true,
+      "raw_packet_sha256": "a73408acc2648e17d79d6b3cab002b0ac777e1658d236b2260975c1d2d6f8907"
+    },
+    {
+      "case_id": "CF-CACHE-D2N023-referral",
+      "document_id": "aci-bench:train:D2N023",
+      "request_type": "referral",
+      "clinical_facts": 48,
+      "clinical_relationships": 2,
+      "readiness": "NEEDS_EVIDENCE",
+      "audit_verified": true,
+      "raw_packet_sha256": "0e501c8ce610546ae805816692a7fa9223d2f202fa03fb7283b59daa10622370"
+    },
+    {
+      "case_id": "CF-CACHE-D2N023-prior_authorization",
+      "document_id": "aci-bench:train:D2N023",
+      "request_type": "prior_authorization",
+      "clinical_facts": 48,
+      "clinical_relationships": 2,
+      "readiness": "NEEDS_EVIDENCE",
+      "audit_verified": true,
+      "raw_packet_sha256": "5ae9e0f827993bf86e22ec3f49d6217bd9bee344e259ae7e98b27c86bdd4a1df"
+    },
+    {
+      "case_id": "CF-CACHE-D2N033-referral",
+      "document_id": "aci-bench:train:D2N033",
+      "request_type": "referral",
+      "clinical_facts": 34,
+      "clinical_relationships": 2,
+      "readiness": "NEEDS_EVIDENCE",
+      "audit_verified": true,
+      "raw_packet_sha256": "64b94b7682da68199d740ec3ba4fa5d64f28b19e16a5ec138894bfcc82adc289"
+    },
+    {
+      "case_id": "CF-CACHE-D2N033-prior_authorization",
+      "document_id": "aci-bench:train:D2N033",
+      "request_type": "prior_authorization",
+      "clinical_facts": 34,
+      "clinical_relationships": 2,
+      "readiness": "NEEDS_EVIDENCE",
+      "audit_verified": true,
+      "raw_packet_sha256": "0b2f22030c44ae7fc4e802f35bb7c160acdff9ac2840b5708bd7baa1dd832256"
+    },
+    {
+      "case_id": "CF-CACHE-D2N034-referral",
+      "document_id": "aci-bench:train:D2N034",
+      "request_type": "referral",
+      "clinical_facts": 29,
+      "clinical_relationships": 4,
+      "readiness": "NEEDS_EVIDENCE",
+      "audit_verified": true,
+      "raw_packet_sha256": "e81bec0d37c1c83bb3c75dc72676dbd1e3284ad9f8098254d3d42dce7112ba04"
+    },
+    {
+      "case_id": "CF-CACHE-D2N034-prior_authorization",
+      "document_id": "aci-bench:train:D2N034",
+      "request_type": "prior_authorization",
+      "clinical_facts": 29,
+      "clinical_relationships": 4,
+      "readiness": "NEEDS_EVIDENCE",
+      "audit_verified": true,
+      "raw_packet_sha256": "77e28a81a743f9a0061ca568e67de3d1bbf4cd9644f2e518e8daab9be6cd5944"
+    },
+    {
+      "case_id": "CF-CACHE-D2N035-referral",
+      "document_id": "aci-bench:train:D2N035",
+      "request_type": "referral",
+      "clinical_facts": 54,
+      "clinical_relationships": 2,
+      "readiness": "NEEDS_EVIDENCE",
+      "audit_verified": true,
+      "raw_packet_sha256": "4c82329441a4089a4264799a2e62923d6b6899e03b1823c976d1709f6e0a8e6d"
+    },
+    {
+      "case_id": "CF-CACHE-D2N035-prior_authorization",
+      "document_id": "aci-bench:train:D2N035",
+      "request_type": "prior_authorization",
+      "clinical_facts": 54,
+      "clinical_relationships": 2,
+      "readiness": "NEEDS_EVIDENCE",
+      "audit_verified": true,
+      "raw_packet_sha256": "f991792b5e2f83853209ac4f8aa0e9c0546b3982d71334cedf3d8eb13812e1af"
+    },
+    {
+      "case_id": "CF-CACHE-D2N036-referral",
+      "document_id": "aci-bench:train:D2N036",
+      "request_type": "referral",
+      "clinical_facts": 29,
+      "clinical_relationships": 1,
+      "readiness": "NEEDS_EVIDENCE",
+      "audit_verified": true,
+      "raw_packet_sha256": "1e5249253348203720d3690f9766247e38a63ac50373e47f0eaaaf2aab8fdd83"
+    },
+    {
+      "case_id": "CF-CACHE-D2N036-prior_authorization",
+      "document_id": "aci-bench:train:D2N036",
+      "request_type": "prior_authorization",
+      "clinical_facts": 29,
+      "clinical_relationships": 1,
+      "readiness": "NEEDS_EVIDENCE",
+      "audit_verified": true,
+      "raw_packet_sha256": "44147ec4229fc654d4ebd1104053bcccd35f4f02960d283be95722f0ca16a4bd"
+    }
+  ],
+  "boundary": "Historical extraction reused mechanically. No new semantic accuracy score, no artificial request-document satisfaction."
+}

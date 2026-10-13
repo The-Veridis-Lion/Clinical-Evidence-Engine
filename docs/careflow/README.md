@@ -193,7 +193,7 @@ history by themselves. No medical bill is converted into a PA request.
 
 ## Validation and limits
 
-The final full run passed **637 tests**: 465 existing + 172 new. Tests cover
+The historical v1 full run passed **637 tests**: 465 existing + 172 new. Tests cover
 multiple patients, text/structured/Unicode/CRLF documents, Referral/PA, truth-state
 and condition matrices, independent hand-written cases, corrections, concurrent
 writes, rollback, restart, source tampering and actual local HTTP/CLI calls.
@@ -202,8 +202,9 @@ writes, rollback, restart, source tampering and actual local HTTP/CLI calls.
 contracts were changed.
 
 Exact quotations establish provenance, not the clinical truth of a supplied
-assertion. Automatic note interpretation is not newly implemented; callers supply
-source-grounded assertions from established extraction/intake/review processes.
+assertion. Clinical extraction reuses the existing source-only Luna prompt, schema
+and validator. Context preserves interpretation and provenance; documentation
+assertions remain explicit, source-grounded inputs.
 Insurer-specific policies, actual provider authenticity, real-patient validation,
 production security and externally signed audit anchors remain future work.
 Local hash chains detect ordinary inconsistency but are not tamper-proof against
@@ -213,3 +214,72 @@ Follow [AGENTS.md](../../AGENTS.md): reread the maintained direction document
 before every autonomous round, solve generalizable problems, keep fixed tests,
 validate across patients/documents/request types/conditions, and do not claim
 clinical effectiveness from these synthetic software results. No auto-merge or deployment.
+
+## Frozen evaluation and clinical source reuse
+
+The maintained [acceptance contract](../CAREFLOW_READINESS_ENGINE.md) supersedes
+arbitrary duration/five-round stops and mandatory human sign-off. Read it and
+[actual progress](../CAREFLOW_PROGRESS.md) before each autonomous decision.
+Version 2 reports are separate from historical v1 files in [evaluation-v2](evaluation-v2/).
+The complete run currently passes 755 tests; source extraction Precision/Recall
+and final holdout acceptance remain pending.
+
+The unchanged ClinicalFact/dialogue packages were copied from a frozen existing
+engine commit in a separate compatible addition; [the hash manifest](clinical-engine-compatibility.json)
+records reuse. Optional `clinical_context` binds an original text source to an
+existing `Extraction`. Quotes, offsets, supporting spans and source index
+provenance are validated before persistence. Stable context fact IDs are reviewable
+through the same HTTP interface. Context cannot automatically establish a PA form,
+referral intent or documentary completeness.
+
+Freeze by original case and duplicate content; raw labels stay in ignored artifacts.
+ACN requires development/holdout >=200 groups. Old ACI cached encounters stay in
+development. The current ACN prefix is not a random sample of all 30K records.
+Public datasets have no PA approval/completeness gold.
+
+```powershell
+python -m clinical_intelligence.careflow.evaluation freeze-corpus --dataset acn --input ORIGINAL.jsonl --output artifacts/acn-frozen --development-groups 200 --holdout-groups 200
+python -m clinical_intelligence.careflow.evaluation freeze-reference-inventory --source ORIGINAL.jsonl --frozen artifacts/acn-frozen --output artifacts/acn-original-references
+```
+
+The second command preserves malformed raw labels, strict parsed labels and hashes.
+Its permissive JSON view is diagnostic only; it never substitutes repaired labels
+for scoring or drops an invalid case.
+
+Actual extraction uses the configured Codex provider, Luna/high, no reference input,
+shared SQLite reservations and at most two mechanical or upstream retries. This
+command makes product model calls, so run it deliberately:
+
+```powershell
+python -m clinical_intelligence.careflow extract-development --frozen artifacts/acn-frozen --groups 1 --ledger SHARED_CALLS.sqlite --output artifacts/acn-extraction
+python -m clinical_intelligence.careflow --db artifacts/acn-product.sqlite replay-extraction --frozen artifacts/acn-frozen --extraction artifacts/acn-extraction --ledger SHARED_CALLS.sqlite --received-at 2026-10-13 --output artifacts/acn-product
+```
+
+Use the same ledger path in both projects. Participating callers have global cap50
+and project cap25; until Copilot adopts it, accounting cannot cover its independent
+calls. Successful first outputs are reused despite reference disagreements. Cache
+replay reconstructs acceptance from original raw responses and immutable call
+records; corruption fails without inference. Replay makes zero calls and constructs
+both request types with missing paperwork visible. They are product fixtures,
+not real insured cases.
+
+To reproduce deterministic scoring with the pinned Synthea archive and split:
+
+```powershell
+python -m clinical_intelligence.careflow.evaluation material-demo-freeze --archive ORIGINAL.zip --split docs/general-claims/split.json --output artifacts/materials-frozen
+python -m clinical_intelligence.careflow.evaluation run-materials --frozen artifacts/materials-frozen --partition development --output artifacts/materials-dev
+```
+
+The 26 fixed mechanisms cover five states, wrong scope, unavailable/ungrounded
+evidence, future actual/order distinctions, amendment authority and trigger truth,
+across both request types and text/structured sources. Six existing Synthea
+development patients are split 3/3 for this new material corpus; they are not the
+old claims benchmark's holdout. Expected results are declared before execution.
+Development312 scenarios yield macro-F1 100%, serious false Ready0 and source/rule
+mechanical validity100%; these are constructed software scenarios.
+
+After final candidate freeze, `seal-candidate --frozen ROOT` followed by
+`run-materials --partition holdout` permits the one-use final material test. Code
+changes invalidate the seal. Never resample the final set or change references/
+denominators to meet targets. Source-checked extraction metrics are separate;
+advanced-AI silver findings are not medical ground truth.

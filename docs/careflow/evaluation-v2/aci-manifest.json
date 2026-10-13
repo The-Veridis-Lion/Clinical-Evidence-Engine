@@ -1,0 +1,1244 @@
+{
+  "schema_version": "careflow-frozen-corpus/2",
+  "seed": "careflow-case-split/2",
+  "source_metadata": {
+    "repository": "https://github.com/wyim/aci-bench",
+    "revision": "b909b2bb9cf1d19de08df15cddde7bd0179665e4",
+    "existing_cached_encounters": [
+      "D2N001",
+      "D2N002",
+      "D2N003",
+      "D2N021",
+      "D2N022",
+      "D2N023",
+      "D2N033",
+      "D2N034",
+      "D2N035",
+      "D2N036"
+    ],
+    "reference_warning": "Reference notes are not structured source-checked fact gold."
+  },
+  "documents_sha256": "c2bacc99f4d39fa7824328e7fb10639c5501803f2f7d19f783ab22222764a840",
+  "document_count": 67,
+  "original_case_groups": 67,
+  "isolated_groups": 67,
+  "partition_selection": "SHA-256 of seed/group identity only; exposed groups restricted to development",
+  "grouping": "original case identity plus connected components of whitespace-normalized duplicate source content",
+  "partitions": {
+    "development": [
+      {
+        "group_id": "group-006fbcdf43660d784bb9cd5a272260771b5145899f40358ec929b93665007b7f",
+        "original_case_groups": [
+          "D2N021"
+        ],
+        "document_ids": [
+          "aci-bench:train:D2N021"
+        ],
+        "previously_exposed": true
+      },
+      {
+        "group_id": "group-e4336d91540f744044446787ad319067c683247589cf1a1aa75cc491c9d34e12",
+        "original_case_groups": [
+          "D2N033"
+        ],
+        "document_ids": [
+          "aci-bench:train:D2N033"
+        ],
+        "previously_exposed": true
+      },
+      {
+        "group_id": "group-3897fc099245761ac42f01f63f6b1ab36b78998b885f301f6a1046a125e93775",
+        "original_case_groups": [
+          "D2N002"
+        ],
+        "document_ids": [
+          "aci-bench:train:D2N002"
+        ],
+        "previously_exposed": true
+      },
+      {
+        "group_id": "group-c9ee6e465706686d8ba0dc63eebe3e25428fe884978c2006940d706b6686fe6a",
+        "original_case_groups": [
+          "D2N023"
+        ],
+        "document_ids": [
+          "aci-bench:train:D2N023"
+        ],
+        "previously_exposed": true
+      },
+      {
+        "group_id": "group-c61fbe5128e251fb5af3bb4eec8a824c994786ed95e687194bfaacf54555fd06",
+        "original_case_groups": [
+          "D2N035"
+        ],
+        "document_ids": [
+          "aci-bench:train:D2N035"
+        ],
+        "previously_exposed": true
+      },
+      {
+        "group_id": "group-caef62df4fa54e94572984fb92d7b946f228bbc770fc4dff460ab8836e9d46a9",
+        "original_case_groups": [
+          "D2N036"
+        ],
+        "document_ids": [
+          "aci-bench:train:D2N036"
+        ],
+        "previously_exposed": true
+      },
+      {
+        "group_id": "group-bb9efcad352716497dd47be2c683764b000e15b9e64798dc5e6f4fe685cadf20",
+        "original_case_groups": [
+          "D2N034"
+        ],
+        "document_ids": [
+          "aci-bench:train:D2N034"
+        ],
+        "previously_exposed": true
+      },
+      {
+        "group_id": "group-03e234f34bf3f02c85e9f97a4ef363e443816c138ed31d14198e999a4723b35a",
+        "original_case_groups": [
+          "D2N001"
+        ],
+        "document_ids": [
+          "aci-bench:train:D2N001"
+        ],
+        "previously_exposed": true
+      },
+      {
+        "group_id": "group-9545343ce5e1a7425a5711b328e7869acb61621bc10b2c2cf23d912bfc667ed0",
+        "original_case_groups": [
+          "D2N022"
+        ],
+        "document_ids": [
+          "aci-bench:train:D2N022"
+        ],
+        "previously_exposed": true
+      },
+      {
+        "group_id": "group-48f9b89d40dfc3a3e49f29fa0882ecf95f93b72c8b63a1746d072fce965d842c",
+        "original_case_groups": [
+          "D2N003"
+        ],
+        "document_ids": [
+          "aci-bench:train:D2N003"
+        ],
+        "previously_exposed": true
+      },
+      {
+        "group_id": "group-a0995cbd62686c20bdfb6fd71cbf6e62a4fec3a2c7fa433c0d241181b8f2f7ef",
+        "original_case_groups": [
+          "D2N029"
+        ],
+        "document_ids": [
+          "aci-bench:train:D2N029"
+        ],
+        "previously_exposed": false
+      },
+      {
+        "group_id": "group-5d273f0cee5130888a2eeb512e865ec253a9be5ba39f2f57a0f006a4abd742ac",
+        "original_case_groups": [
+          "D2N027"
+        ],
+        "document_ids": [
+          "aci-bench:train:D2N027"
+        ],
+        "previously_exposed": false
+      },
+      {
+        "group_id": "group-08e4b3a8a6fb4acabfeebacb9e96d319343bb47dcca7f520a75c2d9c69c92177",
+        "original_case_groups": [
+          "D2N005"
+        ],
+        "document_ids": [
+          "aci-bench:train:D2N005"
+        ],
+        "previously_exposed": false
+      },
+      {
+        "group_id": "group-9bf0a708f25df41c943d8367aa8282601db1d138dda49313d0849c3b1b9f7b69",
+        "original_case_groups": [
+          "D2N059"
+        ],
+        "document_ids": [
+          "aci-bench:train:D2N059"
+        ],
+        "previously_exposed": false
+      },
+      {
+        "group_id": "group-f76bbd5daef594c59ab7bc2d01fdf580a7ff6913251eb2d148e8d28f0e50a749",
+        "original_case_groups": [
+          "D2N011"
+        ],
+        "document_ids": [
+          "aci-bench:train:D2N011"
+        ],
+        "previously_exposed": false
+      },
+      {
+        "group_id": "group-84617cae0009f7a23203c53fedd88bcf3c2c2be69d26484e0d228df38578812e",
+        "original_case_groups": [
+          "D2N045"
+        ],
+        "document_ids": [
+          "aci-bench:train:D2N045"
+        ],
+        "previously_exposed": false
+      },
+      {
+        "group_id": "group-20e4ba8e4359e5d6207bfbd7037effcb56e6e1c2072837047deccf7a5d9f6a34",
+        "original_case_groups": [
+          "D2N010"
+        ],
+        "document_ids": [
+          "aci-bench:train:D2N010"
+        ],
+        "previously_exposed": false
+      },
+      {
+        "group_id": "group-babd656f392a25b78dc5d63857046e6bc8ec21dae6a2a4c36395ce400bc516a2",
+        "original_case_groups": [
+          "D2N062"
+        ],
+        "document_ids": [
+          "aci-bench:train:D2N062"
+        ],
+        "previously_exposed": false
+      },
+      {
+        "group_id": "group-04c9280b48552efddc8bc2442520df7cba5cdf8cd38dcc80d3ed70b2cbfa014a",
+        "original_case_groups": [
+          "D2N038"
+        ],
+        "document_ids": [
+          "aci-bench:train:D2N038"
+        ],
+        "previously_exposed": false
+      },
+      {
+        "group_id": "group-c2bcd493026be12f1a4ba316dbc499167d331498bd57bb5aefef32f40bb85325",
+        "original_case_groups": [
+          "D2N004"
+        ],
+        "document_ids": [
+          "aci-bench:train:D2N004"
+        ],
+        "previously_exposed": false
+      },
+      {
+        "group_id": "group-b89e946f5c511799d429a065bb8929bdb918b0b3f91650959cf4789804f71ac1",
+        "original_case_groups": [
+          "D2N015"
+        ],
+        "document_ids": [
+          "aci-bench:train:D2N015"
+        ],
+        "previously_exposed": false
+      },
+      {
+        "group_id": "group-88360defd828705c4924a5677a27532c2d4716adc611f10dfdaca5f40715aa36",
+        "original_case_groups": [
+          "D2N017"
+        ],
+        "document_ids": [
+          "aci-bench:train:D2N017"
+        ],
+        "previously_exposed": false
+      },
+      {
+        "group_id": "group-b59ca42a1f763fdc3b6a8cf4f9bec954fa28fd2ec22b5ff821244cf4550e3874",
+        "original_case_groups": [
+          "D2N057"
+        ],
+        "document_ids": [
+          "aci-bench:train:D2N057"
+        ],
+        "previously_exposed": false
+      },
+      {
+        "group_id": "group-87af8c5c81faddc8bb1eb6c4ce5764c50139d805f48dc2a7872952e6c2eb8083",
+        "original_case_groups": [
+          "D2N006"
+        ],
+        "document_ids": [
+          "aci-bench:train:D2N006"
+        ],
+        "previously_exposed": false
+      },
+      {
+        "group_id": "group-0ae0349e49fb842c8279d7cf425ef497a4c947b9a49f6974634f73cddff712ed",
+        "original_case_groups": [
+          "D2N041"
+        ],
+        "document_ids": [
+          "aci-bench:train:D2N041"
+        ],
+        "previously_exposed": false
+      },
+      {
+        "group_id": "group-7eba9582169a1a7e4a20ba639a42d03b0530f6a6cc31aedbb0cf1c3d472f8d8b",
+        "original_case_groups": [
+          "D2N051"
+        ],
+        "document_ids": [
+          "aci-bench:train:D2N051"
+        ],
+        "previously_exposed": false
+      },
+      {
+        "group_id": "group-64b0b7158c04a0a72e0bd26c1462327b357dd151d37938ee917bdcd12cca3d1e",
+        "original_case_groups": [
+          "D2N052"
+        ],
+        "document_ids": [
+          "aci-bench:train:D2N052"
+        ],
+        "previously_exposed": false
+      },
+      {
+        "group_id": "group-833daa9d2585fd3eacebba2afe1fb7a48b42775f788dac814d4abc1d8380a565",
+        "original_case_groups": [
+          "D2N039"
+        ],
+        "document_ids": [
+          "aci-bench:train:D2N039"
+        ],
+        "previously_exposed": false
+      },
+      {
+        "group_id": "group-314fe4ffae0a24c15db170e4e7ed9a7f3371224728cc9bd68975d34597ab908b",
+        "original_case_groups": [
+          "D2N048"
+        ],
+        "document_ids": [
+          "aci-bench:train:D2N048"
+        ],
+        "previously_exposed": false
+      },
+      {
+        "group_id": "group-c45598bf1fda624fc4012f7942a2ad7f0bbef85cc2977533067a8ae04991c3aa",
+        "original_case_groups": [
+          "D2N061"
+        ],
+        "document_ids": [
+          "aci-bench:train:D2N061"
+        ],
+        "previously_exposed": false
+      },
+      {
+        "group_id": "group-6e52139ae3f8b39d7495716004a4de0dd312005aea3a1b56f203932e094194a1",
+        "original_case_groups": [
+          "D2N044"
+        ],
+        "document_ids": [
+          "aci-bench:train:D2N044"
+        ],
+        "previously_exposed": false
+      },
+      {
+        "group_id": "group-a276e184616003c584daa54f94ee585d298367f193101cf0eb8784592f14aa68",
+        "original_case_groups": [
+          "D2N043"
+        ],
+        "document_ids": [
+          "aci-bench:train:D2N043"
+        ],
+        "previously_exposed": false
+      },
+      {
+        "group_id": "group-808c14cb48a8544a6276d1e9b6a646bd7eea896fabdc8d95664696cf22029df3",
+        "original_case_groups": [
+          "D2N053"
+        ],
+        "document_ids": [
+          "aci-bench:train:D2N053"
+        ],
+        "previously_exposed": false
+      },
+      {
+        "group_id": "group-162dc5bbfd03e1d596de5c462be1ecc42ce948eee218fc418280c8b5c5f89f52",
+        "original_case_groups": [
+          "D2N046"
+        ],
+        "document_ids": [
+          "aci-bench:train:D2N046"
+        ],
+        "previously_exposed": false
+      },
+      {
+        "group_id": "group-1cbe17a2e1231e3a9b24ed84afccaae0f8e5b6c7d7c7054b069760977bdc5f3e",
+        "original_case_groups": [
+          "D2N050"
+        ],
+        "document_ids": [
+          "aci-bench:train:D2N050"
+        ],
+        "previously_exposed": false
+      },
+      {
+        "group_id": "group-1feb574487f1a34d48a242f36148bddc1acc7681de01d5ccd16fa0b36161afa7",
+        "original_case_groups": [
+          "D2N019"
+        ],
+        "document_ids": [
+          "aci-bench:train:D2N019"
+        ],
+        "previously_exposed": false
+      },
+      {
+        "group_id": "group-085264e6647595d6f785f5ce022d8421c0fdb400bae86ba2d0a235b1b0a43e99",
+        "original_case_groups": [
+          "D2N008"
+        ],
+        "document_ids": [
+          "aci-bench:train:D2N008"
+        ],
+        "previously_exposed": false
+      },
+      {
+        "group_id": "group-eaa19695b34c74322e9d27b1900a23f4aae998eeed51799e674286ef7622497d",
+        "original_case_groups": [
+          "D2N047"
+        ],
+        "document_ids": [
+          "aci-bench:train:D2N047"
+        ],
+        "previously_exposed": false
+      },
+      {
+        "group_id": "group-b254a80e8f65fdc3dc67172852c5ee230fea053e120d5373b2e4213adadbb3da",
+        "original_case_groups": [
+          "D2N031"
+        ],
+        "document_ids": [
+          "aci-bench:train:D2N031"
+        ],
+        "previously_exposed": false
+      },
+      {
+        "group_id": "group-43db3ba3283bfed7c51d754151f11b41e45c9d602f59686ad5dc017c6591285c",
+        "original_case_groups": [
+          "D2N026"
+        ],
+        "document_ids": [
+          "aci-bench:train:D2N026"
+        ],
+        "previously_exposed": false
+      },
+      {
+        "group_id": "group-7cc6dcc412ece71986593ef704ac8f45e72ac45dfd2b87f5d6d5e64b194060e0",
+        "original_case_groups": [
+          "D2N056"
+        ],
+        "document_ids": [
+          "aci-bench:train:D2N056"
+        ],
+        "previously_exposed": false
+      },
+      {
+        "group_id": "group-0a2e0cb27e3582af244bf6c092d2d5594c9fa75aeb5d09fbb582ea915e390a1c",
+        "original_case_groups": [
+          "D2N055"
+        ],
+        "document_ids": [
+          "aci-bench:train:D2N055"
+        ],
+        "previously_exposed": false
+      },
+      {
+        "group_id": "group-cd167ec1d20318737ebdd6e47a23ffed286b0c338bf8d63116dc68f7f61064fe",
+        "original_case_groups": [
+          "D2N032"
+        ],
+        "document_ids": [
+          "aci-bench:train:D2N032"
+        ],
+        "previously_exposed": false
+      },
+      {
+        "group_id": "group-f2c9acda292cb3f46df884e1577a4953b6d756f317188bb302076db73503ea49",
+        "original_case_groups": [
+          "D2N067"
+        ],
+        "document_ids": [
+          "aci-bench:train:D2N067"
+        ],
+        "previously_exposed": false
+      },
+      {
+        "group_id": "group-f85a7ab9deb0122909820c842d5de235b2ea716688eedeb49d494764339581c6",
+        "original_case_groups": [
+          "D2N042"
+        ],
+        "document_ids": [
+          "aci-bench:train:D2N042"
+        ],
+        "previously_exposed": false
+      },
+      {
+        "group_id": "group-d7cbac01e415de21306109fff0321cbe14e8bea16eba2f83e3f7f32f85f70948",
+        "original_case_groups": [
+          "D2N024"
+        ],
+        "document_ids": [
+          "aci-bench:train:D2N024"
+        ],
+        "previously_exposed": false
+      },
+      {
+        "group_id": "group-952f3f72fbfc6e4b8e3fb8cdbab3e2725ea3d9ba29d64559cdebf0efc7492fec",
+        "original_case_groups": [
+          "D2N049"
+        ],
+        "document_ids": [
+          "aci-bench:train:D2N049"
+        ],
+        "previously_exposed": false
+      }
+    ],
+    "holdout": [
+      {
+        "group_id": "group-401879f1961786af46ab72d9a3560da6357dd0a9c583d84eca80f83d722da9f1",
+        "original_case_groups": [
+          "D2N066"
+        ],
+        "document_ids": [
+          "aci-bench:train:D2N066"
+        ],
+        "previously_exposed": false
+      },
+      {
+        "group_id": "group-b8250ce9df2ca64782ff83308e5c9b1d4721bded8b3d0e27e3ad890f296f47a2",
+        "original_case_groups": [
+          "D2N040"
+        ],
+        "document_ids": [
+          "aci-bench:train:D2N040"
+        ],
+        "previously_exposed": false
+      },
+      {
+        "group_id": "group-1b81c789152968f619abd97bfcb56e747eb47f934707ba7751a91c6a78674fe0",
+        "original_case_groups": [
+          "D2N063"
+        ],
+        "document_ids": [
+          "aci-bench:train:D2N063"
+        ],
+        "previously_exposed": false
+      },
+      {
+        "group_id": "group-d07a7a0e5ae601c7b11c663a78093746294901e8d792c7de0005734447a3fae7",
+        "original_case_groups": [
+          "D2N018"
+        ],
+        "document_ids": [
+          "aci-bench:train:D2N018"
+        ],
+        "previously_exposed": false
+      },
+      {
+        "group_id": "group-554e61f3a15a62ae343c72407b9756d9ab33dd8a0d400997c95643e8d128c797",
+        "original_case_groups": [
+          "D2N037"
+        ],
+        "document_ids": [
+          "aci-bench:train:D2N037"
+        ],
+        "previously_exposed": false
+      },
+      {
+        "group_id": "group-a3527dc4313ea73fb2525bc89e1b0f158d626daafcebb8fe2290c26209268df8",
+        "original_case_groups": [
+          "D2N025"
+        ],
+        "document_ids": [
+          "aci-bench:train:D2N025"
+        ],
+        "previously_exposed": false
+      },
+      {
+        "group_id": "group-fc257cdd6f988e7aa8ff8153b5fcc5ea8b2132475513945200eb1c4fc9364e4d",
+        "original_case_groups": [
+          "D2N060"
+        ],
+        "document_ids": [
+          "aci-bench:train:D2N060"
+        ],
+        "previously_exposed": false
+      },
+      {
+        "group_id": "group-56f0d3f9a9edeb4e8c6c3ff64df97784e637fc3a680474ba3c172210fbab63b1",
+        "original_case_groups": [
+          "D2N028"
+        ],
+        "document_ids": [
+          "aci-bench:train:D2N028"
+        ],
+        "previously_exposed": false
+      },
+      {
+        "group_id": "group-dc936340ab13e578c6f157d57acbf429d1f4d944953ca8af6f213360c680a235",
+        "original_case_groups": [
+          "D2N012"
+        ],
+        "document_ids": [
+          "aci-bench:train:D2N012"
+        ],
+        "previously_exposed": false
+      },
+      {
+        "group_id": "group-e4ea971853634c9289535eef4e2e51cc7f7c003219d1037eea576f1a02cfbad4",
+        "original_case_groups": [
+          "D2N009"
+        ],
+        "document_ids": [
+          "aci-bench:train:D2N009"
+        ],
+        "previously_exposed": false
+      },
+      {
+        "group_id": "group-338ad033fccd02932b24d177d6a40b598b7bb7e24c787e5b06ab13db2861c3af",
+        "original_case_groups": [
+          "D2N065"
+        ],
+        "document_ids": [
+          "aci-bench:train:D2N065"
+        ],
+        "previously_exposed": false
+      },
+      {
+        "group_id": "group-6c4b9503cf4b01edc6f66c2147323ea415f239b2c771f088af6ab65c5cff4185",
+        "original_case_groups": [
+          "D2N064"
+        ],
+        "document_ids": [
+          "aci-bench:train:D2N064"
+        ],
+        "previously_exposed": false
+      },
+      {
+        "group_id": "group-08abc5d0ec8e780f676c78d40d732b0c659458ec76b9277c64c036b54c7d4328",
+        "original_case_groups": [
+          "D2N054"
+        ],
+        "document_ids": [
+          "aci-bench:train:D2N054"
+        ],
+        "previously_exposed": false
+      },
+      {
+        "group_id": "group-17339318958b67816f2c3e817d2551dfd0a8b2dffb3680df41ef8569317caae4",
+        "original_case_groups": [
+          "D2N013"
+        ],
+        "document_ids": [
+          "aci-bench:train:D2N013"
+        ],
+        "previously_exposed": false
+      },
+      {
+        "group_id": "group-10380a445a121af3889a9855ace375c96a97c6a3afb15b2531e5f30a1e131407",
+        "original_case_groups": [
+          "D2N058"
+        ],
+        "document_ids": [
+          "aci-bench:train:D2N058"
+        ],
+        "previously_exposed": false
+      },
+      {
+        "group_id": "group-407c0fcdbf9dee0f62ee2f42f6597e62493de526770b889ad4ea16d872bfa1f1",
+        "original_case_groups": [
+          "D2N030"
+        ],
+        "document_ids": [
+          "aci-bench:train:D2N030"
+        ],
+        "previously_exposed": false
+      },
+      {
+        "group_id": "group-4c7e9075e2aea7549049e9b773729d8e66c312450c7cbfcd96305cc0a6abe8ec",
+        "original_case_groups": [
+          "D2N007"
+        ],
+        "document_ids": [
+          "aci-bench:train:D2N007"
+        ],
+        "previously_exposed": false
+      },
+      {
+        "group_id": "group-e97b083bb036d686941632900f99ad5c4820738f52eb6b5db8989ec7e69c78ff",
+        "original_case_groups": [
+          "D2N020"
+        ],
+        "document_ids": [
+          "aci-bench:train:D2N020"
+        ],
+        "previously_exposed": false
+      },
+      {
+        "group_id": "group-2ce996c72341253c6a731b122a895a74294ec601ea049c4239b02f1b7984fb70",
+        "original_case_groups": [
+          "D2N014"
+        ],
+        "document_ids": [
+          "aci-bench:train:D2N014"
+        ],
+        "previously_exposed": false
+      },
+      {
+        "group_id": "group-048f2ed7b27cd4ae782feb35b690321107c0a954bc859ca8dc857ccb87983a45",
+        "original_case_groups": [
+          "D2N016"
+        ],
+        "document_ids": [
+          "aci-bench:train:D2N016"
+        ],
+        "previously_exposed": false
+      }
+    ],
+    "reserve": []
+  },
+  "documents": [
+    {
+      "document_id": "aci-bench:train:D2N001",
+      "case_group": "D2N001",
+      "source_sha256": "f088a03f74af3fe5083652c6d81ec9ea38691ad0842dcf66c7573ff9672f43cf",
+      "reference_sha256": "a3b85ca5e39901993ec6c6b95d51b34580ba046605eb24cabd072bb56e381466",
+      "reference_origin": "reference_note_not_structured_fact_gold",
+      "input_kind": "dialogue"
+    },
+    {
+      "document_id": "aci-bench:train:D2N002",
+      "case_group": "D2N002",
+      "source_sha256": "24cb75ebd61edc8a421f62b26d2240a59c19e1d55cf9de6fb7b01a8150f09bf0",
+      "reference_sha256": "16a31f15b8023dbd1f86615954471c3f261467420886a094b01c52bd626d4872",
+      "reference_origin": "reference_note_not_structured_fact_gold",
+      "input_kind": "dialogue"
+    },
+    {
+      "document_id": "aci-bench:train:D2N003",
+      "case_group": "D2N003",
+      "source_sha256": "5a2d1f2adc2ccde7f249b929a0b46b46ce09878956e57eb96d97985a6a514d09",
+      "reference_sha256": "51701383d19133c86f567e9129c83fe331d5d76e40bb166ea73010c52be48fc7",
+      "reference_origin": "reference_note_not_structured_fact_gold",
+      "input_kind": "dialogue"
+    },
+    {
+      "document_id": "aci-bench:train:D2N004",
+      "case_group": "D2N004",
+      "source_sha256": "19caaff1d2751c0868ab0b23638eccee58e94cddaf718b6745da8745bdffc4a6",
+      "reference_sha256": "f10685812e5a9c9ead2eccb3d4d9cdaf3f296fea1a3100505b7fe2ad2078d2a3",
+      "reference_origin": "reference_note_not_structured_fact_gold",
+      "input_kind": "dialogue"
+    },
+    {
+      "document_id": "aci-bench:train:D2N005",
+      "case_group": "D2N005",
+      "source_sha256": "929dcb7c8044390e18fd16fe5779c45b3551f06fe6b6b89ae96cf489538f66e8",
+      "reference_sha256": "1e18321d267d9d50781b6e27182abead42c799712787b3191293d03059f691e7",
+      "reference_origin": "reference_note_not_structured_fact_gold",
+      "input_kind": "dialogue"
+    },
+    {
+      "document_id": "aci-bench:train:D2N006",
+      "case_group": "D2N006",
+      "source_sha256": "4b18da7e6999a7240e19ae4dbb5c76989fb9c8c7a46355a03d1857f0244d8e80",
+      "reference_sha256": "0d031378380877a90490e05a67c2d6c8d1206e0fbccd6c3805d2d3543871d947",
+      "reference_origin": "reference_note_not_structured_fact_gold",
+      "input_kind": "dialogue"
+    },
+    {
+      "document_id": "aci-bench:train:D2N007",
+      "case_group": "D2N007",
+      "source_sha256": "2ba3c6399d83b3a9ae9e0684b9519c38bf32ea25a49cc7c041295cbddda1405e",
+      "reference_sha256": "6eba9119885311da8843f16c60622589e7d3ca07d825689bed41fef3a1aa2bbe",
+      "reference_origin": "reference_note_not_structured_fact_gold",
+      "input_kind": "dialogue"
+    },
+    {
+      "document_id": "aci-bench:train:D2N008",
+      "case_group": "D2N008",
+      "source_sha256": "f550ccc2893008fdcd5cccf1442aba5d1313beff7250e8f4d7eda3ce7f704a8e",
+      "reference_sha256": "ed6d09b69d1eecd3a4462a8d70936f759c7c9ec4c2e91ad2b69a638b48bd6951",
+      "reference_origin": "reference_note_not_structured_fact_gold",
+      "input_kind": "dialogue"
+    },
+    {
+      "document_id": "aci-bench:train:D2N009",
+      "case_group": "D2N009",
+      "source_sha256": "65b8e06ada3a2103c5df6695196816ebc5b4b9832a06ba34c6e21cd3d713f60f",
+      "reference_sha256": "3b2ad87b0d18e46a2b231abf2e385d6efee52e68bf0f753766099f4a62515967",
+      "reference_origin": "reference_note_not_structured_fact_gold",
+      "input_kind": "dialogue"
+    },
+    {
+      "document_id": "aci-bench:train:D2N010",
+      "case_group": "D2N010",
+      "source_sha256": "0d4a567e38842b7ba958af044f26309c64699c30ed1b5b7ff522beae69052244",
+      "reference_sha256": "728e5b2a920fb7d3b9b2b848c9a6e8e34f85f76be939b9ec7e29ed6e95b59a32",
+      "reference_origin": "reference_note_not_structured_fact_gold",
+      "input_kind": "dialogue"
+    },
+    {
+      "document_id": "aci-bench:train:D2N011",
+      "case_group": "D2N011",
+      "source_sha256": "badeba303ec2e148284e900cb23664a9c60d839657d9fc70ec3d38f49d03dfe5",
+      "reference_sha256": "85d97d26ac8687bc1e147b53e4af9b86865ab051f1e42ea71be70cfc8851e986",
+      "reference_origin": "reference_note_not_structured_fact_gold",
+      "input_kind": "dialogue"
+    },
+    {
+      "document_id": "aci-bench:train:D2N012",
+      "case_group": "D2N012",
+      "source_sha256": "57f74d0d82167cc03b64857c66b37642a55da69889b41144a1d904f934e8a0d9",
+      "reference_sha256": "12d72e3014bf4476a6d3a33f4db85cf1430148aeb4e5b02b3fa65d07c4115b6f",
+      "reference_origin": "reference_note_not_structured_fact_gold",
+      "input_kind": "dialogue"
+    },
+    {
+      "document_id": "aci-bench:train:D2N013",
+      "case_group": "D2N013",
+      "source_sha256": "a00312aeba1b370ce9a7c50aa7ef0c73283fb229257f4950f1b295d1ba875eda",
+      "reference_sha256": "f0d898fab12a0f1aa7d42418d43620662be55bb14c609b189928679b51e946ac",
+      "reference_origin": "reference_note_not_structured_fact_gold",
+      "input_kind": "dialogue"
+    },
+    {
+      "document_id": "aci-bench:train:D2N014",
+      "case_group": "D2N014",
+      "source_sha256": "3dbc86ede78bbe07197525313f467e0a4f97dca4c04ea4fb8e95e2fbee2a20a7",
+      "reference_sha256": "d9b97c22628daf60dad732a3ec01ea74653a7bf19764bb573dcc0bedc54b4951",
+      "reference_origin": "reference_note_not_structured_fact_gold",
+      "input_kind": "dialogue"
+    },
+    {
+      "document_id": "aci-bench:train:D2N015",
+      "case_group": "D2N015",
+      "source_sha256": "d38f07b8bd1c869004edfcea8e003236e19d34e816b20f99f03db1d77131acdd",
+      "reference_sha256": "d8bc02ab8168c39a9c77b10163a26b5403d8e406bdf0bd3c58658dae1f555f42",
+      "reference_origin": "reference_note_not_structured_fact_gold",
+      "input_kind": "dialogue"
+    },
+    {
+      "document_id": "aci-bench:train:D2N016",
+      "case_group": "D2N016",
+      "source_sha256": "b40bc4e1c64c3abdcc25a358226e4d0a1dab5f67eee943fdc087828be18a4a77",
+      "reference_sha256": "b5909a854e06ff38b7352a7a89673b9c9c66b37162c789d9d8277e00a6571013",
+      "reference_origin": "reference_note_not_structured_fact_gold",
+      "input_kind": "dialogue"
+    },
+    {
+      "document_id": "aci-bench:train:D2N017",
+      "case_group": "D2N017",
+      "source_sha256": "d03050bcaa317652349035dc0d3c4ab2fd8e88e694e494d1cd451a2ed7e73f12",
+      "reference_sha256": "efb44e7e7fe1178fbb1aae98c15f5c2bd41bf1def754a6a7d73ea3ff2dbd4507",
+      "reference_origin": "reference_note_not_structured_fact_gold",
+      "input_kind": "dialogue"
+    },
+    {
+      "document_id": "aci-bench:train:D2N018",
+      "case_group": "D2N018",
+      "source_sha256": "dbde67e88838b455cba05f6224f199cc3c38b10a3eacb37ef5a6b675f9230381",
+      "reference_sha256": "c62cb717ae7617af6322c117324a3ba00a3a488e3d8aa348957f68d03117c182",
+      "reference_origin": "reference_note_not_structured_fact_gold",
+      "input_kind": "dialogue"
+    },
+    {
+      "document_id": "aci-bench:train:D2N019",
+      "case_group": "D2N019",
+      "source_sha256": "bc3d09d83228391e7f465e285fb1a66dfc423de6ebcdee5fd136ffdb65cc201a",
+      "reference_sha256": "97522b31c9220ba847cf82d0fc787a0f6987dc97904a3399f5702074ccd28075",
+      "reference_origin": "reference_note_not_structured_fact_gold",
+      "input_kind": "dialogue"
+    },
+    {
+      "document_id": "aci-bench:train:D2N020",
+      "case_group": "D2N020",
+      "source_sha256": "bd4111c79404c689ce61df98c944c6962ed86f7edebacf1d1af977012ca856da",
+      "reference_sha256": "0146d5b56d6367fdf33e8b672d1e4b640bc86f08881d6a66611a9039c784c9d7",
+      "reference_origin": "reference_note_not_structured_fact_gold",
+      "input_kind": "dialogue"
+    },
+    {
+      "document_id": "aci-bench:train:D2N021",
+      "case_group": "D2N021",
+      "source_sha256": "f765d82827950410d5865434b9fe24d311cc7d336db2fcea014f64e79a49399d",
+      "reference_sha256": "cd2b77f70051fce2317e83c1e73005abb1df745b6dc709bf03b1abfcd4b65b66",
+      "reference_origin": "reference_note_not_structured_fact_gold",
+      "input_kind": "dialogue"
+    },
+    {
+      "document_id": "aci-bench:train:D2N022",
+      "case_group": "D2N022",
+      "source_sha256": "5e9a53f487f15fec9240eb78b4981a6b7dc4f140445895b6c99ed72156975581",
+      "reference_sha256": "e907a7f70bd5f37b1876d13dab994ddc90cff4c4d3bf7d63fbafe9ae37ecfcbf",
+      "reference_origin": "reference_note_not_structured_fact_gold",
+      "input_kind": "dialogue"
+    },
+    {
+      "document_id": "aci-bench:train:D2N023",
+      "case_group": "D2N023",
+      "source_sha256": "acc16d774919eee1dbf9564e0912b11969f298ce982db27e19dd5893e9b8e7cc",
+      "reference_sha256": "817829120ac4ec057c03dd9c84ea739e62f86007ceaddf6ca7274a258c1b0e41",
+      "reference_origin": "reference_note_not_structured_fact_gold",
+      "input_kind": "dialogue"
+    },
+    {
+      "document_id": "aci-bench:train:D2N024",
+      "case_group": "D2N024",
+      "source_sha256": "6ffbb876af71c3f1e8b55d74ca86b3bf94257f475c89e0c2d8c530f9968c8c4e",
+      "reference_sha256": "4ac8d50d48a6b2a8526bcb96c9f733c8c544f019e39386db01f241ec95758faa",
+      "reference_origin": "reference_note_not_structured_fact_gold",
+      "input_kind": "dialogue"
+    },
+    {
+      "document_id": "aci-bench:train:D2N025",
+      "case_group": "D2N025",
+      "source_sha256": "0b4e8edf870ef2f02237bb5ccbcd8395510b080b68bfd6bf5fe9d11e62f9136b",
+      "reference_sha256": "a1c65424b4a74e6e1c5dce254c48c67c9e4cee0a416d584fe5a3c14f0c976065",
+      "reference_origin": "reference_note_not_structured_fact_gold",
+      "input_kind": "dialogue"
+    },
+    {
+      "document_id": "aci-bench:train:D2N026",
+      "case_group": "D2N026",
+      "source_sha256": "bfa44d305ecb578cb32625787acc18963f021b021c0ecae9581079c46359c611",
+      "reference_sha256": "1f6f6771a8a03de89b634228205b9d6d38b7a434febde026b63b15abe02d9b46",
+      "reference_origin": "reference_note_not_structured_fact_gold",
+      "input_kind": "dialogue"
+    },
+    {
+      "document_id": "aci-bench:train:D2N027",
+      "case_group": "D2N027",
+      "source_sha256": "0b3ac558641bbfc318a91f9a89983d27cb82e39f24e142c03f44f66d04beb2cd",
+      "reference_sha256": "b95912d8bfba2b69324c541f52f99ffde59d77279a28d5973aea2ee7eb04c7f6",
+      "reference_origin": "reference_note_not_structured_fact_gold",
+      "input_kind": "dialogue"
+    },
+    {
+      "document_id": "aci-bench:train:D2N028",
+      "case_group": "D2N028",
+      "source_sha256": "516889428b266b8734afb98d467eb654b6e53a05de0466cee535655edc4b72a9",
+      "reference_sha256": "d36a78ba5e346b63318a51f7d92a61f901730706535fbefeb7a3e51545a57328",
+      "reference_origin": "reference_note_not_structured_fact_gold",
+      "input_kind": "dialogue"
+    },
+    {
+      "document_id": "aci-bench:train:D2N029",
+      "case_group": "D2N029",
+      "source_sha256": "a17fa14e9d73faa46d8f600193c5576aa7077d13551413e089d83244bf9f51b8",
+      "reference_sha256": "3b5d521f5b4a15244f06df9136ad4d08be2899a3444f70b927dc98801a73e44b",
+      "reference_origin": "reference_note_not_structured_fact_gold",
+      "input_kind": "dialogue"
+    },
+    {
+      "document_id": "aci-bench:train:D2N030",
+      "case_group": "D2N030",
+      "source_sha256": "13029508ccdb08aced154b4d0f9a6617f74c802a538166ab5cf2f0bb7e4c72cc",
+      "reference_sha256": "e226a1626a80360feef1dbddddf616796f3c8832fd5efa4901b33a57a7713ba4",
+      "reference_origin": "reference_note_not_structured_fact_gold",
+      "input_kind": "dialogue"
+    },
+    {
+      "document_id": "aci-bench:train:D2N031",
+      "case_group": "D2N031",
+      "source_sha256": "41cf93007c25e19e8e895dfe9fce3650dd5a7f265e04e6e8fa6e7e5565e28588",
+      "reference_sha256": "f1552a5e280bd4695aadfbb438ed5b2403291b87fa692704b4dcfff4bd5bc28b",
+      "reference_origin": "reference_note_not_structured_fact_gold",
+      "input_kind": "dialogue"
+    },
+    {
+      "document_id": "aci-bench:train:D2N032",
+      "case_group": "D2N032",
+      "source_sha256": "c83a6fa8054fedd2313a3ba4ad0f8c17261ac6f6f068d01abb4d3b5de0766005",
+      "reference_sha256": "6d387427f2f545eec10d2505ecaa917185be09bf8f5eae4c8fb399d4458c1363",
+      "reference_origin": "reference_note_not_structured_fact_gold",
+      "input_kind": "dialogue"
+    },
+    {
+      "document_id": "aci-bench:train:D2N033",
+      "case_group": "D2N033",
+      "source_sha256": "cc49d37c8d729739e0f7fd8f54c40bf45b608aa48e08c50f2c336ae5a8e98bef",
+      "reference_sha256": "3471965d88d0954112a5ae6a552cb4a34d2eda0d18c4fb675ceafff7c0ccda06",
+      "reference_origin": "reference_note_not_structured_fact_gold",
+      "input_kind": "dialogue"
+    },
+    {
+      "document_id": "aci-bench:train:D2N034",
+      "case_group": "D2N034",
+      "source_sha256": "0cc1669fe4cdc480f51b5c072f4aec46a1f78afe095c9322b8fea54ab39fb779",
+      "reference_sha256": "981c5abeb3f4a21e710960ca572dfaa825ba3ad42d25adcb78c5e92e55700332",
+      "reference_origin": "reference_note_not_structured_fact_gold",
+      "input_kind": "dialogue"
+    },
+    {
+      "document_id": "aci-bench:train:D2N035",
+      "case_group": "D2N035",
+      "source_sha256": "37165299120f18941d2f92aeabf7667472c6988bb087881c607f8a62d6387e1e",
+      "reference_sha256": "5696559eb23adef04a248b326ec75f3041040a4dba24cce588798b5c894d3669",
+      "reference_origin": "reference_note_not_structured_fact_gold",
+      "input_kind": "dialogue"
+    },
+    {
+      "document_id": "aci-bench:train:D2N036",
+      "case_group": "D2N036",
+      "source_sha256": "6000bbed88034a5bf4ed9db8a4d3eed60877ae8088029b8835989534382b9787",
+      "reference_sha256": "d1a976d388b65a58e464a9361a727fcfc3337d26aad43fdef7379c65b161520a",
+      "reference_origin": "reference_note_not_structured_fact_gold",
+      "input_kind": "dialogue"
+    },
+    {
+      "document_id": "aci-bench:train:D2N037",
+      "case_group": "D2N037",
+      "source_sha256": "8c7771ea69e7fb24342e77e380a4429a7364ed599621fa944d8a835c07fa9b4d",
+      "reference_sha256": "bc3ccdd484a25b1aa505b3faa7480f48ce5f76f5cca3cc7fd94b58aece708608",
+      "reference_origin": "reference_note_not_structured_fact_gold",
+      "input_kind": "dialogue"
+    },
+    {
+      "document_id": "aci-bench:train:D2N038",
+      "case_group": "D2N038",
+      "source_sha256": "86fc7b0533b2effe39399ed8fc774121699a0f7d1689b30ba50fb0d29a864005",
+      "reference_sha256": "f2909270c4b27dff389c1f33c9f8e23650198f13f1efde93ff02e9b71b1193a6",
+      "reference_origin": "reference_note_not_structured_fact_gold",
+      "input_kind": "dialogue"
+    },
+    {
+      "document_id": "aci-bench:train:D2N039",
+      "case_group": "D2N039",
+      "source_sha256": "1803b79c5077460818f41d2e782451e37e83d9e51ff61b6d0d5b8c9ee47346d5",
+      "reference_sha256": "00281d5f5093fa883d57c6c6d43fcb05641ca32c1ae52bd43fa3e942a9f3a9cf",
+      "reference_origin": "reference_note_not_structured_fact_gold",
+      "input_kind": "dialogue"
+    },
+    {
+      "document_id": "aci-bench:train:D2N040",
+      "case_group": "D2N040",
+      "source_sha256": "191cb72f4e20f8ce5dfd3ac081251c0e4d1cd3848c19a73eea0674c57ef5c5fb",
+      "reference_sha256": "80aedb7cc1480a1ab0f9f27e3aeadd46e7f8e276065c986310765dbe8e819b0e",
+      "reference_origin": "reference_note_not_structured_fact_gold",
+      "input_kind": "dialogue"
+    },
+    {
+      "document_id": "aci-bench:train:D2N041",
+      "case_group": "D2N041",
+      "source_sha256": "2178a602e1eaad223d752b6101cc6081286d75b7e0d18991d77f4b6c4a07dca3",
+      "reference_sha256": "60db4f3175aa10a92a4cd795eff8c5706955ada0a5f47cf1cf77031a4f7ae692",
+      "reference_origin": "reference_note_not_structured_fact_gold",
+      "input_kind": "dialogue"
+    },
+    {
+      "document_id": "aci-bench:train:D2N042",
+      "case_group": "D2N042",
+      "source_sha256": "4423d13a8a33c834041f0744405b7930787fdb4a5632a489c7a7e4ee11f5c581",
+      "reference_sha256": "e51c3d0bbb4fc6f1ee116db5133dcc1687bd7baa5b55cd4f77b433ffe3da8574",
+      "reference_origin": "reference_note_not_structured_fact_gold",
+      "input_kind": "dialogue"
+    },
+    {
+      "document_id": "aci-bench:train:D2N043",
+      "case_group": "D2N043",
+      "source_sha256": "f03ad71cf3440b71359ebcad020af946a515f2ed6da96068bde882d790904e09",
+      "reference_sha256": "f684d096f51cb70d6800d49df7c5c58b5e94f129a239d420c1b8073c42ee5173",
+      "reference_origin": "reference_note_not_structured_fact_gold",
+      "input_kind": "dialogue"
+    },
+    {
+      "document_id": "aci-bench:train:D2N044",
+      "case_group": "D2N044",
+      "source_sha256": "d951b9bff3ab1656a0feadec1ca1c3b432934d216dd9b0251b1f44f5c84ac834",
+      "reference_sha256": "c37b640461574a9cffc2922b8b842d0f8d93a57ad0a51d4b7337ef20177d48a1",
+      "reference_origin": "reference_note_not_structured_fact_gold",
+      "input_kind": "dialogue"
+    },
+    {
+      "document_id": "aci-bench:train:D2N045",
+      "case_group": "D2N045",
+      "source_sha256": "b228f02daa8fe7e1eb35f4d800c2a009f9172702aa829e1913e28ea188ef72e4",
+      "reference_sha256": "2ee4db1b110c6c959913b82d9657ec1a1dc58242f777530a9eadf1f89c3e21d8",
+      "reference_origin": "reference_note_not_structured_fact_gold",
+      "input_kind": "dialogue"
+    },
+    {
+      "document_id": "aci-bench:train:D2N046",
+      "case_group": "D2N046",
+      "source_sha256": "02c9b22e7569be46f9c53a5df48d49af8ecbf8e26c0caf380863ee186cd76060",
+      "reference_sha256": "621923a0d3ec166a55af95b0d16aa40fcd4f42a82ef24950fea69d2da23df6ad",
+      "reference_origin": "reference_note_not_structured_fact_gold",
+      "input_kind": "dialogue"
+    },
+    {
+      "document_id": "aci-bench:train:D2N047",
+      "case_group": "D2N047",
+      "source_sha256": "05770e01fce969e91ffc375f24644c5bf46b03dd87e952f52f42171a61dbd76c",
+      "reference_sha256": "c76be1d4c104e384a73a51132eb269d9cf25eeaf39ded417da561d0c5305a3a8",
+      "reference_origin": "reference_note_not_structured_fact_gold",
+      "input_kind": "dialogue"
+    },
+    {
+      "document_id": "aci-bench:train:D2N048",
+      "case_group": "D2N048",
+      "source_sha256": "94f23598c22a7a1cd0143ef2791ff5423c86789c3b1d363a58e60d5afe6fffb8",
+      "reference_sha256": "67a3840297ff191d045ddd1e861698c53ac4e60c30941062aeb4a34ddbaeb3a7",
+      "reference_origin": "reference_note_not_structured_fact_gold",
+      "input_kind": "dialogue"
+    },
+    {
+      "document_id": "aci-bench:train:D2N049",
+      "case_group": "D2N049",
+      "source_sha256": "adfa336fbbcf4127fe089fa26d42f55c8c442db35097cad5692fd046dc4397ae",
+      "reference_sha256": "8e60363dd9a1f555e48df6fc578cec66b9e80ba424b8e083263a151ac4af13cf",
+      "reference_origin": "reference_note_not_structured_fact_gold",
+      "input_kind": "dialogue"
+    },
+    {
+      "document_id": "aci-bench:train:D2N050",
+      "case_group": "D2N050",
+      "source_sha256": "d4aa008be4109db3c828a236061d12e1f32155852e7ee941b2581886d6ff7d86",
+      "reference_sha256": "1eb3c6a4b0b70bc9c2ed788b44d23da3e05ae1cdab7b46218272100272501f11",
+      "reference_origin": "reference_note_not_structured_fact_gold",
+      "input_kind": "dialogue"
+    },
+    {
+      "document_id": "aci-bench:train:D2N051",
+      "case_group": "D2N051",
+      "source_sha256": "ae79bf908717d25f5050d87925fd358acc86cceb6adc9085dc2fcd271b68a58b",
+      "reference_sha256": "0f5acc56d5627c4b8ccbd7cac94112c7cf483e1a83040a3d277e05847284bb9d",
+      "reference_origin": "reference_note_not_structured_fact_gold",
+      "input_kind": "dialogue"
+    },
+    {
+      "document_id": "aci-bench:train:D2N052",
+      "case_group": "D2N052",
+      "source_sha256": "ec6ff88077cf813537767771c37cd72df1b97d5ba833bc40c3f7ccb65954d66d",
+      "reference_sha256": "099f15dd2559a4d9bcea05e6fb39ef62ecf5173698c295e66205b2a925c2008c",
+      "reference_origin": "reference_note_not_structured_fact_gold",
+      "input_kind": "dialogue"
+    },
+    {
+      "document_id": "aci-bench:train:D2N053",
+      "case_group": "D2N053",
+      "source_sha256": "ec978288c141218223dbcf3c187936df4ad4cdf72c56e5e4329d89f2feb3236d",
+      "reference_sha256": "f1a7f19654f589547c153c2024d7402f6d8fbf7f48103f55bee5fac9c67b7e99",
+      "reference_origin": "reference_note_not_structured_fact_gold",
+      "input_kind": "dialogue"
+    },
+    {
+      "document_id": "aci-bench:train:D2N054",
+      "case_group": "D2N054",
+      "source_sha256": "9b782102241e2973656c3f80b29be0ff89e5a9966280dcd31776ecd4980e1f70",
+      "reference_sha256": "d7bfb5fc3e54fffe84aa0ec87e4474cbbeaa6866e3e4104d9b5b3c36c772c3b8",
+      "reference_origin": "reference_note_not_structured_fact_gold",
+      "input_kind": "dialogue"
+    },
+    {
+      "document_id": "aci-bench:train:D2N055",
+      "case_group": "D2N055",
+      "source_sha256": "0efd7c609e686b1e1ffbde734116f76bf8660517bb507ab9f0a54d12dde93bd4",
+      "reference_sha256": "eaa738c85259fc22e8f446f8093505861980167c5c2460ccadb50b709cbb8998",
+      "reference_origin": "reference_note_not_structured_fact_gold",
+      "input_kind": "dialogue"
+    },
+    {
+      "document_id": "aci-bench:train:D2N056",
+      "case_group": "D2N056",
+      "source_sha256": "85082543c0499650096d20edc4d984f495c831df4a9a1474c6efa3e5ea2cce0b",
+      "reference_sha256": "b29bb318ea5700c316a785e3db641351ade60080339033214f56904495960f7e",
+      "reference_origin": "reference_note_not_structured_fact_gold",
+      "input_kind": "dialogue"
+    },
+    {
+      "document_id": "aci-bench:train:D2N057",
+      "case_group": "D2N057",
+      "source_sha256": "d7efedc3580bbf033116fae152b44760cb9163039e4af1c68553b9b6d5a0456a",
+      "reference_sha256": "299ad4c68d875588010ea52bf6a4e9287b9cc22fc4219f0697c37aad53e6e79d",
+      "reference_origin": "reference_note_not_structured_fact_gold",
+      "input_kind": "dialogue"
+    },
+    {
+      "document_id": "aci-bench:train:D2N058",
+      "case_group": "D2N058",
+      "source_sha256": "735666abfeb34d6a13d84de9e8b8d026a022ec25954b6aa8715b888546d9a01c",
+      "reference_sha256": "eca8f0d9d75bfcab2117b3d23e6387298b8072f00aaf21459f66b9532782243c",
+      "reference_origin": "reference_note_not_structured_fact_gold",
+      "input_kind": "dialogue"
+    },
+    {
+      "document_id": "aci-bench:train:D2N059",
+      "case_group": "D2N059",
+      "source_sha256": "70220ffbf1aa8f487f1243054e512e8d403c7867e10b670e96c75f62e46e673b",
+      "reference_sha256": "837e08b86106eb64145b6219c47fef9feca322bc4b54792a4de551e8cce2bb6b",
+      "reference_origin": "reference_note_not_structured_fact_gold",
+      "input_kind": "dialogue"
+    },
+    {
+      "document_id": "aci-bench:train:D2N060",
+      "case_group": "D2N060",
+      "source_sha256": "c8a6c22c94bd2c4002f5e3cc4f94187f2aed01d35ac80c728c65da5e34ef4081",
+      "reference_sha256": "66245a19874bf0f6193d6af24f5c30802b38618117c594a6aecfeed4867c1392",
+      "reference_origin": "reference_note_not_structured_fact_gold",
+      "input_kind": "dialogue"
+    },
+    {
+      "document_id": "aci-bench:train:D2N061",
+      "case_group": "D2N061",
+      "source_sha256": "3eb118bf2b109bf5224f5df61b046f2d108afb6f645db0cbf634e72b11e486cc",
+      "reference_sha256": "25ca48c442e327016e5848db15a1355be2868e5e395c7be1821cd4b254d3d281",
+      "reference_origin": "reference_note_not_structured_fact_gold",
+      "input_kind": "dialogue"
+    },
+    {
+      "document_id": "aci-bench:train:D2N062",
+      "case_group": "D2N062",
+      "source_sha256": "d44eafae4ad1d878bf62badf4c04f2b399fed58ed4b2a656ee74fc9ab40c774b",
+      "reference_sha256": "81f51a9766a1af782ff9fd43b8c3b1117d960d0772fef0ac4e0b5c35b25866a4",
+      "reference_origin": "reference_note_not_structured_fact_gold",
+      "input_kind": "dialogue"
+    },
+    {
+      "document_id": "aci-bench:train:D2N063",
+      "case_group": "D2N063",
+      "source_sha256": "afb99d81c8d20b2d3573652821a363b588dd4e7790868fd7f0bb2b58bb09f139",
+      "reference_sha256": "dec5014feb279cdf5c8e0b6fe01c118094df5b96f17fdce826f1f10fdfc55f91",
+      "reference_origin": "reference_note_not_structured_fact_gold",
+      "input_kind": "dialogue"
+    },
+    {
+      "document_id": "aci-bench:train:D2N064",
+      "case_group": "D2N064",
+      "source_sha256": "fe6cf6f2dc1121e58201637414762b3f82dfa25b47a170e55cded92e42c16252",
+      "reference_sha256": "5d8334a07a4d0c78504ad4a009c7c6bbe46ba7ee217542442091f04c64274bb7",
+      "reference_origin": "reference_note_not_structured_fact_gold",
+      "input_kind": "dialogue"
+    },
+    {
+      "document_id": "aci-bench:train:D2N065",
+      "case_group": "D2N065",
+      "source_sha256": "37cc4fddd97c42c7daf5ab4f85da5f7de20b64dffb1fa1bda02adc916050784e",
+      "reference_sha256": "340b1b04baa496173ac76dc909f556cf29c889e87a67e9de96421c405fa11aec",
+      "reference_origin": "reference_note_not_structured_fact_gold",
+      "input_kind": "dialogue"
+    },
+    {
+      "document_id": "aci-bench:train:D2N066",
+      "case_group": "D2N066",
+      "source_sha256": "bde1272297bbc5e68be730103192142b8ffb575ca5f393cecc23b5da510fce8e",
+      "reference_sha256": "9cfd4a982a5d58e3376048f51889859a2b0aa4c465213a965d066ee81ff47b35",
+      "reference_origin": "reference_note_not_structured_fact_gold",
+      "input_kind": "dialogue"
+    },
+    {
+      "document_id": "aci-bench:train:D2N067",
+      "case_group": "D2N067",
+      "source_sha256": "b0b679d902b399b9ac486044c0cac1a759a2ad13a78f48f294e26299c8a3b76e",
+      "reference_sha256": "6a71d1eda20e6b46b68f8ea75042d87bfaf6e8945ecaadbbe9548371ccb85f3e",
+      "reference_origin": "reference_note_not_structured_fact_gold",
+      "input_kind": "dialogue"
+    }
+  ],
+  "boundary": "Source extraction only; no PA approval/completeness gold. Silver and reference-note labels require source review.",
+  "manifest_sha256": "2b43d9f00603f7cd067a9d72ad8d71e66755b045ffa0b5b5eaa332325733b56c"
+}

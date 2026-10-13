@@ -106,4 +106,13 @@ def evaluate(case, *, revision=1):
         'interpretation_limit': 'Exact provenance validates location, not clinical interpretation or signature authenticity. '
                                 'Supplied assertions require independent human or advanced-AI review when warranted.',
     }
+    if case.clinical_context:
+        from .clinical_context import prepared_context
+        packet['clinical_context'] = prepared_context(case)
+        packet['execution'].update({
+            'scope': 'this_deterministic_evaluation_only',
+            'note_extraction': 'supplied_clinical_context_and_documentation_assertions',
+            'upstream_extraction_model_calls': None,
+            'upstream_accounting': 'External shared extraction ledger; unknown here is not zero.',
+        })
     return {**packet, 'packet_sha256': digest(packet)}

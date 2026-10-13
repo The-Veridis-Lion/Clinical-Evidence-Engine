@@ -5,12 +5,32 @@ from typing import Literal
 from pydantic import Field, StrictBool, model_validator
 
 from ..claims_review.contracts import Contract, Identifier, SourceInput
+from ..dialogue_first.contract import Extraction
 
 Requirement = Literal[
     'request_intent', 'referral_reason', 'destination', 'clinical_summary',
     'investigation_required', 'investigation_result', 'therapy_required',
     'therapy_completed', 'pa_form', 'payer_context',
 ]
+
+
+class Source(SourceInput):
+    """Add public text origins locally; leave the shared claims contract intact."""
+    origin: Literal['constructed_synthetic', 'synthea_export', 'public_clinical_dataset']
+    source_kind: Literal['structured_record', 'synthetic_note', 'clinical_text']
+
+    @model_validator(mode='after')
+    def content_matches_source_kind(self):
+        if self.source_kind == 'clinical_text':
+            if not isinstance(self.content, str) or not self.content.strip() or self.record_type != 'note':
+                raise ValueError('clinical_text requires original nonempty note/dialogue content')
+            return self
+        return super().content_matches_source_kind()
+
+
+class ClinicalContext(Contract):
+    source_id: Identifier
+    extraction: Extraction
 
 
 class Request(Contract):
@@ -65,8 +85,9 @@ class Case(Contract):
     case_id: Identifier
     request: Request
     review_as_of: date
-    sources: list[SourceInput]
+    sources: list[Source]
     facts: list[Fact]
+    clinical_context: list[ClinicalContext] = Field(default_factory=list, exclude_if=lambda value: not value)
 
     @model_validator(mode='after')
     def unique_ids_and_references(self):
@@ -90,6 +111,9 @@ class Case(Contract):
                 old_sources = {r.source_id for r in original.evidence}
                 if any(r.source_id in old_sources for r in fact.evidence):
                     raise ValueError('A correction requires independent source evidence')
+        if self.clinical_context:
+            from .clinical_context import validate_context_sources
+            validate_context_sources(self)
         return self
 
 
@@ -118,6 +142,7 @@ class Review(Contract):
 
 class EvidenceUpdate(Contract):
     expected_revision: int = Field(ge=1)
-    sources: list[SourceInput] = Field(min_length=1)
+    sources: list[Source] = Field(min_length=1)
     facts: list[Fact] = Field(min_length=1)
     review: Review
+    clinical_context: list[ClinicalContext] = Field(default_factory=list, exclude_if=lambda value: not value)

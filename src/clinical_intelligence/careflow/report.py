@@ -61,6 +61,9 @@ def markdown(packet, reviews=()):
     else:
         out.append('No reviewer opinions recorded. Reviewer sign-off is not a prerequisite for deterministic documentation readiness.\n')
     out.append('## Preserved original documents\n')
+    if packet.get('clinical_context'):
+        out += ['## Clinical context (source validated; separate from documentation checks)\n',
+                literal(packet['clinical_context'], 'json')]
     out.append(literal(packet.get('source_screening', []), 'json'))
     for source in packet['sources']:
         out += [f"### {cell(source['source_id'])}\n", literal(source, 'json')]

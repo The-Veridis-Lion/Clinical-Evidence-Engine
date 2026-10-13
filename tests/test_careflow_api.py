@@ -83,6 +83,23 @@ def test_api_rejects_rule_override_malformed_review_and_large_body(api):
     assert api('GET', '/v1/cases/CF-REF-001')[1] == packet
 
 
+@pytest.mark.parametrize('kind', ['referral', 'prior_authorization'])
+def test_http_clinical_context_is_reviewable_and_does_not_fill_material_gap(api, kind):
+    from test_careflow_clinical_context import clinical_case
+    raw = clinical_case(kind, patient='HTTP-CONTEXT-' + kind)
+    status, packet = api('POST', '/v1/cases', raw)
+    assert status == 201 and packet['readiness'] == 'NEEDS_EVIDENCE'
+    identifier = packet['clinical_context'][0]['facts'][0]['context_fact_id']
+    route = '/v1/cases/' + quote(raw['case_id'], safe='')
+    review = {'reviewer_id': 'source-reviewer', 'reviewer_type': 'advanced_ai', 'model': 'offline-fixture', 'model_version': '1',
+        'basis_revision': 1, 'basis_packet_sha256': packet['packet_sha256'], 'fact_ids': [identifier],
+        'judgment': 'ESCALATE', 'reason': 'Clinical context exists; request summary material remains missing.'}
+    assert api('POST', route + '/reviews', review)[0] == 201
+    assert api('GET', route)[1] == packet
+    assert identifier in api('GET', route + '/report')[1]
+    assert api('GET', route + '/audit')[1]['verified']
+
+
 def test_report_preserves_unicode_offsets_raw_fields_and_excluded_evidence():
     raw = referral_case(patient='患者-报告', request='请求-报告')
     extra = supplemental('clinical_summary', True, '原文：```<script>内容|断言</script>。\n第二行。',

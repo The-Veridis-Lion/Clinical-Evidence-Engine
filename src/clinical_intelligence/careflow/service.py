@@ -35,7 +35,9 @@ class CareFlow:
         original, packet = self.store.load(conn, case_id, review.basis_revision)
         if review.basis_packet_sha256 != packet['packet_sha256']:
             raise ValueError('Review packet hash does not match its basis revision')
-        if not set(review.fact_ids) <= {f['fact_id'] for f in original['facts']}:
+        known = {f['fact_id'] for f in original['facts']}
+        known.update(f['context_fact_id'] for c in packet.get('clinical_context', []) for f in c['facts'])
+        if not set(review.fact_ids) <= known:
             raise ValueError('Review cites facts absent from the reviewed revision')
         return packet
 
@@ -54,6 +56,7 @@ class CareFlow:
                 raise RevisionConflict('Evidence updates require a review of the current revision')
             known_sources = {s['source_id'] for s in current['sources']}
             known_facts = {f['fact_id'] for f in current['facts']}
+            known_facts.update(f['context_fact_id'] for c in previous.get('clinical_context', []) for f in c['facts'])
             new_sources = {s.source_id for s in update.sources}
             seen_content = {digest({'patient_id': s['patient_id'], 'content': s['content']}) for s in current['sources']}
             content_by_id = {s.source_id: digest({'patient_id': s.patient_id, 'content': s.content}) for s in update.sources}
@@ -74,6 +77,9 @@ class CareFlow:
             revised = Case.model_validate_json(json.dumps({
                 **current, 'sources': current['sources'] + [s.model_dump(mode='json') for s in update.sources],
                 'facts': current['facts'] + [f.model_dump(mode='json') for f in update.facts],
+                **({'clinical_context': current.get('clinical_context', []) +
+                                       [c.model_dump(mode='json') for c in update.clinical_context]}
+                   if current.get('clinical_context') or update.clinical_context else {}),
             }))
             packet = evaluate(revised, revision=previous['revision'] + 1)
             # Invalid new evidence is retained, with explicit exclusions and gaps.

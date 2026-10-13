@@ -32,6 +32,10 @@ def main(argv=None):
     p.add_argument('--received-at', required=True); p.add_argument('--output', required=True)
     p = sub.add_parser('synthea-demo'); p.add_argument('--archive', required=True); p.add_argument('--split', required=True)
     p.add_argument('--output', required=True)
+    p = sub.add_parser('extract-development'); p.add_argument('--frozen', required=True)
+    p.add_argument('--output', required=True); p.add_argument('--ledger', required=True); p.add_argument('--groups', type=int, required=True)
+    p = sub.add_parser('replay-extraction'); p.add_argument('--frozen', required=True); p.add_argument('--extraction', required=True)
+    p.add_argument('--ledger', required=True); p.add_argument('--output', required=True); p.add_argument('--received-at', required=True)
     args = parser.parse_args(argv)
     try:
         if args.command == 'serve':
@@ -48,6 +52,14 @@ def main(argv=None):
         if args.command == 'demo':
             from .demo import run_demo
             result = run_demo(args.db, args.output)
+        elif args.command == 'extract-development':
+            from .extraction import run_development
+            result = run_development(args.frozen, args.output, args.ledger, groups=args.groups)
+            print(json.dumps(result, ensure_ascii=False, indent=2))
+            return 1 if result['failures'] else 0
+        elif args.command == 'replay-extraction':
+            from .replay import replay_development
+            result = replay_development(args.frozen, args.extraction, args.ledger, args.db, args.output, received_at=args.received_at)
         elif args.command == 'synthea-demo':
             from .demo import run_synthea_demo
             result = run_synthea_demo(args.db, args.output, args.archive, args.split)

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="6" skipped="0" tests="37" time="0.923" timestamp="2026-10-13T07:38:35.890110-04:00" hostname="iSATiS"><testcase classname="tests.test_careflow_extraction" name="test_valid_extraction_is_cached_even_if_reference_changes" time="0.037" /><testcase classname="tests.test_careflow_extraction" name="test_mechanical_repair_preserves_original_attempts" time="0.033" /><testcase classname="tests.test_careflow_extraction" name="test_structural_retry_cannot_change_previously_valid_clinical_facts" time="0.038" /><testcase classname="tests.test_careflow_extraction" name="test_corrupt_cache_is_rejected_without_resampling[concept]" time="0.029" /><testcase classname="tests.test_careflow_extraction" name="test_corrupt_cache_is_rejected_without_resampling[quote]" time="0.030" /><testcase classname="tests.test_careflow_extraction" name="test_corrupt_cache_is_rejected_without_resampling[document]" time="0.038" /><testcase classname="tests.test_careflow_extraction" name="test_corrupt_cache_is_rejected_without_resampling[attempt]" time="0.031" /><testcase classname="tests.test_careflow_clinical_context" name="test_public_clinical_facts_are_preserved_reviewable_and_context_only[symptom-referral]" time="0.004" /><testcase classname="tests.test_careflow_clinical_context" name="test_public_clinical_facts_are_preserved_reviewable_and_context_only[symptom-prior_authorization]" time="0.002" /><testcase classname="tests.test_careflow_clinical_context" name="test_public_clinical_facts_are_preserved_reviewable_and_context_only[diagnosis-referral]" time="0.001" /><testcase classname="tests.test_careflow_clinical_context" name="test_public_clinical_facts_are_preserved_reviewable_and_context_only[diagnosis-prior_authorization]" time="0.002" /><testcase classname="tests.test_careflow_clinical_context" name="test_public_clinical_facts_are_preserved_reviewable_and_context_only[medication-referral]" time="0.001" /><testcase classname="tests.test_careflow_clinical_context" name="test_public_clinical_facts_are_preserved_reviewable_and_context_only[medication-prior_authorization]" time="0.002" /><testcase classname="tests.test_careflow_clinical_context" name="test_public_clinical_facts_are_preserved_reviewable_and_context_only[treatment-referral]" time="0.001" /><testcase classname="tests.test_careflow_clinical_context" name="test_public_clinical_facts_are_preserved_reviewable_and_context_only[treatment-prior_authorization]" time="0.002" /><testcase classname="tests.test_careflow_clinical_context" name="test_public_clinical_facts_are_preserved_reviewable_and_context_only[laboratory_result-referral]" time="0.001" /><testcase classname="tests.test_careflow_clinical_context" name="test_public_clinical_facts_are_preserved_reviewable_and_context_only[laboratory_result-prior_authorization]" time="0.002" /><testcase classname="tests.test_careflow_clinical_context" name="test_public_clinical_facts_are_preserved_reviewable_and_context_only[other-referral]" time="0.001" /><testcase classname="tests.test_careflow_clinical_context" name="test_public_clinical_facts_are_preserved_reviewable_and_context_only[other-prior_authorization]" time="0.002" /><testcase classname="tests.test_careflow_clinical_context" name="test_bad_clinical_quote_or_document_binding_is_rejected_before_ready[referral]" time="0.001" /><testcase classname="tests.test_careflow_clinical_context" name="test_bad_clinical_quote_or_document_binding_is_rejected_before_ready[prior_authorization]" time="0.001" /><testcase classname="tests.test_careflow_clinical_context" name="test_other_patient_clinical_context_is_not_associated[referral]" time="0.001" /><testcase classname="tests.test_careflow_clinical_context" name="test_other_patient_clinical_context_is_not_associated[prior_authorization]" time="0.001" /><testcase classname="tests.test_careflow_clinical_context" name="test_empty_context_preserves_original_case_and_packet_hashes" time="0.001" /><testcase classname="tests.test_careflow_clinical_context" name="test_advanced_reviewer_can_cite_clinical_context_fact_ids[referral]" time="0.020" /><testcase classname="tests.test_careflow_clinical_context" name="test_advanced_reviewer_can_cite_clinical_context_fact_ids[prior_authorization]" time="0.019" /><testcase classname="tests.test_careflow_clinical_context" name="test_packet_verifier_includes_clinical_context[quote-referral]" time="0.001"><failure message="assert False&#10; +  where False = all([True, True, True, True, True, False])">kind = 'referral', mutation = 'quote'
+
+    @pytest.mark.parametrize('kind', ['referral', 'prior_authorization'])
+    @pytest.mark.parametrize('mutation', ['quote', 'context_fact_id', 'source_sha256'])
+    def test_packet_verifier_includes_clinical_context(kind, mutation):
+        from clinical_intelligence.careflow.evaluation.acceptance import verify_packet
+        packet = evaluate(Case.model_validate_json(json.dumps(clinical_case(kind))))
+&gt;       assert all(verify_packet(packet)['source_checks'])
+E       assert False
+E        +  where False = all([True, True, True, True, True, False])
+
+tests\test_careflow_clinical_context.py:100: AssertionError</failure></testcase><testcase classname="tests.test_careflow_clinical_context" name="test_packet_verifier_includes_clinical_context[quote-prior_authorization]" time="0.002"><failure message="assert False&#10; +  where False = all([True, True, True, True, True, True, ...])">kind = 'prior_authorization', mutation = 'quote'
+
+    @pytest.mark.parametrize('kind', ['referral', 'prior_authorization'])
+    @pytest.mark.parametrize('mutation', ['quote', 'context_fact_id', 'source_sha256'])
+    def test_packet_verifier_includes_clinical_context(kind, mutation):
+        from clinical_intelligence.careflow.evaluation.acceptance import verify_packet
+        packet = evaluate(Case.model_validate_json(json.dumps(clinical_case(kind))))
+&gt;       assert all(verify_packet(packet)['source_checks'])
+E       assert False
+E        +  where False = all([True, True, True, True, True, True, ...])
+
+tests\test_careflow_clinical_context.py:100: AssertionError</failure></testcase><testcase classname="tests.test_careflow_clinical_context" name="test_packet_verifier_includes_clinical_context[context_fact_id-referral]" time="0.001"><failure message="assert False&#10; +  where False = all([True, True, True, True, True, False])">kind = 'referral', mutation = 'context_fact_id'
+
+    @pytest.mark.parametrize('kind', ['referral', 'prior_authorization'])
+    @pytest.mark.parametrize('mutation', ['quote', 'context_fact_id', 'source_sha256'])
+    def test_packet_verifier_includes_clinical_context(kind, mutation):
+        from clinical_intelligence.careflow.evaluation.acceptance import verify_packet
+        packet = evaluate(Case.model_validate_json(json.dumps(clinical_case(kind))))
+&gt;       assert all(verify_packet(packet)['source_checks'])
+E       assert False
+E        +  where False = all([True, True, True, True, True, False])
+
+tests\test_careflow_clinical_context.py:100: AssertionError</failure></testcase><testcase classname="tests.test_careflow_clinical_context" name="test_packet_verifier_includes_clinical_context[context_fact_id-prior_authorization]" time="0.001"><failure message="assert False&#10; +  where False = all([True, True, True, True, True, True, ...])">kind = 'prior_authorization', mutation = 'context_fact_id'
+
+    @pytest.mark.parametrize('kind', ['referral', 'prior_authorization'])
+    @pytest.mark.parametrize('mutation', ['quote', 'context_fact_id', 'source_sha256'])
+    def test_packet_verifier_includes_clinical_context(kind, mutation):
+        from clinical_intelligence.careflow.evaluation.acceptance import verify_packet
+        packet = evaluate(Case.model_validate_json(json.dumps(clinical_case(kind))))
+&gt;       assert all(verify_packet(packet)['source_checks'])
+E       assert False
+E        +  where False = all([True, True, True, True, True, True, ...])
+
+tests\test_careflow_clinical_context.py:100: AssertionError</failure></testcase><testcase classname="tests.test_careflow_clinical_context" name="test_packet_verifier_includes_clinical_context[source_sha256-referral]" time="0.001"><failure message="assert False&#10; +  where False = all([True, True, True, True, True, False])">kind = 'referral', mutation = 'source_sha256'
+
+    @pytest.mark.parametrize('kind', ['referral', 'prior_authorization'])
+    @pytest.mark.parametrize('mutation', ['quote', 'context_fact_id', 'source_sha256'])
+    def test_packet_verifier_includes_clinical_context(kind, mutation):
+        from clinical_intelligence.careflow.evaluation.acceptance import verify_packet
+        packet = evaluate(Case.model_validate_json(json.dumps(clinical_case(kind))))
+&gt;       assert all(verify_packet(packet)['source_checks'])
+E       assert False
+E        +  where False = all([True, True, True, True, True, False])
+
+tests\test_careflow_clinical_context.py:100: AssertionError</failure></testcase><testcase classname="tests.test_careflow_clinical_context" name="test_packet_verifier_includes_clinical_context[source_sha256-prior_authorization]" time="0.001"><failure message="assert False&#10; +  where False = all([True, True, True, True, True, True, ...])">kind = 'prior_authorization', mutation = 'source_sha256'
+
+    @pytest.mark.parametrize('kind', ['referral', 'prior_authorization'])
+    @pytest.mark.parametrize('mutation', ['quote', 'context_fact_id', 'source_sha256'])
+    def test_packet_verifier_includes_clinical_context(kind, mutation):
+        from clinical_intelligence.careflow.evaluation.acceptance import verify_packet
+        packet = evaluate(Case.model_validate_json(json.dumps(clinical_case(kind))))
+&gt;       assert all(verify_packet(packet)['source_checks'])
+E       assert False
+E        +  where False = all([True, True, True, True, True, True, ...])
+
+tests\test_careflow_clinical_context.py:100: AssertionError</failure></testcase><testcase classname="tests.test_careflow_acceptance" name="test_frozen_acceptance_counts_all_states_and_mechanical_refs" time="0.019" /><testcase classname="tests.test_careflow_acceptance" name="test_exceptions_stay_in_denominator_and_false_ready_is_fatal" time="0.014" /><testcase classname="tests.test_careflow_acceptance" name="test_packet_mechanical_verification_rejects_changed_quote_and_version" time="0.001" /><testcase classname="tests.test_careflow_acceptance" name="test_holdout_is_reserved_only_after_candidate_seal_and_cannot_be_rerun" time="0.051" /><testcase classname="tests.test_careflow_acceptance" name="test_global_conflict_false_ready_counts_even_when_item_is_inapplicable" time="0.006" /></testsuite></testsuites>
