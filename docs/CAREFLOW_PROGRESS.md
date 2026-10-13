@@ -1,6 +1,6 @@
 # CareFlow 实际运行进度
 
-更新：2026-10-13 11:55 UTC（纽约07:55）。当前 turn 中实际开发；没有虚构后台计算。
+更新：2026-10-13 12:02 UTC（纽约08:02）。当前 turn 中实际开发；没有虚构后台计算。
 长期方向与冻结验收：docs/CAREFLOW_READINESS_ENGINE.md、AGENTS.md。
 
 ## 已实现的 Referral / PA 功能
@@ -11,6 +11,11 @@
 SQLite revisions和审计均可运行。已有ACI10病例/469条事实在20个Referral/PA
 case中实际重放；事实只作clinical context，不填补缺失材料，全部NEEDS_EVIDENCE，
 审计全部通过。最新完整回归755 passed / 0 failed / 0 skipped，含实际本机HTTP。
+
+本轮实现提交c7a8936已推送；草稿PR #4已创建并附加到当前任务：
+https://github.com/The-Veridis-Lion/Clinical-Evidence-Engine/pull/4 。它基于仍open的
+PR #3，当前依赖head仍f91768e。没有合并、部署或购买资源。测试/数据缺口在
+PR描述中明确披露；不能将草稿发布等同于最终验收完成。
 
 ## 评分与冻结数据
 
