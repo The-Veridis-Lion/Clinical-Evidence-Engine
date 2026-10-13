@@ -1,11 +1,11 @@
 """One immutable in-memory CSV index per run; no database or model provider."""
 import csv
 import io
-import zipfile
 from collections import Counter, defaultdict
 from pathlib import Path
 
 from ..claims_review.retrieval import records, sha
+from ..archive_bounds import BoundedArchive
 from .contracts import SourceRow
 
 SNOMED = "http://snomed.info/sct"
@@ -52,7 +52,8 @@ def code_system(source):
 class ArchiveIndex:
     def __init__(self, path, *, allowed_patients=None):
         self.path = Path(path)
-        self.archive_sha256 = sha(self.path.read_bytes())
+        snapshot = BoundedArchive(self.path)
+        self.archive_sha256 = snapshot.snapshot_sha256
         self.sources = {}
         self.tables = defaultdict(list)
         self.ids = defaultdict(lambda: defaultdict(list))
@@ -64,7 +65,7 @@ class ArchiveIndex:
         self.observations = defaultdict(list)
         self.members = []
         self.allowed_patients = allowed_patients
-        with zipfile.ZipFile(self.path) as archive:
+        with snapshot as archive:
             names = archive.namelist()
             if len(names) != len(set(names)):
                 raise ValueError("DUPLICATE_ARCHIVE_MEMBER")
