@@ -17,6 +17,33 @@ class CareFlow:
         self.store = Store(db)
 
     def create(self, case):
+        if any(c.structured_extraction is not None for c in case.clinical_context):
+            raise ValueError('Structured model output must enter through runtime clinical extraction, not caller-supplied context')
+        return self._persist_case(case)
+
+    def _create_from_extraction(self, case, record, cache_root, ledger):
+        """Internal runtime boundary, unavailable as an API trust flag."""
+        from pathlib import Path
+        from ..clinical_notes.dataset import sha
+        from .extraction import source_contract, validate_cached, extraction_context, STRUCTURED_TASK
+        document, _, _, identity = source_contract(record, task_version=STRUCTURED_TASK)
+        from .evaluation.corpus import canonical
+        accepted = validate_cached(Path(cache_root) / sha(canonical(identity)), document, identity, ledger)
+        contexts = [c for c in case.clinical_context if c.structured_extraction is not None]
+        sources = {s.source_id:s for s in case.sources}
+        if len(contexts) != 1:
+            raise ValueError('Runtime structured creation needs one original extraction')
+        context = contexts[0]
+        if (sources[context.source_id].content != record['text']
+                or context.model_dump(mode='json') != extraction_context(context.source_id, accepted)):
+            raise ValueError('Runtime extraction differs from original cached response and successful ledger')
+        return self._persist_case(case, extraction_provenance={
+            'identity':identity, 'accepted_attempt':accepted['attempt'],
+            'raw_response_sha256':accepted['structured_extraction']['raw_response_sha256'],
+            'source_sha256':identity['source_sha256'], 'ledger_run_id':sha(canonical(identity)),
+            'method':'model_extracted', 'independently_source_verified':False})
+
+    def _persist_case(self, case, *, extraction_provenance=None):
         case = case.model_copy(update={'source_support_policy': PRODUCT_SUPPORT_POLICY})
         packet = evaluate(case)
         with self.store.transaction() as conn:
@@ -27,11 +54,23 @@ class CareFlow:
                 'revision': 1, 'packet_sha256': packet['packet_sha256'], 'input_sha256': packet['input_sha256'],
                 'ruleset_sha256': packet['ruleset']['sha256'],
             })
+            if extraction_provenance is not None:
+                self.store.append_event(conn, case.case_id, 'STRUCTURED_MODEL_EXTRACTION_ACCEPTED', extraction_provenance)
         return packet
 
     def packet(self, case_id, revision=None):
         with self.store.connect() as conn:
             return self.store.load(conn, case_id, revision)[1]
+
+    def cases(self):
+        """Small discovery view; original source documents stay in each packet."""
+        with self.store.connect() as conn:
+            rows = conn.execute('SELECT case_id, MAX(revision) AS revision FROM revisions '
+                                'GROUP BY case_id ORDER BY case_id').fetchall()
+            packets = [self.store.load(conn, row['case_id'], row['revision'])[1] for row in rows]
+        return [{'case_id': p['case_id'], 'revision': p['revision'],
+                 'patient_id': p['request']['patient_id'], 'request_type': p['request']['request_type'],
+                 'readiness': p['readiness']} for p in packets]
 
     def validate_review(self, conn, case_id, review):
         original, packet = self.store.load(conn, case_id, review.basis_revision)
@@ -52,6 +91,41 @@ class CareFlow:
         with self.store.transaction() as conn:
             return self._add_evidence(conn, case_id, update)
 
+    def associate_clinical(self, case_id, selection):
+        from .clinical_intake import selected_association_update
+        with self.store.transaction() as conn:
+            current, previous = self.store.load(conn,case_id)
+            if (selection.expected_revision != previous['revision']
+                    or selection.basis_packet_sha256 != previous['packet_sha256']):
+                raise RevisionConflict('Clinical selection refers to a stale revision or packet hash')
+            prepared = selected_association_update(current,previous,selection)
+            packet = self._add_evidence(conn,case_id,prepared)
+            self.store.append_event(conn,case_id,'CLINICAL_ASSOCIATION_SELECTED',{
+                **selection.model_dump(mode='json'),'binding_id':prepared.clinical_bindings[0].binding_id,
+                'result_revision':packet['revision'],'result_packet_sha256':packet['packet_sha256'],
+                'clinical_truth_certified':False,'model_calls':0})
+            return packet
+
+    def recalculate(self, case_id, request):
+        """Append a program revision without asserting new clinical evidence."""
+        with self.store.transaction() as conn:
+            current,previous=self.store.load(conn,case_id)
+            if (request.expected_revision!=previous['revision']
+                    or request.basis_packet_sha256!=previous['packet_sha256']):
+                raise RevisionConflict('Recalculation refers to a stale revision or packet hash')
+            case=Case.model_validate_json(json.dumps({**current,'source_support_policy':PRODUCT_SUPPORT_POLICY}))
+            packet=evaluate(case,revision=previous['revision']+1)
+            self.store.append_revision(conn,case,packet)
+            self.store.append_event(conn,case_id,'PROGRAM_RECALCULATED',{
+                'revision':packet['revision'],'packet_sha256':packet['packet_sha256'],
+                'input_sha256':packet['input_sha256'],'ruleset_sha256':packet['ruleset']['sha256'],
+                'basis_revision':previous['revision'],'basis_packet_sha256':previous['packet_sha256'],
+                'previous_requirement_support_manifest':previous['requirement_support_manifest'],
+                'current_requirement_support_manifest':packet['requirement_support_manifest'],
+                'actor_id':request.actor_id,'reason':request.reason,'new_model_calls':0,
+                'new_source_count':0,'new_clinical_assertion_count':0})
+            return packet
+
     def add_material_sources(self, case_id, update):
         """Map new original materials and persist their audit in one transaction."""
         from .requirement_support import prepare_material_update
@@ -69,6 +143,8 @@ class CareFlow:
             return packet
 
     def _add_evidence(self, conn, case_id, update):
+        if any(c.structured_extraction is not None for c in update.clinical_context):
+            raise ValueError('Caller-supplied structured model context cannot enter an evidence update')
         current, previous = self.store.load(conn, case_id)
         if update.expected_revision != previous['revision']:
             raise RevisionConflict('Stale expected_revision; reload the current packet')
@@ -186,8 +262,12 @@ class CareFlow:
 
     def model_calls(self, case_id):
         events = self.audit(case_id)['events']
+        extraction = [e['payload'] for e in events if e['event_type'] == 'CLINICAL_SOURCE_EXTRACTED']
         return {'research_model_calls': 0,
-                'product_model_calls': sum(e['event_type'] == 'PRODUCT_REVIEW_RESERVED' for e in events),
+                'product_model_calls': sum(e['event_type'] == 'PRODUCT_REVIEW_RESERVED' for e in events)
+                    + sum(e['actual_new_attempts'] for e in extraction),
+                **({'product_extraction_calls': sum(e['actual_new_attempts'] for e in extraction),
+                    'extraction_receipts': extraction} if extraction else {}),
                 'failed_product_reviews': sum(e['event_type'] == 'PRODUCT_REVIEW_FAILED' for e in events),
                 'incomplete_product_reviews': sum(e['event_type'] == 'PRODUCT_REVIEW_RESERVED' for e in events)
                     - sum(e['event_type'] in {'PRODUCT_REVIEW_COMPLETED', 'PRODUCT_REVIEW_FAILED'} for e in events)}

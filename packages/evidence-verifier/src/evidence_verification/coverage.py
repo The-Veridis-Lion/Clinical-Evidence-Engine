@@ -27,7 +27,9 @@ AUTO_SCOPE = 'explicit-symptom-clause/1'
 SCOPED_INTERPRETATION = 'bounded-source-grammar/2'
 LITERAL_INTERPRETATION = 'bounded-source-grammar/3'
 TEMPORAL_INTERPRETATION = 'bounded-source-grammar/4'
-SCOPED_INTERPRETATIONS = {SCOPED_INTERPRETATION, LITERAL_INTERPRETATION, TEMPORAL_INTERPRETATION}
+LATERAL_INTERPRETATION = 'bounded-source-grammar/5'
+SCOPED_INTERPRETATIONS = {SCOPED_INTERPRETATION, LITERAL_INTERPRETATION, TEMPORAL_INTERPRETATION, LATERAL_INTERPRETATION}
+LATERAL_SYMPTOMS = {'knee pain', 'chest pain'}
 DEMOGRAPHIC_CONCEPTS = {'age', 'demographic descriptor'}
 AUTO_CLAUSE = re.compile(r'^(?:(?:patient|pt)\s*:\s*)?(?:the\s+)?(?:patient|pt|i)\s+'
     r'(?:currently\s+)?(?:has|have|reports|report|denies|deny|does\s+not\s+have)\s+'
@@ -281,7 +283,7 @@ def _actions(source,span):
         attributes=attrs)]
 
 
-def _symptoms_scoped(source, span):
+def _symptoms_scoped(source, span, *, preserve_laterality=False):
     """Only complete predicates establish polarity; partial mentions remain candidates.
 
     Unlike the legacy enumerator, finding a reporting verb before a symptom does
@@ -340,8 +342,14 @@ def _symptoms_scoped(source, span):
             polarity, objects = 'affirmed', body
     terms = [re.sub(r'^(?:a|an|any|the)\s+', '', v.strip(), flags=re.I)
              for v in re.split(r'\s*,\s*|\s+and\s+', objects or '')]
+    def literal_term(term):
+        if SYMPTOMS.fullmatch(term):
+            return True
+        side = re.fullmatch(r'(?:right|left)\s+(.+)', norm(term))
+        return bool(preserve_laterality and side and side[1] in LATERAL_SYMPTOMS)
+
     complete = (subject and first_person_ok and not UNKNOWN.search(text) and polarity and terms
-                and all(SYMPTOMS.fullmatch(term) for term in terms)
+                and all(literal_term(term) for term in terms)
                 and not (attributes and len(terms) != 1))
     if complete:
         return [_make(source, span, 'symptom', term,
@@ -405,10 +413,11 @@ def enumerate_source_assertions(source: Source | dict, *, independent_assertions
     atoms=[];proposals=[];origins=[]
     unresolved=[]
     for span in _scope_units(source):
-        symptom_parser = _symptoms_scoped if source_interpretation_version else _symptoms
-        action_parser = _actions_temporally_scoped if source_interpretation_version==TEMPORAL_INTERPRETATION else _actions
-        found=[*symptom_parser(source,span),*action_parser(source,span),
-               *(_literal_demographics(source,span) if source_interpretation_version in {LITERAL_INTERPRETATION,TEMPORAL_INTERPRETATION} else [])]
+        symptoms = (_symptoms_scoped(source,span,preserve_laterality=source_interpretation_version==LATERAL_INTERPRETATION)
+                    if source_interpretation_version else _symptoms(source,span))
+        action_parser = _actions_temporally_scoped if source_interpretation_version in {TEMPORAL_INTERPRETATION,LATERAL_INTERPRETATION} else _actions
+        found=[*symptoms,*action_parser(source,span),
+               *(_literal_demographics(source,span) if source_interpretation_version in {LITERAL_INTERPRETATION,TEMPORAL_INTERPRETATION,LATERAL_INTERPRETATION} else [])]
         atoms.extend(found)
         proposals.extend({'origin':'native_bounded_grammar','assertion':a.model_dump(mode='json')} for a in found)
         unresolved.append({'unit_id':'unit-'+digest([source.sha256,span.start,span.end])[:20],

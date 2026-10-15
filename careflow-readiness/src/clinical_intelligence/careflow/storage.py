@@ -97,7 +97,7 @@ class Store:
                 errors.append(f'Invalid event chain at sequence {sequence}')
             previous = row['event_sha256']
             events.append({**event, 'event_sha256': previous})
-            if event['event_type'] in {'CASE_CREATED', 'EVIDENCE_ADDED', 'FACT_CORRECTED'}:
+            if event['event_type'] in {'CASE_CREATED', 'EVIDENCE_ADDED', 'FACT_CORRECTED', 'PROGRAM_RECALCULATED'}:
                 recorded_revisions[event['payload']['revision']] = event['payload']
         if set(recorded_revisions) != {r['revision'] for r in revisions}:
             errors.append('Revision/event coverage mismatch')

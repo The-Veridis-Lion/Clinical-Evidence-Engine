@@ -9,6 +9,8 @@ from ..dialogue_first.prompt import DIALOGUE_INSTRUCTION, NOTE_INSTRUCTION
 
 VERSION = 'copilot-source-index/v1'
 TASK_VERSION = 'clinical-event-assertions/1'
+TYPED_DEFAULT_TASK_VERSION = 'clinical-typed-default/1'
+STRUCTURED_TASK_VERSION = 'clinical-structured-extraction/1'
 NATIVE_LABELS = re.compile(r'(?<!\w)(Doctor|Patient|Nurse|Clinician|Physician|Provider):', re.I)
 
 
@@ -68,7 +70,21 @@ def source_index(doc):
 
 def prompt(doc, *, semantics_version=None, task_version=None):
     instruction = DIALOGUE_INSTRUCTION if doc.input_kind == 'dialogue' else NOTE_INSTRUCTION
-    if semantics_version == 'clinical-fact-semantics/2':
+    if task_version == STRUCTURED_TASK_VERSION:
+        if semantics_version != 'clinical-fact-semantics/2':
+            raise ValueError('Structured extraction requires clinical semantics/2')
+        from ..evidence_bridge import verification_package
+        verification_package()
+        from evidence_verification.extensions.structured_extraction import prompt_fragment
+        # The wire uses IDs and an independent anchor. Do not append rules that
+        # contradict the inherited index/first-reference instructions.
+        instruction=instruction.replace(
+            'For explicit relationships emit from_fact_index, to_fact_index (zero-based facts indices),',
+            'For explicit relationships emit from_fact_id, to_fact_id (the emitted fact_id values),').replace(
+            'The first selected passage is the verbatim\noriginal_term/evidence anchor; concept expresses the clinical assertion. Do not confuse\nthis source anchor with a normalized medical term.',
+            'primary_source_id is a proposed direct anchor within the preserved citations; concept expresses the clinical assertion.')
+        instruction += prompt_fragment()
+    elif semantics_version == 'clinical-fact-semantics/2':
         instruction += ('\nVERSIONED REPRESENTATION CONTRACT: each fact has a semantics object. '
             'Frequency (e.g. daily) is separate from elapsed duration; event_time preserves explicit original time wording. '
             'Null means not asserted, unknown action_state means not established. '
@@ -77,7 +93,19 @@ def prompt(doc, *, semantics_version=None, task_version=None):
             'Do not invent values; the source verifier checks each dimension separately.')
     elif semantics_version is not None:
         raise ValueError('Unsupported clinical semantics schema version')
-    if task_version is not None:
+    if task_version == STRUCTURED_TASK_VERSION:
+        pass
+    elif task_version == TYPED_DEFAULT_TASK_VERSION:
+        if semantics_version != 'clinical-fact-semantics/2':
+            raise ValueError('Typed precision task requires the existing clinical semantics/2 schema')
+        instruction += ('\nCLINICAL TYPED PRECISION CONTRACT/1: duration is an elapsed span, '
+            'not a life stage, calendar date, lookback window or delay to a future event; '
+            'keep the latter in event_time without duplicating it as duration. '
+            'Keep assertion_basis consistent between the fact and its semantics, for the actual proposition. '
+            'An observed numeric result stays present even when its interpretation is negative. '
+            'An explicitly undocumented event is not an explicitly absent clinical event. '
+            'Preserve independently asserted execution states and plans; do not split ordinary attributes into extra facts.')
+    elif task_version is not None:
         if task_version != TASK_VERSION or semantics_version != 'clinical-fact-semantics/2':
             raise ValueError('Event assertion task requires the existing clinical semantics/2 schema')
         instruction += ('\nCLINICAL EVENT ASSERTIONS CONTRACT/1: facts are independent propositions, not just unique concepts. '
@@ -97,6 +125,19 @@ def prompt(doc, *, semantics_version=None, task_version=None):
 
 
 def schema(doc, *, semantics_version=None, task_version=None):
+    if task_version == STRUCTURED_TASK_VERSION:
+        if semantics_version != 'clinical-fact-semantics/2':
+            raise ValueError('Structured extraction requires clinical semantics/2')
+        from ..evidence_bridge import verification_package
+        verification_package()
+        from evidence_verification.extensions.structured_extraction import build_schema
+        return build_schema(schema(doc,semantics_version=semantics_version),source_index(doc)['source_catalogue'])
+    if task_version == TYPED_DEFAULT_TASK_VERSION:
+        if semantics_version != 'clinical-fact-semantics/2':
+            raise ValueError('Typed precision task requires the existing clinical semantics/2 schema')
+        # The candidate changes only the bounded representation instruction.
+        # There is no second extraction schema or additional model pass.
+        return schema(doc, semantics_version=semantics_version)
     if task_version is not None:
         if task_version != TASK_VERSION or semantics_version != 'clinical-fact-semantics/2':
             raise ValueError('Event assertion task requires the existing clinical semantics/2 schema')
@@ -131,6 +172,50 @@ def schema(doc, *, semantics_version=None, task_version=None):
 
 def inspect(raw, doc, *, semantics_version=None, task_version=None):
     """Resolve using Engine types/resolvers with the application catalogue."""
+    if task_version == STRUCTURED_TASK_VERSION:
+        if semantics_version != 'clinical-fact-semantics/2':
+            raise ValueError('Structured extraction requires clinical semantics/2')
+        from ..evidence_bridge import verification_package
+        verification_package()
+        from evidence_verification.extensions.structured_extraction import normalize
+        try:
+            normalized=normalize(json.loads(raw),source_index(doc)['source_catalogue'],schema(doc,semantics_version=semantics_version))
+            resolved=inspect(json.dumps(normalized['payload'],ensure_ascii=False),doc)
+            if resolved['result'] is None:
+                return resolved
+            mapping={old:new for new,old in enumerate(resolved['accepted_indices'])}
+            proposals={p['fact_index']:p for p in normalized['semantic_proposals']}
+            anchors={p['fact_index']:p for p in normalized['anchors']}
+            records=[{'fact_index':new,**{k:v for k,v in anchors[old].items() if k!='fact_index'},
+                'semantics':proposals[old]['semantics'],'invalid_fields':proposals[old]['invalid_fields']}
+                for old,new in mapping.items()]
+            catalogue={s['source_id']:s for s in source_index(doc)['source_catalogue']}
+            for record in records:
+                record['original_provenance']=engine.resolve_references(
+                    engine.References(source_ids=record['selected_source_ids']),doc,catalogue)
+            resolved['result']['structured_extraction_contract']={
+                'version':STRUCTURED_TASK_VERSION,'normalization_version':normalized['version'],
+                'primary_reference_application':normalized['primary_reference_application'],
+                'source_sha256':doc.note_sha256,'assertions':records,
+                'accepted_original_indices':[normalized['accepted_original_indices'][old] for old in mapping],
+                'field_quarantine':normalized['field_quarantine'],'rejected_facts':normalized['rejected_facts'],
+                'relationship_quarantine':normalized['relationship_quarantine'],
+                'interpretation':normalized['interpretation']}
+            resolved['errors'].extend(normalized['errors'])
+            resolved['accepted_indices']=[normalized['accepted_original_indices'][old] for old in mapping]
+            resolved['status']='PARTIAL' if resolved['errors'] and records else 'INVALID' if resolved['errors'] else 'VALID'
+            return resolved
+        except (ValueError,TypeError,KeyError,AttributeError) as exc:
+            return dict(status='INVALID',result=None,accepted_indices=[],errors=[str(exc)])
+    if task_version == TYPED_DEFAULT_TASK_VERSION:
+        if semantics_version != 'clinical-fact-semantics/2':
+            raise ValueError('Typed precision task requires the existing clinical semantics/2 schema')
+        inspected = inspect(raw, doc, semantics_version=semantics_version)
+        if inspected['result'] is not None:
+            # Retain individual invalid relationship proposals as well as their
+            # errors. Valid relationships and every accepted fact are unchanged.
+            inspected['result']['relationship_quarantine'] = relationship_quarantine(raw, inspected, doc)
+        return inspected
     if task_version is not None:
         if task_version != TASK_VERSION or semantics_version != 'clinical-fact-semantics/2':
             raise ValueError('Event assertion task requires the existing clinical semantics/2 schema')
@@ -229,3 +314,25 @@ def inspect(raw, doc, *, semantics_version=None, task_version=None):
     validate_extraction(json.dumps(engine.primary_projection(result)), doc)
     return dict(status='PARTIAL' if errors and facts else 'INVALID' if errors else 'VALID',
                 result=result,accepted_indices=accepted,errors=errors)
+
+
+def relationship_quarantine(raw, inspected, doc):
+    """Losslessly identify excluded relationships; never guess their endpoints."""
+    payload = json.loads(raw)
+    records = []
+    catalogue = {s['source_id']: s for s in source_index(doc)['source_catalogue']}
+    mapping = {raw_index: index for index, raw_index in enumerate(inspected['accepted_indices'])}
+    for index, proposal in enumerate(payload['relationships']):
+        try:
+            engine.resolve_relationship(proposal, doc, catalogue, mapping)
+        except ValueError as error:
+            reason = str(error)
+        else:
+            continue
+        records.append({'original_index': index,
+            'raw_relationship': proposal,
+            'reason': reason, 'status': 'QUARANTINED_NOT_ADOPTED',
+            'valid_facts_preserved': True, 'endpoint_repair_attempted': False})
+    return {'version': 'relationship-quarantine/1', 'items': records,
+            'raw_relationship_count': len(payload['relationships']),
+            'accepted_relationship_count': len(inspected['result']['relationships'])}

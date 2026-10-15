@@ -6,7 +6,7 @@ Every asserted value is subsequently checked by the shared source verifier.
 """
 from typing import Literal
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, TypeAdapter, model_validator
 
 
 class ClinicalSemanticsV2(BaseModel):
@@ -30,6 +30,28 @@ class SemanticsRecord(BaseModel):
     origin: str = Field(min_length=1)
 
 
+class StructuredSemanticsRecord(BaseModel):
+    """A partial representation retains valid dimensions and explicit failures."""
+    model_config = ConfigDict(extra='forbid')
+    fact_id: str = Field(min_length=1)
+    source_sha256: str
+    semantics: dict
+    origin: Literal['original_structured_extraction']
+    normalization_version: Literal['clinical-structured-normalization/1']
+    invalid_fields: list[str]
+
+    @model_validator(mode='after')
+    def validate_dimensions(self):
+        fields=ClinicalSemanticsV2.model_fields
+        if set(self.semantics)-set(fields) or set(self.semantics)&set(self.invalid_fields):
+            raise ValueError('Structured semantics must separate valid and invalid fields')
+        if not set(fields) <= set(self.semantics)|set(self.invalid_fields):
+            raise ValueError('Missing structured semantic dimensions need explicit errors')
+        for name,value in self.semantics.items():
+            TypeAdapter(fields[name].annotation).validate_python(value,strict=True)
+        return self
+
+
 def checked_records(packet):
     values = packet.extraction_metadata.get('clinical_semantics_v2', [])
     if not isinstance(values, list):
@@ -37,13 +59,30 @@ def checked_records(packet):
     known = {f.fact_id for f in packet.facts}
     result = {}
     for raw in values:
-        value = SemanticsRecord.model_validate(raw)
+        value = (StructuredSemanticsRecord if 'normalization_version' in raw else SemanticsRecord).model_validate(raw)
         if value.fact_id not in known or value.fact_id in result:
             raise ValueError('Clinical semantics has unknown or duplicate fact identity')
         if value.source_sha256 != packet.source.sha256:
             raise ValueError('Clinical semantics source hash mismatch')
         result[value.fact_id] = value.model_dump(mode='json')
     return result
+
+
+def bound_human_semantic_correction(packet, item, record):
+    """An origin string alone is not an explicit human correction decision."""
+    if record is None or not record['origin'].startswith('targeted_semantics_correction/human/'):
+        return False
+    current=item.assertion.model_dump()
+    for event in reversed(packet.extraction_metadata.get('semantic_corrections',[])):
+        if (event.get('fact_id')!=item.fact_id or event.get('source_sha256')!=packet.source.sha256
+                or event.get('after')!=record or event.get('version',packet.version+1)>packet.version):
+            continue
+        review=next((r for r in packet.reviews if r.review_id==event.get('review_id')),None)
+        return bool(review and review.action=='correct' and review.reviewer.reviewer_type=='human'
+            and review.fact_id==item.fact_id and review.applied_version==event['version']
+            and review.before==review.after==review.replacement==current
+            and set(review.evidence_ids)<=set(item.evidence_ids))
+    return False
 
 
 def apply_semantics(claim, record):
@@ -56,13 +95,72 @@ def apply_semantics(claim, record):
     # original duration value remains in original_fact and the version history.
     claim['attributes'].pop('duration', None)
     for name in ('duration', 'frequency'):
-        if semantics[name] is not None:
+        if semantics.get(name) is not None:
             claim['attributes'][name] = semantics[name]
     for name in ('event_time', 'action_type', 'action_state', 'completion_scope'):
+        if name not in semantics:
+            # A mechanical invalid field is absent from the proposal. The Claim
+            # transport requires an unknown action placeholder; the field and
+            # raw error remain explicit in the structured record and quarantine.
+            if 'normalization_version' in record:
+                claim[name] = 'unknown' if name == 'action_state' else None
+            continue
         value = semantics[name]
         claim[name] = None if name == 'completion_scope' and value == 'unknown' else value
-    claim['reporting_basis'] = semantics['assertion_basis']
+    claim['reporting_basis'] = semantics.get('assertion_basis',claim['reporting_basis'])
     return claim
+
+
+def semantic_subject_changed(fact, original):
+    """Citation ordering does not invalidate unchanged event/attribute proposals.
+
+    Any clinical field change or a different cited span still invalidates the old
+    sidecar. This only recognizes an exact permutation of the same evidence.
+    """
+    current = fact.model_dump()
+    citation_fields = {'evidence', 'supporting_evidence', 'provenance'}
+    if {k:v for k,v in current.items() if k not in citation_fields} != {
+            k:v for k,v in original.items() if k not in citation_fields}:
+        return True
+    def spans(value):
+        return sorted((p['start'], p['end'], p['quote']) for p in
+                      [value['evidence'], *value.get('supporting_evidence', [])])
+    return spans(current) != spans(original)
+
+
+CITATION_PRESERVATION_VERSION = 'citation-permutation-preservation/1'
+
+
+def citation_preservation_review(packet, review):
+    """A new human citation edit may adopt the scoped policy for this fact only."""
+    from ..dialogue_first.contract import DialogueFact
+    if (review.action != 'correct' or review.reviewer.reviewer_type != 'human'
+            or packet.extraction_metadata.get('soap_projection_version') != 'soap/v6'):
+        return False
+    item = next((f for f in packet.facts if f.fact_id == review.fact_id), None)
+    semantic = checked_records(packet).get(review.fact_id)
+    if item is None or semantic is None:
+        return False
+    after = DialogueFact.model_validate(review.after)
+    # A source selection cannot restore semantics tied to a changed clinical
+    # proposition or newly selected evidence. Both comparisons must be exact.
+    if (semantic_subject_changed(after, review.before)
+            or semantic_subject_changed(after, item.original_fact)
+            or after.model_dump() == item.original_fact):
+        return False
+    return True
+
+
+def citation_preservation_targets(packet):
+    """Validate retained per-fact events without reinterpreting historical packets."""
+    targets = set()
+    for review in packet.reviews:
+        if review.correction_contract_version is None:
+            continue
+        if not citation_preservation_review(packet, review):
+            raise ValueError('Citation preservation must bind an exact human citation-only correction')
+        targets.add(review.fact_id)
+    return targets
 
 
 MAIN_DIMENSIONS = {'category', 'concept', 'experiencer', 'reporting_basis', 'polarity', 'temporality'}

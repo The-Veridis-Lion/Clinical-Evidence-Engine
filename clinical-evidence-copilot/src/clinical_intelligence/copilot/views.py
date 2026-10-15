@@ -1,6 +1,61 @@
 """Human-readable output from the same sealed machine-readable packet."""
 
 
+def render_readable_markdown(packet):
+    """Readable, source-linked draft; the original audit export stays available."""
+    from .presentation import draft_presentation
+    view = draft_presentation(packet)
+    counts = view['summary']
+    lines = [f'# SOAP draft · {packet.case_id}', '',
+             f'Patient: {packet.patient_id} · Encounter: {packet.source.encounter_time or "Not documented"} · Version: {packet.version}',
+             'Source-linked extraction draft. Human review is optional; machine checks and human decisions are recorded separately.',
+             f'{counts["specific_risks"]} assertions with specific risk flags; {counts["machine_unverified"]} not confirmed by automatic checks; {counts["human_reviewed"]} reviewed by a person.',
+             'These counts can overlap. An unconfirmed machine check is not a finding that the assertion is false.',
+             f'Extraction: {packet.extraction_status}. Complete clinical coverage and independent clinical accuracy are not established.',
+             f'Source: {packet.source.document_id} · SHA256: `{packet.source.sha256}`',
+             f'Packet hash: `{packet.content_hash}`', '']
+    for section, title in [('S', 'Subjective'), ('O', 'Objective'), ('A', 'Assessment'), ('P', 'Plan')]:
+        lines += [f'## {section} · {title}', '']
+        for row in view['sections'][section]:
+            fields = '; '.join(f'{f["label"]}: {f["value"]}' for f in row['fields'])
+            lines += [f'- **{row["concept"]}** — {fields}.',
+                      f'  Claim: `{row["fact_id"]}` · Evidence: ' + ', '.join(f'`{e}`' for e in row['evidence_ids']),
+                      f'  Automatic check: {row["machine_status"]}. Human review: {row["review_status"]}.']
+            if row['section_note']:
+                lines.append('  ' + row['section_note'])
+            if row.get('not_adopted_dimensions'):
+                lines.append('  Not adopted into this draft: '+', '.join(
+                    d['dimension'] for d in row['not_adopted_dimensions'])+'. Original proposals remain in the audit export.')
+            if row['human_reviewed']:
+                review = row['human_review']
+                lines.append(f'  Human decision: {review["action"]} by {review["reviewer_id"]} at v{review["version"]}: {review["reason"]}. Automatic check unchanged.')
+                lines.append('  Human review task completed.' if row['human_review_complete'] else '  Human decision saved; outstanding review questions remain.')
+            if row['specific_risk']:
+                lines.append('  **Specific risk remains — inspect the original source and recorded concerns.**')
+            if row['review_targets']:
+                lines.append('  Check dimensions: ' + ', '.join(row['review_targets']) + '.')
+            for issue in row['issues']:
+                if issue['severity'] == 'high' or not issue['code'].startswith('source_'):
+                    lines.append(f'  Recorded concern ({issue["code"]}): {issue["question"]}')
+            for conflict in row['conflicts']:
+                lines.append(f'  Recorded conflict: {conflict["reason"]}')
+        if not view['sections'][section]:
+            lines.append('Not documented in the accepted extraction.')
+        lines.append('')
+    lines += ['## Original evidence', '']
+    for evidence in packet.evidence:
+        lines += [f'### {evidence.evidence_id}',
+                  f'{evidence.document_id} · {evidence.turn_id} · {evidence.speaker_label or "Clinical note"} · characters [{evidence.start}:{evidence.end}]',
+                  '', *['> ' + line for line in evidence.quote.splitlines()], '']
+    general = [i for i in packet.issues if not i.fact_ids]
+    if general or packet.rejected_facts:
+        lines += ['## Extraction issues', '']
+        lines += [f'- {issue.code}: {issue.question}' for issue in general]
+        lines += [f'- Rejected proposal {f["original_index"]}: {f["reason"]}' for f in packet.rejected_facts]
+    lines += ['', 'The full audit Markdown and evidence JSON retain every machine check, relationship proposal, source span and immutable revision.']
+    return '\n'.join(lines) + '\n'
+
+
 def render_markdown(packet):
     packet.verify()
     lines = [f'# Clinical Evidence Copilot · {packet.case_id}',
@@ -42,6 +97,10 @@ def render_markdown(packet):
     lines += [f'- {i.code}: {i.question} [{", ".join(i.fact_ids)}]' for i in packet.issues] or ['No automatic discrepancy flags. This is not clinical certification.']
     lines += ['', '## Review trail', '']
     lines += [f'- v{r.applied_version} · {r.reviewer.reviewer_type}/{r.reviewer.reviewer_id} ({r.reviewer.version}) · {r.action} {r.fact_id}: {r.reason} · evidence={", ".join(r.evidence_ids)}' for r in packet.reviews] or ['No review recorded. Saving a draft does not require a signature.']
+    events = packet.extraction_metadata.get('program_reprocessing_events', [])
+    if events:
+        lines += ['', '## Program reprocessing', '']
+        lines += [f'- v{e["base_version"]} → v{e["applied_version"]} · {e["profile_version"]}: {e["reason"]} · {len(e["changes"])} changed fact projections; zero model calls; no human approval created.' for e in events]
     if packet.rejected_facts:
         lines += ['', '## Rejected proposals', ''] + [f'- Index {r["original_index"]}: {r["reason"]}' for r in packet.rejected_facts]
     atomic = packet.extraction_metadata.get('atomic_source_checklist')
@@ -61,9 +120,17 @@ def render_markdown(packet):
         for row in verified['assertions']:
             result = row['result']
             lines.append(f'- {row["fact_id"]}: {result["status"]} · {result["risk_route"]} · ' + '; '.join(result['reasons']))
+            if row.get('adoption'):
+                scope=row['adopted_claim'].get('completion_scope')
+                lines.append(f'  Adopted completion_scope: {scope or "not asserted"}. Proposal and source-check result retained separately.')
+                for dimension in row['adoption']['not_adopted_dimensions']:
+                    lines.append(f'  Not adopted: {dimension["dimension"]}; proposed={dimension["proposed_value"]}; source check={dimension["source_check_status"]}. '+dimension['reason'])
             if row.get('primary_reference_proposal'):
                 anchor = row['primary_reference_proposal']
-                lines.append(f'  Extraction anchor: {anchor["primary_source_id"] or "none"} · {anchor["status"]}. Original citation order retained.')
+                order_note=('Selected primary passage adopted first; original citation order retained in raw response and audit metadata.'
+                    if packet.extraction_metadata.get('structured_extraction_contract',{}).get('primary_reference_application')=='model-selected-primary/1'
+                    else 'Original citation order retained.')
+                lines.append(f'  Extraction anchor: {anchor["primary_source_id"] or "none"} · {anchor["status"]}. {order_note}')
             for ref in row.get('semantic_support_refs', []):
                 lines.append(f'  Source-verified support ({ref["support_scope"]}) [{ref["start"]}:{ref["end"]}]: {ref["quote"]}')
             if row.get('components'):

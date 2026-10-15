@@ -61,7 +61,7 @@ def material_assertion(fact, binding, *, source_support_policy=None):
     # Availability of the declared attachment is a documentary condition, not
     # certification of every clinical statement in that attachment. Scope,
     # exact extraction references and availability are checked by map_clinical.
-    if source_support_policy in {'luna-only-source-policy/1', 'luna-only-source-policy/2', 'luna-only-source-policy/3', 'luna-only-source-policy/4'} and binding.requirement == 'clinical_summary':
+    if source_support_policy in {'luna-only-source-policy/1', 'luna-only-source-policy/2', 'luna-only-source-policy/3', 'luna-only-source-policy/4', 'luna-only-source-policy/5', 'luna-only-source-policy/6', 'luna-only-source-policy/7'} and binding.requirement == 'clinical_summary':
         if binding.document_role != 'clinical_summary':
             return None, 'document_not_declared_as_request_summary'
         return True, 'available_explicitly_attached_clinical_summary'
@@ -74,6 +74,11 @@ def material_assertion(fact, binding, *, source_support_policy=None):
     if fact['polarity'] == 'uncertain':
         return None, 'clinical_assertion_uncertain'
     status = normalized_status(fact['clinical_status'])
+    structured = fact.get('structured_clinical_proposal') if source_support_policy == 'luna-only-source-policy/7' else None
+    if structured and fact['category'] in {'treatment', 'procedure', 'medication'}:
+        # The task's canonical field is the proposal, rather than a lossy
+        # free-form clinical_status projection. Source support stays separate.
+        status = structured['semantics'].get('action_state', 'unknown')
     requirement = binding.requirement
     if requirement == 'therapy_completed':
         if fact['category'] not in {'treatment', 'procedure', 'medication'}:
@@ -86,7 +91,7 @@ def material_assertion(fact, binding, *, source_support_policy=None):
             return None, 'execution_not_explicitly_completed'
         return True, 'documented_completed_patient_therapy'
     if requirement == 'investigation_result':
-        if fact['category'] not in {'laboratory_result', 'observation'} or status in PENDING:
+        if fact['category'] not in {'laboratory_result', 'observation'} or status in (PENDING - {'unknown'} if structured else PENDING):
             return None, 'completed_investigation_result_not_established'
         if not fact['concept']:
             return None, 'result_concept_unknown'
@@ -163,7 +168,14 @@ def map_clinical(case):
                 assertion=assertion, statement=f'{reason}; clinical fact {clinical_id}; binding {binding.binding_id}.',
                 evidence=references[clinical_id], interpretation_origin='structured_mapping'))
             ids.append(identifier)
+        candidate_association = source.content.get('association_version') in {
+            'careflow-request-reason-association/1', 'careflow-request-clinical-target/1',
+            'careflow-selected-clinical-association/1'}
         decisions.append({'binding': original, 'mapping_version': VERSION, 'issues': [],
                           'clinical_checks': values, 'derived_fact_ids': ids,
-                          'required_target_incomplete': any(value is None for _, value, _ in values)})
+                          # Automatic relevance candidates do not turn an
+                          # independently adequate formal reason into a gap.
+                          # Without another proof, their unknown values remain
+                          # insufficient under the ordinary five-state rule.
+                          'required_target_incomplete': not candidate_association and any(value is None for _, value, _ in values)})
     return derived, decisions

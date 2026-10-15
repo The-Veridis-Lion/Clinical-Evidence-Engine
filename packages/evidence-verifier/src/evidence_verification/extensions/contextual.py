@@ -9,7 +9,7 @@ import re
 from itertools import combinations
 
 from ..models import Calibration, Claim, DimensionCheck, Source, SourceReview, Span, digest
-from ..coverage import (ACTION, LITERAL_INTERPRETATION, TEMPORAL_INTERPRETATION, SYMPTOMS, _scope_units, enumerate_source_assertions,
+from ..coverage import (ACTION, LITERAL_INTERPRETATION, TEMPORAL_INTERPRETATION, LATERAL_INTERPRETATION, LATERAL_SYMPTOMS, SYMPTOMS, _scope_units, enumerate_source_assertions,
                         inspect_source_context, norm, overlapping, source_units)
 from ..verifier import ACTION_REPRESENTATIONS, EvidenceVerifier, _compare, _contradictory_atoms, _known
 
@@ -96,12 +96,21 @@ def _related_unresolved(source,claim,source_interpretation_version=None):
     if claim.category!='symptom':
         return []
     atoms=_symptom_atoms(source,source_interpretation_version);unknown=[]
+    concept=norm(claim.concept)
+    lateral=re.fullmatch(r'(?:right|left)\s+(.+)',concept)
+    related_concept=(lateral[1] if source_interpretation_version==LATERAL_INTERPRETATION
+                     and lateral and lateral[1] in LATERAL_SYMPTOMS else concept)
     for unit in _scope_units(source):
-        if not re.search(r'(?<!\w)'+re.escape(norm(claim.concept))+r'(?!\w)',unit.quote,re.I):
+        if not re.search(r'(?<!\w)'+re.escape(related_concept)+r'(?!\w)',unit.quote,re.I):
             continue
         if _other_actor(unit):
             continue
-        resolved=any(norm(atom.concept)==norm(claim.concept) and any(s.start<unit.end and unit.start<s.end for s in atom.spans) for atom in atoms)
+        # Opposite-side explicit assertions are different entities. An unqualified
+        # later mention is not silently assigned to either side or cropped away.
+        explicit_concepts={concept}
+        if related_concept != concept:
+            explicit_concepts={f'right {related_concept}',f'left {related_concept}'}
+        resolved=any(norm(atom.concept) in explicit_concepts and any(s.start<unit.end and unit.start<s.end for s in atom.spans) for atom in atoms)
         if not resolved:
             unknown.append(unit)
     return unknown
@@ -230,7 +239,7 @@ def _recognized_action_prefix(atom):
     return bool(atom.spans)
 
 
-def verify_contextual_claim(source,claim,*,reviews=(),calibrations=(),event_comparability_version=None,source_interpretation_version=None):
+def _verify_contextual_claim(source,claim,*,reviews=(),calibrations=(),event_comparability_version=None,source_interpretation_version=None):
     """v6-only adapter to the same EvidenceVerifier, with versioned local scope."""
     source=Source.model_validate(source);claim=Claim.model_validate(claim)
     if event_comparability_version not in {None, 'distinct-source-event-comparability/2', 'distinct-source-event-comparability/3', 'distinct-source-event-comparability/4'}:
@@ -286,7 +295,7 @@ def verify_contextual_claim(source,claim,*,reviews=(),calibrations=(),event_comp
                       'administration_event': 'administration_event',
                       'therapy_course': 'therapy_course', 'therapy_event': 'therapy_event',
                       'procedure_event': 'procedure_event', 'order_placed': 'order_placed'}
-    if source_interpretation_version in {LITERAL_INTERPRETATION,TEMPORAL_INTERPRETATION}:
+    if source_interpretation_version in {LITERAL_INTERPRETATION,TEMPORAL_INTERPRETATION,LATERAL_INTERPRETATION}:
         action_aliases.update(ACTION_REPRESENTATIONS)
     wanted = action_aliases.get(claim.action_type)
     observed = action_aliases.get(base.source_assertion.action_type) if base.source_assertion else None
@@ -425,3 +434,23 @@ def verify_contextual_claim(source,claim,*,reviews=(),calibrations=(),event_comp
                     'calibration_id':calibration.calibration_id,'method':METHOD})
                 break
     return result
+
+
+def verify_contextual_claim(source, claim, *, reviews=(), calibrations=(), event_comparability_version=None,
+                            source_interpretation_version=None, risk_scope_version=None,
+                            local_scope_calibrations=(), event_support_version=None):
+    """Preserve historical methods; explicitly opt into the finite local proof."""
+    if risk_scope_version not in {None, 'source-local-proof/1'}:
+        raise ValueError('Unavailable local source proof scope')
+    if event_support_version not in {None, 'explicit-source-action/1'}:
+        raise ValueError('Unavailable explicit source event support version')
+    result = _verify_contextual_claim(source, claim, reviews=reviews, calibrations=calibrations,
+        event_comparability_version=event_comparability_version,
+        source_interpretation_version=source_interpretation_version)
+    if event_support_version is not None:
+        from .explicit_action import apply_explicit_action
+        result=apply_explicit_action(source,claim,result,reviews=reviews)
+    if risk_scope_version is None:
+        return result
+    from .local_scope import apply_local_scope
+    return apply_local_scope(source, claim, result, calibrations=local_scope_calibrations, reviews=reviews)

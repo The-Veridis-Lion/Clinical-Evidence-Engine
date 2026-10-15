@@ -31,6 +31,14 @@ class Source(SourceInput):
 class ClinicalContext(Contract):
     source_id: Identifier
     extraction: Extraction
+    # The existing typed extraction sidecar, indexed by its original fact list.
+    # Missing on historical contexts and therefore absent from their JSON bytes.
+    clinical_semantics: list[dict] = Field(default_factory=list, exclude_if=lambda value: not value)
+    clinical_semantics_source_sha256: str | None = Field(default=None, exclude_if=lambda value: value is None)
+    source_index_version: Literal['copilot-source-index/v1'] | None = Field(default=None, exclude_if=lambda value: value is None)
+    # New-task raw plus its mechanically reconstructed, field-local proposals.
+    # Historical typed/2 sidecars do not acquire this extraction contract.
+    structured_extraction: dict | None = Field(default=None, exclude_if=lambda value: value is None)
 
 
 class ClinicalBinding(Contract):
@@ -106,7 +114,7 @@ class Case(Contract):
     clinical_bindings: list[ClinicalBinding] = Field(default_factory=list, exclude_if=lambda value: not value)
     # Absent on saved historical inputs. Public creation and new revisions pin
     # the product contract; replay of a historical Case remains explicit.
-    source_support_policy: Literal['luna-only-source-policy/1', 'luna-only-source-policy/2', 'luna-only-source-policy/3', 'luna-only-source-policy/4'] | None = Field(
+    source_support_policy: Literal['luna-only-source-policy/1', 'luna-only-source-policy/2', 'luna-only-source-policy/3', 'luna-only-source-policy/4', 'luna-only-source-policy/5', 'luna-only-source-policy/6', 'luna-only-source-policy/7'] | None = Field(
         default=None, exclude_if=lambda value: value is None)
 
     @model_validator(mode='after')
@@ -177,6 +185,13 @@ class EvidenceIntake(Contract):
     basis_revision: int = Field(ge=1)
     basis_packet_sha256: Identifier
     reason: Identifier
+
+
+class ProgramRecalculation(Contract):
+    expected_revision: int = Field(ge=1)
+    basis_packet_sha256: Identifier
+    actor_id: Identifier
+    reason: str = Field(min_length=1,max_length=4000)
 
 
 class EvidenceUpdate(Contract):

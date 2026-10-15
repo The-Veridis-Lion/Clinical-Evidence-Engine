@@ -53,9 +53,11 @@ def main(argv=None):
     live.add_argument('--encounter-time')
     live.add_argument('--model', choices=['gpt-6-luna'], default='gpt-6-luna')
     live.add_argument('--request-id', default='first')
+    live.add_argument('--legacy-extraction',action='store_true',
+                      help='Use the historical extraction schema explicitly, without typed/task extensions')
     live.add_argument('--semantics-version', choices=['clinical-fact-semantics/2'],
                       help='Typed frequency/event_time/duration representation for new sources; legacy wire schema remains available')
-    live.add_argument('--task-version', choices=['clinical-event-assertions/1'],
+    live.add_argument('--task-version', choices=['clinical-event-assertions/1','clinical-typed-default/1','clinical-structured-extraction/1'],
                       help='Opt-in independent events, documentation statements and proposed primary reference; requires semantics/2')
     cached = sub.add_parser('import-cache', help='Read original dialogue Engine cache without inference')
     cached.add_argument('root')
@@ -75,6 +77,10 @@ def main(argv=None):
     review = sub.add_parser('review', help='Apply an active human review as a new immutable version')
     review.add_argument('case_id')
     review.add_argument('request')
+    reprocess = sub.add_parser('reprocess', help='Explicitly reprocess retained source/raw without model calls or a human review')
+    reprocess.add_argument('case_id')
+    reprocess.add_argument('--base-version', type=int, required=True)
+    reprocess.add_argument('--reason', required=True)
     typed_review=sub.add_parser('review-semantics',help='Audit a typed attribute/event correction as an immutable version')
     typed_review.add_argument('case_id')
     typed_review.add_argument('request')
@@ -126,9 +132,13 @@ def main(argv=None):
         text = Path(args.input).read_text(encoding='utf-8')
         src = Source.create(args.document_id if args.document_id is not None else args.case_id+':source',
                             text, args.kind, encounter_time=args.encounter_time)
+        options = {key:value for key,value in (
+            ('semantics_version', args.semantics_version), ('task_version', args.task_version)) if value is not None}
+        if args.legacy_extraction:
+            if options:raise ValueError('--legacy-extraction cannot be combined with semantics/task options')
+            options={'semantics_version':None,'task_version':None}
         p = extract_live(args.case_id, args.patient_id, src, ledger, model=args.model,
-            request_id=args.request_id,semantics_version=args.semantics_version,
-            **({'task_version':args.task_version} if args.task_version is not None else {}))
+            request_id=args.request_id, **options)
         store.save(p, expected_version=0)
     elif args.command == 'import-cache':
         p = import_engine_cache(args.root, args.encounter_id, patient_id=args.patient_id, case_id=args.case_id)
@@ -136,6 +146,11 @@ def main(argv=None):
     elif args.command == 'replay-response':
         p = replay_product_response(args.source_packet, args.raw_response, args.product_ledger, case_id=args.case_id)
         store.save(p, expected_version=0)
+    elif args.command == 'reprocess':
+        from .reprocessing import ReprocessRequest, reprocess_packet
+        old = store.get(args.case_id)
+        p = reprocess_packet(old, ReprocessRequest(base_version=args.base_version, reason=args.reason))
+        store.save(p, expected_version=old.version)
     elif args.command == 'review':
         old = store.get(args.case_id)
         p = review_packet(old, validate_product_review_request(old, ReviewRequest.model_validate(read_json(args.request))))

@@ -58,6 +58,18 @@ def validate_verified_revision(old, packet, record):
     if record.action != 'correct' and record.before != record.after:
         raise ValueError('Only a correction can change an assertion')
     derived = {'evidence_verification','semantic_detector_candidates'}
+    if record.correction_contract_version is not None:
+        from .semantics import citation_preservation_review
+        if not citation_preservation_review(old, record):
+            raise ValueError('Citation preservation only applies to an exact citation-only correction')
+    if packet.extraction_metadata.get('review_workflow') != old.extraction_metadata.get('review_workflow'):
+        from .reviewer import workflow_marker, validate_review_workflow
+        if (old.extraction_metadata.get('review_workflow') is not None
+                or record.action != 'accept' or record.reviewer.reviewer_type != 'human'
+                or packet.extraction_metadata.get('review_workflow') != workflow_marker(record)):
+            raise ValueError('Human review workflow may only begin with its explicit new acceptance')
+        validate_review_workflow(packet)
+        derived.add('review_workflow')
     old_semantic_events=old.extraction_metadata.get('semantic_corrections',[])
     semantic_events=packet.extraction_metadata.get('semantic_corrections',[])
     if semantic_events != old_semantic_events:
@@ -121,7 +133,11 @@ class CaseStore:
                 if packet.parent_hash != last[1] or packet.source != old.source or packet.patient_id != last[3]:
                     raise ValueError('Source/patient identity and parent hash must remain unchanged')
                 verified_revision = old.extraction_metadata.get('soap_projection_version') in {'soap/v5','soap/v6'}
-                if verified_revision:
+                from .reprocessing import EVENTS, validate_program_revision
+                program_revision = packet.extraction_metadata.get(EVENTS, []) != old.extraction_metadata.get(EVENTS, [])
+                if program_revision:
+                    validate_program_revision(old, packet)
+                elif verified_revision:
                     if packet.reviews[:len(old.reviews)] != old.reviews or len(packet.reviews) != len(old.reviews)+1:
                         raise ValueError('Review history cannot be overwritten')
                     validate_verified_revision(old, packet, packet.reviews[-1])
@@ -135,6 +151,8 @@ class CaseStore:
                 raise ValueError('First version cannot have a parent')
             elif packet.reviews:
                 raise ValueError('First version cannot contain unlinked review history')
+            elif packet.extraction_metadata.get('program_reprocessing_events'):
+                raise ValueError('First version cannot contain unlinked program history')
             db.execute('INSERT INTO versions VALUES (?,?,?,?,?,?,?,?)',
                 (packet.case_id, packet.version, packet.patient_id, packet.source.sha256, packet.content_hash,
                  packet.parent_hash, packet.created_at, packet.model_dump_json()))

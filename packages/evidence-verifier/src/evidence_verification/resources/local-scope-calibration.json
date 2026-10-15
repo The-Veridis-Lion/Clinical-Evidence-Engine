@@ -1,0 +1,26 @@
+{
+  "version": "local-source-configuration/1",
+  "engine_version": "evidence-verifier/1",
+  "risk_scope_version": "source-local-proof/1",
+  "implementation_sha256": {
+    "local_scope.py": "3bbba4b75181d5cdf9544d1595952b41135736baa6b4b9ef10c19ecf964cd182"
+  },
+  "local_scope_calibrations": [
+    {
+      "calibration_id": "synthetic-local-source-proof-v1",
+      "method": "literal-local-source-proof/1",
+      "scope": "explicit-patient-symptom-or-numeric-measurement/1",
+      "categories": [
+        "symptom",
+        "observation",
+        "laboratory_result"
+      ],
+      "sample_count": 86,
+      "measured_precision": 1.0,
+      "minimum_precision": 0.95,
+      "reference_type": "synthetic_source_checked_software_calibration",
+      "data_sha256": "6b774520afc76406015a6ccd2236a844edcca78b19f98133a024fcb287395a55"
+    }
+  ],
+  "boundary": "Finite explicit patient symptoms and literal numeric measurements with complete source context; not clinical certification."
+}

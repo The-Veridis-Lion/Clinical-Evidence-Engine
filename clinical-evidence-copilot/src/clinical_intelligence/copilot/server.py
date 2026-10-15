@@ -12,7 +12,8 @@ from .reviewer import review_task, validate_product_review_request, ProductModel
 from .runtime import create_from_bundle, extract_live
 from .service import compare_packets, review_packet
 from .store import VersionConflict
-from .views import render_markdown
+from .views import render_markdown, render_readable_markdown
+from .presentation import draft_presentation
 
 
 MAX_BODY_BYTES = 2_000_000
@@ -46,12 +47,14 @@ def make_server(store, *, port=8765, live=False, ledger=None, offline_evaluation
                     return self.reply({'error': 'Invalid local host'}, 403)
                 parsed = urlparse(self.path)
                 path, query = parsed.path, parse_qs(parsed.query)
-                if path in {'/', '/app.js', '/style.css'}:
-                    name = {'/': 'index.html', '/app.js': 'app.js', '/style.css': 'style.css'}[path]
-                    content_type = {'index.html': 'text/html', 'app.js': 'text/javascript', 'style.css': 'text/css'}[name]
+                if path in {'/', '/app.js', '/editor.js', '/style.css'}:
+                    name = {'/': 'index.html', '/app.js': 'app.js', '/editor.js': 'editor.js', '/style.css': 'style.css'}[path]
+                    content_type = {'index.html': 'text/html', 'app.js': 'text/javascript', 'editor.js': 'text/javascript', 'style.css': 'text/css'}[name]
                     return self.reply(files('clinical_intelligence.copilot').joinpath('static', name).read_bytes(), content_type=content_type+'; charset=utf-8')
                 if path == '/api/config':
+                    from .defaults import request_options,PROFILE_VERSION
                     return self.reply({'csrf_token': token, 'live_enabled': live, 'offline_evaluation': offline_evaluation,
+                                       'extraction_defaults':request_options(),'extraction_profile_version':PROFILE_VERSION,
                                        'runtime_model': 'gpt-6-luna', 'schema_version': 'clinical-evidence-copilot/v1'})
                 if path == '/api/cases':
                     return self.reply(store.list_cases())
@@ -71,8 +74,11 @@ def make_server(store, *, port=8765, live=False, ledger=None, offline_evaluation
                     if len(pieces) == 2 and pieces[1] == 'history':
                         return self.reply(store.history(case_id))
                     p = store.get(case_id, version)
+                    if len(pieces) == 2 and pieces[1] == 'presentation':
+                        return self.reply(draft_presentation(p))
                     if len(pieces) == 2 and pieces[1] == 'markdown':
-                        return self.reply(render_markdown(p), content_type='text/markdown; charset=utf-8')
+                        render = render_readable_markdown if query.get('view') == ['draft'] else render_markdown
+                        return self.reply(render(p), content_type='text/markdown; charset=utf-8')
                     if len(pieces) == 2 and pieces[1] == 'review-task':
                         return self.reply(review_task(p, query.get('fact_id')))
                     if len(pieces) != 1:
@@ -116,11 +122,23 @@ def make_server(store, *, port=8765, live=False, ledger=None, offline_evaluation
                         raise VersionConflict('Case already exists')
                     src = Source.create(body.get('document_id',body['case_id']+':source'), body['text'],
                                         body['input_kind'], encounter_time=body.get('encounter_time'))
-                    p = extract_live(body['case_id'], body['patient_id'], src, ledger,
-                        semantics_version=body.get('semantics_version'),
-                        **({'task_version':body['task_version']} if body.get('task_version') is not None else {}))
+                    options = {key: body[key] for key in ('semantics_version','task_version') if key in body}
+                    if body.get('legacy_extraction'):
+                        if options:raise ValueError('legacy_extraction cannot be combined with semantics/task options')
+                        options={'semantics_version':None,'task_version':None}
+                    p = extract_live(body['case_id'], body['patient_id'], src, ledger, **options)
                     store.save(p, expected_version=0)
                     return self.reply(p.model_dump(mode='json'), 201)
+                if self.path.startswith('/api/cases/') and self.path.endswith('/reprocess'):
+                    from .reprocessing import ReprocessRequest, reprocess_packet
+                    case_id = unquote(self.path[len('/api/cases/'):-len('/reprocess')])
+                    old = store.get(case_id)
+                    request = ReprocessRequest.model_validate(body)
+                    if request.base_version != old.version:
+                        raise VersionConflict('Program reprocessing base version is stale')
+                    p = reprocess_packet(old, request)
+                    store.save(p, expected_version=old.version)
+                    return self.reply(p.model_dump(mode='json'))
                 if self.path.startswith('/api/cases/') and self.path.endswith('/semantics'):
                     case_id = unquote(self.path[len('/api/cases/'):-len('/semantics')])
                     old=store.get(case_id)

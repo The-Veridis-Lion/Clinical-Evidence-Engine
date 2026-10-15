@@ -100,9 +100,14 @@ def evaluate(case, *, revision=1):
         missing = []
         if status == 'INSUFFICIENT_EVIDENCE':
             wanted = rule.trigger_requirement if trigger_value is None else rule.requirement
+            unparsed_documents = [f for f in selected if f.get('requirement_support', {}).get('document_present') is True
+                                  and f.get('requirement_support', {}).get('unparsed_document_lines')]
             existing = [f for f in selected if f.get('requirement_support', {}).get('document_present') is True
                         and f.get('requirement_support', {}).get('clinical_source_support') == 'INSUFFICIENT_EVIDENCE']
-            if existing:
+            if unparsed_documents:
+                missing = [f'Review the unparsed lines in the received document for {wanted}; the document is present.']
+                questions = [f'Do the retained unparsed document lines qualify or revoke the fields proposed for {wanted}?']
+            elif existing:
                 missing = [f'Review existing source semantics for {wanted}; the document exists but support is unresolved.']
                 questions = [f'Which asserted dimensions are supported in the existing source for {wanted}?']
             else:

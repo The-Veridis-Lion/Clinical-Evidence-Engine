@@ -2,7 +2,7 @@
   "version": "contextual-source-configuration/2",
   "engine_version": "evidence-verifier/1",
   "implementation_sha256": {
-    "contextual.py": "a91199efae17c98469247053f8f8e442e642d57b1acb5dc7d15e3c2db6e28c2b"
+    "contextual.py": "d3ed644bcc56b8832d960f18dc34a48cd1080c680c8bb03a57fed1528a56c78a"
   },
   "contextual_calibrations": [
     {

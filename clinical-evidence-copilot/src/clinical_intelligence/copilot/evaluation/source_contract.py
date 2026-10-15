@@ -11,7 +11,7 @@ import re
 
 from .matching import normalize
 
-VERSION = 'copilot-source-reviewed-evaluation/2'
+VERSION = 'copilot-source-reviewed-evaluation/3'
 ATTRIBUTE_FIELDS = ('frequency', 'event_time', 'duration', 'value', 'unit', 'assertion_basis')
 CATEGORY_ALIASES = {'measurement': 'observation'}
 CONCEPT_ALIASES = {'physical therapy course': 'physical therapy',
@@ -198,6 +198,22 @@ def main_matches(prediction, reference, source):
         return False
     for name, expected in reference['fields'].items():
         if expected is not None and canonical(prediction['fields'].get(name), name) != canonical(expected, name):
+            # A source-reviewed reference may explicitly identify two encodings
+            # of an unperformed event: occurrence=false, or the negative state
+            # "not started"=true.  This never equates a positive execution event
+            # with its negation, and does not infer a state from source keywords.
+            state = prediction['fields'].get('action_state')
+            status = prediction['fields'].get('clinical_status') or ''
+            negative_state = re.search(
+                r'\b(?:not\s+(?:yet\s+)?(?:started|begun|commenced|completed|taken|administered|performed)|has\s+not\s+started)\b',
+                status.replace('_', ' '))
+            if (name == 'polarity' and expected == 'absent'
+                    and prediction['fields'].get('polarity') == 'present'
+                    and reference.get('polarity_object') == 'event_occurrence'
+                    and reference['fields'].get('action_state') == 'not_completed'
+                    and state == 'not_completed' and negative_state
+                    and prediction.get('semantic_proposal') is not None):
+                continue
             return False
     return True
 

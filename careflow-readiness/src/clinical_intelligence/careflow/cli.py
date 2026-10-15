@@ -31,6 +31,10 @@ def main(argv=None):
     p = sub.add_parser('demo'); p.add_argument('--output', default='artifacts/careflow-demo')
     p = sub.add_parser('source-demo'); p.add_argument('--output', required=True)
     p = sub.add_parser('serve'); p.add_argument('--host', default='127.0.0.1'); p.add_argument('--port', type=int, default=8765)
+    p.add_argument('--enable-live-extraction', action='store_true')
+    p.add_argument('--cache'); p.add_argument('--ledger')
+    p = sub.add_parser('extract-intake'); p.add_argument('--input', required=True)
+    p.add_argument('--cache'); p.add_argument('--ledger')
     p = sub.add_parser('retrieve'); p.add_argument('--archive', required=True); p.add_argument('--case', required=True)
     p.add_argument('--received-at', required=True); p.add_argument('--output', required=True)
     p = sub.add_parser('synthea-demo'); p.add_argument('--archive', required=True); p.add_argument('--split', required=True)
@@ -45,11 +49,14 @@ def main(argv=None):
     for key in ('document','case','attachments','cache','ledger','output'):
         p.add_argument('--'+key,required=True)
     p.add_argument('--received-at',required=True)
+    p.add_argument('--extraction-task', choices=['clinical-structured-extraction/1','legacy-clinical-extraction/1'],
+        default='clinical-structured-extraction/1')
     args = parser.parse_args(argv)
     try:
         if args.command == 'serve':
             from .api import make_server
-            server = make_server(args.db, args.host, args.port)
+            server = make_server(args.db, args.host, args.port,
+                allow_live_extraction=args.enable_live_extraction, cache=args.cache, ledger=args.ledger)
             print(f'CareFlow local API: http://{args.host}:{server.server_port}', flush=True)
             try:
                 server.serve_forever()
@@ -78,7 +85,7 @@ def main(argv=None):
         elif args.command == 'source-workflow':
             from .source_workflow import run_source_workflow
             result = run_source_workflow(args.db,args.output,args.document,args.case,args.attachments,args.cache,args.ledger,
-                                         received_at=args.received_at)
+                                         received_at=args.received_at, task_version=args.extraction_task)
         elif args.command == 'synthea-demo':
             from .demo import run_synthea_demo
             result = run_synthea_demo(args.db, args.output, args.archive, args.split)
@@ -95,7 +102,10 @@ def main(argv=None):
                 stream.write(json.dumps(result, ensure_ascii=False, indent=2) + '\n')
         else:
             app = CareFlow(args.db)
-            if args.command == 'create':
+            if args.command == 'extract-intake':
+                from .clinical_intake import ClinicalTextIntake, extract_intake
+                result = extract_intake(app, load(args.input, ClinicalTextIntake), cache=args.cache, ledger=args.ledger)
+            elif args.command == 'create':
                 result = app.create(load(args.case, Case))
             elif args.command == 'intake':
                 from .raw_input import build_case

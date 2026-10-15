@@ -1,0 +1,8 @@
+{
+  "version": "explicit-source-action/1",
+  "engine_version": "evidence-verifier/1",
+  "implementation_sha256": {
+    "explicit_action.py": "88d294f95523519a4b28090e31521907fc33fd497d15491aed0a68f00e0304ee"
+  },
+  "boundary": "Bounded exact execution dimensions; no whole-fact automatic eligibility or course proof. No independent clinical accuracy claim."
+}

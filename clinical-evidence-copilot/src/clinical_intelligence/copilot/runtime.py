@@ -9,13 +9,18 @@ from .source_adapter import inspect, schema, prompt
 from ..provider import ProviderConfig
 from ..clinical_notes.runner import SingleDispatchProvider
 from .models import Packet, Source, digest, now
-from .service import build_packet, PRODUCT_EVIDENCE_USAGE, SOURCE_INTERPRETATION_VERSION
+from .service import (build_packet, PRODUCT_EVIDENCE_USAGE, SOURCE_INTERPRETATION_VERSION,
+                      SOURCE_EVENT_SUPPORT_VERSION, SOURCE_SEMANTICS_CORRECTION_VERSION)
+
+_USE_DEFAULT = object()
 
 
 def product_evidence_metadata():
     """The evidence boundary is independent of typed versus legacy wire schema."""
     return {'evidence_usage':PRODUCT_EVIDENCE_USAGE,
-            'source_interpretation_version':SOURCE_INTERPRETATION_VERSION}
+            'source_interpretation_version':SOURCE_INTERPRETATION_VERSION,
+            'source_event_support_version':SOURCE_EVENT_SUPPORT_VERSION,
+            'source_semantics_correction_version':SOURCE_SEMANTICS_CORRECTION_VERSION}
 
 
 def mark_partial(packet, errors):
@@ -148,7 +153,9 @@ def replay_product_response(source_packet_path, raw_path, ledger_path, *, case_i
     # than from a later user's sidecar edit of a legacy response.
     if 'clinical_semantics_v2' in original.extraction_metadata:
         saved_extraction = json.loads(row['result']) if row['result'] else {}
-        if 'clinical_semantics' in saved_extraction:
+        if ('clinical_semantics' in saved_extraction or
+                (original.extraction_metadata.get('extraction_task_version')=='clinical-structured-extraction/1'
+                 and saved_extraction.get('structured_extraction_contract',{}).get('version')=='clinical-structured-extraction/1')):
             semantics_version = 'clinical-fact-semantics/2'
     task_version = original.extraction_metadata.get('extraction_task_version')
     inspected = inspect(raw, original.source.document(), semantics_version=semantics_version, task_version=task_version)
@@ -233,18 +240,32 @@ class ProductLedger:
                 'dispatch_attempts': sum(r['dispatched'] for r in rows), 'automatic_retries': 0}
 
 
-def extract_live(case_id, patient_id, source, ledger, *, provider_factory=None, request_id='first', model='gpt-6-luna', semantics_version=None, task_version=None):
+def extract_live(case_id, patient_id, source, ledger, *, provider_factory=None, request_id='first', model='gpt-6-luna', semantics_version=_USE_DEFAULT, task_version=_USE_DEFAULT):
     """Explicit opt-in. Same request key resumes the saved outcome, never resamples.
 
     A different request_id permits only an eligible failure retry, at most three
     attempts per original document. Successful/uncertain outcomes cannot resample.
     """
+    using_default_profile=semantics_version is _USE_DEFAULT and task_version is _USE_DEFAULT
+    if using_default_profile:
+        from .defaults import request_options
+        options = request_options()
+        semantics_version, task_version = options['semantics_version'], options['task_version']
+    else:
+        semantics_version = None if semantics_version is _USE_DEFAULT else semantics_version
+        task_version = None if task_version is _USE_DEFAULT else task_version
     if model!='gpt-6-luna':
         raise ValueError('Clinical extraction must use gpt-6-luna/high; no silent model substitution')
     doc = source.document()
     request_prompt = prompt(doc,semantics_version=semantics_version,task_version=task_version)
     shape = schema(doc,semantics_version=semantics_version,task_version=task_version)
     task_metadata = {'extraction_task_version':task_version} if task_version is not None else {}
+    if task_version=='clinical-structured-extraction/1':
+        from .defaults import PROFILE_VERSION
+        task_metadata.update(extraction_semantics_version=semantics_version,
+            extraction_profile={'version':PROFILE_VERSION if using_default_profile else 'explicit-extraction-profile/1',
+                'selection':'default' if using_default_profile else 'explicit',
+                'semantics_version':semantics_version,'task_version':task_version})
     if semantics_version == 'clinical-fact-semantics/2':
         # Mechanical errors are rejected before ledger reservation or provider
         # construction. Legacy payloads retain their frozen schema contract.
@@ -266,7 +287,8 @@ def extract_live(case_id, patient_id, source, ledger, *, provider_factory=None, 
                       **task_metadata,
                       'validation_errors': json.loads(previous['error']) if resolved and previous['error'] else []},
             projection_version=projection)
-        return mark_partial(p, p.extraction_metadata['validation_errors']) if previous['status'] == 'partial' else p
+        from .reprocessing import process_new_packet
+        return process_new_packet(mark_partial(p, p.extraction_metadata['validation_errors']) if previous['status'] == 'partial' else p)
     try:
         prior=ledger.reserve(key, source, request_prompt, model)
     except sqlite3.IntegrityError:
@@ -305,7 +327,12 @@ def extract_live(case_id, patient_id, source, ledger, *, provider_factory=None, 
         inspected = inspect(raw, doc,semantics_version=semantics_version,task_version=task_version)
         if prior and prior['status']=='partial' and prior['raw_response']:
             from .evaluation.execution import preserving_repair
-            if semantics_version is None:
+            if task_version == 'clinical-structured-extraction/1':
+                from evidence_verification.extensions.structured_extraction import preserving_repair as structured_repair
+                from .source_adapter import source_index
+                structured_repair(json.loads(prior['raw_response']),json.loads(raw),
+                    source_index(doc)['source_catalogue'],schema(doc,semantics_version=semantics_version))
+            elif semantics_version is None:
                 preserving_repair(prior['raw_response'],raw,initial,inspected,doc)
             else:
                 original_json=json.loads(prior['raw_response'])
@@ -331,7 +358,8 @@ def extract_live(case_id, patient_id, source, ledger, *, provider_factory=None, 
             projection_version=projection)
         if inspected['status'] == 'PARTIAL':
             mark_partial(p, inspected['errors'])
-        return p
+        from .reprocessing import process_new_packet
+        return process_new_packet(p)
     except Exception as exc:
         error = f'{type(exc).__name__}: {exc}'
         if ledger.get(key)['status'] != 'reserved':

@@ -11,7 +11,7 @@ from pydantic import Field
 
 from .contracts import Contract, Identifier, Case, ClinicalBinding, Requirement
 from .clinical_context import prepared_context
-from .extraction import extract_document
+from .extraction import extract_document, extraction_context, STRUCTURED_TASK, LEGACY_TASK
 from .evaluation.batch import source_for
 from .evaluation.corpus import canonical, write_once
 from .scheduler import CallLedger
@@ -33,7 +33,7 @@ class AttachmentSelection(Contract):
 
 
 def run_source_workflow(database, output, document_path, case_path, attachments_path,
-                        cache, ledger_path, *, received_at=None, provider=None):
+                        cache, ledger_path, *, received_at=None, provider=None, task_version=STRUCTURED_TASK):
     # A requested historical snapshot cannot manufacture evidence availability.
     # Validate before files, reservation or dispatch. This date is explicit intake
     # provenance; it does not authenticate the receiving institution.
@@ -60,11 +60,12 @@ def run_source_workflow(database, output, document_path, case_path, attachments_
     root.mkdir(parents=True, exist_ok=False)
     ledger = CallLedger(ledger_path)
     before_attempts = len(ledger.attempts())
-    result = extract_document(record, cache, ledger, provider=provider)
+    result = extract_document(record, cache, ledger, provider=provider,
+        task_version=None if task_version == LEGACY_TASK else task_version)
     source = source_for(record,result['extraction'],received_at=receipt_date)
     augmented = {**raw, 'sources': [*raw['sources'],source],
                  'clinical_context': [*raw.get('clinical_context',[]),
-                    {'source_id':source['source_id'],'extraction':result['extraction']}]}
+                    extraction_context(source['source_id'], result)]}
     case = Case.model_validate_json(canonical(augmented))
     context = next(c for c in prepared_context(case) if c['source_id']==source['source_id'])
     binding_sources,bindings = [],[]
@@ -100,7 +101,11 @@ def run_source_workflow(database, output, document_path, case_path, attachments_
         if fact['requirement_support'].get('support_method') == PRODUCT_SUPPORT_POLICY
         for review in fact['requirement_support'].get('source_reviews', [])]
     write_once(root/'atomic-source-reviews.json',(canonical(source_reviews)+'\n').encode('utf-8'))
-    receipt = run_http_workflow(database,root/'http',root/'case.json',root/'update.json')
+    if 'structured_extraction' in result:
+        from .service import CareFlow
+        CareFlow(database)._create_from_extraction(case, record, cache, ledger)
+    receipt = run_http_workflow(database,root/'http',root/'case.json',root/'update.json',
+        **({'existing_runtime_case':True} if 'structured_extraction' in result else {}))
     current = [r for r in ledger.attempts()[before_attempts:] if r['document_id']==record['document_id']]
     receipt.update({'document_id':record['document_id'],'source_sha256':result['identity']['source_sha256'],
                     'source_receipt':{'version':'careflow-source-receipt/1','received_at':receipt_date,

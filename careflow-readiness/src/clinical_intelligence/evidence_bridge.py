@@ -58,13 +58,20 @@ def verification_identity() -> dict:
                                          separators=(',',':')).encode('utf-8')).hexdigest()}
 
 
-def verify_source_claim(source: dict, claim: dict, *, reviews=(), calibrations=None) -> dict:
+def verify_source_claim(source: dict, claim: dict, *, reviews=(), calibrations=None, source_interpretation_version=None, event_support_version=None) -> dict:
     core = verification_package()
     verification_identity()
     configuration = verification_configuration() if calibrations is None else {
         'engine_version': core.ENGINE_VERSION, 'calibrations': calibrations}
-    result = core.EvidenceVerifier(calibrations=configuration['calibrations']).verify(
+    options={'source_interpretation_version':source_interpretation_version} if source_interpretation_version is not None else {}
+    result = core.EvidenceVerifier(calibrations=configuration['calibrations'], **options).verify(
         core.Source.model_validate(source), core.Claim.model_validate(claim), reviews=reviews)
+    if event_support_version is not None:
+        configuration=verification_event_configuration()
+        if event_support_version != configuration['event_support_version']:
+            raise ValueError('Unavailable explicit event source configuration')
+        from evidence_verification.extensions.explicit_action import apply_explicit_action
+        result=apply_explicit_action(source,claim,result,reviews=reviews)
     return result.model_dump(mode='json')
 
 
@@ -83,11 +90,47 @@ def verification_contextual_configuration() -> dict:
         'contextual_version':value['version'],'contextual_implementation_sha256':value['implementation_sha256']}
 
 
-def verify_contextual_source_claim(source: dict, claim: dict, *, reviews=(), calibrations=None, event_comparability_version=None, source_interpretation_version=None) -> dict:
+def verify_contextual_source_claim(source: dict, claim: dict, *, reviews=(), calibrations=None, event_comparability_version=None, source_interpretation_version=None, risk_scope_version=None, local_scope_calibrations=None, event_support_version=None) -> dict:
     verification_identity()
-    configuration=verification_contextual_configuration()
+    configuration=(verification_local_configuration() if risk_scope_version is not None
+                   else verification_contextual_configuration())
+    if event_support_version is not None:
+        verification_event_configuration()
     from evidence_verification.extensions.contextual import verify_contextual_claim
     return verify_contextual_claim(source,claim,reviews=reviews,
         calibrations=configuration['contextual_calibrations'] if calibrations is None else calibrations,
-        event_comparability_version=event_comparability_version,
+        event_comparability_version=event_comparability_version, event_support_version=event_support_version,
+        risk_scope_version=risk_scope_version, local_scope_calibrations=(
+            configuration.get('local_scope_calibrations', []) if local_scope_calibrations is None else local_scope_calibrations),
         source_interpretation_version=source_interpretation_version).model_dump(mode='json')
+
+
+def verification_local_configuration() -> dict:
+    """Explicit finite local source proof; historical configurations stay unchanged."""
+    core=verification_package()
+    folder=Path(core.__file__).resolve().parent
+    value=json.loads((folder/'resources/local-scope-calibration.json').read_text(encoding='utf-8'))
+    if value.get('engine_version') != core.ENGINE_VERSION or value.get('version') != 'local-source-configuration/1':
+        raise ValueError('Unavailable local source proof configuration')
+    for name,expected in value['implementation_sha256'].items():
+        path=folder/'extensions'/name
+        if path.parent != folder/'extensions' or hashlib.sha256(path.read_bytes()).hexdigest()!=expected:
+            raise ValueError('Local source proof changed after calibration; retain candidate and recalibrate')
+    return {**verification_contextual_configuration(), 'risk_scope_version':value['risk_scope_version'],
+        'local_scope_calibrations':value['local_scope_calibrations'],
+        'local_scope_implementation_sha256':value['implementation_sha256']}
+
+
+def verification_event_configuration() -> dict:
+    """Explicit execution dimensions, with independent implementation identity."""
+    core=verification_package()
+    folder=Path(core.__file__).resolve().parent
+    value=json.loads((folder/'resources/event-support.json').read_text(encoding='utf-8'))
+    if value.get('version') != 'explicit-source-action/1' or value.get('engine_version') != core.ENGINE_VERSION:
+        raise ValueError('Unavailable explicit event source configuration')
+    for name,expected in value['implementation_sha256'].items():
+        path=folder/'extensions'/name
+        if path.parent != folder/'extensions' or hashlib.sha256(path.read_bytes()).hexdigest()!=expected:
+            raise ValueError('Explicit event verifier changed after validation')
+    return {'event_support_version':value['version'],
+            'event_support_implementation_sha256':value['implementation_sha256']}

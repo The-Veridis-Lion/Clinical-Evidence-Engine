@@ -1,11 +1,14 @@
 """Local synthetic-data HTTP API; no implicit provider calls or rule overrides."""
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 import json
+from pathlib import Path
+import secrets
+from threading import Lock
 from urllib.parse import parse_qs, unquote, urlsplit
 
 from pydantic import ValidationError
 
-from .contracts import Case, EvidenceUpdate, Review, SourceIntake, SourceMaterialUpdate
+from .contracts import Case, EvidenceUpdate, Review, SourceIntake, SourceMaterialUpdate, ProgramRecalculation
 from .report import SUPPORT_VIEW_VERSION, markdown, packet_support_view
 from .rules import manifests
 from .service import CareFlow, RevisionConflict
@@ -17,14 +20,17 @@ class BodyTooLarge(ValueError):
     pass
 
 
-def make_server(db, host='127.0.0.1', port=8765):
+def make_server(db, host='127.0.0.1', port=8765, *, allow_live_extraction=False,
+                cache=None, ledger=None, provider=None):
     app = CareFlow(db)
+    live_token = secrets.token_urlsafe(32)
+    extraction_lock = Lock()
 
     class Handler(BaseHTTPRequestHandler):
         def log_message(self, *_):
             pass  # No patient IDs/documents in access logs.
 
-        def respond(self, status, value, *, text=False, support_packet=None):
+        def respond(self, status, value, *, text=False, support_packet=None, content_type=None):
             if status >= 400:
                 self.discard_rejected_body()
             semantic_contract = None
@@ -39,7 +45,7 @@ def make_server(db, host='127.0.0.1', port=8765):
                 semantic_contract = packet_support_view(support_packet)['status']
             body = (value if text else json.dumps(value, ensure_ascii=False, allow_nan=False)).encode('utf-8')
             self.send_response(status)
-            self.send_header('Content-Type', 'text/markdown; charset=utf-8' if text else 'application/json; charset=utf-8')
+            self.send_header('Content-Type', content_type or ('text/markdown; charset=utf-8' if text else 'application/json; charset=utf-8'))
             self.send_header('Content-Length', str(len(body)))
             self.send_header('Cache-Control', 'no-store')
             if semantic_contract:
@@ -83,17 +89,53 @@ def make_server(db, host='127.0.0.1', port=8765):
             parsed = urlsplit(self.path)
             path = [unquote(p) for p in parsed.path.strip('/').split('/')]
             query = parse_qs(parsed.query)
+            if self.command == 'GET' and path == ['']:
+                return self.respond(200, Path(__file__).with_name('workspace.html').read_text(encoding='utf-8'),
+                                    text=True, content_type='text/html; charset=utf-8')
+            if self.command == 'GET' and path == ['v1', 'config']:
+                return self.respond(200, {'live_extraction_enabled': allow_live_extraction,
+                    'model': 'gpt-6-luna', 'reasoning_effort': 'high', 'csrf_token': live_token,
+                    'clinical_text_contract': 'careflow-clinical-text-intake/1'})
+            if self.command == 'GET' and path == ['v1', 'cases']:
+                return self.respond(200, app.cases())
+            if self.command == 'GET' and path == ['v1', 'material-fields']:
+                from .material_intake import DOCUMENTS, ENUM_FIELDS, FIELD_LABELS, VERSION
+                return self.respond(200, {'version': VERSION, 'document_types': DOCUMENTS,
+                    'field_labels': {k: labels[0] for k, labels in FIELD_LABELS.items()},
+                    'enum_values': {k: sorted(v) for k, v in ENUM_FIELDS.items()}})
+            if self.command == 'POST' and path == ['v1', 'clinical-intake']:
+                if not allow_live_extraction:
+                    return self.respond(403, {'error': 'LIVE_EXTRACTION_DISABLED',
+                        'message': 'Restart with --enable-live-extraction to submit new text to Luna.'})
+                origin = self.headers.get('Origin')
+                if (self.headers.get('X-CareFlow-Token') != live_token
+                        or origin is not None and origin != 'http://' + self.headers.get('Host', '')):
+                    return self.respond(403, {'error': 'INVALID_LOCAL_TOKEN'})
+                from .clinical_intake import ClinicalTextIntake, extract_intake
+                intake = self.body(ClinicalTextIntake)
+                if not extraction_lock.acquire(blocking=False):
+                    return self.respond(409, {'error': 'EXTRACTION_BUSY', 'message': 'A source extraction is already running.'})
+                try:
+                    return self.respond(201, extract_intake(app, intake, cache=cache, ledger=ledger, provider=provider))
+                finally:
+                    extraction_lock.release()
             if self.command == 'GET' and path == ['health']:
                 return self.respond(200, {'status': 'ok', 'product': 'careflow/1.0.0'})
             if self.command == 'GET' and path == ['v1', 'rules']:
                 return self.respond(200, manifests())
             if self.command == 'GET' and path == ['v1', 'schemas']:
                 from .requirement_support import RequirementEvidence
+                from .clinical_intake import ClinicalTextIntake, SelectedClinicalAssociation
+                from .material_intake import ReceivedMaterialUpdate
                 return self.respond(200, {'case': Case.model_json_schema(), 'review': Review.model_json_schema(),
                                           'evidence_update': EvidenceUpdate.model_json_schema(),
                                           'source_intake': SourceIntake.model_json_schema(),
                                           'source_material_update': SourceMaterialUpdate.model_json_schema(),
-                                          'requirement_evidence': RequirementEvidence.model_json_schema()})
+                                          'requirement_evidence': RequirementEvidence.model_json_schema(),
+                                          'clinical_text_intake': ClinicalTextIntake.model_json_schema(),
+                                          'selected_clinical_association': SelectedClinicalAssociation.model_json_schema(),
+                                          'program_recalculation':ProgramRecalculation.model_json_schema(),
+                                          'received_document': ReceivedMaterialUpdate.model_json_schema()})
             if self.command == 'POST' and path == ['v1', 'intake']:
                 from .raw_input import build_case
                 intake = self.body(SourceIntake)
@@ -130,6 +172,14 @@ def make_server(db, host='127.0.0.1', port=8765):
                     return self.respond(200, {'invocation': 'optional_external_reviewer',
                                               'model_calls': 0, 'packet': packet, 'review_schema': Review.model_json_schema()})
             if self.command == 'POST':
+                if action == 'recalculate':
+                    return self.respond(201,app.recalculate(case_id,self.body(ProgramRecalculation)))
+                if action == 'clinical-associations':
+                    from .clinical_intake import SelectedClinicalAssociation
+                    return self.respond(201,app.associate_clinical(case_id,self.body(SelectedClinicalAssociation)))
+                if action == 'documents':
+                    from .material_intake import ReceivedMaterialUpdate, append_received_material
+                    return self.respond(201, append_received_material(app, case_id, self.body(ReceivedMaterialUpdate)))
                 if action == 'materials':
                     return self.respond(201, app.add_material_sources(case_id, self.body(SourceMaterialUpdate)))
                 if action == 'reviews':

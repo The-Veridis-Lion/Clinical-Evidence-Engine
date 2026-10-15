@@ -6,7 +6,7 @@ import json
 from datetime import datetime, timezone
 from typing import Literal
 
-from pydantic import BaseModel, ConfigDict, Field, model_validator
+from pydantic import BaseModel, ConfigDict, Field, model_validator, model_serializer
 
 from ..dialogue_first.contract import DialogueFact
 from ..dialogue_first.dataset import Document
@@ -124,6 +124,15 @@ class ReviewRecord(ReviewRequest):
     before: dict
     after: dict
     supersedes_review_id: str | None = None
+    correction_contract_version: Literal['citation-permutation-preservation/1'] | None = None
+
+    @model_serializer(mode='wrap')
+    def serialize_retained_contract(self, handler):
+        value = handler(self)
+        # Old saved review bytes/hashes do not acquire a newly defaulted field.
+        if self.correction_contract_version is None:
+            value.pop('correction_contract_version', None)
+        return value
 
 
 class OmissionCorrectionRequest(Model):

@@ -2,7 +2,7 @@
 from __future__ import annotations
 from .models import (BoundVerificationResult, Calibration, Claim, DimensionCheck, ENGINE_VERSION, METHOD_VERSION,
                      Source, SourceReview, Span, VerificationResult)
-from .coverage import AUTO_SCOPE, LITERAL_INTERPRETATION, TEMPORAL_INTERPRETATION, SCOPED_INTERPRETATIONS, automatic_symptom_scope, canonical_dimension, enumerate_source_assertions, inspect_source_context, norm, overlapping
+from .coverage import AUTO_SCOPE, LITERAL_INTERPRETATION, TEMPORAL_INTERPRETATION, LATERAL_INTERPRETATION, SCOPED_INTERPRETATIONS, automatic_symptom_scope, canonical_dimension, enumerate_source_assertions, inspect_source_context, norm, overlapping
 
 DIMENSIONS=('category','concept','experiencer','reporting_basis','polarity','certainty',
             'temporality','event_time','action_type','action_state','completion_scope','attributes')
@@ -41,7 +41,7 @@ def _compare(claim,atom, *, source_interpretation_version=None):
             state='UNVERIFIED';reason='Bounded source grammar cannot establish this dimension.'
         elif _canonical(key,proposed)==_canonical(key,actual):
             state='SUPPORTED';reason='Independent explicit source assertion agrees in this dimension.'
-        elif (source_interpretation_version in {LITERAL_INTERPRETATION,TEMPORAL_INTERPRETATION} and key=='action_type' and
+        elif (source_interpretation_version in {LITERAL_INTERPRETATION,TEMPORAL_INTERPRETATION,LATERAL_INTERPRETATION} and key=='action_type' and
               ACTION_REPRESENTATIONS.get(proposed,proposed)==ACTION_REPRESENTATIONS.get(actual,actual)):
             state='SUPPORTED';reason=f'Versioned action representation equivalence: source {actual}; proposal {proposed}. No event state or completion scope inferred.'
             actual=proposed

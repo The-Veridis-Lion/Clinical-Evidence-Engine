@@ -25,18 +25,24 @@ ATOMIC_REVIEW_VERSION = 'careflow-atomic-support-review/2'
 REVIEWED_CLAIM_VERSION = 'careflow-atomic-support-review/3'
 CLINICAL_ASSOCIATION_VERSION = 'careflow-reviewed-clinical-association/1'
 CLINICAL_SUPPORT_VERSION = 'careflow-clinical-source-support/3'
-PRODUCT_SUPPORT_POLICY = 'luna-only-source-policy/4'
+PRODUCT_SUPPORT_POLICY = 'luna-only-source-policy/7'
 PRODUCT_SOURCE_INTERPRETATIONS = {
     'luna-only-source-policy/1': 'bounded-source-grammar/2',
     'luna-only-source-policy/2': 'bounded-source-grammar/4',
     'luna-only-source-policy/3': 'bounded-source-grammar/4',
     'luna-only-source-policy/4': 'bounded-source-grammar/4',
+    'luna-only-source-policy/5': 'bounded-source-grammar/4',
+    'luna-only-source-policy/6': 'bounded-source-grammar/5',
+    'luna-only-source-policy/7': 'bounded-source-grammar/5',
 }
 PRODUCT_EVENT_COMPARABILITY = {
     'luna-only-source-policy/1': 'distinct-source-event-comparability/2',
     'luna-only-source-policy/2': 'distinct-source-event-comparability/2',
     'luna-only-source-policy/3': 'distinct-source-event-comparability/3',
     'luna-only-source-policy/4': 'distinct-source-event-comparability/4',
+    'luna-only-source-policy/5': 'distinct-source-event-comparability/4',
+    'luna-only-source-policy/6': 'distinct-source-event-comparability/4',
+    'luna-only-source-policy/7': 'distinct-source-event-comparability/4',
 }
 INVENTORY_REVIEW_VERSION = 'careflow-negative-document-inventory/1'
 SCOPE = ('patient_id', 'request_id', 'service_code', 'code_system')
@@ -104,6 +110,7 @@ def check_loaded_implementation():
 def support_manifest():
     check_loaded_implementation()
     from ..evidence_bridge import verification_identity
+    from .material_intake import adapter_identity
     value = {'version': VERSION, 'code_sha256': _LOADED_SOURCE_SHA256,
         'document_types': {k: sorted(v) for k, v in DOCUMENT_TYPES.items()},
         'therapy_completed': {'action_states': ['completed', 'finished'], 'completion_scope': 'course'},
@@ -115,6 +122,10 @@ def support_manifest():
             'Luna-only product inputs recompute bounded source checks without external AI opinions.',
             'Available clinical-summary attachment is separate from clinical assertion correctness.'],
         'clinical_support_version': CLINICAL_SUPPORT_VERSION,
+        'structured_model_support_version':'careflow-structured-model-support/2',
+        'completed_course_object_contract':'careflow-completed-course-object/1',
+        'model_context_evidence_bundle_version':'careflow-model-context-evidence-bundle/1',
+        'received_form_adapter': adapter_identity(),
         'product_support_policy': PRODUCT_SUPPORT_POLICY,
         'product_source_interpretations': PRODUCT_SOURCE_INTERPRETATIONS,
         'product_event_comparability': PRODUCT_EVENT_COMPARABILITY,
@@ -236,7 +247,7 @@ def nonempty(value):
     return isinstance(value, str) and bool(value.strip())
 
 
-def clinical_verification_input(source, clinical, *, completion_scope=None):
+def clinical_verification_input(source, clinical, *, completion_scope=None, semantics=None):
     """Lossless clinical -> shared-source claim adapter; no source interpretation.
 
     The metadata digest and original text digest serve different purposes. Keep
@@ -276,6 +287,19 @@ def clinical_verification_input(source, clinical, *, completion_scope=None):
         'action_state': canonical if action and canonical in known_states else 'unknown',
         'completion_scope': completion_scope,
         'attributes': {key: value for key, value in (original.get('attributes') or {}).items() if value is not None}}
+    if semantics is not None:
+        # The source-hash/index validator has already checked this typed/2
+        # sidecar. These remain Luna proposals; independent source proof below
+        # decides support and course/requirement satisfaction separately.
+        claim['attributes'] = {key: value for key, value in claim['attributes'].items() if key != 'duration'}
+        for key in ('duration', 'frequency'):
+            if semantics.get(key) is not None:
+                claim['attributes'][key] = semantics[key]
+        for key in ('event_time', 'action_type', 'action_state', 'completion_scope'):
+            if key in semantics:
+                value = semantics[key]
+                claim[key] = None if key == 'completion_scope' and value == 'unknown' else value
+        claim['reporting_basis'] = semantics.get('assertion_basis', claim['reporting_basis'])
     return source_value, claim
 
 
@@ -608,6 +632,80 @@ def _reviewed_clinical_value(case, fact, derived_facts):
         'refs': [source_ref], 'method': 'source_atomic_review', 'review': review}
 
 
+def _structured_model_support(clinical, source, fact, source_check):
+    """Use the new task's grounded proposal with an honest model evidence type.
+
+    Mechanical reconstruction is checked in ClinicalContext. A legacy typed/2
+    sidecar alone never enters here. No caller boolean or model confidence is a
+    source check. Unknown parser coverage cannot discard an extracted assertion.
+    """
+    proposal = clinical['structured_clinical_proposal']
+    anchor = proposal['anchor']
+    primary_id = anchor.get('primary_source_id')
+    spans = [item for item in clinical.get('provenance', []) if item['source_id'] == primary_id]
+    issues = []
+    if len(spans) != 1 or proposal['source_sha256'] != hashlib.sha256(source.content.encode('utf-8')).hexdigest():
+        issues.append('structured_primary_support_not_established')
+    required_dimensions = {'concept','experiencer','polarity'}
+    if fact.requirement == 'therapy_completed':
+        required_dimensions.update({'action_type','action_state','completion_scope'})
+    contrary_dimensions = [row['dimension'] for row in source_check.get('dimension_checks', [])
+        if row['status'] == 'CONTRADICTED' and row['dimension'] in required_dimensions]
+    if source_check['status'] == 'CONFLICTED' or contrary_dimensions:
+        issues.append('source_counterevidence_' + source_check['status'].lower())
+    if fact.assertion is None:
+        issues.append('clinical_mapping_target_unknown')
+    semantics = proposal['semantics']
+    completion = None
+    if fact.requirement == 'therapy_completed' and fact.assertion is True:
+        event = source_check.get('source_assertion') or {}
+        dimensions = {row['dimension']:row['status'] for row in source_check.get('dimension_checks', [])}
+        # These are object/representation checks over an already located source
+        # event, not another reading of the note. A model may name the treatment
+        # in action_type; that is acceptable only for the same source-established
+        # object and an independently explicit whole-course completion event.
+        norm = lambda value:' '.join((value or '').casefold().split())
+        action_representation = ('source_action_type' if dimensions.get('action_type')=='SUPPORTED' else
+            'same_treatment_object' if norm(semantics.get('action_type'))==norm(clinical.get('concept'))
+            and norm(clinical.get('concept')) else 'unresolved')
+        same_primary_event = bool(spans) and any(
+            original['start'] < selected['end'] and original['end'] > selected['start']
+            for original in event.get('spans', []) for selected in spans)
+        course_equivalent = (semantics.get('completion_scope') in {'course','full_course'}
+            and event.get('completion_scope') in {'course','full_course'})
+        if (semantics.get('action_state') != 'completed'
+                or not course_equivalent or action_representation=='unresolved' or not same_primary_event
+                or not clinical.get('concept')
+                or event.get('action_state') not in {'completed','finished'}
+                or any(dimensions.get(key) != 'SUPPORTED' for key in
+                    ('concept','experiencer','polarity','action_state'))):
+            issues.append('requested_therapy_completed_course_object_not_source_established')
+        completion = {'concept':clinical['concept'], 'category':clinical['category'],
+            'action_type':semantics.get('action_type'), 'action_state':semantics.get('action_state'),
+            'completion_scope':semantics.get('completion_scope'), 'primary_support':spans,
+            'source_event':event,'course_object_contract':'careflow-completed-course-object/1',
+            'same_primary_source_event':same_primary_event,'whole_course_scope_equivalent':course_equivalent,
+            'action_representation':action_representation}
+    retained = [{**{k:span[k] for k in ('start','end','quote')}, 'source_id':source.source_id,
+        'source_text_sha256':proposal['source_sha256'],
+        'source_provenance_sha256':source_key(source.model_dump(mode='json'))} for span in spans]
+    context_bundle = [{**{k:span[k] for k in ('start','end','quote')},'source_id':source.source_id,
+        'original_source_unit_id':span['source_id'],'source_text_sha256':proposal['source_sha256'],
+        'source_provenance_sha256':source_key(source.model_dump(mode='json'))}
+        for span in clinical.get('provenance', [])]
+    return {'version':'careflow-structured-model-support/2', 'supported':not issues,
+        'method':'model_extracted', 'independently_source_verified':False,
+        'task_version':proposal['task_version'], 'source_sha256':proposal['source_sha256'],
+        'raw_response_sha256':proposal['raw_response_sha256'], 'wire_fact_id':anchor['wire_fact_id'],
+        'issues':issues,'supporting_spans':retained, 'completion_object':completion,
+        'evidence_bundle':{'version':'careflow-model-context-evidence-bundle/1',
+            'primary_source_unit_id':primary_id,'primary_spans':retained,'context_spans':context_bundle,
+            'interpretation':'Joint model-selected context, including question/answer units. Individual passages are not independently asserted to support the claim.'},
+        'required_counterevidence_dimensions':contrary_dimensions,
+        'quarantined_typed_fields':proposal['invalid_fields'],
+        'boundary':'Source-located Luna extraction consumed by documentation rules; not deterministic entailment or clinical expert certification.'}
+
+
 def _product_clinical_value(case, fact, clinical, source, binding_source):
     """Consume the original Luna proposal; external assessments are audit only.
 
@@ -618,19 +716,27 @@ def _product_clinical_value(case, fact, clinical, source, binding_source):
     """
     from ..evidence_bridge import verify_contextual_source_claim
     from .evidence import citation, source_dict
-    source_value, claim = clinical_verification_input(source, clinical)
+    source_value, claim = clinical_verification_input(source, clinical,
+        semantics=(clinical.get('structured_clinical_proposal') or {}).get('semantics')
+            if case.source_support_policy == 'luna-only-source-policy/7' else
+            clinical.get('clinical_semantics_v2') if case.source_support_policy == 'luna-only-source-policy/5' else None)
     interpretation = PRODUCT_SOURCE_INTERPRETATIONS[case.source_support_policy]
+    local_options = ({'risk_scope_version': 'source-local-proof/1'}
+                     if case.source_support_policy == 'luna-only-source-policy/5' else {})
     verification = verify_contextual_source_claim(source_value, claim, reviews=(),
         source_interpretation_version=interpretation,
-        event_comparability_version=PRODUCT_EVENT_COMPARABILITY[case.source_support_policy])
+        event_comparability_version=PRODUCT_EVENT_COMPARABILITY[case.source_support_policy], **local_options)
     main = verification
     # Duration/severity are optional for the current clinical-reason checklist.
     # The original values and their uncertain dimensions stay on the full result.
     if fact.requirement == 'referral_reason' and claim['attributes']:
         main = verify_contextual_source_claim(source_value, {**claim, 'attributes': {}}, reviews=(),
             source_interpretation_version=interpretation,
-            event_comparability_version=PRODUCT_EVENT_COMPARABILITY[case.source_support_policy])
+            event_comparability_version=PRODUCT_EVENT_COMPARABILITY[case.source_support_policy], **local_options)
     status = main['status']
+    extracted = None
+    if case.source_support_policy == 'luna-only-source-policy/7' and clinical.get('structured_clinical_proposal'):
+        extracted = _structured_model_support(clinical, source, fact, main)
     pos = next(i for i, item in enumerate(case.sources) if item.source_id == binding_source.source_id)
     ref = citation(EvidenceRef(source_id=binding_source.source_id, field='clinical_binding'),
         source_dict(binding_source, pos)).model_dump(mode='json')
@@ -641,9 +747,15 @@ def _product_clinical_value(case, fact, clinical, source, binding_source):
         if (event.get('completion_scope') not in {'course', 'full_course'}
                 or event.get('action_state') not in {'completed', 'finished'}):
             requirement_issues.append('requested_therapy_course_scope_not_established')
+    if extracted is not None:
+        requirement_issues = extracted['issues']
     supported = documentary or status == 'SUPPORTED_BY_SOURCE' and fact.assertion is not None and not requirement_issues
+    if extracted is not None and not documentary:
+        supported = extracted['supported']
     risk = main['risk_route']
     automatic = supported and (documentary or risk == 'AUTO_ACCEPT_ELIGIBLE' and nonempty(main.get('calibration_id')))
+    if extracted is not None:
+        automatic = supported
     preferred = []
     for span in main.get('supporting_spans', []) if main['status'] == 'SUPPORTED_BY_SOURCE' else []:
         if (0 <= span['start'] < span['end'] <= len(source.content)
@@ -652,11 +764,16 @@ def _product_clinical_value(case, fact, clinical, source, binding_source):
             preferred.append({**span, 'source_id': source.source_id,
                 'source_text_sha256': source_value['sha256'],
                 'source_provenance_sha256': source_key(source.model_dump(mode='json'))})
+    if extracted is not None and extracted['supported']:
+        preferred = extracted['supporting_spans']
     primary = clinical['evidence']
     primary_status = ('SUPPORTED_BY_SOURCE' if any(primary['start'] == s['start']
         and primary['end'] == s['end'] for s in preferred) else
         'CONTAINS_SOURCE_SUPPORT' if any(primary['start'] <= s['start'] < s['end'] <= primary['end']
         for s in preferred) else 'NOT_ESTABLISHED_AS_SUPPORTING_SPAN')
+    if extracted is not None and extracted['supported']:
+        primary_status = ('MODEL_SELECTED_SUPPORT' if any(primary['start']==s['start'] and primary['end']==s['end']
+            for s in preferred) else 'CONTAINS_MODEL_SELECTED_SUPPORT')
     # Actual rule evidence is bound to verified supporting spans, rather than
     # merely displaying a preferred passage while retaining an unrelated first
     # extraction quote as its proof. Original selections remain immutable.
@@ -665,8 +782,10 @@ def _product_clinical_value(case, fact, clinical, source, binding_source):
     source_dict_value = source_dict(source, source_position)
     semantic_refs = []
     semantic_citations = []
+    consumed_spans = (extracted['evidence_bundle']['context_spans']
+        if extracted is not None and extracted['supported'] else preferred)
     for anchor in line_anchors(source.source_id, source.content):
-        if not any(anchor['start'] < span['end'] and anchor['end'] > span['start'] for span in preferred):
+        if not any(anchor['start'] < span['end'] and anchor['end'] > span['start'] for span in consumed_spans):
             continue
         selected = EvidenceRef(source_id=source.source_id, span_id=anchor['span_id'])
         semantic_refs.append(selected.model_dump(mode='json'))
@@ -678,21 +797,28 @@ def _product_clinical_value(case, fact, clinical, source, binding_source):
         'retained_offline_review_count': (len(binding_source.content['atomic_support_reviews'])
             if isinstance(binding_source.content.get('atomic_support_reviews'), list) else 0),
         'boundary': 'Program source checks and declared documentary scope; no external AI approval or clinical expert certification.'}
+    if extracted is not None:
+        record['model_extraction_support'] = extracted
     # A contradictory fact does not disprove that its source document exists.
     # It remains visible as a clinical review issue rather than a false gap.
     issues = ([] if supported else requirement_issues or (
         ['clinical_mapping_target_unknown'] if fact.assertion is None else ['clinical_source_' + status.lower()]))
     return {'value': fact.assertion if supported else None,
-        'status': 'VERIFIED' if supported else 'DISPUTED' if status == 'CONFLICTED' else 'UNVERIFIED',
+        'status': 'MODEL_EXTRACTED' if supported and extracted is not None and not documentary else
+            'VERIFIED' if supported else 'DISPUTED' if status == 'CONFLICTED' else 'UNVERIFIED',
         'issues': issues, 'refs': [ref, *semantic_citations], 'method': case.source_support_policy, 'review': record,
         'source_verification': verification, 'clinical_source_support': status,
         'clinical_expert_validation': 'NOT_ESTABLISHED', 'auto_accept_eligible': automatic,
-        'risk_route': 'AUTO_ACCEPT_ELIGIBLE' if documentary else risk,
+        'risk_route': 'MODEL_EXTRACTED' if supported and extracted is not None and not documentary else
+            'AUTO_ACCEPT_ELIGIBLE' if documentary else risk,
         'readiness_review_required': supported and not automatic,
         'clinical_support_version': CLINICAL_SUPPORT_VERSION,
         'document_content_satisfaction': documentary,
         'preferred_source_evidence': preferred, 'primary_evidence_semantic_status': primary_status,
         'semantic_support_refs': semantic_refs, 'semantic_evidence_binding_version': 'careflow-semantic-evidence-binding/1',
+        **({'clinical_evidence_method':'model_extracted', 'independent_source_verification':False,
+            'model_extraction_support':extracted,'semantic_evidence_bundle':extracted['evidence_bundle']}
+            if extracted is not None else {}),
         'clinical_review_dimensions': [d['dimension'] for d in verification['dimension_checks']
             if d['status'] in {'UNVERIFIED', 'CONTRADICTED'}]}
 
@@ -739,7 +865,7 @@ def verify_requirement_support(case, fact, citations, *, derived_facts=()):
     clinical = _reviewed_clinical_value(case, fact, derived_facts) if case.clinical_bindings else None
     if clinical is not None:
         result.update(status=clinical['status'], effective_assertion=clinical['value'],
-            semantic_supports_requirement=clinical['status'] == 'VERIFIED', document_present=True,
+            semantic_supports_requirement=clinical['status'] in {'VERIFIED','MODEL_EXTRACTED'}, document_present=True,
             issues=clinical['issues'], source_refs=clinical['refs'], source_reviews=[clinical['review']],
             support_method=clinical['method'])
         for key in ('source_verification', 'clinical_source_support', 'clinical_expert_validation',
@@ -748,6 +874,9 @@ def verify_requirement_support(case, fact, citations, *, derived_facts=()):
                     'document_content_satisfaction', 'clinical_review_dimensions',
                     'preferred_source_evidence', 'primary_evidence_semantic_status',
                     'semantic_support_refs', 'semantic_evidence_binding_version'):
+            if key in clinical:
+                result[key] = clinical[key]
+        for key in ('clinical_evidence_method','independent_source_verification','model_extraction_support','semantic_evidence_bundle'):
             if key in clinical:
                 result[key] = clinical[key]
         return result
@@ -765,6 +894,36 @@ def verify_requirement_support(case, fact, citations, *, derived_facts=()):
         return result
     values = []
     for support_source, envelope in envelopes:
+        # The ordinary form adapter retains an original text, not a caller's
+        # truth vote. Reconstruct its fields before trusting a derived object.
+        holder = sources[support_source]
+        if holder['content'].get('adapter_version') == 'careflow-received-form/1':
+            from .material_intake import ReceivedMaterial, received_material_sources
+            try:
+                raw_document = holder['content']['original_document']
+                original = sources[raw_document['source_id']]
+                if available(original, case) or not isinstance(original['content'], str):
+                    raise ValueError('Original received form is unavailable')
+                document = ReceivedMaterial.model_validate_json(json.dumps({
+                    'document_id': original['source_id'], 'document_type': envelope.document_type,
+                    'received_at': original['available_at'], 'text': original['content']}))
+                rebuilt = next(s for s in received_material_sources(document, case.request) if s.source_id == support_source)
+                if rebuilt.content != holder['content'] or rebuilt.patient_id != holder['patient_id']:
+                    raise ValueError('Received form fields differ from original text')
+                result['document_present'] = True
+                if rebuilt.content['unparsed_document_lines']:
+                    result['issues'].append('received_form_contains_unparsed_content')
+                    result['unparsed_document_lines'] = rebuilt.content['unparsed_document_lines']
+                    continue
+                from ..claims_review.prepare import line_anchors
+                for anchor in line_anchors(original['source_id'], original['content']):
+                    if any(anchor['start'] == field['start'] and anchor['end'] == field['end']
+                           for field in holder['content']['original_field_evidence'].values()):
+                        result['source_refs'].append(citation(EvidenceRef(source_id=original['source_id'],
+                            span_id=anchor['span_id']), original).model_dump(mode='json'))
+            except (ValueError, TypeError, KeyError, StopIteration):
+                result['issues'].append('received_form_fields_not_bound_to_original_text')
+                continue
         if (any(getattr(envelope, field) != getattr(case.request, field) for field in SCOPE)
                 or envelope.requirement != fact.requirement or envelope.assertion is not fact.assertion):
             if any(getattr(envelope, field) != getattr(case.request, field) for field in SCOPE):
@@ -772,7 +931,7 @@ def verify_requirement_support(case, fact, citations, *, derived_facts=()):
             result['issues'].append('support_envelope_scope_or_assertion_mismatch')
             continue
         if envelope.review_status != 'source_confirmed':
-            if case.source_support_policy in {'luna-only-source-policy/3', 'luna-only-source-policy/4'}:
+            if case.source_support_policy in {'luna-only-source-policy/3', 'luna-only-source-policy/4', 'luna-only-source-policy/5', 'luna-only-source-policy/6', 'luna-only-source-policy/7'}:
                 # A retained opinion is neither counterevidence nor a missing
                 # document. Evaluate the original fields before deciding truth.
                 # Unknown original material stays unverified below; adequate

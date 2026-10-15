@@ -9,9 +9,10 @@ from .api import make_server
 from .contracts import Case, EvidenceUpdate
 from .evaluation.acceptance import verify_packet
 from .evaluation.corpus import canonical, write_once
+from ..claims_review.prepare import digest
 
 
-def run_http_workflow(database, output, case_path, update_path):
+def run_http_workflow(database, output, case_path, update_path, *, existing_runtime_case=False):
     case = Case.model_validate_json(Path(case_path).read_text(encoding='utf-8'))
     update = EvidenceUpdate.model_validate_json(Path(update_path).read_text(encoding='utf-8'))
     root = Path(output)
@@ -32,7 +33,10 @@ def run_http_workflow(database, output, case_path, update_path):
         return parsed
     route = '/v1/cases/' + quote(case.case_id, safe='')
     try:
-        before = call('POST', '/v1/cases', case.model_dump(mode='json'))
+        before = (call('GET', route) if existing_runtime_case else
+            call('POST', '/v1/cases', case.model_dump(mode='json')))
+        if existing_runtime_case and before['input_sha256'] != digest(case.model_dump(mode='json')):
+            raise ValueError('Existing runtime case differs from retained extraction input')
         basis = update.review or update.intake
         if update.expected_revision != before['revision'] or basis.basis_packet_sha256 != before['packet_sha256']:
             raise ValueError('Replay update does not reference the exact initial packet')

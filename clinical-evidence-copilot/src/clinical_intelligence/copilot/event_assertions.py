@@ -1,6 +1,6 @@
 """Versioned event/citation proposals layered on the existing fact contract."""
 from .models import digest
-from .source_adapter import TASK_VERSION
+from .source_adapter import TASK_VERSION, STRUCTURED_TASK_VERSION
 
 
 def checked_anchors(packet):
@@ -8,7 +8,7 @@ def checked_anchors(packet):
     if contract is None:
         return {}
     if (not isinstance(contract,dict) or set(contract)!={'version','source_sha256','assertions'} or
-            contract['version']!=TASK_VERSION or contract['source_sha256']!=packet.source.sha256 or
+            contract['version'] not in {TASK_VERSION,STRUCTURED_TASK_VERSION} or contract['source_sha256']!=packet.source.sha256 or
             not isinstance(contract['assertions'],list)):
         raise ValueError('Event assertion contract differs from the original source/version')
     facts={f.fact_id:f for f in packet.facts};records={}
@@ -18,7 +18,13 @@ def checked_anchors(packet):
             raise ValueError('Event assertion has unknown or duplicate fact identity')
         fact=facts[record['fact_id']]
         selected=[p['source_id'] for p in fact.original_fact['provenance']]
-        if record['selected_source_ids']!=selected or (
+        expected=record['selected_source_ids']
+        adopted=(packet.extraction_metadata.get('structured_extraction_contract',{}).get(
+            'primary_reference_application')=='model-selected-primary/1')
+        if contract['version']==STRUCTURED_TASK_VERSION and adopted and record['primary_source_id'] is not None:
+            primary=record['primary_source_id']
+            expected=[primary]+[identity for identity in expected if identity!=primary]
+        if expected!=selected or (
                 record['primary_source_id'] is not None and record['primary_source_id'] not in selected):
             raise ValueError('Primary source proposal must retain original ordered citations')
         records[record['fact_id']]=record
