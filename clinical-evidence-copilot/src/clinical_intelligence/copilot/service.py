@@ -12,6 +12,10 @@ from .models import Assertion, Conflict, Issue, Packet, ReviewRecord, SoapAssert
 
 ACTION_CATEGORIES = {'medication', 'procedure', 'treatment'}
 VERIFIED_PROJECTION = 'soap/v5'
+LAYERED_PROJECTION = 'soap/v6'
+PRODUCT_EVIDENCE_USAGE = 'luna-only-product/1'
+SOURCE_INTERPRETATION_VERSION = 'bounded-source-grammar/4'
+VERIFIED_PROJECTIONS = {VERIFIED_PROJECTION, LAYERED_PROJECTION}
 VERIFICATION_VERSION = 'copilot-source-verification/v1'
 DOCUMENTATION_GAP = re.compile(r'\b(?:not (?:documented|reported)|no (?:record|documentation|evidence)|unclear (?:if|whether)|unknown (?:if|whether))\b')
 NEGATED_ACTION = re.compile(r"\b(?:not|never|[a-z]+n['’]t)(?:\s+(?:actually|currently|yet|ever|been|being|previously|initially|still)){0,3}\s+(?:started|taken|taking|completed|performed|administered)\b")
@@ -19,6 +23,15 @@ COMPLETED_ACTION = re.compile(r'\b(?:completed|performed|administered|taken|took
 ONGOING_ACTION = re.compile(r'\b(?:ongoing|taking|currently used|current use)\b')
 DECLINED_ACTION = re.compile(r'\b(?:declined|refused|unwilling|cancelled|canceled|not proceeding)\b')
 COMMITTED_PLAN = re.compile(r'\b(?:scheduled|will start|will perform|will order|plan to|planned for|now planned)\b')
+
+
+def event_projection_policy(packet):
+    if packet.extraction_metadata.get('soap_projection_version') != LAYERED_PROJECTION:
+        return 'copilot-source-event-projection/1'
+    stored = packet.extraction_metadata.get('evidence_verification', {}).get('action_projection_policy', {}).get('version')
+    if stored is not None and stored not in {'copilot-source-event-projection/1','copilot-source-event-projection/2'}:
+        raise ValueError('Unsupported stored source event projection policy')
+    return stored or 'copilot-source-event-projection/2'
 
 
 def explicit_disposition(status):
@@ -95,7 +108,7 @@ def section(f, projection_version='soap/v2'):
         return 'S'
     if f.temporality == 'planned':
         return 'P'
-    if projection_version in {'soap/v2','soap/v3','soap/v4',VERIFIED_PROJECTION} and f.assertion_basis in {'patient_report','documented_history','discussion'}:
+    if projection_version in {'soap/v2','soap/v3','soap/v4',*VERIFIED_PROJECTIONS} and f.assertion_basis in {'patient_report','documented_history','discussion'}:
         return 'S'
     if f.assertion_basis == 'clinician_assessment' or f.category == 'diagnosis':
         return 'A'
@@ -109,14 +122,49 @@ def soap_section(item, projection_version):
     if f.experiencer!='patient':
         return 'S'
     nonplan_action = (item.action_status in {'not_completed','discussed','unknown'} if projection_version in {'soap/v3','soap/v4'}
-                      else item.action_status != 'planned' if projection_version == VERIFIED_PROJECTION else False)
+                      else item.action_status != 'planned' if projection_version in VERIFIED_PROJECTIONS else False)
     if nonplan_action and f.category in ACTION_CATEGORIES and f.temporality=='planned':
         return 'A' if f.assertion_basis=='clinician_assessment' else 'O' if f.assertion_basis=='clinician_observation' else 'S'
     return 'P' if item.action_status=='planned' and f.experiencer=='patient' else section(f,projection_version)
 
 
-def assertion_text(item, projection_version='soap/v1'):
+def assertion_text(item, projection_version='soap/v1', verification_record=None, presentation_version=None):
     f = item.assertion
+    if projection_version == LAYERED_PROJECTION:
+        record = verification_record or {}
+        components = record.get('components', {})
+        main = components.get('main_assertion', {}).get('status', 'INSUFFICIENT_EVIDENCE')
+        claim = record.get('proposed_claim', {})
+        values = [f.concept or 'Unnormalized source assertion',
+                  f'polarity={f.polarity}; time={f.temporality}; subject={f.experiencer}; basis={claim.get("reporting_basis", f.assertion_basis or "unknown")}']
+        if f.clinical_status:
+            values.append('clinical_status_proposal=' + f.clinical_status)
+        dimensions = {c['dimension']: c for c in record.get('result', {}).get('dimension_checks', [])}
+        attributes = claim.get('attributes', {})
+        # Metadata dictionaries may be canonically sorted by an exporter. Their
+        # insertion order must not change sealed SOAP text after JSON reload.
+        priority = ('severity','value','unit','duration','frequency') if record.get('semantic_proposal') else ('severity','duration','value','unit','frequency')
+        ordered_keys = [k for k in priority if k in attributes] + sorted(set(attributes)-set(priority))
+        if presentation_version == 'copilot-source-event-projection/1':
+            retained_order = [c['dimension'].split('.',1)[1] for c in record.get('result',{}).get('dimension_checks',[])
+                if c['dimension'].startswith('attributes.') and c['dimension'].split('.',1)[1] in attributes]
+            # This list is preserved across canonical JSON sorting and contains
+            # the original verified proposal order, unlike metadata dictionaries.
+            ordered_keys = list(dict.fromkeys(retained_order)) + [k for k in ordered_keys if k not in retained_order]
+        for key in ordered_keys:
+            value = attributes[key]
+            if value is not None:
+                status = dimensions.get('attributes.' + key, {}).get('status', 'UNVERIFIED')
+                values.append(f'{key}={value} [{status}]')
+        for key in ('event_time', 'completion_scope'):
+            if claim.get(key) is not None:
+                values.append(f'{key}={claim[key]} [{dimensions.get(key, {}).get("status", "UNVERIFIED")}]')
+        if f.category in ACTION_CATEGORIES:
+            values.append(f'source_event_state={item.action_status}; event_support={components.get("event", {}).get("status", "INSUFFICIENT_EVIDENCE")}')
+            if components.get('event',{}).get('modality'):
+                values.append('source_modality=' + components['event']['modality'] + '; no committed plan or execution asserted')
+        label = 'SOURCE-SUPPORTED ASSERTION' if main == 'SUPPORTED_BY_SOURCE' else 'DRAFT · ORIGINAL PROPOSAL'
+        return label + ' — ' + ' — '.join(values)
     if projection_version == VERIFIED_PROJECTION:
         # The extraction proposal is immutable. In particular, free-form status
         # is not covered by a source check of named clinical dimensions.
@@ -152,7 +200,20 @@ def shared_source_verifications(packet):
     previous = packet.extraction_metadata.get('evidence_verification', {})
     configuration = previous.get('configuration')
     if configuration is None:
-        configuration = verification_configuration()
+        if packet.extraction_metadata.get('soap_projection_version') == LAYERED_PROJECTION:
+            from ..evidence_bridge import verification_contextual_configuration
+            configuration = verification_contextual_configuration()
+            configuration['source_event_comparability_version'] = (
+                'distinct-source-event-comparability/4' if packet.extraction_metadata.get(
+                    'extraction_task_version') == 'clinical-event-assertions/1' else
+                'distinct-source-event-comparability/2')
+            configuration['main_assertion_scope_version'] = 'action-proposition-scope/2'
+        else:
+            configuration = verification_configuration()
+        if packet.extraction_metadata.get('evidence_usage') == PRODUCT_EVIDENCE_USAGE:
+            configuration['evidence_usage'] = PRODUCT_EVIDENCE_USAGE
+            configuration['source_interpretation_version'] = packet.extraction_metadata.get(
+                'source_interpretation_version', SOURCE_INTERPRETATION_VERSION)
     if not isinstance(configuration, dict) or not isinstance(configuration.get('calibrations'), list):
         raise ValueError('Source verification requires a frozen structured configuration')
     source = dict(source_id=packet.source.document_id, text=packet.source.text,
@@ -163,9 +224,24 @@ def shared_source_verifications(packet):
     if not isinstance(reviews, list) or any(not isinstance(review, dict) for review in reviews):
         raise ValueError('Source verification reviews must be retained structured records')
     routed_reviews = {}
+    product_only = configuration.get('evidence_usage') == PRODUCT_EVIDENCE_USAGE
+    interpretation_options = ({'source_interpretation_version': configuration['source_interpretation_version']}
+                              if 'source_interpretation_version' in configuration else {})
+    layered = packet.extraction_metadata.get('soap_projection_version') == LAYERED_PROJECTION
+    layered_events = layered and event_projection_policy(packet) == 'copilot-source-event-projection/2'
+    if layered:
+        from .semantics import apply_semantics, checked_records, split_verification
+        semantic_records = checked_records(packet)
+    from .event_assertions import checked_anchors, source_annotations
+    anchors=checked_anchors(packet)
     for item in packet.facts:
         fact = item.assertion
         proposed_action = action_status(fact, resolve_intent=True)
+        if layered_events and fact.category in ACTION_CATEGORIES and (fact.clinical_status or '').strip().casefold() in {'discussed','considered','hypothetical','conditional discussion'}:
+            # A proposal's future topic does not make its explicitly proposed
+            # discussion a committed plan. This normalizes the proposal only;
+            # the independent full-source proof still decides source_event_state.
+            proposed_action = 'discussed'
         # These are proposal qualifiers only. The verifier must independently
         # find them in the original source before returning support.
         status_words = set(re.findall(r'\w+', (fact.clinical_status or '').casefold()))
@@ -183,9 +259,45 @@ def shared_source_verifications(packet):
                       temporality=fact.temporality, event_time=None, action_type=action_type,
                       action_state=proposed_action, completion_scope=completion_scope,
                       attributes={k: v for k, v in (fact.attributes.model_dump() if fact.attributes else {}).items() if v is not None})
+        if layered:
+            semantic_record = semantic_records.get(item.fact_id)
+            raw_changed = fact.model_dump() != item.original_fact
+            stale_semantics = bool(raw_changed and semantic_record and semantic_record['origin'] in {
+                'original_source_review_claim','original_versioned_extraction'})
+            claim = apply_semantics(claim, None if stale_semantics else semantic_record)
+            originals = packet.extraction_metadata.get('source_review_original_claims', [])
+            original = next((r for r in originals if r.get('claim_id') == item.fact_id), None)
+            if original is not None:
+                from ..evidence_bridge import verification_package
+                core = verification_package()
+                original = core.Claim.model_validate(original).model_dump(mode='json')
+                if (original['source_id'] != source['source_id'] or original['patient_id'] != source['patient_id'] or
+                        original['encounter_id'] != source['encounter_id'] or
+                        not all(0 <= s['start'] < s['end'] <= len(source['text']) and source['text'][s['start']:s['end']]==s['quote'] for s in original['spans'])):
+                    raise ValueError('Original source-review claim identity/span binding differs from retained source')
+                original_fingerprint = digest(original)
+                if not any(r.get('source_hash') == source['sha256'] and r.get('claim_fingerprint') == original_fingerprint and
+                        r.get('source_id') == source['source_id'] and r.get('patient_id') == source['patient_id'] and
+                        r.get('encounter_id') == source['encounter_id'] for r in reviews):
+                    raise ValueError('Original source-review claim requires its original hash-bound review')
+                if not raw_changed and semantic_record and semantic_record['origin'] == 'original_source_review_claim':
+                    for key, value in claim.items():
+                        if key == 'certainty':
+                            continue  # Preserved original proposal, not an inferred certainty.
+                        expected = original[key]
+                        if key == 'polarity':
+                            value = {'affirmed':'present'}.get(value,value)
+                            expected = {'affirmed':'present'}.get(expected,expected)
+                        if value != expected:
+                            raise ValueError('Original source-review claim differs from the current typed assertion: ' + key)
+                    claim = original
         claim_fingerprint = digest(claim)
         matched_reviews = []
         for index, review in enumerate(reviews):
+            # Offline model opinions are retained for audit, never a product
+            # entailment oracle. Human review remains an explicit user action.
+            if product_only and review.get('reviewer_type') != 'human':
+                continue
             if (review.get('source_id') == source['source_id'] and
                     review.get('source_hash') == source['sha256'] and
                     review.get('claim_fingerprint') == claim_fingerprint and
@@ -195,27 +307,70 @@ def shared_source_verifications(packet):
                 routed_reviews[index] = item.fact_id
         # Merely matching this envelope is not validation of the judgment. The
         # shared engine separately verifies all required dimension/citation proofs.
-        result = verify_source_claim(source, claim, reviews=matched_reviews,
-                                     calibrations=configuration['calibrations'])
+        contextual = layered and 'contextual_calibrations' in configuration
+        if contextual:
+            from ..evidence_bridge import verify_contextual_source_claim
+            result = verify_contextual_source_claim(source, claim, reviews=matched_reviews,
+                calibrations=configuration['contextual_calibrations'],
+                event_comparability_version=configuration.get('source_event_comparability_version'), **interpretation_options)
+        else:
+            result = verify_source_claim(source, claim, reviews=matched_reviews,
+                                         calibrations=configuration['calibrations'], **interpretation_options)
         if result.get('engine_version') != configuration.get('engine_version'):
             raise ValueError('Frozen source verification engine version is unavailable')
-        results.append({'fact_id': item.fact_id, 'proposed_claim': claim,
-                        'result': result})
+        record = {'fact_id': item.fact_id, 'proposed_claim': claim, 'result': result}
+        if layered:
+            record['components'] = split_verification(record)
+            if not layered_events:
+                record['components']['event'].pop('modality',None)
+                record['components']['event'].pop('interpretation',None)
+            if contextual:
+                # The main assertion is independently checked without claiming
+                # uncertain attribute or execution dimensions. Full-claim review
+                # fingerprints are deliberately not rebound to this subset.
+                main_claim = {**claim, 'attributes':{}, 'event_time':None,
+                    'action_type':None, 'action_state':'unknown','completion_scope':None}
+                if (configuration.get('main_assertion_scope_version') == 'action-proposition-scope/2'
+                        and fact.category in ACTION_CATEGORIES):
+                    # The event type identifies the proposition: dropping it
+                    # would compare prescription presence with administration
+                    # absence again. Unknown attributes can still be separated.
+                    main_claim['action_type'] = claim['action_type']
+                main_result = verify_contextual_source_claim(source,main_claim,
+                    calibrations=configuration['contextual_calibrations'],
+                    event_comparability_version=configuration.get('source_event_comparability_version'), **interpretation_options)
+                record['main_claim'] = main_claim
+                record['main_result'] = main_result
+                record['components']['main_automatic_eligible'] = main_result['risk_route'] == 'AUTO_ACCEPT_ELIGIBLE'
+                if main_result['status'] == 'SUPPORTED_BY_SOURCE' and result['status'] not in {'CONTRADICTED','CONFLICTED'}:
+                    from .semantics import component_result, MAIN_DIMENSIONS
+                    record['components']['main_assertion'] = component_result(main_result,MAIN_DIMENSIONS)
+            if item.fact_id in semantic_records:
+                record['semantic_proposal'] = semantic_records[item.fact_id]
+                if stale_semantics:
+                    record['semantic_application'] = 'UNAPPLIED_AFTER_FACT_CORRECTION'
+        if item.fact_id in anchors:
+            record.update(source_annotations(packet,item,claim,result,anchors[item.fact_id],record.get('main_result')))
+        results.append(record)
     return {'version': VERIFICATION_VERSION, 'source_sha256': packet.source.sha256,
             'patient_id': packet.patient_id, 'encounter_id': packet.case_id, 'assertions': results,
             'configuration': configuration,
             'action_projection_policy': {
-                'version': 'copilot-source-event-projection/1',
+                'version': event_projection_policy(packet),
                 'required_supported_dimensions': ['concept', 'action_state'],
                 'blocking_contradictions': ['category', 'experiencer', 'polarity', 'temporality',
                                             'event_time', 'action_type', 'action_state', 'completion_scope'],
-                'interpretation': 'A locally supported source event can be projected while whole-fact support remains insufficient. Unknown subject/time/basis are retained for review; no clinical or whole-fact certification.'},
+                'interpretation': ('An independently supported conditional discussion with matched subject/concept is retained as discussed even while clinical/time attributes require review; it never becomes committed plan or execution. '
+                    if layered_events else '') + 'A locally supported source event can be projected while whole-fact support remains insufficient. Unknown subject/time/basis are retained for review; no clinical or whole-fact certification.'},
             'source_reviews_application': [
                 {'review_id': review.get('review_id'),
                  'fact_id': routed_reviews.get(index),
-                 'status': 'ROUTED_TO_SHARED_VALIDATION' if index in routed_reviews else 'UNAPPLIED_BINDING',
+                 'status': ('OFFLINE_EVALUATION_ONLY' if product_only and review.get('reviewer_type') != 'human'
+                            else 'ROUTED_TO_SHARED_VALIDATION' if index in routed_reviews else 'UNAPPLIED_BINDING'),
                  'reason': 'Exact original source/complete claim envelope matches; shared validation still applies.'
-                           if index in routed_reviews else 'Original source, patient, encounter or complete claim fingerprint does not match. Original review is retained.'}
+                           if index in routed_reviews else 'Offline model review cannot determine product fact adoption.'
+                           if product_only and review.get('reviewer_type') != 'human'
+                           else 'Original source, patient, encounter or complete claim fingerprint does not match. Original review is retained.'}
                 for index, review in enumerate(reviews)],
             'clinical_expert_validation': 'NOT_PERFORMED',
             'interpretation': 'Source support of explicit dimensions is separate from original clinical proposals, reviewer opinion and clinical expert validation.'}
@@ -253,6 +408,38 @@ def verified_action_state(record):
     return state if state in {'planned','completed','not_completed','ongoing','discussed'} else 'unknown'
 
 
+def layered_action_state(record):
+    """Retain a proved conditional discussion without claiming plan/execution."""
+    state = verified_action_state(record)
+    if state != 'unknown':
+        return state
+    result = record['result']
+    checks = {c['dimension']:c for c in result.get('dimension_checks',[])}
+    if result['status'] == 'CONFLICTED':
+        return 'unknown'
+    if all(checks.get(k,{}).get('status') == 'SUPPORTED' for k in ('concept','action_state','experiencer')) and checks['action_state'].get('source_value') == 'discussed':
+        if not any(checks.get(k,{}).get('status') == 'CONTRADICTED' for k in ('category','concept','experiencer','polarity')):
+            return 'discussed'
+    return 'unknown'
+
+
+def explicit_human_acceptance(packet, item, record):
+    """A user's supported-fact review is distinct from automatic eligibility.
+
+    Store revisions retain the identical source/patient and immutable review
+    graph. Acceptance cannot clear a missing, contradicted or conflicted source
+    dimension; changing facts/typed proposals invalidates the accepted status.
+    """
+    if (packet.extraction_metadata.get('evidence_usage') != PRODUCT_EVIDENCE_USAGE or
+            item.review_status != 'accepted' or record['result']['status'] != 'SUPPORTED_BY_SOURCE' or
+            record['result'].get('source_hash') != packet.source.sha256):
+        return False
+    review = next((r for r in reversed(packet.reviews) if r.fact_id == item.fact_id), None)
+    return bool(review and review.action == 'accept' and review.reviewer.reviewer_type == 'human' and
+        review.after == item.assertion.model_dump() and set(review.evidence_ids) <= set(item.evidence_ids) and
+        review.applied_version <= packet.version)
+
+
 def validate_v5_projection(packet):
     """Integrity check for the new contract, leaving v1-v4 readers unchanged."""
     expected = shared_source_verifications(packet)
@@ -272,25 +459,44 @@ def validate_v5_projection(packet):
     return expected
 
 
+def validate_v6_projection(packet):
+    """Only the opt-in layered packet contract can carry new semantic proposals."""
+    expected = shared_source_verifications(packet)
+    if packet.extraction_metadata.get('evidence_verification') != expected:
+        raise ValueError('Layered source verification differs from retained source/facts')
+    from .atomic import validate_checklist
+    validate_checklist(packet.extraction_metadata.get('atomic_source_checklist', {}),packet)
+    records = {r['fact_id']: r for r in expected['assertions']}
+    for item in packet.facts:
+        record = records[item.fact_id]
+        state = layered_action_state(record) if event_projection_policy(packet) == 'copilot-source-event-projection/2' else verified_action_state(record)
+        if item.action_status != state:
+            raise ValueError('Action state differs from layered source-verified projection')
+        if (not record['components']['automatic_eligible'] and not explicit_human_acceptance(packet,item,record)
+                and item.fact_id not in packet.review_required_fact_ids):
+            raise ValueError('Uncalibrated or unresolved source judgment requires targeted review')
+    return expected
+
+
 def project(packet):
     # Recompute derived views after corrections; historical review records remain intact.
     packet.issues = [i for i in packet.issues if not i.fact_ids]
     packet.conflicts = []
     projection_version=packet.extraction_metadata.get('soap_projection_version','soap/v1')
     verification_records = {}
-    if projection_version == VERIFIED_PROJECTION:
+    if projection_version in VERIFIED_PROJECTIONS:
         verified = shared_source_verifications(packet)
         packet.extraction_metadata['evidence_verification'] = verified
         verification_records = {row['fact_id']: row for row in verified['assertions']}
         packet.extraction_metadata['semantic_detector_candidates'] = []
     grouped = defaultdict(list)
     for item in packet.facts:
-        findings = inspect_semantics(item,resolve_intent=projection_version in {'soap/v3','soap/v4',VERIFIED_PROJECTION})
-        if projection_version == VERIFIED_PROJECTION:
+        findings = inspect_semantics(item,resolve_intent=projection_version in {'soap/v3','soap/v4',*VERIFIED_PROJECTIONS})
+        if projection_version in VERIFIED_PROJECTIONS:
             packet.extraction_metadata['semantic_detector_candidates'].append({
                 'fact_id': item.fact_id, 'candidates': [finding.model_dump() for finding in findings]})
             findings = []
-        if projection_version in {'soap/v4', VERIFIED_PROJECTION}:
+        if projection_version in {'soap/v4', *VERIFIED_PROJECTIONS}:
             from .action_state import inspect_action, attribute_scope_warnings, VERSION as action_version
             detector_version = packet.extraction_metadata.get('action_state_checklist',{}).get('version',action_version)
             detected = inspect_action(item, packet.source,version=detector_version)
@@ -299,12 +505,15 @@ def project(packet):
             else:
                 record = verification_records[item.fact_id]
                 result = record['result']
-                item.action_status = verified_action_state(record)
+                item.action_status = layered_action_state(record) if projection_version == LAYERED_PROJECTION and event_projection_policy(packet) == 'copilot-source-event-projection/2' else verified_action_state(record)
                 status = result['status']
                 if status != 'SUPPORTED_BY_SOURCE' or result['risk_route'] != 'AUTO_ACCEPT_ELIGIBLE':
-                    findings.append(issue('source_' + status.lower(), [item],
+                    human_accepted = explicit_human_acceptance(packet,item,record)
+                    findings.append(issue('source_human_reviewed' if human_accepted else 'source_' + status.lower(), [item],
+                        ('Targeted dimensions: ' + ', '.join(record['components']['review_targets']) + '. '
+                         if projection_version == LAYERED_PROJECTION else '') +
                         'Inspect targeted source verification: ' + '; '.join(result.get('reasons', [])),
-                        'high' if status in {'CONTRADICTED', 'CONFLICTED'} else 'review'))
+                        'info' if human_accepted else 'high' if status in {'CONTRADICTED', 'CONFLICTED'} else 'review'))
                 if status == 'CONFLICTED':
                     packet.conflicts.append(Conflict(
                         conflict_id='source-conflict-' + digest([item.fact_id, result.get('counter_spans', [])])[:16],
@@ -317,20 +526,43 @@ def project(packet):
             if any(a['boundary_discrepancy'] and any(p.start < a['end'] and a['start'] < p.end for p in item.assertion.provenance) for a in annotations):
                 findings.append(issue('source_speaker_boundary_unverified',[item], 'Preserve the raw source label. The legacy source index assigns another turn label; speaker role and experiencer require independent review.', 'high'))
         packet.issues.extend(findings)
-        if projection_version not in {'soap/v4', VERIFIED_PROJECTION}:
+        if projection_version not in {'soap/v4', *VERIFIED_PROJECTIONS}:
             item.action_status = action_status(item.assertion, prospective_mismatch=any(i.code == 'prospective_action_mismatch' for i in findings),resolve_intent=projection_version=='soap/v3')
         f = item.assertion
         if f.concept:
-            grouped[(f.concept.casefold(), f.experiencer, f.temporality)].append(item)
+            event_scope = None
+            if packet.extraction_metadata.get('evidence_usage') == PRODUCT_EVIDENCE_USAGE:
+                record = verification_records.get(item.fact_id, {})
+                checks = {c['dimension']: c for c in record.get('result', {}).get('dimension_checks', [])}
+                event_check = checks.get('event_time', {})
+                # Different source-confirmed times describe separate events.
+                # Unverified time proposals cannot conceal a real conflict.
+                if event_check.get('status') == 'SUPPORTED':
+                    event_scope = event_check.get('source_value')
+            grouped[(f.concept.casefold(), f.experiencer, f.temporality, event_scope)].append(item)
     for group in grouped.values():
         if {'present', 'absent'} <= {f.assertion.polarity for f in group}:
             ids = [f.fact_id for f in group]
+            if packet.extraction_metadata.get('evidence_usage') == PRODUCT_EVIDENCE_USAGE:
+                proved = []
+                for f in group:
+                    checks = {c['dimension']: c for c in verification_records[f.fact_id]['result']['dimension_checks']}
+                    proved.append(all(checks.get(k, {}).get('status') == 'SUPPORTED'
+                                      for k in ('concept', 'experiencer', 'polarity', 'temporality')))
+                if not all(proved):
+                    packet.conflicts.append(Conflict(conflict_id='proposal-conflict-' + digest(ids)[:16], fact_ids=ids,
+                        reason='Unresolved opposition between extracted proposals; source conflict is NOT_CONFIRMED. Incomplete program interpretations are not source counterevidence.'))
+                    packet.issues.append(issue('opposing_proposals_scope_review', group,
+                        'The extracted proposals have opposing polarities. Verify each complete predicate and event scope; incomplete program interpretations are not confirmed source conflict.', 'review'))
+                    continue
             packet.conflicts.append(Conflict(conflict_id='c-' + digest(ids)[:16], fact_ids=ids,
                 reason='Opposing polarities in the same documented subject and time scope; no automatic winner.'))
             packet.issues.append(issue('conflicting_assertions', group, 'Do these assertions describe different events, or a real unresolved conflict?', 'high'))
     flagged = {f for i in packet.issues if i.severity != 'info' for f in i.fact_ids}
     source_blocked = {identity for identity, row in verification_records.items()
-                      if row['result']['status'] != 'SUPPORTED_BY_SOURCE'}
+                      if (not row['components']['automatic_eligible'] and not explicit_human_acceptance(packet,
+                          next(f for f in packet.facts if f.fact_id==identity),row) if projection_version == LAYERED_PROJECTION
+                          else row['result']['status'] != 'SUPPORTED_BY_SOURCE')}
     packet.review_required_fact_ids = [f.fact_id for f in packet.facts if
         f.fact_id in source_blocked or f.review_status in {'questioned', 'escalated'} or
         (f.fact_id in flagged and f.review_status != 'accepted')]
@@ -338,7 +570,7 @@ def project(packet):
     packet.soap = {s: [] for s in 'SOAP'}
     for item in packet.facts:
         s = soap_section(item,projection_version)
-        packet.soap[s].append(SoapAssertion(text=assertion_text(item,projection_version), fact_ids=[item.fact_id],
+        packet.soap[s].append(SoapAssertion(text=assertion_text(item,projection_version,verification_records.get(item.fact_id),event_projection_policy(packet)), fact_ids=[item.fact_id],
             evidence_ids=item.evidence_ids, review_status=item.review_status,
             requires_review=item.fact_id in packet.review_required_fact_ids))
     return packet.seal()
@@ -347,10 +579,14 @@ def project(packet):
 def build_packet(case_id, patient_id, source, extraction, *, extraction_error=None, metadata=None, projection_version=None):
     source.verify()
     projection_version = projection_version or (metadata or {}).get('soap_projection_version', 'soap/v4')
-    if projection_version not in {'soap/v1','soap/v2','soap/v3','soap/v4',VERIFIED_PROJECTION}:
+    if projection_version not in {'soap/v1','soap/v2','soap/v3','soap/v4',*VERIFIED_PROJECTIONS}:
         raise ValueError('Unsupported SOAP projection version')
     p = Packet(case_id=case_id, patient_id=patient_id, source=source, extraction_status='valid',
                extraction_metadata={**(metadata or {}), 'soap_projection_version': projection_version})
+    if projection_version == LAYERED_PROJECTION and p.extraction_metadata.get('evidence_usage') != 'offline-evaluation/1':
+        p.extraction_metadata.setdefault('evidence_usage', PRODUCT_EVIDENCE_USAGE)
+        p.extraction_metadata.setdefault('source_interpretation_version', SOURCE_INTERPRETATION_VERSION)
+        p.extraction_metadata.setdefault('coverage_alignment_version', 'copilot-source-alignment-triage/2')
     if extraction_error is not None or extraction is None:
         p.extraction_status = 'failed'
         p.issues.append(issue('extraction_failure', [], extraction_error or 'No extraction received.', 'high'))
@@ -361,6 +597,7 @@ def build_packet(case_id, patient_id, source, extraction, *, extraction_error=No
         raise ValueError('Extraction document_id differs from source')
     if not isinstance(extraction.get('facts'), list):
         raise ValueError('Expected extraction facts list')
+    accepted_indices = []
     for index, raw in enumerate(extraction['facts']):
         try:
             f, spans = ground_fact(raw, source)
@@ -370,6 +607,7 @@ def build_packet(case_id, patient_id, source, extraction, *, extraction_error=No
         item = Assertion(fact_id='f-' + digest([case_id, source.sha256, index, f.model_dump()])[:20],
             original_fact=f.model_dump(), assertion=f, evidence_ids=[e.evidence_id for e in spans])
         p.facts.append(item)
+        accepted_indices.append(index)
         seen = {e.evidence_id for e in p.evidence}
         for e in spans:
             if e.evidence_id not in seen:
@@ -378,6 +616,52 @@ def build_packet(case_id, patient_id, source, extraction, *, extraction_error=No
     if p.rejected_facts:
         p.extraction_status = 'partial' if p.facts else 'invalid'
         p.issues.append(issue('rejected_evidence', [], 'Some proposed facts failed validation. Inspect rejected_facts; they are excluded from SOAP.', 'high'))
+    if extraction.get('clinical_semantics') is not None:
+        if projection_version != LAYERED_PROJECTION:
+            raise ValueError('New clinical semantics requires explicit soap/v6')
+        from .semantics import SemanticsRecord
+        proposals = extraction['clinical_semantics']
+        if not isinstance(proposals,list) or len(proposals) != len(extraction['facts']):
+            raise ValueError('Every input v2 fact needs an explicit semantic proposal')
+        records = []
+        seen_indices = set()
+        accepted_by_index = dict(zip(accepted_indices, p.facts))
+        for proposal in proposals:
+            if (not isinstance(proposal, dict) or set(proposal) != {'fact_index','semantics'} or
+                    type(proposal['fact_index']) is not int or
+                    not 0 <= proposal['fact_index'] < len(extraction['facts']) or
+                    proposal['fact_index'] in seen_indices):
+                raise ValueError('Clinical semantics index differs from input fact or is duplicated')
+            seen_indices.add(proposal['fact_index'])
+            from .semantics import ClinicalSemanticsV2
+            semantics = ClinicalSemanticsV2.model_validate(proposal['semantics'])
+            item = accepted_by_index.get(proposal['fact_index'])
+            if item is None:
+                continue  # Rejected raw facts cannot donate attributes to a neighbor.
+            records.append(SemanticsRecord(fact_id=item.fact_id,
+                source_sha256=source.sha256,semantics=semantics,
+                origin='original_versioned_extraction').model_dump(mode='json'))
+        p.extraction_metadata['clinical_semantics_v2'] = records
+    contract=extraction.get('event_assertion_contract')
+    if contract is not None:
+        from .source_adapter import TASK_VERSION
+        if (projection_version!=LAYERED_PROJECTION or not isinstance(contract,dict) or
+                set(contract)!={'version','source_sha256','assertions'} or contract['version']!=TASK_VERSION or
+                contract['source_sha256']!=source.sha256 or not isinstance(contract['assertions'],list) or
+                len(contract['assertions'])!=len(extraction['facts'])):
+            raise ValueError('Event assertion proposals require the exact typed source contract')
+        by_index=dict(zip(accepted_indices,p.facts));records=[];seen=set()
+        for proposal in contract['assertions']:
+            if (set(proposal)!={'fact_index','primary_source_id','selected_source_ids'} or
+                    type(proposal['fact_index']) is not int or proposal['fact_index'] in seen or
+                    not 0<=proposal['fact_index']<len(extraction['facts'])):
+                raise ValueError('Event assertion proposal has invalid input fact identity')
+            seen.add(proposal['fact_index'])
+            if proposal['fact_index'] in by_index:
+                records.append({'fact_id':by_index[proposal['fact_index']].fact_id,
+                    'primary_source_id':proposal['primary_source_id'],'selected_source_ids':proposal['selected_source_ids']})
+        p.extraction_metadata['event_assertion_contract']={**contract,'assertions':records}
+        p.extraction_metadata['extraction_task_version']=TASK_VERSION
     for index, relationship in enumerate(extraction.get('relationships', [])):
         # Preserve the source proposal, but do not infer new clinical prose from it.
         p.relationships.append({'relationship_id': f'r-{index:04d}', 'original': relationship,
@@ -486,7 +770,7 @@ def compare_packets(before, after, *, comparison_version=None):
     if before.patient_id != after.patient_id:
         raise ValueError('Cannot compare different patient identities')
     comparison_version = comparison_version or ('clinical-evidence-comparison/v3' if any(
-        packet.extraction_metadata.get('soap_projection_version') == VERIFIED_PROJECTION
+        packet.extraction_metadata.get('soap_projection_version') in VERIFIED_PROJECTIONS
         for packet in (before, after)) else 'clinical-evidence-comparison/v2')
     if comparison_version not in {'clinical-evidence-comparison/v2', 'clinical-evidence-comparison/v3'}:
         raise ValueError('Unsupported document comparison version')

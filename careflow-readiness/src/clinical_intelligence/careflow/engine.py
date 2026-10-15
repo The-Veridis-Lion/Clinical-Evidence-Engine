@@ -5,22 +5,29 @@ from pathlib import Path
 from ..claims_review.contracts import Citation, CriterionResult
 from ..claims_review.prepare import digest
 from .evidence import prepare, available
-from .rules import ruleset
+from .rules import ruleset, documentation_decision
 
 _LOADED_IMPLEMENTATION_SHA256 = hashlib.sha256(Path(__file__).read_bytes()).hexdigest()
 
 
 def state(facts):
     values = {value for f in facts for value in f['effective_assertions'] if value is not None}
-    if (any(f['reconciliation_status'] in {'CONFLICTED', 'UNRESOLVED'} for f in facts)
+    unresolved = [f for f in facts if f['reconciliation_status'] in {'CONFLICTED', 'UNRESOLVED'}]
+    # An amendment chain containing no source-established value cannot veto a
+    # separate, complete original document. A chain involving a verified value
+    # still fails closed, as does unresolved authority without any other proof.
+    authority_conflict = unresolved and (not values or any(
+        any(v is not None for v in f['effective_assertions']) for f in unresolved))
+    if (authority_conflict
             or any(f.get('request_identity_conflict') for f in facts) or len(values) > 1):
         return 'CONFLICTED'
     if any(f.get('requirement_support', {}).get('status') == 'DISPUTED'
            and f['reconciliation_status'] != 'AMENDED' for f in facts):
         return 'CONFLICTED'
-    if any(f.get('requirement_support', {}).get('status') == 'UNVERIFIED'
-           and f['assertion'] is not None and f['reconciliation_status'] != 'AMENDED' for f in facts):
-        return 'INSUFFICIENT_EVIDENCE'
+    # Unverified proposals have effective_assertions=[None]. They remain visible
+    # for correction, but cannot veto independently established true/false
+    # material or create a conflict. A source-supported disputed claim above
+    # still fails closed. Required-target completeness is checked separately.
     if values == {True}:
         return 'SUPPORTED'
     if values == {False}:
@@ -82,26 +89,13 @@ def evaluate(case, *, revision=1):
         trigger_facts = [f for f in facts if f['requirement'] == rule.trigger_requirement]
         trigger_state = state(trigger_facts) if rule.trigger_requirement else 'SUPPORTED'
         selected = support + trigger_facts
-        trigger_value = True if not rule.trigger_requirement else (
-            True if trigger_state == 'SUPPORTED' else False if trigger_state == 'NOT_SUPPORTED' else None)
         status = state(support)
         if status == 'SUPPORTED' and any(d.get('required_target_incomplete') and d['binding']['requirement'] == rule.requirement
                 and any(not any(v is not None for v in f['effective_assertions']) for f in support
                         if f['fact_id'] in d['derived_fact_ids']) for d in mapping_decisions):
             status = 'INSUFFICIENT_EVIDENCE'
-        reason = {
-            'SUPPORTED': 'Traceable assertions support the required document or fact.',
-            'NOT_SUPPORTED': 'Explicit contrary evidence is documented; this is not an absence inference.',
-            'INSUFFICIENT_EVIDENCE': 'Required material is missing, unknown, unavailable, or not grounded.',
-            'CONFLICTED': 'Relevant assertions or amendment authority remain unresolved.',
-        }[status]
-        if rule.trigger_requirement:
-            if trigger_state == 'CONFLICTED':
-                status, reason = 'CONFLICTED', 'The requirement trigger has unresolved contradictory evidence.'
-            elif trigger_value is False:
-                status, reason = 'NOT_APPLICABLE', 'Source-linked explicit false trigger establishes inapplicability.'
-            elif trigger_value is None:
-                status, reason = 'INSUFFICIENT_EVIDENCE', 'Applicability is unknown; missing triggers cannot waive a requirement.'
+        status, reason, trigger_value = documentation_decision(
+            status, trigger_state=trigger_state if rule.trigger_requirement else None)
         questions = []
         missing = []
         if status == 'INSUFFICIENT_EVIDENCE':
@@ -118,6 +112,9 @@ def evaluate(case, *, revision=1):
             questions = [f'Is the explicit contrary assertion for {rule.requirement} still correct? Supply new evidence for any correction.']
         elif status == 'CONFLICTED':
             questions = [f'Which source explicitly corrects the disputed {rule.requirement} or its trigger, with scoped authority?']
+        for fact in selected:
+            for opinion in fact.get('requirement_support', {}).get('reviewer_opinions', []):
+                questions.append(f"Review {fact['fact_id']} / {opinion['source_id']}: " + opinion['question'])
         pending_review = [f['fact_id'] for f in selected
                           if f['reconciliation_status'] != 'AMENDED'
                           and f.get('requirement_support', {}).get('readiness_review_required')]
@@ -130,7 +127,7 @@ def evaluate(case, *, revision=1):
             verification_reviews.append({'rule_id': rule.rule_id, 'fact_ids': pending_review,
                                          'reason': 'Source supported; automatic processing threshold is not established.'})
         refs = {digest(c): Citation.model_validate_json(json.dumps(c))
-                for f in selected for c in f['citations']}
+                for f in selected for c in f.get('requirement_citations', f['citations'])}
         conflicts = ([{'fact_ids': [f['fact_id'] for f in selected],
                        'reason': reason, 'resolution': 'unresolved'}] if status == 'CONFLICTED' else [])
         criterion = CriterionResult(
@@ -153,6 +150,8 @@ def evaluate(case, *, revision=1):
     risk_reasons = [f"{c['rule_id']}:{c['status']}" for c in checks if c['status'] in {'CONFLICTED', 'NOT_SUPPORTED'}]
     risk_reasons += [f"unresolved_assertions:{c['requirement']}" for c in unresolved]
     risk_reasons += [f"source_verification_review:{r['rule_id']}" for r in verification_reviews]
+    risk_reasons += [f"document_review_opinion:{f['fact_id']}" for f in facts
+                     if f.get('requirement_support', {}).get('reviewer_opinions')]
     if any(f.amends_fact_id for f in case.facts):
         risk_reasons.append('fact_correction_present')
     if any(f['reason'] == 'ungrounded_citation' for f in excluded):
@@ -176,7 +175,10 @@ def evaluate(case, *, revision=1):
                          'reviewer_types': ['human', 'advanced_ai'], 'mandatory': False},
         'input_sha256': digest(case.model_dump(mode='json')),
         'execution': {'research_model_calls': 0, 'product_model_calls': 0,
-                      'note_extraction': 'supplied_assertions_only', 'deterministic_rules': True},
+                      'note_extraction': 'supplied_assertions_only', 'deterministic_rules': True,
+                      **({'source_support_policy': case.source_support_policy,
+                          'runtime_model': 'gpt-6-luna', 'external_ai_review_consumed': False}
+                         if case.source_support_policy else {})},
         'decision_boundary': manifest['boundary'],
         'interpretation_limit': 'Exact provenance validates location. Requirement support additionally verifies '
                                 'versioned structured material fields or an explicit source-atomic review. '

@@ -11,7 +11,8 @@ class VersionConflict(ValueError):
 
 def validate_verified_revision(old, packet, record):
     """Permit an audited source correction while retaining original extraction bytes."""
-    if packet.extraction_metadata.get('soap_projection_version') != 'soap/v5':
+    projection=old.extraction_metadata.get('soap_projection_version')
+    if projection not in {'soap/v5','soap/v6'} or packet.extraction_metadata.get('soap_projection_version') != projection:
         raise ValueError('Cannot change the projection contract during a review')
     original_ids = [f.fact_id for f in old.facts]
     if [f.fact_id for f in packet.facts[:len(old.facts)]] != original_ids:
@@ -57,6 +58,25 @@ def validate_verified_revision(old, packet, record):
     if record.action != 'correct' and record.before != record.after:
         raise ValueError('Only a correction can change an assertion')
     derived = {'evidence_verification','semantic_detector_candidates'}
+    old_semantic_events=old.extraction_metadata.get('semantic_corrections',[])
+    semantic_events=packet.extraction_metadata.get('semantic_corrections',[])
+    if semantic_events != old_semantic_events:
+        from .semantics import checked_records
+        if (projection != 'soap/v6' or before is None or record.action != 'correct'
+                or record.before != record.after or record.replacement != record.before
+                or semantic_events[:len(old_semantic_events)] != old_semantic_events
+                or len(semantic_events) != len(old_semantic_events)+1):
+            raise ValueError('Typed semantic correction requires one append-only audit event')
+        event=semantic_events[-1]
+        previous=checked_records(old);current=checked_records(packet)
+        if (event.get('review_id') != record.review_id or event.get('version') != packet.version
+                or event.get('fact_id') != record.fact_id or event.get('source_sha256') != old.source.sha256
+                or event.get('original_clinical_fact_unchanged') is not True
+                or event.get('before') != previous.get(record.fact_id)
+                or event.get('after') != current.get(record.fact_id)
+                or {k:v for k,v in previous.items() if k!=record.fact_id} != {k:v for k,v in current.items() if k!=record.fact_id}):
+            raise ValueError('Typed semantic audit must bind the exact target/source/version')
+        derived |= {'clinical_semantics_v2','semantic_corrections','atomic_source_checklist'}
     if before is None:
         derived |= {'atomic_source_checklist','action_state_checklist','omission_corrections'}
     if {k:v for k,v in old.extraction_metadata.items() if k not in derived} != {
@@ -100,7 +120,7 @@ class CaseStore:
                 old = Packet.model_validate_json(last[4]).verify()
                 if packet.parent_hash != last[1] or packet.source != old.source or packet.patient_id != last[3]:
                     raise ValueError('Source/patient identity and parent hash must remain unchanged')
-                verified_revision = old.extraction_metadata.get('soap_projection_version') == 'soap/v5'
+                verified_revision = old.extraction_metadata.get('soap_projection_version') in {'soap/v5','soap/v6'}
                 if verified_revision:
                     if packet.reviews[:len(old.reviews)] != old.reviews or len(packet.reviews) != len(old.reviews)+1:
                         raise ValueError('Review history cannot be overwritten')

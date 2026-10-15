@@ -26,7 +26,7 @@ def candidate_fact_identity(packet, candidate, assertion, spans):
 
 def correct_omission(packet, request: OmissionCorrectionRequest):
     packet.verify()
-    if packet.extraction_metadata.get('soap_projection_version') != 'soap/v5':
+    if packet.extraction_metadata.get('soap_projection_version') not in {'soap/v5', 'soap/v6'}:
         raise ValueError('Omission correction requires the versioned source verification workflow')
     if request.base_version != packet.version:
         raise ValueError('Omission correction base version is stale')
@@ -89,7 +89,9 @@ def complete_eligible_omissions(packet, *, store=None):
     result = packet
     for candidate in list(candidates(packet)):
         atom = candidate['assertion']
-        proof = verify_source_claim(source, atom, calibrations=configuration['calibrations'])
+        interpretation = configuration.get('source_interpretation_version')
+        options = {'source_interpretation_version': interpretation} if interpretation is not None else {}
+        proof = verify_source_claim(source, atom, calibrations=configuration['calibrations'], **options)
         if proof['risk_route'] != 'AUTO_ACCEPT_ELIGIBLE':
             continue
         span = atom['spans'][0]

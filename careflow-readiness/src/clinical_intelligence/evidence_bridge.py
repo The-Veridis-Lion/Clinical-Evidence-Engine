@@ -66,3 +66,28 @@ def verify_source_claim(source: dict, claim: dict, *, reviews=(), calibrations=N
     result = core.EvidenceVerifier(calibrations=configuration['calibrations']).verify(
         core.Source.model_validate(source), core.Claim.model_validate(claim), reviews=reviews)
     return result.model_dump(mode='json')
+
+
+def verification_contextual_configuration() -> dict:
+    """Explicit opt-in v2 scope; old packet configurations remain unchanged."""
+    core=verification_package()
+    folder=Path(core.__file__).resolve().parent
+    value=json.loads((folder/'resources/contextual-calibration.json').read_text(encoding='utf-8'))
+    if value.get('engine_version') != core.ENGINE_VERSION or value.get('version') != 'contextual-source-configuration/2':
+        raise ValueError('Unavailable contextual source configuration')
+    for name,expected in value['implementation_sha256'].items():
+        path=folder/'extensions'/name
+        if path.parent != folder/'extensions' or hashlib.sha256(path.read_bytes()).hexdigest()!=expected:
+            raise ValueError('Contextual verifier changed after calibration; retain candidate and recalibrate')
+    return {**verification_configuration(), 'contextual_calibrations':value['contextual_calibrations'],
+        'contextual_version':value['version'],'contextual_implementation_sha256':value['implementation_sha256']}
+
+
+def verify_contextual_source_claim(source: dict, claim: dict, *, reviews=(), calibrations=None, event_comparability_version=None, source_interpretation_version=None) -> dict:
+    verification_identity()
+    configuration=verification_contextual_configuration()
+    from evidence_verification.extensions.contextual import verify_contextual_claim
+    return verify_contextual_claim(source,claim,reviews=reviews,
+        calibrations=configuration['contextual_calibrations'] if calibrations is None else calibrations,
+        event_comparability_version=event_comparability_version,
+        source_interpretation_version=source_interpretation_version).model_dump(mode='json')

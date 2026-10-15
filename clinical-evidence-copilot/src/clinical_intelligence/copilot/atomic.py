@@ -12,6 +12,7 @@ from .source_adapter import source_index, speaker_annotations
 
 VERSION = 'copilot-atomic-coverage/v1'
 VERIFIED_VERSION = 'copilot-atomic-coverage/v2'
+LAYERED_VERSION = 'copilot-atomic-coverage/v3'
 
 
 class SourceSpan(BaseModel):
@@ -82,10 +83,13 @@ def checklist(packet, independent_assertions=()):
         'independent_source_assertions': independent, 'speaker_annotations': speaker_annotations(packet.source.document()),
         'semantic_completeness': 'UNVERIFIED', 'reference_type': 'explicit_source_grounded_review_or_unverified',
         'limitation': 'Citation overlap never establishes semantic support or completeness; unenumerated assertions remain unknown.'}
-    if packet.extraction_metadata.get('soap_projection_version') == 'soap/v5':
-        value['version'] = VERIFIED_VERSION
+    if packet.extraction_metadata.get('soap_projection_version') in {'soap/v5', 'soap/v6'}:
+        value['version'] = LAYERED_VERSION if packet.extraction_metadata.get('soap_projection_version') == 'soap/v6' else VERIFIED_VERSION
         value['automatic_source_coverage'] = automatic_source_coverage(packet)
         value['reference_type'] = 'partial_bounded_source_enumeration_and_explicit_independent_review'
+    if packet.extraction_metadata.get('soap_projection_version') == 'soap/v6' and packet.extraction_metadata.get('source_mention_detector') == 'existing-source-mention-scanner/1':
+        from .mention_coverage import detect_source_mentions
+        value['mention_source_coverage'] = detect_source_mentions(packet)
     return value
 
 
@@ -98,6 +102,8 @@ def automatic_source_coverage(packet):
     """
     from ..evidence_bridge import verification_package
     core = verification_package()
+    interpretation = packet.extraction_metadata.get('source_interpretation_version')
+    options = {'source_interpretation_version': interpretation} if interpretation is not None else {}
     source = core.Source(source_id=packet.source.document_id, text=packet.source.text,
         sha256=packet.source.sha256, patient_id=packet.patient_id,
         encounter_id=packet.case_id, available_at=None, input_kind=packet.source.input_kind)
@@ -105,12 +111,16 @@ def automatic_source_coverage(packet):
     for item in packet.facts:
         fact = item.assertion
         attributes = {k:v for k,v in (fact.attributes.model_dump() if fact.attributes else {}).items() if v is not None}
-        claims.append(core.Claim(claim_id=item.fact_id, source_id=source.source_id,
+        claim = core.Claim(claim_id=item.fact_id, source_id=source.source_id,
             patient_id=packet.patient_id, encounter_id=source.encounter_id,
             category=fact.category, concept=fact.concept,
             spans=[core.Span(start=p.start,end=p.end,quote=p.quote,source_id=source.source_id) for p in fact.provenance],
             experiencer=fact.experiencer, reporting_basis=fact.assertion_basis or 'unknown',
-            polarity=fact.polarity, temporality=fact.temporality, attributes=attributes))
+            polarity=fact.polarity, temporality=fact.temporality, attributes=attributes)
+        if packet.extraction_metadata.get('soap_projection_version') == 'soap/v6':
+            from .semantics import apply_semantics, checked_records
+            claim = core.Claim.model_validate(apply_semantics(claim.model_dump(mode='json'),checked_records(packet).get(item.fact_id)))
+        claims.append(claim)
     external=packet.extraction_metadata.get('source_atomic_enumeration')
     independent=[]
     if external is not None:
@@ -125,27 +135,73 @@ def automatic_source_coverage(packet):
         if not isinstance(external['assertions'],list):
             raise ValueError('Source-first model enumeration assertions must be a list')
         independent=external['assertions']
-    enumeration = core.enumerate_source_assertions(source,independent_assertions=independent)
+    enumeration = core.enumerate_source_assertions(source,independent_assertions=independent, **options)
     coverage = core.align_coverage(enumeration, claims)
     value = coverage.model_dump(mode='json')
     if external is not None:
         value['source_enumerator_audit']={k:v for k,v in external.items() if k!='assertions'}
         value['source_enumerator_audit']['reference_type']='independent_model_candidates_not_clinical_gold'
-    value['claim_verifications'] = [core.EvidenceVerifier().verify(source,claim).model_dump(mode='json') for claim in claims]
+    value['claim_verifications'] = [core.EvidenceVerifier(**options).verify(source,claim).model_dump(mode='json') for claim in claims]
     verified_candidates = []
     for candidate in coverage.omission_candidates:
-        result = core.EvidenceVerifier().verify(source,candidate)
+        result = core.EvidenceVerifier(**options).verify(source,candidate)
         verified_candidates.append({'assertion':candidate.model_dump(mode='json'),
             'source_verification':result.model_dump(mode='json'),
             'allow_fact_completion':False,
             'routing':'CORRECTION_CANDIDATE' if result.status=='SUPPORTED_BY_SOURCE' else result.risk_route,
             'reason':'A supported omitted source assertion still requires a targeted append/review workflow; no proposal is silently replaced.'})
     value['verified_omission_candidates'] = verified_candidates
+    if packet.extraction_metadata.get('soap_projection_version') == 'soap/v6':
+        # A same-source assertion whose actor or typed qualifier could not be
+        # aligned is not a new clinical entity. Preserve the discrepancy while
+        # separating it from actual missing independent assertions.
+        from .evaluation.matching import normalize
+        triage_version = packet.extraction_metadata.get('coverage_alignment_version', 'copilot-source-alignment-triage/1')
+        if triage_version not in {'copilot-source-alignment-triage/1', 'copilot-source-alignment-triage/2'}:
+            raise ValueError('Unsupported stored coverage alignment version')
+        unresolved = []
+        genuinely_missing = []
+        for candidate in verified_candidates:
+            atom = candidate['assertion']
+            existing = [c for c in claims if c.category == atom['category'] and
+                normalize(c.concept) == normalize(atom['concept']) and any(
+                    p.start < q['end'] and q['start'] < p.end for p in c.spans for q in atom['spans'])]
+            if existing:
+                unresolved.append({**candidate, 'classification': 'EXISTING_ASSERTION_ALIGNMENT_REVIEW',
+                    'existing_fact_ids': [c.claim_id for c in existing],
+                    'reason': 'The same entity is already asserted at this source position. Unresolved actor, event or equivalent representation is not a confirmed content omission.'})
+            else:
+                genuinely_missing.append({**candidate,
+                    'classification': 'SUPPORTED_ATOMIC_OMISSION' if candidate['source_verification']['status'] == 'SUPPORTED_BY_SOURCE' else 'UNVERIFIED_SOURCE_CANDIDATE'})
+        if triage_version == 'copilot-source-alignment-triage/2':
+            atoms = {a.claim_id:a for a in enumeration.assertions}
+            for alignment in coverage.alignments:
+                if alignment['status'] != 'UNVERIFIED_SOURCE_CANDIDATE':
+                    continue
+                atom = atoms[alignment['source_assertion_id']]
+                existing = [c for c in claims if c.claim_id in alignment.get('candidate_claim_ids', []) and
+                    c.source_id == atom.source_id and c.patient_id == atom.patient_id and c.encounter_id == atom.encounter_id and
+                    c.category == atom.category and normalize(c.concept) == normalize(atom.concept) and
+                    all(source.check_span(s) for s in [*c.spans,*atom.spans]) and any(
+                        p.start < q.end and q.start < p.end for p in c.spans for q in atom.spans)]
+                if not existing or any(c['assertion']['claim_id'] == atom.claim_id for c in unresolved):
+                    continue
+                proof = core.EvidenceVerifier(**options).verify(source,atom)
+                unresolved.append({'assertion':atom.model_dump(mode='json'),
+                    'source_verification':proof.model_dump(mode='json'),
+                    'allow_fact_completion':False, 'routing':'REVIEW_REQUIRED',
+                    'classification':'EXISTING_ASSERTION_ALIGNMENT_REVIEW',
+                    'source_alignment_status':'UNVERIFIED_SOURCE_CANDIDATE',
+                    'existing_fact_ids':[c.claim_id for c in existing],
+                    'reason':'An independently enumerated same-source entity is already proposed at this exact source location. Its unresolved subject/time/event scope requires alignment review; it is neither an omission nor support for the existing fact.'})
+        value['verified_omission_candidates'] = genuinely_missing
+        value['unresolved_alignment_candidates'] = unresolved
+        value['coverage_triage_version'] = triage_version
     return value
 
 
 def validate_checklist(value, packet):
-    expected_version = VERIFIED_VERSION if packet.extraction_metadata.get('soap_projection_version') == 'soap/v5' else VERSION
+    expected_version = LAYERED_VERSION if packet.extraction_metadata.get('soap_projection_version') == 'soap/v6' else VERIFIED_VERSION if packet.extraction_metadata.get('soap_projection_version') == 'soap/v5' else VERSION
     if value.get('version') != expected_version or value.get('source_sha256') != packet.source.sha256:
         raise ValueError('Atomic checklist version/source mismatch')
     original = packet.model_copy(deep=True)
@@ -177,7 +233,7 @@ def coverage_report(packet):
         'unresolved_assertion_ids': [a['assertion_id'] for a in atoms if a['decision'] in {'DISPUTED','UNVERIFIED'}],
         'reference_types': sorted({a['reviewer_type'] for a in atoms}),
         'note': 'Counts describe supplied independent assertions only; no inferred complete source denominator.'}
-    if value['version'] == VERIFIED_VERSION:
+    if value['version'] in {VERIFIED_VERSION, LAYERED_VERSION}:
         automatic = value['automatic_source_coverage']
         report['automatic_source_coverage'] = {'semantic_completeness':automatic['semantic_completeness'],
             'enumerated_assertions':len(automatic['enumeration']['assertions']),
@@ -191,5 +247,7 @@ def coverage_report(packet):
             'unrepresented_attributes':automatic['unrepresented_attributes'],
             'unresolved_attributes':automatic['unresolved_attributes'],
             'unresolved_units':len(automatic['enumeration']['unresolved_units'])}
+        if value['version'] == LAYERED_VERSION:
+            report['automatic_source_coverage']['existing_assertion_alignment_reviews'] = len(automatic['unresolved_alignment_candidates'])
         report['note'] = 'Automatic counts use only a partial, independently source-enumerated denominator; supplied judgments and unknown source meanings stay separate.'
     return report

@@ -4,6 +4,35 @@ from dataclasses import asdict, dataclass
 from ..claims_review.prepare import digest
 
 
+def documentation_decision(support_state, *, trigger_state=None):
+    """Pure checklist logic over states, never a source-verification shortcut.
+
+    Production supplies states obtained from independently checked materials.
+    Offline historical rule fixtures may supply their predeclared truth states;
+    that result has no document/source certificate and must not be persisted as a
+    clinical review packet. Neither this function nor the HTTP schema accepts an
+    assertion boolean as verified documentary evidence.
+    """
+    states = {'SUPPORTED', 'NOT_SUPPORTED', 'INSUFFICIENT_EVIDENCE', 'CONFLICTED'}
+    if support_state not in states or trigger_state is not None and trigger_state not in states:
+        raise ValueError('A verified truth state is required for deterministic rule evaluation')
+    reason = {
+        'SUPPORTED': 'Traceable assertions support the required document or fact.',
+        'NOT_SUPPORTED': 'Explicit contrary evidence is documented; this is not an absence inference.',
+        'INSUFFICIENT_EVIDENCE': 'Required material is missing, unknown, unavailable, or not grounded.',
+        'CONFLICTED': 'Relevant assertions or amendment authority remain unresolved.',
+    }[support_state]
+    trigger_value = True if trigger_state is None or trigger_state == 'SUPPORTED' else (
+        False if trigger_state == 'NOT_SUPPORTED' else None)
+    if trigger_state == 'CONFLICTED':
+        return 'CONFLICTED', 'The requirement trigger has unresolved contradictory evidence.', trigger_value
+    if trigger_value is False:
+        return 'NOT_APPLICABLE', 'Source-linked explicit false trigger establishes inapplicability.', trigger_value
+    if trigger_value is None:
+        return 'INSUFFICIENT_EVIDENCE', 'Applicability is unknown; missing triggers cannot waive a requirement.', trigger_value
+    return support_state, reason, trigger_value
+
+
 @dataclass(frozen=True)
 class Rule:
     rule_id: str

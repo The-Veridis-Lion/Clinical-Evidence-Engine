@@ -17,7 +17,7 @@ from .evaluation.corpus import canonical, write_once
 from .scheduler import CallLedger
 from .engine import evaluate
 from .workflow import run_http_workflow
-from .requirement_support import atomic_support_review, ATOMIC_REVIEW_VERSION
+from .requirement_support import PRODUCT_SUPPORT_POLICY
 
 
 class AttachmentSelection(Contract):
@@ -27,8 +27,8 @@ class AttachmentSelection(Contract):
     fact_indices: list[int] = Field(min_length=1)
     document_role: Literal['clinical_summary'] | None = None
     clinical_purpose: Literal['therapeutic','diagnostic','unknown'] = 'unknown'
-    # Optional independent source judgments, never an approval/reviewer stamp.
-    # The shared verifier checks their original identities and exact spans.
+    # Historical wire field retained for a clear pre-dispatch rejection. External
+    # judgments are supplied to offline evaluation tools, not this product path.
     independent_reviews: list[dict] = Field(default_factory=list)
 
 
@@ -48,6 +48,9 @@ def run_source_workflow(database, output, document_path, case_path, attachments_
     targets = [AttachmentSelection.model_validate_json(canonical(t)) for t in raw_targets]
     if not targets:
         raise ValueError('Explicit attachment selections are required; no relevance is inferred')
+    if any(target.independent_reviews for target in targets):
+        raise ValueError('External semantic reviews belong to offline evaluation, not the Luna-only source workflow')
+    raw['source_support_policy'] = PRODUCT_SUPPORT_POLICY
     original = Case.model_validate_json(canonical(raw))
     if original.request.patient_id != 'DATASET:'+record['case_group']:
         raise ValueError('Original document group does not match explicit request patient')
@@ -64,8 +67,7 @@ def run_source_workflow(database, output, document_path, case_path, attachments_
                     {'source_id':source['source_id'],'extraction':result['extraction']}]}
     case = Case.model_validate_json(canonical(augmented))
     context = next(c for c in prepared_context(case) if c['source_id']==source['source_id'])
-    binding_sources,bindings,source_reviews = [],[],[]
-    original_source = next(s for s in case.sources if s.source_id == source['source_id'])
+    binding_sources,bindings = [],[]
     for target, supplied in zip(targets,raw_targets):
         if len(target.fact_indices)!=len(set(target.fact_indices)) or any(
                 type(i) is not int or not 0<=i<len(context['facts']) for i in target.fact_indices):
@@ -76,17 +78,13 @@ def run_source_workflow(database, output, document_path, case_path, attachments_
             requirement=target.requirement,clinical_fact_ids=[context['facts'][i]['context_fact_id'] for i in target.fact_indices],
             document_role=target.document_role,clinical_purpose=target.clinical_purpose).model_dump(mode='json')
         bindings.append(binding)
-        reviews = [atomic_support_review(original_source, context['facts'][i],
-            requirement=target.requirement, reviews=target.independent_reviews) for i in target.fact_indices]
-        source_reviews.extend(reviews)
         binding_sources.append({'source_id':target.binding_source_id,'patient_id':case.request.patient_id,
             'encounter_id':case.request.encounter_id,'available_at':receipt_date,
             'recorded_at':None,'event_date':None,'event_link_id':None,'record_type':'order',
             'source_kind':'structured_record','origin':'request_intake',
             'content':{'clinical_binding':binding,'original_attachment_selection':supplied,
-                       'atomic_support_reviews':reviews,
+                       'product_source_support_policy':PRODUCT_SUPPORT_POLICY,
                        'original_document_id':record['document_id'],'source_sha256':result['identity']['source_sha256']}})
-    write_once(root/'atomic-source-reviews.json',(canonical(source_reviews)+'\n').encode('utf-8'))
     packet = evaluate(case)
     update = {'expected_revision':1,'sources':binding_sources,'facts':[],'clinical_bindings':bindings,
               'intake':{'actor_id':'source-workflow-intake','actor_type':'intake_service','basis_revision':1,
@@ -94,6 +92,14 @@ def run_source_workflow(database, output, document_path, case_path, attachments_
                         'reason':'Explicit request attachments received; no clinical reviewer opinion is inferred.'}}
     write_once(root/'case.json',(canonical(case.model_dump(mode='json'))+'\n').encode('utf-8'))
     write_once(root/'update.json',(canonical(update)+'\n').encode('utf-8'))
+    after = evaluate(Case.model_validate_json(canonical({**case.model_dump(mode='json'),
+        'sources': [*[s.model_dump(mode='json') for s in case.sources], *binding_sources],
+        'clinical_bindings': [*[b.model_dump(mode='json') for b in case.clinical_bindings], *bindings]})),
+        revision=2)
+    source_reviews = [review for fact in after['facts']
+        if fact['requirement_support'].get('support_method') == PRODUCT_SUPPORT_POLICY
+        for review in fact['requirement_support'].get('source_reviews', [])]
+    write_once(root/'atomic-source-reviews.json',(canonical(source_reviews)+'\n').encode('utf-8'))
     receipt = run_http_workflow(database,root/'http',root/'case.json',root/'update.json')
     current = [r for r in ledger.attempts()[before_attempts:] if r['document_id']==record['document_id']]
     receipt.update({'document_id':record['document_id'],'source_sha256':result['identity']['source_sha256'],
@@ -103,7 +109,7 @@ def run_source_workflow(database, output, document_path, case_path, attachments_
                     'clinical_facts':len(result['extraction']['facts']),'actual_new_attempts':len(current),
                     'extraction_identity':result['identity'],'accepted_attempt':result['attempt'],
                     'extraction_usage':result['usage'],'review_calls':0,
-                    'source_verification':{'atomic_review_version':ATOMIC_REVIEW_VERSION,
+                    'source_verification':{'source_support_policy':PRODUCT_SUPPORT_POLICY,
                         'proof_count':len(source_reviews),'actual_new_verification_model_calls':0,
                         'status_counts':{s:sum(r['source_verification']['status']==s for r in source_reviews)
                             for s in sorted({r['source_verification']['status'] for r in source_reviews})},

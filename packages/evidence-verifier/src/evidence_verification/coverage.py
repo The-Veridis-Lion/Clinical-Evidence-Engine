@@ -24,6 +24,11 @@ ACTION_STATES = {'took':'completed','taken':'completed','administered':'complete
     'order':'planned','ordered':'planned','request':'planned','requested':'planned'}
 FREQUENCY=re.compile(r'\b(?:(?:once|twice|three times|two times)\s+(?:daily|weekly|monthly)|(?:once|twice|three times|two times)\s+(?:a|per)\s+(?:day|week|month)|every\s+\d+\s+(?:hours?|days?|weeks?)|daily|weekly|monthly)\b',re.I)
 AUTO_SCOPE = 'explicit-symptom-clause/1'
+SCOPED_INTERPRETATION = 'bounded-source-grammar/2'
+LITERAL_INTERPRETATION = 'bounded-source-grammar/3'
+TEMPORAL_INTERPRETATION = 'bounded-source-grammar/4'
+SCOPED_INTERPRETATIONS = {SCOPED_INTERPRETATION, LITERAL_INTERPRETATION, TEMPORAL_INTERPRETATION}
+DEMOGRAPHIC_CONCEPTS = {'age', 'demographic descriptor'}
 AUTO_CLAUSE = re.compile(r'^(?:(?:patient|pt)\s*:\s*)?(?:the\s+)?(?:patient|pt|i)\s+'
     r'(?:currently\s+)?(?:has|have|reports|report|denies|deny|does\s+not\s+have)\s+'
     r'(?P<objects>[a-z ,]+?)(?:\s+(?:today|currently))?\s*[.!]?$',re.I)
@@ -190,6 +195,11 @@ def _symptoms(source,span):
         if re.search(r'\b(?:documented|recorded|reported|listed|mentioned)\b',tail,re.I):
             continue
         local=list(re.finditer(r'\b(?:has|have|reports?|reported|denies|denied|no|without|negative for)\b',text[:token.start()],re.I))
+        if not local:
+            # A broader initial predicate (e.g. "having") is not a scoped
+            # assertion. Preserve this unit as unresolved rather than crashing
+            # or inferring an affirmative symptom from "deny having".
+            continue
         conjunctions=list(re.finditer(r'\b(?:and|but|whereas|however)\b',text[:token.start()],re.I))
         scope_begin=conjunctions[-1].end() if conjunctions else 0
         negative_cues=list(re.finditer(r'\b(?:not|never|no|without|denies|denied|negative for)\b',text[scope_begin:token.start()],re.I))
@@ -271,12 +281,134 @@ def _actions(source,span):
         attributes=attrs)]
 
 
-def enumerate_source_assertions(source: Source | dict, *, independent_assertions=()) -> EnumerationResult:
+def _symptoms_scoped(source, span):
+    """Only complete predicates establish polarity; partial mentions remain candidates.
+
+    Unlike the legacy enumerator, finding a reporting verb before a symptom does
+    not prove that the remainder of the predicate is affirmative. Unknown suffixes,
+    embedded subjects and conditional clauses cannot supply counterevidence.
+    """
+    text = re.sub(r'^\s*(?:[SOAP]:\s*|\[(?:patient|doctor|clinician)\]\s*)', '', span.quote, flags=re.I).strip().rstrip('.!')
+    text = re.sub(r'^(?:Patient|Pt|Clinician|Doctor)\s*:\s*', '', text, flags=re.I)
+    subject = re.match(r'^(?:the\s+)?(?P<actor>patient|pt|i|mother|father|sister|brother|wife|husband)\s+', text, re.I)
+    body = text[subject.end():] if subject else ''
+    actor = subject['actor'].casefold() if subject else None
+    # First-person declarations require the original patient role, not an inferred role.
+    first_person_ok = actor != 'i' or bool(re.match(r'\s*(?:Patient:|\[patient\])', span.quote, re.I))
+    basis = 'patient_report' if actor == 'i' and first_person_ok else 'documented_history'
+    report = re.match(r'(?P<verb>reports?|reported|says|said)\s+', body, re.I)
+    if report:
+        basis = 'patient_report' if actor in {'patient', 'pt', 'i'} else 'family_report'
+        body = body[report.end():]
+    when = None
+    temporality = 'current'
+    attributes = {}
+    time_match = re.search(r'\s+(today|yesterday|currently|now|\d{4}-\d{2}-\d{2})$', body, re.I)
+    if time_match:
+        when = time_match[1].casefold()
+        body = body[:time_match.start()]
+        temporality = 'historical' if when == 'yesterday' else 'current'
+        if when in {'currently', 'now'}:
+            when = None
+    duration = re.search(r'\s+for\s+((?:\d+|one|two|three|four|five|six|seven|eight|nine|ten|twelve)\s+(?:days?|weeks?|months?))$', body, re.I)
+    if duration:
+        attributes['duration'] = duration[1]
+        body = body[:duration.start()]
+    polarity = None
+    objects = None
+    # Resolution is a predicate about current symptom presence. Its negation is
+    # scoped to that predicate, not to the earlier reporting verb.
+    resolution = re.fullmatch(r'(?P<objects>.+?)\s+(?P<aux>has|have|had|is|are|was|were)\s+(?P<neg>not\s+)?(?:resolved|gone|absent)', body, re.I)
+    if resolution:
+        polarity = 'affirmed' if resolution['neg'] else 'absent'
+        objects = resolution['objects']
+        if resolution['aux'].casefold() in {'had', 'was', 'were'}:
+            temporality = 'historical'
+    else:
+        predicate = re.fullmatch(r'(?P<verb>no longer\s+(?:has|have)|does\s+not\s+have|do\s+not\s+have|has\s+no|have\s+no|has|have|had|denies|deny|denied)\s+(?P<objects>.+)', body, re.I)
+        if predicate:
+            verb = norm(predicate['verb'])
+            polarity = 'absent' if verb.startswith(('no longer', 'does not', 'do not')) or verb in {'has no', 'have no', 'denies', 'deny', 'denied'} else 'affirmed'
+            objects = predicate['objects']
+            if verb in {'had', 'denied'}:
+                temporality = 'historical'
+            if verb in {'denies', 'deny', 'denied'} and actor in {'patient', 'pt', 'i'}:
+                basis = 'patient_report'
+        elif report:
+            # Bare report is supported only if its entire object list consists of
+            # literal symptoms. Any remaining predicate must be understood first.
+            polarity, objects = 'affirmed', body
+    terms = [re.sub(r'^(?:a|an|any|the)\s+', '', v.strip(), flags=re.I)
+             for v in re.split(r'\s*,\s*|\s+and\s+', objects or '')]
+    complete = (subject and first_person_ok and not UNKNOWN.search(text) and polarity and terms
+                and all(SYMPTOMS.fullmatch(term) for term in terms)
+                and not (attributes and len(terms) != 1))
+    if complete:
+        return [_make(source, span, 'symptom', term,
+                      experiencer='patient' if actor in {'patient', 'pt', 'i'} else 'family',
+                      reporting_basis=basis, polarity=polarity, certainty='explicit',
+                      temporality=temporality, event_time=when, attributes=attributes) for term in terms]
+    # Retain literal candidates for coverage, without promoting the parser's
+    # incomplete interpretation to a source-supported semantic judgment.
+    return [a.model_copy(update={'polarity': 'uncertain', 'certainty': 'unknown',
+                                'temporality': 'unknown', 'experiencer': 'unknown',
+                                'reporting_basis': 'unknown'}) for a in _symptoms(source, span)]
+
+
+def _actions_temporally_scoped(source, span):
+    """Absence of a parsed time anchor does not establish a current event.
+
+    Keep the bounded action/event proposal, but leave its time unverified. This
+    deliberately does not guess calendar dates or reinterpret historical packets.
+    """
+    atoms = _actions(source, span)
+    anchored = bool(re.search(r'\b(?:today|yesterday|tomorrow|currently|now|previously|last\s+\w+|history|ago|will|next|scheduled|plans? to)\b', span.quote, re.I))
+    present_progressive = bool(re.search(r'\b(?:is|are|am)\s+(?:not\s+)?(?:taking|receiving)\b', span.quote, re.I))
+    if not anchored and not present_progressive:
+        return [a.model_copy(update={'temporality':'unknown'}) for a in atoms]
+    return atoms
+
+
+def _literal_demographics(source, span):
+    """Retain explicit record-introduction quantities, never infer sex/gender.
+
+    These are partial coverage candidates about the documented encounter. Family
+    references, pronouns, titles and dialogue speakers are not demographic proof.
+    Unknown encounter time is preserved and nothing here is AUTO calibrated.
+    """
+    first = next(source_units(source), None)
+    if source.input_kind != 'note' or first is None or span.start != first.start or UNKNOWN.search(span.quote):
+        return []
+    match = re.match(r'^(?:(?:Patient(?:\s+(?P<label>[A-Z]|\d+))?\s+(?:was|is)\s+)?(?:A|An|The))\s+(?P<age>\d{1,3})[- ]year[- ]old\s+(?:(?P<descriptor>male|female)\s+)?(?P<noun>child|patient|man|woman|boy|girl)\b', span.quote, re.I)
+    if not match:
+        return []
+    if match['label'] and len({label.casefold() for label in re.findall(r'\bPatient\s+([A-Z]|\d+)\b', source.text, re.I)}) != 1:
+        return []  # Different labelled patients are not one patient-level record.
+    # An explicit relationship in the same original unit invalidates the assumed
+    # record-subject binding. Do not infer its opposite or manufacture a family
+    # fact; retain a literal candidate whose subject still requires verification.
+    other_role = re.search(r"\bpatient['’]s\s+(?:son|daughter|mother|father|wife|husband|sister|brother|parent|child|clinician|doctor|nurse|provider)\b", span.quote, re.I)
+    fields = {'experiencer':'unknown' if other_role else 'patient','reporting_basis':'documented_history',
+              'polarity':'affirmed','certainty':'explicit','temporality':'unknown'}
+    atoms = [_make(source, span, 'observation', 'age', attributes={'value':match['age'],'unit':'years'}, **fields)]
+    descriptor = match['descriptor'] or (match['noun'] if match['noun'].casefold() in {'man','woman','boy','girl'} else None)
+    if descriptor:
+        atoms.append(_make(source, span, 'observation', 'demographic descriptor',
+                           attributes={'value':descriptor.casefold()}, **fields))
+    return atoms
+
+
+def enumerate_source_assertions(source: Source | dict, *, independent_assertions=(), source_interpretation_version=None) -> EnumerationResult:
+    if source_interpretation_version not in {None, *SCOPED_INTERPRETATIONS}:
+        raise ValueError('Unavailable source interpretation version')
     source=Source.model_validate(source)
     atoms=[];proposals=[];origins=[]
     unresolved=[]
     for span in _scope_units(source):
-        found=[*_symptoms(source,span),*_actions(source,span)]
+        symptom_parser = _symptoms_scoped if source_interpretation_version else _symptoms
+        action_parser = _actions_temporally_scoped if source_interpretation_version==TEMPORAL_INTERPRETATION else _actions
+        found=[*symptom_parser(source,span),*action_parser(source,span),
+               *(_literal_demographics(source,span) if source_interpretation_version in {LITERAL_INTERPRETATION,TEMPORAL_INTERPRETATION} else [])]
         atoms.extend(found)
         proposals.extend({'origin':'native_bounded_grammar','assertion':a.model_dump(mode='json')} for a in found)
         unresolved.append({'unit_id':'unit-'+digest([source.sha256,span.start,span.end])[:20],
@@ -300,7 +432,8 @@ def enumerate_source_assertions(source: Source | dict, *, independent_assertions
         else:
             next(group for group in origins if group['assertion_id']==prior.claim_id)['proposal_ids'].append(atom.claim_id)
     return EnumerationResult(source_hash=source.sha256,assertions=selected,assertion_proposals=proposals,
-        assertion_origins=origins,unresolved_units=unresolved)
+        assertion_origins=origins,unresolved_units=unresolved,
+        method=source_interpretation_version or 'bounded-source-grammar/1')
 
 
 def overlapping(a,b):
@@ -322,9 +455,21 @@ def align_coverage(atoms: EnumerationResult | list[Claim], claims) -> CoverageRe
     for atom in enum.assertions:
         candidates=[c for c in claims if c.source_id==atom.source_id and c.patient_id==atom.patient_id and
             c.encounter_id==atom.encounter_id and c.category==atom.category and norm(c.concept)==norm(atom.concept) and overlapping(c,atom)]
+        literal_demographic = atom.category=='observation' and atom.concept in DEMOGRAPHIC_CONCEPTS
+        if enum.method in SCOPED_INTERPRETATIONS and any(
+                getattr(atom, key) in {None, '', 'unknown', 'uncertain'}
+                for key in (('experiencer', 'polarity') if literal_demographic else ('experiencer', 'polarity', 'temporality'))):
+            aligned.append({'source_assertion_id':atom.claim_id,'claim_ids':[],
+                'candidate_claim_ids':[c.claim_id for c in candidates],
+                'status':'UNVERIFIED_SOURCE_CANDIDATE','attribute_checks':[],
+                'method':enum.method})
+            # Partial source parsing cannot prove either a clinical omission or
+            # that an otherwise valid model proposal is unsupported.
+            continue
         matched=[];attribute_checks=[]
         for claim in candidates:
             exact=all(getattr(claim,k) in {'unknown',None,''} or
+                      (enum.method in SCOPED_INTERPRETATIONS and literal_demographic and getattr(atom,k) in {'unknown',None,''}) or
                       (canonical_dimension(k,getattr(claim,k))==canonical_dimension(k,getattr(atom,k)))
                       for k in ('experiencer','polarity','temporality','event_time','action_state','completion_scope'))
             # An unrepresentable/unverified attribute is not an omitted entity.

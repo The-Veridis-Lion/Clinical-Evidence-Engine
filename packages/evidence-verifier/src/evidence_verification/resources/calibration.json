@@ -2,9 +2,9 @@
   "engine_version": "evidence-verifier/1",
   "implementation_sha256": {
     "__init__.py": "43d2a773ce0f814c06928f27953457b42bbbf87532f207f653c4ed51e764e32a",
-    "coverage.py": "a2e33f67dccddedc80d71696320038aa5c6166eac514f7a5b3a3745b5f07c6e6",
+    "coverage.py": "30b1a88786adfefd2728093327ada392930c178d8c4d02cf0630f90dc600a4d6",
     "models.py": "ce7f877f88093bcec26b6e546d191bb6df1026ce93177b4bf7214b2676fe8418",
-    "verifier.py": "0753e451e742828b8f1e7373aa34233fee5b797ebb4731c114a83ff4978de1cb"
+    "verifier.py": "78ff051b0fd40b0e8edd6f70a35716d27237c5194b38c9a44ce6d67e1c656941"
   },
   "calibrations": [
     {

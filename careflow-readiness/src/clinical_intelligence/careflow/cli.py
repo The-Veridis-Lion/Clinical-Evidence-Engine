@@ -4,7 +4,7 @@ import json
 from pathlib import Path
 import sys
 
-from .contracts import Case, EvidenceUpdate, Review, SourceIntake
+from .contracts import Case, EvidenceUpdate, Review, SourceIntake, SourceMaterialUpdate
 from .report import markdown
 from .rules import manifests
 from .service import CareFlow
@@ -21,6 +21,7 @@ def main(argv=None):
     p = sub.add_parser('create'); p.add_argument('--case', required=True)
     p = sub.add_parser('intake'); p.add_argument('--input', required=True)
     p = sub.add_parser('add-evidence'); p.add_argument('--case-id', required=True); p.add_argument('--input', required=True)
+    p = sub.add_parser('add-materials'); p.add_argument('--case-id', required=True); p.add_argument('--input', required=True)
     p = sub.add_parser('review'); p.add_argument('--case-id', required=True); p.add_argument('--input', required=True)
     for command in ['packet', 'report', 'audit', 'reviews', 'model-calls', 'review-input']:
         p = sub.add_parser(command); p.add_argument('--case-id', required=True)
@@ -103,6 +104,8 @@ def main(argv=None):
                 result = {'packet': app.create(case), 'intake_receipt': receipt}
             elif args.command == 'add-evidence':
                 result = app.add_evidence(args.case_id, load(args.input, EvidenceUpdate))
+            elif args.command == 'add-materials':
+                result = app.add_material_sources(args.case_id, load(args.input, SourceMaterialUpdate))
             elif args.command == 'review':
                 result = app.review(args.case_id, load(args.input, Review))
             elif args.command == 'packet':

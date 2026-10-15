@@ -104,6 +104,10 @@ class Case(Contract):
     facts: list[Fact]
     clinical_context: list[ClinicalContext] = Field(default_factory=list, exclude_if=lambda value: not value)
     clinical_bindings: list[ClinicalBinding] = Field(default_factory=list, exclude_if=lambda value: not value)
+    # Absent on saved historical inputs. Public creation and new revisions pin
+    # the product contract; replay of a historical Case remains explicit.
+    source_support_policy: Literal['luna-only-source-policy/1', 'luna-only-source-policy/2', 'luna-only-source-policy/3', 'luna-only-source-policy/4'] | None = Field(
+        default=None, exclude_if=lambda value: value is None)
 
     @model_validator(mode='after')
     def unique_ids_and_references(self):
@@ -192,6 +196,21 @@ class EvidenceUpdate(Contract):
             raise ValueError('Assertion corrections require a reasoned human/AI review')
         if not (self.facts or self.clinical_context or self.clinical_bindings):
             raise ValueError('Evidence update needs assertions, clinical facts or source-backed bindings')
+        return self
+
+
+class SourceMaterialUpdate(Contract):
+    """Append original materials against a persisted case, without caller truth votes."""
+    schema_version: Literal['careflow-source-material-update/1'] = 'careflow-source-material-update/1'
+    expected_revision: int = Field(ge=1)
+    sources: list[Source] = Field(min_length=1)
+    review: Review | None = None
+    intake: EvidenceIntake | None = None
+
+    @model_validator(mode='after')
+    def receipt_or_review(self):
+        if (self.review is None) == (self.intake is None):
+            raise ValueError('Exactly one review or administrative intake record is required')
         return self
 
 

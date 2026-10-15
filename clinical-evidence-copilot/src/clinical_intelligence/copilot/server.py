@@ -6,9 +6,9 @@ from importlib.resources import files
 from urllib.parse import parse_qs, unquote, urlparse
 
 from .demo import bundles
-from .models import OmissionCorrectionRequest, ReviewRequest, Source
+from .models import OmissionCorrectionRequest, ReviewRequest, SemanticsReviewRequest, Source
 from .augmentation import correct_omission, complete_eligible_omissions
-from .reviewer import review_task
+from .reviewer import review_task, validate_product_review_request, ProductModelReviewForbidden
 from .runtime import create_from_bundle, extract_live
 from .service import compare_packets, review_packet
 from .store import VersionConflict
@@ -18,7 +18,7 @@ from .views import render_markdown
 MAX_BODY_BYTES = 2_000_000
 
 
-def make_server(store, *, port=8765, live=False, ledger=None):
+def make_server(store, *, port=8765, live=False, ledger=None, offline_evaluation=False):
     token = secrets.token_urlsafe(32)
 
     class Handler(BaseHTTPRequestHandler):
@@ -51,7 +51,8 @@ def make_server(store, *, port=8765, live=False, ledger=None):
                     content_type = {'index.html': 'text/html', 'app.js': 'text/javascript', 'style.css': 'text/css'}[name]
                     return self.reply(files('clinical_intelligence.copilot').joinpath('static', name).read_bytes(), content_type=content_type+'; charset=utf-8')
                 if path == '/api/config':
-                    return self.reply({'csrf_token': token, 'live_enabled': live, 'schema_version': 'clinical-evidence-copilot/v1'})
+                    return self.reply({'csrf_token': token, 'live_enabled': live, 'offline_evaluation': offline_evaluation,
+                                       'runtime_model': 'gpt-6-luna', 'schema_version': 'clinical-evidence-copilot/v1'})
                 if path == '/api/cases':
                     return self.reply(store.list_cases())
                 if path == '/api/demo-bundles':
@@ -98,19 +99,44 @@ def make_server(store, *, port=8765, live=False, ledger=None):
                     p = create_from_bundle(body)
                     store.save(p, expected_version=0)
                     return self.reply(p.model_dump(mode='json'), 201)
+                if self.path == '/api/source-reviews':
+                    if not offline_evaluation:
+                        return self.reply({'error': 'Source-review import is an offline evaluation endpoint; disabled in the product server.'}, 403)
+                    from .runtime import create_from_claim_reviews
+                    if set(body) != {'case_id','patient_id','source','claims','reviews','audit'}:
+                        raise ValueError('Reviewed input requires exact original source/claims/reviews/audit')
+                    p=create_from_claim_reviews(body['source'],body['claims'],body['reviews'],
+                        case_id=body['case_id'],patient_id=body['patient_id'],audit=body['audit'])
+                    store.save(p,expected_version=0)
+                    return self.reply(p.model_dump(mode='json'),201)
                 if self.path == '/api/extract':
                     if not live:
                         return self.reply({'error': 'Live extraction is disabled. Start serve --live to enable it.'}, 403)
                     if any(c['case_id'] == body['case_id'] for c in store.list_cases()):
                         raise VersionConflict('Case already exists')
-                    src = Source.create(body['case_id']+':source', body['text'], body['input_kind'], encounter_time=body.get('encounter_time'))
-                    p = extract_live(body['case_id'], body['patient_id'], src, ledger)
+                    src = Source.create(body.get('document_id',body['case_id']+':source'), body['text'],
+                                        body['input_kind'], encounter_time=body.get('encounter_time'))
+                    p = extract_live(body['case_id'], body['patient_id'], src, ledger,
+                        semantics_version=body.get('semantics_version'),
+                        **({'task_version':body['task_version']} if body.get('task_version') is not None else {}))
                     store.save(p, expected_version=0)
                     return self.reply(p.model_dump(mode='json'), 201)
+                if self.path.startswith('/api/cases/') and self.path.endswith('/semantics'):
+                    case_id = unquote(self.path[len('/api/cases/'):-len('/semantics')])
+                    old=store.get(case_id)
+                    request=SemanticsReviewRequest.model_validate(body)
+                    validate_product_review_request(old, request)
+                    if request.base_version != old.version:
+                        raise VersionConflict('Semantic correction base version is stale')
+                    from .semantics import review_semantics
+                    p=review_semantics(old,request)
+                    store.save(p,expected_version=old.version)
+                    return self.reply(p.model_dump(mode='json'))
                 if self.path.startswith('/api/cases/') and self.path.endswith('/review'):
                     case_id = unquote(self.path[len('/api/cases/'):-len('/review')])
                     old = store.get(case_id)
                     request = ReviewRequest.model_validate(body)
+                    validate_product_review_request(old, request)
                     if request.base_version != old.version:
                         raise VersionConflict('Review base version is stale; reload latest version')
                     p = review_packet(old, request)
@@ -121,7 +147,8 @@ def make_server(store, *, port=8765, live=False, ledger=None):
                     old = store.get(case_id)
                     if body.get('base_version') != old.version:
                         raise VersionConflict('Omission correction base version is stale')
-                    p = correct_omission(old, OmissionCorrectionRequest.model_validate(body))
+                    request = validate_product_review_request(old, OmissionCorrectionRequest.model_validate(body))
+                    p = correct_omission(old, request)
                     store.save(p, expected_version=old.version)
                     return self.reply(p.model_dump(mode='json'))
                 if self.path.startswith('/api/cases/') and self.path.endswith('/complete-eligible'):
@@ -132,6 +159,8 @@ def make_server(store, *, port=8765, live=False, ledger=None):
                     p = complete_eligible_omissions(old, store=store)
                     return self.reply(p.model_dump(mode='json'))
                 return self.reply({'error': 'Unknown endpoint'}, 404)
+            except ProductModelReviewForbidden as exc:
+                self.reply({'error': str(exc)}, 403)
             except VersionConflict as exc:
                 self.reply({'error': str(exc)}, 409)
             except KeyError as exc:
@@ -142,8 +171,8 @@ def make_server(store, *, port=8765, live=False, ledger=None):
     return ThreadingHTTPServer(('127.0.0.1', port), Handler)
 
 
-def serve(store, *, port=8765, live=False, ledger=None):
-    server = make_server(store, port=port, live=live, ledger=ledger)
+def serve(store, *, port=8765, live=False, ledger=None, offline_evaluation=False):
+    server = make_server(store, port=port, live=live, ledger=ledger, offline_evaluation=offline_evaluation)
     print(f'Clinical Evidence Copilot: http://127.0.0.1:{server.server_port} · live extraction {"enabled" if live else "disabled"}', flush=True)
     try:
         server.serve_forever()

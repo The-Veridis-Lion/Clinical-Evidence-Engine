@@ -16,7 +16,7 @@ def render_markdown(packet):
         lines += ['DRAFT · REVIEW REQUIRED. Exact citations establish location; semantic source support and complete clinical coverage remain unverified.', '',
             'Confirmed clinical facts: none automatically certified. Review decisions remain separately recorded.', '',
             f'Atomic coverage: {coverage.get("independent_assertions",0)} independently supplied assertions; semantic completeness UNVERIFIED.', '']
-    if packet.extraction_metadata.get('soap_projection_version') == 'soap/v5':
+    if packet.extraction_metadata.get('soap_projection_version') in {'soap/v5', 'soap/v6'}:
         from .atomic import coverage_report
         coverage = coverage_report(packet)
         rows = packet.extraction_metadata['evidence_verification']['assertions']
@@ -46,15 +46,42 @@ def render_markdown(packet):
         lines += ['', '## Rejected proposals', ''] + [f'- Index {r["original_index"]}: {r["reason"]}' for r in packet.rejected_facts]
     atomic = packet.extraction_metadata.get('atomic_source_checklist')
     verified = packet.extraction_metadata.get('evidence_verification')
+    typed = packet.extraction_metadata.get('clinical_semantics_v2', [])
+    if typed:
+        lines += ['', '## Typed attribute and event proposals', '',
+                  'These retained extraction/correction proposals are not independently confirmed attributes. See dimension evidence and targeted review below.', '']
+        for row in typed:
+            values = row['semantics']
+            shown = '; '.join(f'{key}={values[key]}' for key in
+                ('frequency', 'event_time', 'duration', 'action_type', 'action_state', 'completion_scope', 'assertion_basis')
+                if values.get(key) is not None)
+            lines.append(f'- {row["fact_id"]}: {shown} · source SHA256 `{row["source_sha256"]}`')
     if verified:
         lines += ['', '## Source verification', '']
         for row in verified['assertions']:
             result = row['result']
             lines.append(f'- {row["fact_id"]}: {result["status"]} · {result["risk_route"]} · ' + '; '.join(result['reasons']))
+            if row.get('primary_reference_proposal'):
+                anchor = row['primary_reference_proposal']
+                lines.append(f'  Extraction anchor: {anchor["primary_source_id"] or "none"} · {anchor["status"]}. Original citation order retained.')
+            for ref in row.get('semantic_support_refs', []):
+                lines.append(f'  Source-verified support ({ref["support_scope"]}) [{ref["start"]}:{ref["end"]}]: {ref["quote"]}')
+            if row.get('components'):
+                components = row['components']
+                lines.append(f'  Main assertion: {components["main_assertion"]["status"]}; event: {components["event"]["status"]}; targeted review: {", ".join(components["review_targets"]) or "none"}.')
         automatic = (atomic or {}).get('automatic_source_coverage', {})
         for candidate in automatic.get('verified_omission_candidates', []):
             lines.append(f'- Omission candidate {candidate["assertion"]["claim_id"]}: {candidate["assertion"]["concept"]} · {candidate["source_verification"]["status"]}. Not automatically adopted.')
+        for candidate in automatic.get('unresolved_alignment_candidates', []):
+            lines.append(f'- Existing assertion alignment review {candidate["assertion"]["claim_id"]}: {candidate["assertion"]["concept"]}. {candidate["reason"]}')
     if atomic:
+        mention = atomic.get('mention_source_coverage')
+        if mention:
+            lines += ['', '## Independent source mention candidates', '',
+                f'Existing detector: {mention["status"]}; semantic completeness UNVERIFIED; no automatic fact completion.', '']
+            for candidate in mention['candidates']:
+                span = candidate['mention']
+                lines.append(f'- {candidate["classification"]} [{span["start"]}:{span["end"]}] {span["quote"]}; source support UNVERIFIED; original context retained.')
         lines += ['', '## Source-unit and independent atomic coverage', '']
         for unit in atomic['source_units']:
             lines.append(f'- {unit["unit_id"]} [{unit["start"]}:{unit["end"]}] · {unit["citation_status"]} · semantic coverage UNVERIFIED · atoms={", ".join(unit["independent_assertion_ids"])}')

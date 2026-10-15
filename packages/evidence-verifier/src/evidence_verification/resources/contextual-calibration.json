@@ -1,0 +1,23 @@
+{
+  "version": "contextual-source-configuration/2",
+  "engine_version": "evidence-verifier/1",
+  "implementation_sha256": {
+    "contextual.py": "a91199efae17c98469247053f8f8e442e642d57b1acb5dc7d15e3c2db6e28c2b"
+  },
+  "contextual_calibrations": [
+    {
+      "calibration_id": "synthetic-contextual-symptom-recovery-v2",
+      "method": "contextual-source-symptom/2",
+      "categories": [
+        "symptom"
+      ],
+      "sample_count": 144,
+      "measured_precision": 1.0,
+      "minimum_precision": 0.95,
+      "reference_type": "synthetic_source_checked_development",
+      "data_sha256": "a189d080c6625b7432f42d2639786ca299f13aa74d7b9afdc480219a30cba46e",
+      "scope": "contextual-symptom-clause/2"
+    }
+  ],
+  "boundary": "Finite declared-patient explicit symptom clause with original full-source scope. No independent clinical validation."
+}

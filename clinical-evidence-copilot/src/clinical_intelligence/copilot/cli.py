@@ -6,7 +6,7 @@ from pathlib import Path
 from .demo import seed_demo
 from .models import OmissionCorrectionRequest, ReviewRequest, Source
 from .augmentation import correct_omission, complete_eligible_omissions
-from .reviewer import review_task
+from .reviewer import review_task, validate_product_review_request
 from .runtime import ProductLedger, create_from_bundle, extract_live, import_engine_cache, replay_product_response
 from .service import compare_packets, review_packet
 from .store import CaseStore
@@ -40,14 +40,23 @@ def main(argv=None):
     serve.add_argument('--live', action='store_true', help='Explicitly enable inherited model extraction')
     create = sub.add_parser('create', help='Import a source + extraction bundle')
     create.add_argument('bundle')
+    reviewed=sub.add_parser('reviewed-input',help='Offline evaluation only: import retained source judgments without model dispatch')
+    reviewed.add_argument('input')
+    reviewed.add_argument('--offline-evaluation', action='store_true', required=True,
+                          help='Explicit evaluation import, separate from the Luna product workflow')
     live = sub.add_parser('extract', help='Explicit opt-in model extraction, with durable accounting')
     live.add_argument('input')
     live.add_argument('--case-id', required=True)
     live.add_argument('--patient-id', required=True)
+    live.add_argument('--document-id', help='Retain an upstream source identity; defaults to CASE_ID:source')
     live.add_argument('--kind', choices=['dialogue', 'note'], default='note')
     live.add_argument('--encounter-time')
     live.add_argument('--model', choices=['gpt-6-luna'], default='gpt-6-luna')
     live.add_argument('--request-id', default='first')
+    live.add_argument('--semantics-version', choices=['clinical-fact-semantics/2'],
+                      help='Typed frequency/event_time/duration representation for new sources; legacy wire schema remains available')
+    live.add_argument('--task-version', choices=['clinical-event-assertions/1'],
+                      help='Opt-in independent events, documentation statements and proposed primary reference; requires semantics/2')
     cached = sub.add_parser('import-cache', help='Read original dialogue Engine cache without inference')
     cached.add_argument('root')
     cached.add_argument('encounter_id')
@@ -63,9 +72,12 @@ def main(argv=None):
     show.add_argument('--version', type=int)
     show.add_argument('--format', choices=['json', 'markdown'], default='markdown')
     show.add_argument('--output')
-    review = sub.add_parser('review', help='Apply human/AI review JSON as a new version')
+    review = sub.add_parser('review', help='Apply an active human review as a new immutable version')
     review.add_argument('case_id')
     review.add_argument('request')
+    typed_review=sub.add_parser('review-semantics',help='Audit a typed attribute/event correction as an immutable version')
+    typed_review.add_argument('case_id')
+    typed_review.add_argument('request')
     omission = sub.add_parser('correct-omission', help='Add a verified source-first omission as a new version')
     omission.add_argument('case_id')
     omission.add_argument('request')
@@ -99,13 +111,24 @@ def main(argv=None):
     if args.command == 'create':
         p = create_from_bundle(read_json(args.bundle))
         store.save(p, expected_version=0)
+    elif args.command == 'reviewed-input':
+        from .runtime import create_from_claim_reviews
+        value=read_json(args.input)
+        if set(value) != {'case_id','patient_id','source','claims','reviews','audit'}:
+            raise ValueError('Reviewed input requires exact source/claims/reviews/audit')
+        p=create_from_claim_reviews(value['source'],value['claims'],value['reviews'],
+            case_id=value['case_id'],patient_id=value['patient_id'],audit=value['audit'])
+        store.save(p,expected_version=0)
     elif args.command == 'extract':
         # Refuse duplicate case before spending a request.
         if any(c['case_id'] == args.case_id for c in store.list_cases()):
             raise ValueError('Case already exists; create a distinct encounter ID')
         text = Path(args.input).read_text(encoding='utf-8')
-        src = Source.create(args.case_id+':source', text, args.kind, encounter_time=args.encounter_time)
-        p = extract_live(args.case_id, args.patient_id, src, ledger, model=args.model, request_id=args.request_id)
+        src = Source.create(args.document_id if args.document_id is not None else args.case_id+':source',
+                            text, args.kind, encounter_time=args.encounter_time)
+        p = extract_live(args.case_id, args.patient_id, src, ledger, model=args.model,
+            request_id=args.request_id,semantics_version=args.semantics_version,
+            **({'task_version':args.task_version} if args.task_version is not None else {}))
         store.save(p, expected_version=0)
     elif args.command == 'import-cache':
         p = import_engine_cache(args.root, args.encounter_id, patient_id=args.patient_id, case_id=args.case_id)
@@ -115,11 +138,17 @@ def main(argv=None):
         store.save(p, expected_version=0)
     elif args.command == 'review':
         old = store.get(args.case_id)
-        p = review_packet(old, ReviewRequest.model_validate(read_json(args.request)))
+        p = review_packet(old, validate_product_review_request(old, ReviewRequest.model_validate(read_json(args.request))))
         store.save(p, expected_version=old.version)
+    elif args.command == 'review-semantics':
+        from .models import SemanticsReviewRequest
+        from .semantics import review_semantics
+        old=store.get(args.case_id)
+        p=review_semantics(old,validate_product_review_request(old,SemanticsReviewRequest.model_validate(read_json(args.request))))
+        store.save(p,expected_version=old.version)
     elif args.command in {'correct-omission', 'complete-eligible'}:
         old = store.get(args.case_id)
-        p = (correct_omission(old, OmissionCorrectionRequest.model_validate(read_json(args.request)))
+        p = (correct_omission(old, validate_product_review_request(old, OmissionCorrectionRequest.model_validate(read_json(args.request))))
              if args.command == 'correct-omission' else complete_eligible_omissions(old, store=store))
         if p.version == old.version:
             print(json.dumps({'case_id':old.case_id,'version':old.version,'eligible_corrections':0}))

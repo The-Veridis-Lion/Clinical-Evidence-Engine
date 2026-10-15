@@ -4,7 +4,7 @@ import json
 from ..claims_review.facts import source_key
 from ..claims_review.prepare import digest
 from .contracts import Case
-from .requirement_support import VERSION as SUPPORT_VERSION, documentary_facts
+from .requirement_support import VERSION as SUPPORT_VERSION, PRODUCT_SUPPORT_POLICY, documentary_facts
 
 VERSION = 'careflow-raw-intake/1'
 
@@ -27,6 +27,7 @@ def build_case(case_id, request, review_as_of, sources, *, extractions=(), clini
     if hasattr(review_as_of, 'isoformat'):
         review_as_of = review_as_of.isoformat()
     raw = {'case_id': case_id, 'request': json_value(request), 'review_as_of': review_as_of,
+        'source_support_policy': PRODUCT_SUPPORT_POLICY,
         'sources': [json_value(s) for s in sources], 'facts': [],
         'clinical_context': [json_value(c) for c in extractions],
         'clinical_bindings': [json_value(b) for b in clinical_bindings]}

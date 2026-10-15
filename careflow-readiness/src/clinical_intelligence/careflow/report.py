@@ -112,6 +112,13 @@ def markdown(packet, reviews=()):
                 f"Amends: {cell(fact['amends_fact_id'])}\n"]
         if fact.get('requirement_support'):
             out.append(literal(fact['requirement_support'], 'json'))
+            support = fact['requirement_support']
+            if 'primary_evidence_semantic_status' in support:
+                out.append('Original primary-reference support: ' + support['primary_evidence_semantic_status'] +
+                    '. Exact offsets validate location; they do not certify every selected quote.\n')
+            for span in support.get('preferred_source_evidence', []):
+                out += [f"Source-supported passage: {cell(span['source_id'])} · Unicode offsets: [{span['start']}, {span['end']})\n",
+                        literal(span['quote'])]
         for citation in fact['citations']:
             out += [f"Source: {cell(citation['source_id'])} · locator: {cell(citation['locator'])} · hash: {citation['source_sha256']}\n",
                     f"Unicode offsets: [{citation['start']}, {citation['end']}) · method: {citation['method']}\n",

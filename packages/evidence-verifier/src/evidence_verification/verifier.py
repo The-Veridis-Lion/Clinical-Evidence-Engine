@@ -2,11 +2,14 @@
 from __future__ import annotations
 from .models import (BoundVerificationResult, Calibration, Claim, DimensionCheck, ENGINE_VERSION, METHOD_VERSION,
                      Source, SourceReview, Span, VerificationResult)
-from .coverage import AUTO_SCOPE, automatic_symptom_scope, canonical_dimension, enumerate_source_assertions, inspect_source_context, norm, overlapping
+from .coverage import AUTO_SCOPE, LITERAL_INTERPRETATION, TEMPORAL_INTERPRETATION, SCOPED_INTERPRETATIONS, automatic_symptom_scope, canonical_dimension, enumerate_source_assertions, inspect_source_context, norm, overlapping
 
 DIMENSIONS=('category','concept','experiencer','reporting_basis','polarity','certainty',
             'temporality','event_time','action_type','action_state','completion_scope','attributes')
 UNKNOWN={None,'','unknown','unspecified','uncertain','not_applicable'}
+ACTION_REPRESENTATIONS={'take':'administration_event','took':'administration_event',
+    'taken':'administration_event','taking':'administration_event','administered':'administration_event',
+    'prescribed':'prescription'}
 
 
 def _known(value):
@@ -17,7 +20,7 @@ def _canonical(key,value):
     return canonical_dimension(key,value)
 
 
-def _compare(claim,atom):
+def _compare(claim,atom, *, source_interpretation_version=None):
     checks=[]
     for key in DIMENSIONS:
         proposed=getattr(claim,key);actual=getattr(atom,key)
@@ -38,7 +41,11 @@ def _compare(claim,atom):
             state='UNVERIFIED';reason='Bounded source grammar cannot establish this dimension.'
         elif _canonical(key,proposed)==_canonical(key,actual):
             state='SUPPORTED';reason='Independent explicit source assertion agrees in this dimension.'
-        elif key in {'reporting_basis','certainty','category','action_type'}:
+        elif (source_interpretation_version in {LITERAL_INTERPRETATION,TEMPORAL_INTERPRETATION} and key=='action_type' and
+              ACTION_REPRESENTATIONS.get(proposed,proposed)==ACTION_REPRESENTATIONS.get(actual,actual)):
+            state='SUPPORTED';reason=f'Versioned action representation equivalence: source {actual}; proposal {proposed}. No event state or completion scope inferred.'
+            actual=proposed
+        elif key in {'reporting_basis','certainty','category','action_type'} or (source_interpretation_version and key=='event_time'):
             state='UNVERIFIED';reason='Reporting/certainty expressions are not assumed interchangeable.'
         else:
             state='CONTRADICTED';reason='Explicit source assertion contradicts this proposed dimension.'
@@ -53,7 +60,7 @@ def _contradictory_atoms(left,right):
         left.event_time!=right.event_time):
         return False
     # Unresolved contradictory statements about the same event, not historical transitions.
-    return (left.polarity!=right.polarity or
+    return ((left.polarity not in UNKNOWN and right.polarity not in UNKNOWN and left.polarity!=right.polarity) or
             (left.action_state not in UNKNOWN and right.action_state not in UNKNOWN and
              left.action_state!=right.action_state))
 
@@ -61,7 +68,10 @@ def _contradictory_atoms(left,right):
 class EvidenceVerifier:
     version=ENGINE_VERSION
 
-    def __init__(self, *, calibrations=()):
+    def __init__(self, *, calibrations=(), source_interpretation_version=None):
+        if source_interpretation_version not in {None, *SCOPED_INTERPRETATIONS}:
+            raise ValueError('Unavailable source interpretation version')
+        self.source_interpretation_version=source_interpretation_version
         self.calibrations=[Calibration.model_validate(c) for c in calibrations]
 
     def _route(self,source,claim,status,checks,method,uncertainty,supporting_spans):
@@ -75,7 +85,7 @@ class EvidenceVerifier:
             return 'REVIEW_REQUIRED',None
         # Calibration cannot broaden the declared small low-risk grammar boundary.
         full_source=Span(start=0,end=len(source.text),quote=source.text,source_id=source.source_id)
-        low_risk=(method==METHOD_VERSION and claim.category=='symptom' and claim.experiencer=='patient' and
+        low_risk=(method in {METHOD_VERSION,*SCOPED_INTERPRETATIONS} and claim.category=='symptom' and claim.experiencer=='patient' and
                   claim.polarity in {'affirmed','absent','present'} and claim.temporality=='current' and
                   claim.action_state in {'unknown',''} and not any(v not in (None,'') for v in claim.attributes.values()) and
                   not uncertainty and automatic_symptom_scope(supporting_spans) and
@@ -83,7 +93,7 @@ class EvidenceVerifier:
                   all(c.status in {'SUPPORTED','NOT_ASSERTED'} for c in checks))
         if low_risk:
             for calibration in self.calibrations:
-                if (calibration.method==method and calibration.scope==AUTO_SCOPE and claim.category in calibration.categories and
+                if (calibration.method==METHOD_VERSION and calibration.scope==AUTO_SCOPE and claim.category in calibration.categories and
                     calibration.measured_precision>=calibration.minimum_precision):
                     return 'AUTO_ACCEPT_ELIGIBLE',calibration.calibration_id
         return 'REVIEW_REQUIRED',None
@@ -100,7 +110,7 @@ class EvidenceVerifier:
             return VerificationResult(claim_id=claim.claim_id,claim_fingerprint=claim.fingerprint(),source_hash=source.sha256,
                 status='INSUFFICIENT_EVIDENCE',dimension_checks=checks,reasons=['Mechanical source binding failed.'],
                 method='exact-source-binding/1',uncertainty=['invalid_source_binding'],risk_route='MISSING_EVIDENCE')
-        enum=enumerate_source_assertions(source)
+        enum=enumerate_source_assertions(source,source_interpretation_version=self.source_interpretation_version)
         candidates=[a for a in enum.assertions if norm(a.concept)==norm(claim.concept) and overlapping(a,claim)]
         atoms_same_entity=[a for a in enum.assertions if norm(a.concept)==norm(claim.concept) and
                            a.experiencer==claim.experiencer and a.temporality==claim.temporality and
@@ -108,7 +118,7 @@ class EvidenceVerifier:
         checks=[];atom=None;uncertainty=[];reasons=[];support=[];counter=[];context_spans=[]
         status='INSUFFICIENT_EVIDENCE'
         if candidates:
-            scored=[(a,_compare(claim,a)) for a in candidates]
+            scored=[(a,_compare(claim,a,source_interpretation_version=self.source_interpretation_version)) for a in candidates]
             # Do not select the best competing event. Multiple compatible atoms require review.
             scoped=[pair for pair in scored if pair[0].experiencer==claim.experiencer and
                     pair[0].temporality==claim.temporality and
@@ -146,7 +156,7 @@ class EvidenceVerifier:
                 uncertainty.extend(context_uncertainty)
                 reasons.append('Original/adjacent source scope contains unresolved subject, event time, modality or negation qualifiers. Local candidate is not a complete support proof.')
                 support=[]
-        method=METHOD_VERSION;model_version=None
+        method=self.source_interpretation_version or METHOD_VERSION;model_version=None
         checked_reviews=[];invalid_reviews=[]
         for raw in reviews:
             try:
@@ -160,7 +170,12 @@ class EvidenceVerifier:
         if checked_reviews:
             review_states={r.status for r in checked_reviews}
             if len(review_states)>1 or (status in {'SUPPORTED_BY_SOURCE','CONTRADICTED','CONFLICTED'} and status not in review_states):
-                status='CONFLICTED';reasons.append('Independent source judgments materially disagree; no majority vote.')
+                # Method opinions disagreeing is not a contradiction between the
+                # original clinical sources. Preserve actual source conflicts;
+                # otherwise route the assessment disagreement for analysis.
+                status=('INSUFFICIENT_EVIDENCE' if self.source_interpretation_version and status!='CONFLICTED' else 'CONFLICTED')
+                reasons.append('Verification methods disagree; no majority vote or rewriting of original sources.' if self.source_interpretation_version
+                               else 'Independent source judgments materially disagree; no majority vote.')
                 counter.extend(s for r in checked_reviews for s in r.counter_spans)
                 support.extend(s for r in checked_reviews for s in r.supporting_spans)
                 uncertainty.append('source_review_disagreement')

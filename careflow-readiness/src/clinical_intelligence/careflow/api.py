@@ -5,7 +5,7 @@ from urllib.parse import parse_qs, unquote, urlsplit
 
 from pydantic import ValidationError
 
-from .contracts import Case, EvidenceUpdate, Review, SourceIntake
+from .contracts import Case, EvidenceUpdate, Review, SourceIntake, SourceMaterialUpdate
 from .report import SUPPORT_VIEW_VERSION, markdown, packet_support_view
 from .rules import manifests
 from .service import CareFlow, RevisionConflict
@@ -92,6 +92,7 @@ def make_server(db, host='127.0.0.1', port=8765):
                 return self.respond(200, {'case': Case.model_json_schema(), 'review': Review.model_json_schema(),
                                           'evidence_update': EvidenceUpdate.model_json_schema(),
                                           'source_intake': SourceIntake.model_json_schema(),
+                                          'source_material_update': SourceMaterialUpdate.model_json_schema(),
                                           'requirement_evidence': RequirementEvidence.model_json_schema()})
             if self.command == 'POST' and path == ['v1', 'intake']:
                 from .raw_input import build_case
@@ -129,6 +130,8 @@ def make_server(db, host='127.0.0.1', port=8765):
                     return self.respond(200, {'invocation': 'optional_external_reviewer',
                                               'model_calls': 0, 'packet': packet, 'review_schema': Review.model_json_schema()})
             if self.command == 'POST':
+                if action == 'materials':
+                    return self.respond(201, app.add_material_sources(case_id, self.body(SourceMaterialUpdate)))
                 if action == 'reviews':
                     return self.respond(201, app.review(case_id, self.body(Review)))
                 if action in {'evidence', 'corrections'}:

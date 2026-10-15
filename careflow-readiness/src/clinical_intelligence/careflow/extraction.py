@@ -72,6 +72,9 @@ def extract_document(record, cache_root, ledger, *, provider=None):
     References are never serialized into the request directory. A valid first
     extraction is final; semantic scores cannot authorize another attempt.
     """
+    configured_model = getattr(getattr(provider, 'config', None), 'model', None)
+    if configured_model is not None and configured_model != 'gpt-6-luna':
+        raise ValueError('CareFlow clinical extraction accepts gpt-6-luna only; external evaluations are offline')
     document, initial_prompt, shape, identity = source_contract(record)
     fingerprint = sha(canonical(identity))
     root = Path(cache_root).resolve() / fingerprint

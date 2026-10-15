@@ -8,6 +8,7 @@ from ..dialogue_first.dataset import source_index as engine_index
 from ..dialogue_first.prompt import DIALOGUE_INSTRUCTION, NOTE_INSTRUCTION
 
 VERSION = 'copilot-source-index/v1'
+TASK_VERSION = 'clinical-event-assertions/1'
 NATIVE_LABELS = re.compile(r'(?<!\w)(Doctor|Patient|Nurse|Clinician|Physician|Provider):', re.I)
 
 
@@ -65,22 +66,135 @@ def source_index(doc):
     return {'turns': turns, 'source_catalogue': catalogue}
 
 
-def prompt(doc):
-    return (DIALOGUE_INSTRUCTION if doc.input_kind == 'dialogue' else NOTE_INSTRUCTION)+'\n'+json.dumps({
+def prompt(doc, *, semantics_version=None, task_version=None):
+    instruction = DIALOGUE_INSTRUCTION if doc.input_kind == 'dialogue' else NOTE_INSTRUCTION
+    if semantics_version == 'clinical-fact-semantics/2':
+        instruction += ('\nVERSIONED REPRESENTATION CONTRACT: each fact has a semantics object. '
+            'Frequency (e.g. daily) is separate from elapsed duration; event_time preserves explicit original time wording. '
+            'Null means not asserted, unknown action_state means not established. '
+            'An administered/taken dose is a single_event, never a completed course. '
+            'Conditional consideration is discussed, not a committed plan or execution. '
+            'Do not invent values; the source verifier checks each dimension separately.')
+    elif semantics_version is not None:
+        raise ValueError('Unsupported clinical semantics schema version')
+    if task_version is not None:
+        if task_version != TASK_VERSION or semantics_version != 'clinical-fact-semantics/2':
+            raise ValueError('Event assertion task requires the existing clinical semantics/2 schema')
+        instruction += ('\nCLINICAL EVENT ASSERTIONS CONTRACT/1: facts are independent propositions, not just unique concepts. '
+            'Keep distinct subject, event time, action and completion scope. A future scheduled treatment and its currently not-started course are two propositions, even for the same treatment. '
+            'A completed session is not a completed course. Do not combine incompatible present, historical or planned assertions into one clinical_status. '
+            'Frequency, event_time, dose and duration are attributes of their corresponding assertion, not extra duplicate facts. '
+            'Choose assertion_basis for the actual proposition: a clinician future order/assessment is not an observation of a performed action; preserve independently measured findings as observations. '
+            'Keep explicit documentation statements as independent facts using category=other, concept="documentation of [the documented target]", clinical_status=not_documented when documentation is explicitly absent. '
+            'The absence polarity then describes documentation only; it does not assert the clinical event or adverse effect was absent. Unstated documentation is not an explicit documentation-gap fact. '
+            'For each fact primary_source_id selects a cited passage that directly supports that proposition, or null if no primary anchor can be established. '
+            'Keep every original evidence.source_ids in source order, including question/answer context. A question alone is not proof; yes/no or elliptical answers need the governing question as well. '
+            'Select primary support by meaning, never simply by patient/clinician speaker role. Do not discard other supporting or conflicting passages.')
+    return instruction+'\n'+json.dumps({
         'document_id': doc.document_id, 'encounter_id': doc.encounter_id, 'input_kind': doc.input_kind,
         'transcript' if doc.input_kind == 'dialogue' else 'note': doc.text,
         **source_index(doc)}, ensure_ascii=False)
 
 
-def schema(doc):
-    shape = engine.Proposal.model_json_schema()
+def schema(doc, *, semantics_version=None, task_version=None):
+    if task_version is not None:
+        if task_version != TASK_VERSION or semantics_version != 'clinical-fact-semantics/2':
+            raise ValueError('Event assertion task requires the existing clinical semantics/2 schema')
+        from .semantics import ClinicalSemanticsV2
+        class EventFact(engine.ProposedFact):
+            semantics: ClinicalSemanticsV2
+            primary_source_id: str | None
+        class EventProposal(engine.Proposal):
+            facts: list[EventFact]
+        shape = EventProposal.model_json_schema()
+        shape['$defs']['EventFact']['properties']['primary_source_id']['anyOf'][0]['enum'] = [
+            s['source_id'] for s in source_index(doc)['source_catalogue']]
+        shape['$defs']['ClinicalSemanticsV2']['required'] = list(shape['$defs']['ClinicalSemanticsV2']['properties'])
+        shape['$defs']['ClinicalSemanticsV2']['properties']['version'].pop('default',None)
+    elif semantics_version == 'clinical-fact-semantics/2':
+        from .semantics import ClinicalSemanticsV2
+        class ProposedFactV2(engine.ProposedFact):
+            semantics: ClinicalSemanticsV2
+        class ProposalV2(engine.Proposal):
+            facts: list[ProposedFactV2]
+        shape = ProposalV2.model_json_schema()
+        shape['$defs']['ClinicalSemanticsV2']['required'] = list(shape['$defs']['ClinicalSemanticsV2']['properties'])
+        shape['$defs']['ClinicalSemanticsV2']['properties']['version'].pop('default',None)
+    elif semantics_version is None:
+        shape = engine.Proposal.model_json_schema()
+    else:
+        raise ValueError('Unsupported clinical semantics schema version')
     shape['$defs']['References']['properties']['source_ids']['items']['enum'] = [s['source_id'] for s in source_index(doc)['source_catalogue']]
     shape['properties']['document_id']['enum'] = [doc.document_id]
     return shape
 
 
-def inspect(raw, doc):
+def inspect(raw, doc, *, semantics_version=None, task_version=None):
     """Resolve using Engine types/resolvers with the application catalogue."""
+    if task_version is not None:
+        if task_version != TASK_VERSION or semantics_version != 'clinical-fact-semantics/2':
+            raise ValueError('Event assertion task requires the existing clinical semantics/2 schema')
+        try:
+            payload=json.loads(raw)
+            if not isinstance(payload,dict) or not isinstance(payload.get('facts'),list):
+                raise ValueError('Malformed event assertion envelope')
+            stripped=[];anchors={};errors=[]
+            for i,fact in enumerate(payload['facts']):
+                if not isinstance(fact,dict):
+                    stripped.append(fact);continue
+                primary=fact.get('primary_source_id')
+                if ('primary_source_id' not in fact or
+                        (primary is not None and (not isinstance(primary,str) or
+                         primary not in fact.get('evidence',{}).get('source_ids',[])))):
+                    stripped.append({})
+                    errors.append(f'facts[{i}].primary_source_id must be null or a selected evidence source ID')
+                    continue
+                stripped.append({k:v for k,v in fact.items() if k!='primary_source_id'})
+                anchors[i]={'primary_source_id':primary,
+                    'selected_source_ids':list(fact.get('evidence',{}).get('source_ids',[]))}
+            result=inspect(json.dumps({**payload,'facts':stripped},ensure_ascii=False),doc,
+                semantics_version=semantics_version)
+            result['errors'].extend(errors)
+            if result['result'] is not None:
+                result['result']['event_assertion_contract']={'version':TASK_VERSION,'source_sha256':doc.note_sha256,
+                    'assertions':[{'fact_index':i,**anchors[raw_index]} for i,raw_index in enumerate(result['accepted_indices'])]}
+                result['status']='PARTIAL' if result['errors'] and result['result']['facts'] else 'INVALID' if result['errors'] else 'VALID'
+            return result
+        except (ValueError,TypeError,KeyError,AttributeError) as exc:
+            return dict(status='INVALID',result=None,accepted_indices=[],errors=[str(exc)])
+    if semantics_version == 'clinical-fact-semantics/2':
+        from .semantics import ClinicalSemanticsV2
+        try:
+            payload = json.loads(raw)
+            legacy = {**payload,'facts':[{k:v for k,v in f.items() if k != 'semantics'} if isinstance(f,dict) else f for f in payload['facts']]}
+            result = inspect(json.dumps(legacy,ensure_ascii=False),doc)
+            if result['result'] is not None:
+                selected=[];typed=[];indices=[];mapping={}
+                for old_index,raw_index in enumerate(result['accepted_indices']):
+                    try:
+                        semantics = ClinicalSemanticsV2.model_validate(payload['facts'][raw_index]['semantics']).model_dump(mode='json')
+                    except (KeyError,ValueError,TypeError) as exc:
+                        result['errors'].append(f'facts[{raw_index}].semantics: {exc}')
+                        continue
+                    mapping[old_index]=len(selected)
+                    selected.append(result['result']['facts'][old_index])
+                    typed.append({'fact_index':len(selected)-1,'semantics':semantics})
+                    indices.append(raw_index)
+                relationships=[]
+                for relation in result['result']['relationships']:
+                    if relation['from_fact_index'] not in mapping or relation['to_fact_index'] not in mapping:
+                        result['errors'].append('Relationship targets rejected typed clinical semantics')
+                        continue
+                    relationships.append({**relation,'from_fact_index':mapping[relation['from_fact_index']],
+                        'to_fact_index':mapping[relation['to_fact_index']]})
+                result['result'].update(facts=selected,relationships=relationships,clinical_semantics=typed)
+                result['accepted_indices']=indices
+                result['status']='PARTIAL' if result['errors'] and selected else 'INVALID' if result['errors'] else 'VALID'
+            return result
+        except (KeyError,ValueError,TypeError) as exc:
+            return dict(status='INVALID',result=None,accepted_indices=[],errors=[str(exc)])
+    if semantics_version is not None:
+        raise ValueError('Unsupported clinical semantics schema version')
     if source_index(doc) == engine_index(doc):
         return engine.inspect(raw, doc)
     doc.verify()

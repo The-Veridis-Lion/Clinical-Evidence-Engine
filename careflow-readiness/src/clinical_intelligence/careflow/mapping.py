@@ -57,7 +57,14 @@ def normalized_status(value):
     return '_'.join((value or '').strip().casefold().split())
 
 
-def material_assertion(fact, binding):
+def material_assertion(fact, binding, *, source_support_policy=None):
+    # Availability of the declared attachment is a documentary condition, not
+    # certification of every clinical statement in that attachment. Scope,
+    # exact extraction references and availability are checked by map_clinical.
+    if source_support_policy in {'luna-only-source-policy/1', 'luna-only-source-policy/2', 'luna-only-source-policy/3', 'luna-only-source-policy/4'} and binding.requirement == 'clinical_summary':
+        if binding.document_role != 'clinical_summary':
+            return None, 'document_not_declared_as_request_summary'
+        return True, 'available_explicitly_attached_clinical_summary'
     if fact['experiencer'] != 'patient':
         return None, 'clinical_subject_not_patient'
     if fact['attribution_confidence'] == 'uncertain':
@@ -134,7 +141,8 @@ def map_clinical(case):
             fact, context = item
             if context['scope_status'] != 'IN_SCOPE':
                 issues.append('clinical_source_' + context['exclusion_reason'])
-            value, reason = material_assertion(fact, binding)
+            value, reason = material_assertion(fact, binding,
+                source_support_policy=case.source_support_policy)
             values.append([fact['context_fact_id'], value, reason])
             refs = [EvidenceRef(source_id=binding.binding_source_id, field='clinical_binding')]
             text_source = sources[fact['source_id']]

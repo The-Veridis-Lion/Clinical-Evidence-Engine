@@ -82,6 +82,10 @@ def prepare(case, extra_facts=()):
                                    'ASSERTED_ABSENT' if fact.assertion is False else 'UNKNOWN',
                'grounding_errors': errors, 'fact_sha256': digest(fact.model_dump(mode='json')),
                'requirement_support': verification}
+        if verification.get('semantic_evidence_binding_version'):
+            row.update(selected_refs=[r.model_dump(mode='json') for r in fact.evidence],
+                semantic_support_refs=verification['semantic_support_refs'],
+                requirement_citations=verification['source_refs'])
         if reason:
             excluded.append({**row, 'reason': reason})
             continue

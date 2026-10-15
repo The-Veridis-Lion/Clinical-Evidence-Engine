@@ -134,6 +134,16 @@ class OmissionCorrectionRequest(Model):
     assertion: dict
 
 
+class SemanticsReviewRequest(Model):
+    """A v6-only sidecar correction; legacy ClinicalFact shape stays frozen."""
+    base_version: int = Field(ge=1)
+    fact_id: str
+    reason: str = Field(min_length=1)
+    evidence_ids: list[str] = Field(min_length=1)
+    reviewer: Reviewer
+    semantics: dict
+
+
 class Packet(Model):
     schema_version: Literal['clinical-evidence-copilot/v1'] = 'clinical-evidence-copilot/v1'
     case_id: str = Field(min_length=1)
@@ -170,7 +180,7 @@ class Packet(Model):
         # Validate the stored graph and prose, without reinterpreting historical
         # review-routing decisions under a newer heuristic implementation.
         from .evidence import ground_fact
-        from .service import assertion_text, soap_section
+        from .service import assertion_text, soap_section, event_projection_policy
         try:
             evidence = {e.evidence_id: e for e in self.evidence}
             fact_ids = {f.fact_id for f in self.facts}
@@ -199,10 +209,12 @@ class Packet(Model):
                         raise ValueError('Each projected assertion must name its source fact')
                     f = next(f for f in self.facts if f.fact_id == row.fact_ids[0])
                     projection_version = self.extraction_metadata.get('soap_projection_version', 'soap/v1')
-                    if projection_version not in {'soap/v1', 'soap/v2', 'soap/v3', 'soap/v4', 'soap/v5'}:
+                    if projection_version not in {'soap/v1', 'soap/v2', 'soap/v3', 'soap/v4', 'soap/v5', 'soap/v6'}:
                         raise ValueError('Unsupported SOAP projection version')
                     expected_section = soap_section(f, projection_version)
-                    if key != expected_section or row.text != assertion_text(f,projection_version) or row.evidence_ids != f.evidence_ids or row.review_status != f.review_status or row.requires_review != (f.fact_id in self.review_required_fact_ids):
+                    verification_record = (next((r for r in self.extraction_metadata.get('evidence_verification', {}).get('assertions', [])
+                        if r['fact_id'] == f.fact_id), None) if projection_version == 'soap/v6' else None)
+                    if key != expected_section or row.text != assertion_text(f,projection_version,verification_record,event_projection_policy(self)) or row.evidence_ids != f.evidence_ids or row.review_status != f.review_status or row.requires_review != (f.fact_id in self.review_required_fact_ids):
                         raise ValueError('SOAP projection differs from linked assertion')
                     linked.extend(row.fact_ids)
             if len(linked) != len(self.facts) or set(linked) != fact_ids:
@@ -224,6 +236,9 @@ class Packet(Model):
             if self.extraction_metadata.get('soap_projection_version') == 'soap/v5':
                 from .service import validate_v5_projection
                 validate_v5_projection(self)
+            if self.extraction_metadata.get('soap_projection_version') == 'soap/v6':
+                from .service import validate_v6_projection
+                validate_v6_projection(self)
         except (ValueError, StopIteration, KeyError, TypeError) as exc:
             raise ValueError('Packet consistency violation: '+str(exc)) from exc
         return self
