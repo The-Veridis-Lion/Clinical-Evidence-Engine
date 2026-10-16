@@ -1,0 +1,29 @@
+SYNTHETIC DEMONSTRATION. Invented patient, clinician and care history; not medical advice.
+Patient ID: SYN-SHOWCASE-KNEE-001
+Patient name: Jordan Avery, age 54
+Encounter: V4, primary-care follow-up, September 22, 2026
+Clinician: Morgan Ellis, MD (SYN-ELLIS)
+Related source: XR-SYN-0903, left knee radiology report dated September 3, 2026
+
+Subjective:
+Jordan returns to review left knee pain, the X-ray and early physical-therapy progress. The patient reports left knee pain of 4/10 when climbing stairs during the last 24 hours on a zero-to-ten scale, and 1/10 at rest. Walking tolerance is now approximately 20 minutes. The patient reports no locking, giving way, falls, fever, redness, calf pain, calf swelling, numbness or weakness. The knee is not puffy today. Morning stiffness lasts about five minutes. There is still discomfort on repeated stair use at school, and the patient has not resumed the full 30-minute walk to work.
+
+The patient reports attending two clinic PT sessions, on September 8 and September 15. The therapist notes list 40 minutes for the first session and 45 minutes for the second. This statement reviews those same earlier sessions; it does not document new physical therapy at today's medical visit. Home exercise was performed on four days during the last week, but its minutes were not recorded. The third clinic PT appointment remains scheduled for September 29.
+
+Medication history: Acetaminophen 500 mg by mouth was taken once on each of two days in the last week, with some relief. The patient denies adverse effects, abdominal pain or black stools. Lisinopril 10 mg every morning continues. The prior maximum of three acetaminophen tablets per day was a permitted limit, not the patient's actual daily use. The penicillin allergy remains a childhood rash; there is no new allergic reaction.
+
+Objective:
+Blood pressure is 126/76 mmHg, pulse 70/min, respiratory rate 16/min, temperature 36.7 degrees Celsius and oxygen saturation 98% on room air. The patient walks without an obvious limp on level ground today. There is mild medial left knee tenderness and crepitus. No redness, warmth or visible effusion is present. Left knee range of motion is 0–125 degrees, and extension and flexion strength are 5/5. The calf is not swollen or tender.
+
+Imaging review:
+The standing left knee radiograph was performed on September 3, 2026, not today. Its report describes mild medial joint-space narrowing and small marginal osteophytes, without acute fracture or dislocation. No new X-ray, MRI or other imaging was performed during this September 22 visit.
+
+Assessment:
+The clinician records symptomatic mild left knee osteoarthritis, supported by the September 3 radiographic findings together with the history and examination. Reported stair pain and walking tolerance have improved, but activity limitation persists. The record does not establish that physical therapy alone caused the change. Hypertension remains controlled on the existing medication. The planned six-week PT course is ongoing and has not been completed; there is no discharge or full-course completion report.
+
+Plan:
+Continue the planned physical-therapy program and the therapist's home exercise instructions. The next attended session has not yet occurred. In view of reduced use, change the acetaminophen instruction to 500 mg by mouth every twelve hours as needed, with a maximum of two 500 mg tablets per day. This replaces the September 1 permitted maximum of three tablets per day; it is a new instruction, not evidence that two doses were taken today. Continue lisinopril 10 mg each morning. Do not add an oral anti-inflammatory medicine at this visit.
+
+Discuss activity pacing and a gradual return toward the patient's walking goal. Arrange another medical review in four weeks if symptoms remain limiting, or earlier for a hot swollen knee, fever or inability to bear weight. These are safety-net instructions, not current symptoms. No injection, medication administration or PT treatment was performed during this medical follow-up. It lasted 20 minutes; those are primary-care visit minutes, not PT contact time. This note is clinical follow-up evidence, not a prior-authorization form or an insurer's decision.
+
+Synthetic sign-off: Morgan Ellis, MD, September 22, 2026.

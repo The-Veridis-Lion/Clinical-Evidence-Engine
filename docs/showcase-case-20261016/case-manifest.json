@@ -1,0 +1,143 @@
+{
+  "created_at": "2026-10-16T05:40:13.200177+00:00",
+  "version": "synthetic-knee-showcase/1",
+  "patient_id": "SYN-SHOWCASE-KNEE-001",
+  "synthetic": true,
+  "authorship": "New authored fictional dialogue and notes; not a Synthea transcript or real patient record. No external clinical dataset was used.",
+  "active_original_files": 8,
+  "clinical_files": [
+    {
+      "path": "docs/showcase-case-20261016/sources/01-initial-consultation-v2.txt",
+      "sha256": "cb189a6d3fa4eeb69ecb6b6e8e25ce8b36366f621b3c89f72d184521c94b050d",
+      "bytes": 6205,
+      "document_id": "showcase-initial-consultation-v2",
+      "input_kind": "dialogue",
+      "encounter_id": "V1",
+      "encounter_time": "2026-09-01"
+    },
+    {
+      "path": "docs/showcase-case-20261016/sources/02-left-knee-radiology.txt",
+      "sha256": "53a4c3003b1f36c70fb0dcd03643f3bce8d16ece738ef7d46efcfe9e24a4f26c",
+      "bytes": 1869,
+      "document_id": "showcase-knee-radiology",
+      "input_kind": "note",
+      "encounter_id": "V4",
+      "encounter_time": "2026-09-22"
+    },
+    {
+      "path": "docs/showcase-case-20261016/sources/04-pt-initial-treatment.txt",
+      "sha256": "81fbd3fe215f3debaf3335137eb39f368a2414fc19b1df0be51106092ec204dd",
+      "bytes": 3182,
+      "document_id": "showcase-pt-session-1",
+      "input_kind": "note",
+      "encounter_id": "V2",
+      "encounter_time": "2026-09-08"
+    },
+    {
+      "path": "docs/showcase-case-20261016/sources/05-pt-followup-dialogue.txt",
+      "sha256": "907847ac318d4183b830eded10a3ee6effd72e87be06b3036baf078fbe948336",
+      "bytes": 2920,
+      "document_id": "showcase-pt-session-2",
+      "input_kind": "dialogue",
+      "encounter_id": "V3",
+      "encounter_time": "2026-09-15"
+    },
+    {
+      "path": "docs/showcase-case-20261016/sources/06-primary-care-followup.txt",
+      "sha256": "3e628cffdc020085c9420411d72a146f9f6f6a8638e2683d336654351225f9a1",
+      "bytes": 4283,
+      "document_id": "showcase-medical-followup",
+      "input_kind": "note",
+      "encounter_id": "V4",
+      "encounter_time": "2026-09-22"
+    },
+    {
+      "path": "docs/showcase-case-20261016/sources/07-pt-third-session-v2.txt",
+      "sha256": "4303951090f36839d5e6674725d7cfb3fd8ec3daf07e84834c75aa75ff250fc8",
+      "bytes": 2984,
+      "document_id": "showcase-pt-session-3",
+      "input_kind": "note",
+      "encounter_id": "V5",
+      "encounter_time": "2026-09-29"
+    }
+  ],
+  "material_files": [
+    {
+      "path": "docs/showcase-case-20261016/sources/03-referral-order-v2.txt",
+      "sha256": "25f7c20d5df1624b8add2238be4031584349ae4a7b853cab83e968baa0c92e87",
+      "bytes": 726,
+      "request_id": "SYN-SHOWCASE-REF-001",
+      "document_roles": [
+        "referral_request"
+      ],
+      "extraction_calls": 0,
+      "method": "ordinary deterministic received-document intake; original file text is the material, not model output"
+    },
+    {
+      "path": "docs/showcase-case-20261016/sources/08-prior-authorization-packet-v2.txt",
+      "sha256": "211d5c4725536546cbaa9c33facc9c3621769e09bb0d745f9926571072683d38",
+      "bytes": 859,
+      "request_id": "SYN-SHOWCASE-PA-001",
+      "document_roles": [
+        "prior_authorization_request",
+        "prior_authorization_form"
+      ],
+      "extraction_calls": 0,
+      "method": "ordinary deterministic received-document intake; original file text is the material, not model output"
+    }
+  ],
+  "registered_encounters": [
+    {
+      "encounter_id": "V1",
+      "date": "2026-09-01"
+    },
+    {
+      "encounter_id": "V2",
+      "date": "2026-09-08"
+    },
+    {
+      "encounter_id": "V3",
+      "date": "2026-09-15"
+    },
+    {
+      "encounter_id": "V4",
+      "date": "2026-09-22"
+    },
+    {
+      "encounter_id": "V5",
+      "date": "2026-09-29"
+    }
+  ],
+  "clinical_event_note": "The radiology report concerns a September 3 diagnostic event and is attached to V4 for September 22 review. It is not a sixth registered clinic visit.",
+  "expected_source_story": {
+    "stair_pain_by_encounter": {
+      "V1": 7,
+      "V2": 6,
+      "V3": 5,
+      "V4": 4,
+      "V5": 3
+    },
+    "pain_scale": "patient-reported zero-to-ten during stair climbing in preceding 24 hours; rest scores remain separate",
+    "attended_pt_events": 3,
+    "documented_pt_minutes": 85,
+    "pt_duration_missing_events": [
+      "PT-S3"
+    ],
+    "pt_duration_complete": false,
+    "office_minutes_excluded": [
+      30,
+      20
+    ],
+    "pt_course_completed": false,
+    "medication_instruction_change": "September 22 acetaminophen maximum reduced from three to two 500 mg tablets/day; actual reported use is separate",
+    "referral_after_form": "DOCUMENTATION_READY if current declared checklist and shared evidence checks pass",
+    "pa_after_form": "Not Ready: completed prior course is explicitly required but not completed. Full form does not repair the clinical gap."
+  },
+  "initial_gate": {
+    "audit": "initial-v2/independent-audit.json",
+    "result": "Core content in all SOAP domains; draft usable for source review, not flawless automated extraction",
+    "known_issues": "Two historical negatives missing and several plan items placed in A. Preserved, not silently repaired. No critical unsupported clinical assertion found by non-expert source audit."
+  },
+  "exported_at": "2026-10-16T08:23:48.349905+00:00",
+  "source_manifest_sha256": "47a91793a04133782cf60b31c721cdd579f6f58c77348b28f96c4505a5350546"
+}

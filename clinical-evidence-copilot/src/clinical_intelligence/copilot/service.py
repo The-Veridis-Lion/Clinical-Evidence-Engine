@@ -901,16 +901,22 @@ def review_packet(packet, request):
     item = next((f for f in p.facts if f.fact_id == request.fact_id), None)
     if item is None:
         raise ValueError('Unknown fact_id')
-    valid_ids = {e.evidence_id for e in p.evidence}
-    if not request.evidence_ids or not set(request.evidence_ids) <= valid_ids or not set(request.evidence_ids) & set(item.evidence_ids):
-        raise ValueError('Review must cite existing evidence supporting the target fact')
+    if not request.evidence_ids or len(request.evidence_ids) != len(set(request.evidence_ids)):
+        raise ValueError('Review must cite unique evidence for the target fact')
     before = item.assertion.model_dump()
+    record_evidence_ids = list(request.evidence_ids)
     if request.action == 'correct':
         if request.replacement is None:
             raise ValueError('Correction requires replacement fact')
         replacement, spans = ground_fact(request.replacement, p.source)
+        resulting_ids = [e.evidence_id for e in spans]
+        if not set(request.evidence_ids) <= set(item.evidence_ids + resulting_ids):
+            raise ValueError('Correction must cite evidence for the old or resulting target fact')
         item.assertion = replacement
-        item.evidence_ids = [e.evidence_id for e in spans]
+        item.evidence_ids = resulting_ids
+        # Input selections are retained separately. The resulting statement is
+        # never endorsed by a stale citation merely because it existed before.
+        record_evidence_ids = resulting_ids
         seen = {e.evidence_id for e in p.evidence}
         for e in spans:
             if e.evidence_id not in seen:
@@ -918,12 +924,17 @@ def review_packet(packet, request):
                 seen.add(e.evidence_id)
     elif request.replacement is not None:
         raise ValueError('Only correct can replace an assertion')
+    elif not set(request.evidence_ids) <= set(item.evidence_ids):
+        raise ValueError('Review must cite evidence belonging to the target fact')
     previous = next((r.review_id for r in reversed(p.reviews) if r.fact_id == item.fact_id), None)
     item.review_status = {'accept': 'accepted', 'question': 'questioned', 'correct': 'corrected', 'escalate': 'escalated'}[request.action]
     p.version += 1
     p.parent_hash = packet.content_hash
     p.created_at = now()
-    p.reviews.append(ReviewRecord(**request.model_dump(), review_id='review-' + digest([packet.content_hash, request.model_dump(), p.version])[:20],
+    recorded_request = {**request.model_dump(), 'evidence_ids': record_evidence_ids}
+    p.reviews.append(ReviewRecord(**recorded_request, review_id='review-' + digest([packet.content_hash, request.model_dump(), p.version])[:20],
+        evidence_binding_version='review-resulting-evidence/1',
+        requested_evidence_ids=list(request.evidence_ids) if request.action == 'correct' else None,
         recorded_at=p.created_at, applied_version=p.version, before=before, after=item.assertion.model_dump(), supersedes_review_id=previous))
     if (p.extraction_metadata.get('evidence_verification', {}).get('configuration', {}).get(
             'source_semantics_correction_version') != SOURCE_SEMANTICS_CORRECTION_VERSION):

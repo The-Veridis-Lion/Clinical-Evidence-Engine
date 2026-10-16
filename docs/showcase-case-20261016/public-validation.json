@@ -1,0 +1,77 @@
+{
+  "checked_at": "2026-10-16T08:27:06.659614+00:00",
+  "public_source_only": true,
+  "saved_case_restored": true,
+  "patients": 1,
+  "registered_visits": 5,
+  "clinical_files": 6,
+  "soap_sections": {
+    "S": 53,
+    "O": 27,
+    "A": 12,
+    "P": 14
+  },
+  "documented_pt_minutes": 85,
+  "duration_complete": false,
+  "missing_duration_evidence_preserved": true,
+  "careflow": {
+    "showcase-referral": {
+      "readiness": "DOCUMENTATION_READY",
+      "checks": {
+        "request_intent": "SUPPORTED",
+        "referral_reason": "SUPPORTED",
+        "clinical_summary": "SUPPORTED",
+        "investigation_result": "NOT_APPLICABLE",
+        "therapy_completed": "NOT_APPLICABLE",
+        "destination": "SUPPORTED"
+      }
+    },
+    "showcase-pa": {
+      "readiness": "NEEDS_EVIDENCE",
+      "checks": {
+        "request_intent": "SUPPORTED",
+        "referral_reason": "SUPPORTED",
+        "clinical_summary": "SUPPORTED",
+        "investigation_result": "NOT_APPLICABLE",
+        "therapy_completed": "INSUFFICIENT_EVIDENCE",
+        "pa_form": "SUPPORTED",
+        "payer_context": "SUPPORTED"
+      }
+    }
+  },
+  "compiled_gemini_ui": "passed",
+  "ledger_counts_before": {
+    "product-calls": {
+      "requests": 6
+    },
+    "workbench-calls": {
+      "calls": 0
+    }
+  },
+  "ledger_counts_after": {
+    "product-calls": {
+      "requests": 6
+    },
+    "workbench-calls": {
+      "calls": 0
+    }
+  },
+  "new_model_calls": 0,
+  "test_boundary": "Public-copy software and synthetic saved-extraction validation.",
+  "regression": {
+    "copilot": {
+      "passed": 119,
+      "failed": 0
+    },
+    "careflow_scope_preflight": {
+      "passed": 3,
+      "failed": 0
+    },
+    "openai_transport_contract": {
+      "passed": 7,
+      "failed": 0
+    },
+    "scope": "Selected synthetic product, query, identity and transport controls included in this public tree.",
+    "initial_environment_failure": "One HTTP control hit sandbox WinError 10013; the exact test passed with local loopback access."
+  }
+}

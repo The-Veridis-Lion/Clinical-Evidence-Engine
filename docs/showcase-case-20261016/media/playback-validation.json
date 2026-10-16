@@ -1,0 +1,38 @@
+{
+  "browser_playback": {
+    "mp4": {
+      "duration": 93.6,
+      "currentTime": 0.273755,
+      "paused": false,
+      "width": 1280,
+      "height": 860
+    },
+    "gif": {
+      "complete": true,
+      "width": 1280,
+      "height": 860,
+      "frames_changed": true
+    }
+  },
+  "caption_focus": {
+    "distinct_positions": 11,
+    "geometry_source": "final encoded ASS, not original recording placements",
+    "same_function_pane_checks": "passed",
+    "source_caption_above_highlight": "passed",
+    "inactive_area_dim_percent": 35,
+    "orange_spotlight_frames": true,
+    "current_target_geometry": true,
+    "stale_evidence_checks": "passed"
+  },
+  "visual_review": "passed: actual final encoded list frame inspected",
+  "sha256": {
+    "workbench-walkthrough.mp4": "0d539e57d6a923b838d09e427ffb24439e9bef39af18c8e340c1f801963127ee",
+    "workbench-walkthrough.gif": "c48a63cda01a6b60db7d7c21477e93c038a38765592303313b7ab1ee9a93d4ea"
+  },
+  "duration_list": [
+    "2026-09-08 \u00b7 physical therapy session PT-S1 \u00b7 completed: 40 minutes",
+    "2026-09-15 \u00b7 physical therapy session \u00b7 completed: 45 minutes",
+    "2026-09-29 \u00b7 physical therapy session PT-S3 \u00b7 completed: Unknown"
+  ],
+  "new_extraction_calls": 0
+}

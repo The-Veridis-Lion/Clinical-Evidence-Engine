@@ -1,0 +1,442 @@
+{
+  "contract": "public-synthetic-evidence-export/1",
+  "provenance": "derived subset from immutable private synthetic snapshot",
+  "patient_id": "SYN-SHOWCASE-KNEE-001",
+  "private_sources_unchanged": true,
+  "source_collection_sha256": "6c54c89de6956228086ebf2b9fd5ff93e93a61557ea98f4a7c5f1b520bb8ed46",
+  "export_collection_sha256": "24ec40896c7420fd06d9cc2670f2aa5cd3b37c0b3c8ede66ec61343d6f3be63c",
+  "removed_only_old_synthetic_versions": [
+    {
+      "case_id": "visit-001",
+      "version": 1,
+      "patient_id": "SYN-TAYLOR"
+    },
+    {
+      "case_id": "visit-002",
+      "version": 1,
+      "patient_id": "SYN-TAYLOR"
+    }
+  ],
+  "omitted_authoring_history": true,
+  "model_calls": 0,
+  "files": [
+    {
+      "path": "sqlite/copilot/cases.sqlite3.gz",
+      "source_sha256": "949e4543e1e25215a847378edc0320857abb560336c960a9521bd41633389ccd",
+      "export_sha256": "d2e64394fe310a0f0db7cadb30236c4560927700616ad6e68f65c0c777516841",
+      "source_bytes": 399249,
+      "export_bytes": 383622,
+      "byte_identical": false
+    },
+    {
+      "path": "sqlite/copilot/product-calls.sqlite3.gz",
+      "source_sha256": "f15e5dc44a5ba6ec91f6ffbfefa195532568fbf5c69f530d81e4bb7383cfb884",
+      "export_sha256": "f15e5dc44a5ba6ec91f6ffbfefa195532568fbf5c69f530d81e4bb7383cfb884",
+      "source_bytes": 74896,
+      "export_bytes": 74896,
+      "byte_identical": true
+    },
+    {
+      "path": "sqlite/copilot/workbench-calls.sqlite3.gz",
+      "source_sha256": "3def91119648022c1d5769080f84c0b1d15acfe5faa16697a4360c92fefeaeba",
+      "export_sha256": "3def91119648022c1d5769080f84c0b1d15acfe5faa16697a4360c92fefeaeba",
+      "source_bytes": 635,
+      "export_bytes": 635,
+      "byte_identical": true
+    },
+    {
+      "path": "sqlite/careflow/cases.sqlite3.gz",
+      "source_sha256": "4eddf40cc2ca7b1ad952df8a03b5df4473d869d40840d1511e1c8da3ff88ab72",
+      "export_sha256": "4eddf40cc2ca7b1ad952df8a03b5df4473d869d40840d1511e1c8da3ff88ab72",
+      "source_bytes": 2170988,
+      "export_bytes": 2170988,
+      "byte_identical": true
+    },
+    {
+      "path": "requests/product-requests/4eed3eaa19f22c3bb54a04f0dfe8c3b3651f719278536ca92f2e28be4d629ccf/prompt.txt",
+      "source_sha256": "9face49d787f7a64e8d15d0cb2c55db9a992ec361df6c061d70b45326be54110",
+      "export_sha256": "9face49d787f7a64e8d15d0cb2c55db9a992ec361df6c061d70b45326be54110",
+      "source_bytes": 19519,
+      "export_bytes": 19519,
+      "byte_identical": true
+    },
+    {
+      "path": "requests/product-requests/4eed3eaa19f22c3bb54a04f0dfe8c3b3651f719278536ca92f2e28be4d629ccf/raw-response.json",
+      "source_sha256": "6151caa5f1b7d161abaa1a68b6f01ed942f67188e7842872cc6db5e76012473f",
+      "export_sha256": "6151caa5f1b7d161abaa1a68b6f01ed942f67188e7842872cc6db5e76012473f",
+      "source_bytes": 29546,
+      "export_bytes": 29546,
+      "byte_identical": true
+    },
+    {
+      "path": "requests/product-requests/4eed3eaa19f22c3bb54a04f0dfe8c3b3651f719278536ca92f2e28be4d629ccf/usage.json",
+      "source_sha256": "96d263fdee909ef35b592daca8d62451389c5ee6d20f62f9adff9891369215e6",
+      "export_sha256": "96d263fdee909ef35b592daca8d62451389c5ee6d20f62f9adff9891369215e6",
+      "source_bytes": 148,
+      "export_bytes": 148,
+      "byte_identical": true
+    },
+    {
+      "path": "requests/product-requests/51c6c2758dde652378b73f061cc06c660314b37d63a3bf2a935e2d337140887b/prompt.txt",
+      "source_sha256": "24c7dad92a986657c531c4a15bcc0a031cdaed6ccb9094532b0f41f68a55eef5",
+      "export_sha256": "24c7dad92a986657c531c4a15bcc0a031cdaed6ccb9094532b0f41f68a55eef5",
+      "source_bytes": 20270,
+      "export_bytes": 20270,
+      "byte_identical": true
+    },
+    {
+      "path": "requests/product-requests/51c6c2758dde652378b73f061cc06c660314b37d63a3bf2a935e2d337140887b/raw-response.json",
+      "source_sha256": "1b90331f3c575269d2d747cc210cb237623ddb9dd29b9f3e474cf9e238a09104",
+      "export_sha256": "1b90331f3c575269d2d747cc210cb237623ddb9dd29b9f3e474cf9e238a09104",
+      "source_bytes": 29718,
+      "export_bytes": 29718,
+      "byte_identical": true
+    },
+    {
+      "path": "requests/product-requests/51c6c2758dde652378b73f061cc06c660314b37d63a3bf2a935e2d337140887b/usage.json",
+      "source_sha256": "618c99a08123ecda3a15e1eb4f152f842fd575c4e18e886be8b67783f3178abb",
+      "export_sha256": "618c99a08123ecda3a15e1eb4f152f842fd575c4e18e886be8b67783f3178abb",
+      "source_bytes": 148,
+      "export_bytes": 148,
+      "byte_identical": true
+    },
+    {
+      "path": "requests/product-requests/64070eafddd538cea57db484b83334e5064e3f50e4c0f1831322d1ed55fd932f/prompt.txt",
+      "source_sha256": "48451741a182e96f327aa56acc1e7d257dbdea57d66418031aae2b3e36ee89a7",
+      "export_sha256": "48451741a182e96f327aa56acc1e7d257dbdea57d66418031aae2b3e36ee89a7",
+      "source_bytes": 13466,
+      "export_bytes": 13466,
+      "byte_identical": true
+    },
+    {
+      "path": "requests/product-requests/64070eafddd538cea57db484b83334e5064e3f50e4c0f1831322d1ed55fd932f/raw-response.json",
+      "source_sha256": "0c6e2d3014aebaa31dddbdd06473b363a99e56c0c1f11119aee5cb046de2ac54",
+      "export_sha256": "0c6e2d3014aebaa31dddbdd06473b363a99e56c0c1f11119aee5cb046de2ac54",
+      "source_bytes": 14641,
+      "export_bytes": 14641,
+      "byte_identical": true
+    },
+    {
+      "path": "requests/product-requests/64070eafddd538cea57db484b83334e5064e3f50e4c0f1831322d1ed55fd932f/usage.json",
+      "source_sha256": "faa223e5c606e38885d86fae38b390ca17b7871a67e441040ee401029ef36d5a",
+      "export_sha256": "faa223e5c606e38885d86fae38b390ca17b7871a67e441040ee401029ef36d5a",
+      "source_bytes": 149,
+      "export_bytes": 149,
+      "byte_identical": true
+    },
+    {
+      "path": "requests/product-requests/b813f69f681652510e1767cb0bab4273f3ad079bb88804dcc14502fc5d88f5b6/prompt.txt",
+      "source_sha256": "b084dccad82c1e4fada966dfe89cbd3aed4d39f0178ca868702ec2ffcb9c1522",
+      "export_sha256": "b084dccad82c1e4fada966dfe89cbd3aed4d39f0178ca868702ec2ffcb9c1522",
+      "source_bytes": 24121,
+      "export_bytes": 24121,
+      "byte_identical": true
+    },
+    {
+      "path": "requests/product-requests/b813f69f681652510e1767cb0bab4273f3ad079bb88804dcc14502fc5d88f5b6/raw-response.json",
+      "source_sha256": "03c07eb855567ac348e2e279ebba6cedb1e94a418259c8dd204026fb1027b86d",
+      "export_sha256": "03c07eb855567ac348e2e279ebba6cedb1e94a418259c8dd204026fb1027b86d",
+      "source_bytes": 45123,
+      "export_bytes": 45123,
+      "byte_identical": true
+    },
+    {
+      "path": "requests/product-requests/b813f69f681652510e1767cb0bab4273f3ad079bb88804dcc14502fc5d88f5b6/usage.json",
+      "source_sha256": "dce3d906c6b564eb608580e53837e6d8bca3d5d6660ca110054d5624221605ae",
+      "export_sha256": "dce3d906c6b564eb608580e53837e6d8bca3d5d6660ca110054d5624221605ae",
+      "source_bytes": 149,
+      "export_bytes": 149,
+      "byte_identical": true
+    },
+    {
+      "path": "requests/product-requests/c27fcaea09324a4dfc25be6bc2c5f6765f8d130c19d2cc1124efadc62db0e8a5/prompt.txt",
+      "source_sha256": "1ae5927a85275b6bc2eafec006aa759165667319175e2ba420a65f5c90fa785d",
+      "export_sha256": "1ae5927a85275b6bc2eafec006aa759165667319175e2ba420a65f5c90fa785d",
+      "source_bytes": 38551,
+      "export_bytes": 38551,
+      "byte_identical": true
+    },
+    {
+      "path": "requests/product-requests/c27fcaea09324a4dfc25be6bc2c5f6765f8d130c19d2cc1124efadc62db0e8a5/raw-response.json",
+      "source_sha256": "f68f580e30fe902061fb59747a91629783de1973f0da10f7e78e34f562f2e7d4",
+      "export_sha256": "f68f580e30fe902061fb59747a91629783de1973f0da10f7e78e34f562f2e7d4",
+      "source_bytes": 64275,
+      "export_bytes": 64275,
+      "byte_identical": true
+    },
+    {
+      "path": "requests/product-requests/c27fcaea09324a4dfc25be6bc2c5f6765f8d130c19d2cc1124efadc62db0e8a5/usage.json",
+      "source_sha256": "ed6cf4cc29bc2c6c4a669ac28aa82fe3afd58288536df401d2c9f942dd062924",
+      "export_sha256": "ed6cf4cc29bc2c6c4a669ac28aa82fe3afd58288536df401d2c9f942dd062924",
+      "source_bytes": 149,
+      "export_bytes": 149,
+      "byte_identical": true
+    },
+    {
+      "path": "requests/product-requests/ceb8731e7b1c137a594347c12ca9912d8a0a3de2070e99e56629a66f4b949d7b/prompt.txt",
+      "source_sha256": "be1ca7b261a24bd0dbec0daa438232cbb6d5c67a416b959360edbed76c225eb2",
+      "export_sha256": "be1ca7b261a24bd0dbec0daa438232cbb6d5c67a416b959360edbed76c225eb2",
+      "source_bytes": 18796,
+      "export_bytes": 18796,
+      "byte_identical": true
+    },
+    {
+      "path": "requests/product-requests/ceb8731e7b1c137a594347c12ca9912d8a0a3de2070e99e56629a66f4b949d7b/raw-response.json",
+      "source_sha256": "54dadba1617e973d938cd6f1c8a1143ab0b643a898c802e6c7da07735ac82861",
+      "export_sha256": "54dadba1617e973d938cd6f1c8a1143ab0b643a898c802e6c7da07735ac82861",
+      "source_bytes": 24829,
+      "export_bytes": 24829,
+      "byte_identical": true
+    },
+    {
+      "path": "requests/product-requests/ceb8731e7b1c137a594347c12ca9912d8a0a3de2070e99e56629a66f4b949d7b/usage.json",
+      "source_sha256": "9f1b079f917dde42679296e0f80286df1b38758056784c0a71774f6d388d3e6d",
+      "export_sha256": "9f1b079f917dde42679296e0f80286df1b38758056784c0a71774f6d388d3e6d",
+      "source_bytes": 149,
+      "export_bytes": 149,
+      "byte_identical": true
+    }
+  ],
+  "checks": {
+    "showcase_packets_unchanged": {
+      "count": 6,
+      "case_version_content_hashes": [
+        [
+          "wb-3376b986d1df1c819721dfba90fc",
+          1,
+          "e8990283d286f4b4db9a7c4b3d0fb9e4123595b897c798800f65b81b3d4a4281"
+        ],
+        [
+          "wb-49f191ba4df5232a0b97ee5bd119",
+          1,
+          "e3612edb86a518b34f594685ca3be09674abf004374df4df3ac780f5c91d350a"
+        ],
+        [
+          "wb-4a483e4f085ad64290127faca22c",
+          1,
+          "a5e2436e183a0c8eed8c79c82ad3bbfd1853d3fde9fbc85edf0fd1e0ed1031ca"
+        ],
+        [
+          "wb-e2eacfb59d11f90042137242dbb2",
+          1,
+          "6ee06c121d7904c13d432f6102e0efba7eac63760822197a9558c31978f07fc5"
+        ],
+        [
+          "wb-e300ccdfd490fadb2883595d483e",
+          1,
+          "f74a3481a30bf1c6ae7c876c3d3a19e9aaa3ece632a43f8da065c69be8988073"
+        ],
+        [
+          "wb-f75dfcdaa1bcec17116422e39bea",
+          1,
+          "439938359882b700592d73a84f0384562148677204d8cc3745d41f6d649a0615"
+        ]
+      ],
+      "exact_payloads_unchanged": true
+    },
+    "evidence/sqlite/copilot/cases.sqlite3.gz": {
+      "versions": {
+        "patients": [
+          "SYN-SHOWCASE-KNEE-001"
+        ],
+        "rows": 6
+      },
+      "wb_patients": {
+        "patients": [
+          "SYN-SHOWCASE-KNEE-001"
+        ],
+        "rows": 1
+      },
+      "wb_encounters": {
+        "patients": [
+          "SYN-SHOWCASE-KNEE-001"
+        ],
+        "rows": 5
+      },
+      "wb_documents": {
+        "patients": [
+          "SYN-SHOWCASE-KNEE-001"
+        ],
+        "rows": 6
+      },
+      "wb_events": {
+        "patients": [
+          "SYN-SHOWCASE-KNEE-001"
+        ],
+        "rows": 33
+      },
+      "wb_careflow": {
+        "patients": [
+          "SYN-SHOWCASE-KNEE-001"
+        ],
+        "rows": 2
+      }
+    },
+    "evidence/sqlite/copilot/product-calls.sqlite3.gz": {
+      "requests": {
+        "document_ids": [
+          "showcase-initial-consultation-v2",
+          "showcase-knee-radiology",
+          "showcase-pt-session-1",
+          "showcase-pt-session-2",
+          "showcase-medical-followup",
+          "showcase-pt-session-3"
+        ]
+      }
+    },
+    "evidence/sqlite/copilot/workbench-calls.sqlite3.gz": {
+      "calls": {
+        "patients": [],
+        "rows": 0
+      }
+    },
+    "evidence/sqlite/careflow/cases.sqlite3.gz": {
+      "revisions": {
+        "case_ids": [
+          "showcase-pa",
+          "showcase-referral"
+        ]
+      },
+      "events": {
+        "case_ids": [
+          "showcase-pa",
+          "showcase-referral"
+        ]
+      }
+    }
+  },
+  "restoration_check": {
+    "reused": false,
+    "dataset_sha256": "24ec40896c7420fd06d9cc2670f2aa5cd3b37c0b3c8ede66ec61343d6f3be63c",
+    "restored_files": 22,
+    "model_calls": 0,
+    "data_directory": "fresh local verification workspace"
+  },
+  "licenses": "Original product/package LICENSE.md, NOTICE and THIRD_PARTY_NOTICES.md must accompany the public product export; no license files are embedded in these 46 runtime evidence inputs.",
+  "excluded_operational_files": [
+    {
+      "path": "requests/product-requests/4eed3eaa19f22c3bb54a04f0dfe8c3b3651f719278536ca92f2e28be4d629ccf/dispatch.json",
+      "source_sha256": "864934f88ea4821a77be7ee2db9600f8fbd29d27f675991eaae9bd85d9752618",
+      "reason": "Operational diagnostics are retained privately."
+    },
+    {
+      "path": "requests/product-requests/4eed3eaa19f22c3bb54a04f0dfe8c3b3651f719278536ca92f2e28be4d629ccf/events.jsonl",
+      "source_sha256": "8100378b80adeece74ee2ca32076dc6d76891a92511293447cb65dcb215c7cf3",
+      "reason": "Operational diagnostics are retained privately."
+    },
+    {
+      "path": "requests/product-requests/4eed3eaa19f22c3bb54a04f0dfe8c3b3651f719278536ca92f2e28be4d629ccf/schema.json",
+      "source_sha256": "3372ec03e69ba12cf4da8a0d7213320086f87fd34d063d241f209221ec5f53ec",
+      "reason": "Operational diagnostics are retained privately."
+    },
+    {
+      "path": "requests/product-requests/4eed3eaa19f22c3bb54a04f0dfe8c3b3651f719278536ca92f2e28be4d629ccf/stderr.txt",
+      "source_sha256": "005e2b2e608179cbcc2244335e4c2923f121b489ebfa8811803abec0033a0e79",
+      "reason": "Operational diagnostics are retained privately."
+    },
+    {
+      "path": "requests/product-requests/51c6c2758dde652378b73f061cc06c660314b37d63a3bf2a935e2d337140887b/dispatch.json",
+      "source_sha256": "4a7dfc639460a89c7198c70dab39ed18c072d9f5ce22facc795169f04afb2f53",
+      "reason": "Operational diagnostics are retained privately."
+    },
+    {
+      "path": "requests/product-requests/51c6c2758dde652378b73f061cc06c660314b37d63a3bf2a935e2d337140887b/events.jsonl",
+      "source_sha256": "ade686453c3617731ea0e714de79334debde6710bfc97fdf4d96cd32129856ec",
+      "reason": "Operational diagnostics are retained privately."
+    },
+    {
+      "path": "requests/product-requests/51c6c2758dde652378b73f061cc06c660314b37d63a3bf2a935e2d337140887b/schema.json",
+      "source_sha256": "d68e6ab6fdbcb1066b8eadfd6d63d51d1893804922a7e3a4d62107ce378f5194",
+      "reason": "Operational diagnostics are retained privately."
+    },
+    {
+      "path": "requests/product-requests/51c6c2758dde652378b73f061cc06c660314b37d63a3bf2a935e2d337140887b/stderr.txt",
+      "source_sha256": "40ffc23179f31f3fa125882a2d0fea4f4996ac9fae1a29d528b11a5147f5ca05",
+      "reason": "Operational diagnostics are retained privately."
+    },
+    {
+      "path": "requests/product-requests/64070eafddd538cea57db484b83334e5064e3f50e4c0f1831322d1ed55fd932f/dispatch.json",
+      "source_sha256": "464fcd77af01e22a6e9c47e979cea50ad0b1f0d8db0f354abd1197a6b0c30161",
+      "reason": "Operational diagnostics are retained privately."
+    },
+    {
+      "path": "requests/product-requests/64070eafddd538cea57db484b83334e5064e3f50e4c0f1831322d1ed55fd932f/events.jsonl",
+      "source_sha256": "f2a1b0a590a3c73a4bc7f1549d3db7d60fe1821f153868af79359ff0382e1b70",
+      "reason": "Operational diagnostics are retained privately."
+    },
+    {
+      "path": "requests/product-requests/64070eafddd538cea57db484b83334e5064e3f50e4c0f1831322d1ed55fd932f/schema.json",
+      "source_sha256": "146b1690849781828b7999266e1ad107aa8d05b023502d428b0bfc13ba9326cb",
+      "reason": "Operational diagnostics are retained privately."
+    },
+    {
+      "path": "requests/product-requests/64070eafddd538cea57db484b83334e5064e3f50e4c0f1831322d1ed55fd932f/stderr.txt",
+      "source_sha256": "4c181b150de5f79b5693c4528723d0f752d4d642c52ea4406c370346b450308b",
+      "reason": "Operational diagnostics are retained privately."
+    },
+    {
+      "path": "requests/product-requests/b813f69f681652510e1767cb0bab4273f3ad079bb88804dcc14502fc5d88f5b6/dispatch.json",
+      "source_sha256": "667ac39a1cfe21a07ed4e14d66f9292fb6960654774ddc0e10bc100f63c98393",
+      "reason": "Operational diagnostics are retained privately."
+    },
+    {
+      "path": "requests/product-requests/b813f69f681652510e1767cb0bab4273f3ad079bb88804dcc14502fc5d88f5b6/events.jsonl",
+      "source_sha256": "d38146ebf53042851108eec0fb77dd422dea590078b50cd904fd11c86bdd50f0",
+      "reason": "Operational diagnostics are retained privately."
+    },
+    {
+      "path": "requests/product-requests/b813f69f681652510e1767cb0bab4273f3ad079bb88804dcc14502fc5d88f5b6/schema.json",
+      "source_sha256": "d949b167b4b7d289c264f16346c36d342ca67c77614e59adba6ad61d32b04786",
+      "reason": "Operational diagnostics are retained privately."
+    },
+    {
+      "path": "requests/product-requests/b813f69f681652510e1767cb0bab4273f3ad079bb88804dcc14502fc5d88f5b6/stderr.txt",
+      "source_sha256": "abcbcd5df64747916ec5782451a1316b8d54c91511338c38d7faf844694878ce",
+      "reason": "Operational diagnostics are retained privately."
+    },
+    {
+      "path": "requests/product-requests/c27fcaea09324a4dfc25be6bc2c5f6765f8d130c19d2cc1124efadc62db0e8a5/dispatch.json",
+      "source_sha256": "4e6c4818d4d9a7f5a207e7da6794846883fce7faee8cc3cc647145a65ab1db50",
+      "reason": "Operational diagnostics are retained privately."
+    },
+    {
+      "path": "requests/product-requests/c27fcaea09324a4dfc25be6bc2c5f6765f8d130c19d2cc1124efadc62db0e8a5/events.jsonl",
+      "source_sha256": "4eb6ee820da796f08965ef4874b2fae4edc1472fe2df5f86bc7996fa126183d0",
+      "reason": "Operational diagnostics are retained privately."
+    },
+    {
+      "path": "requests/product-requests/c27fcaea09324a4dfc25be6bc2c5f6765f8d130c19d2cc1124efadc62db0e8a5/schema.json",
+      "source_sha256": "6210ca22ca4b2b09073083e27f1bec33ee2e2714061f50afb0d626e4fd068ed4",
+      "reason": "Operational diagnostics are retained privately."
+    },
+    {
+      "path": "requests/product-requests/c27fcaea09324a4dfc25be6bc2c5f6765f8d130c19d2cc1124efadc62db0e8a5/stderr.txt",
+      "source_sha256": "cffa272591c24d2848ea221888bd814699bd39a7eaf4cd738ea6f8fe66db99f2",
+      "reason": "Operational diagnostics are retained privately."
+    },
+    {
+      "path": "requests/product-requests/ceb8731e7b1c137a594347c12ca9912d8a0a3de2070e99e56629a66f4b949d7b/dispatch.json",
+      "source_sha256": "a9488caba19557eb3cb8a30334130f168b74197e54ae72f84743b6fafe6f726a",
+      "reason": "Operational diagnostics are retained privately."
+    },
+    {
+      "path": "requests/product-requests/ceb8731e7b1c137a594347c12ca9912d8a0a3de2070e99e56629a66f4b949d7b/events.jsonl",
+      "source_sha256": "a35557c561ecdca6410c6640231bfc99d6a216f663cfe9d112c612e3814a10d8",
+      "reason": "Operational diagnostics are retained privately."
+    },
+    {
+      "path": "requests/product-requests/ceb8731e7b1c137a594347c12ca9912d8a0a3de2070e99e56629a66f4b949d7b/schema.json",
+      "source_sha256": "b6b5afea136f18dfc67829fedcdb4d1c1a5a9f22705c5923a32af91435e753b8",
+      "reason": "Operational diagnostics are retained privately."
+    },
+    {
+      "path": "requests/product-requests/ceb8731e7b1c137a594347c12ca9912d8a0a3de2070e99e56629a66f4b949d7b/stderr.txt",
+      "source_sha256": "aa0288f17450f97990f5752589596fab84a723f78be55c0af36c9e109b779427",
+      "reason": "Operational diagnostics are retained privately."
+    }
+  ],
+  "public_evidence_scope": "Clinical source prompts without local paths, original model output and usage; operational traces remain private. Application SQLite snapshots preserve the six showcase packets.",
+  "retained_raw_count": 18,
+  "sqlite_snapshots_unchanged_by_refinement": true,
+  "local_absolute_paths_in_retained_raw": false
+}

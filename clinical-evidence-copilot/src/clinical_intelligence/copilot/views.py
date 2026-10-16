@@ -18,11 +18,14 @@ def render_readable_markdown(packet):
         lines += [f'## {section} · {title}', '']
         for row in view['sections'][section]:
             fields = '; '.join(f'{f["label"]}: {f["value"]}' for f in row['fields'])
-            lines += [f'- **{row["concept"]}** — {fields}.',
+            lines += [f'- {row["display_text"]}',
+                      f'  Retained fields: {fields}.',
                       f'  Claim: `{row["fact_id"]}` · Evidence: ' + ', '.join(f'`{e}`' for e in row['evidence_ids']),
                       f'  Automatic check: {row["machine_status"]}. Human review: {row["review_status"]}.']
             if row['section_note']:
                 lines.append('  ' + row['section_note'])
+            for note in row.get('presentation_notes', []):
+                lines.append('  ' + note)
             if row.get('not_adopted_dimensions'):
                 lines.append('  Not adopted into this draft: '+', '.join(
                     d['dimension'] for d in row['not_adopted_dimensions'])+'. Original proposals remain in the audit export.')
@@ -42,6 +45,20 @@ def render_readable_markdown(packet):
         if not view['sections'][section]:
             lines.append('Not documented in the accepted extraction.')
         lines.append('')
+    if view['relationship_proposals']:
+        lines += ['## Relationship proposals', '',
+                  'Retained extraction proposals. Endpoint and quotation checks do not establish clinical meaning.', '']
+        for row in view['relationship_proposals']:
+            def endpoint(side):
+                e = row[side]
+                return f'input index {e["input_index"]} · {e["original_concept"] or "unresolved concept"} · {e["fact_id"] or "unresolved identity"}'
+            lines += [f'- `{row["relationship_id"]}`: {endpoint("from")} → {row["relation"]} → {endpoint("to")}',
+                      f'  Status: {row["status"]}; structure: {row["structural_status"]}; adopted in sealed SOAP: {row["adopted_in_soap"]}.']
+            if row['structural_concern']:
+                lines.append('  ' + row['structural_concern'])
+            for span in row['citations']:
+                lines += [f'  Source characters [{span.get("start")}:{span.get("end")}] · exact source match: {span["source_match"]}',
+                          *['> ' + line for line in str(span.get('quote', '')).splitlines()], '']
     lines += ['## Original evidence', '']
     for evidence in packet.evidence:
         lines += [f'### {evidence.evidence_id}',

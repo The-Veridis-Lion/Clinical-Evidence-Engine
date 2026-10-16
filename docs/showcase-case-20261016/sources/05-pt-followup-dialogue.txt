@@ -1,0 +1,21 @@
+SYNTHETIC DEMONSTRATION. This is an authored follow-up dialogue, not a real patient transcript.
+Patient ID: SYN-SHOWCASE-KNEE-001
+Name: Jordan Avery
+Encounter: V3, outpatient physical therapy, September 15, 2026
+Treatment event: PT-S2, September 15, 2026, 14:00–14:45
+
+Clinician: Before we start, how has the left knee been since your first visit last week?
+Patient: It is getting easier to walk, but the inside of the left knee still hurts on stairs. I have not had a new injury. I have not had swelling today, fever or calf pain.
+Clinician: Using the same zero-to-ten pain scale, what was your left knee pain when climbing stairs in the last 24 hours?
+Patient: Five out of ten on stairs. At rest it is one out of ten. I can now walk for about eighteen minutes before I need to pause because of the knee.
+Clinician: Have you attended any other therapy visits since September 8?
+Patient: No. This is my second session. I did the home exercises on four days last week, but I did not time them. That is home practice, not another clinic visit.
+Clinician: What pain medicine did you actually use?
+Patient: I took one acetaminophen 500 mg tablet on three separate days over the past week. I did not take more than one on any day and have not noticed side effects. I still take lisinopril 10 mg each morning.
+Clinician: Today I see no visible swelling or redness. Your left knee moves from zero degrees of extension to 125 degrees of flexion. There is mild medial joint-line tenderness. You can perform a supported step-down with better control than at the first session, though it still causes discomfort.
+Patient: The handrail helps me on stairs. I am taking the bus to work but sometimes walk a short part of the route.
+Clinician: We have now finished today's single physical therapy session on September 15, 2026. The completed session lasted 45 minutes, from 14:00 to 14:45. It included progressive knee-strengthening exercises, step practice, balance work and supervised walking. Those activities were parts of the same 45-minute session, not four separate sessions.
+Patient: I tolerated those exercises. I do not have new pain or dizziness after the session.
+Clinician: My assessment is improving reported function with persistent activity-related left knee pain. We have documented two attended therapy sessions so far. That does not mean the six-week course is finished. Continue the home program as taught; we have no measured duration for your home exercises. Keep your primary-care follow-up on September 22. Your next therapy appointment is planned for September 29 because of your work schedule.
+Patient: I understand. I will bring my medication list and the X-ray report to the doctor's follow-up.
+Clinician: No injection or medication was administered during this visit. We are not making an insurance approval decision. I am signing this synthetic session record as Alex Rivera, PT, on September 15, 2026.

@@ -92,6 +92,19 @@ class SingleDispatchProvider(CodexCLIProvider):
         return (folder / "raw-response.json").read_text(encoding="utf-8"), usage
 
 
+def product_provider(*, timeout_seconds=300):
+    """Select only the explicitly configured product transport."""
+    selected = os.environ.get("CLINICAL_PRODUCT_PROVIDER", "codex_cli")
+    config = ProviderConfig(provider=selected, model="gpt-6-luna", reasoning_effort="high",
+                            timeout_seconds=timeout_seconds)
+    if selected == "codex_cli":
+        return SingleDispatchProvider(config)
+    if selected == "openai_api":
+        from evidence_verification.extensions.openai_product_transport import OpenAIProductProvider
+        return OpenAIProductProvider(config)
+    raise ValueError("Supported product providers: codex_cli, openai_api")
+
+
 def execute(documents, partition_path, root: Path, *, provider=None, prompt_version=PROMPT_VERSION):
     root = root.resolve()
     provider = provider or SingleDispatchProvider(ProviderConfig(timeout_seconds=CONFIG["timeout_seconds"]))

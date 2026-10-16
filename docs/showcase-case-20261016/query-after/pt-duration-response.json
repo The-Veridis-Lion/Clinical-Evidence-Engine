@@ -1,0 +1,856 @@
+{
+  "answer": {
+    "documented_minutes": 85.0,
+    "documented_hours": 1.4166666666666667,
+    "minutes": {
+      "lower": 85.0,
+      "upper": null,
+      "value": null
+    },
+    "complete": false,
+    "comparable_total": true,
+    "groups": [
+      {
+        "concept": "physical therapy session PT-S1",
+        "action_type": "physical therapy session",
+        "completion_scope": "single_event",
+        "documented_minutes": 40.0,
+        "documented_hours": 0.6666666666666666
+      },
+      {
+        "concept": "physical therapy session",
+        "action_type": "physical therapy session",
+        "completion_scope": "single_event",
+        "documented_minutes": 45.0,
+        "documented_hours": 0.75
+      }
+    ],
+    "events": [
+      {
+        "case_id": "wb-4a483e4f085ad64290127faca22c",
+        "packet_version": 1,
+        "document_id": "showcase-pt-session-1",
+        "fact_id": "f-57cad9d857cd5f1c73e1",
+        "encounter_id": "V2",
+        "source_sha256": "81fbd3fe215f3debaf3335137eb39f368a2414fc19b1df0be51106092ec204dd",
+        "category": "treatment",
+        "concept": "physical therapy session PT-S1",
+        "experiencer": "patient",
+        "polarity": "present",
+        "temporality": "historical",
+        "assertion_basis": "clinician_observation",
+        "clinical_status": "completed",
+        "status_qualifier": "completed",
+        "event_time": "September 8, 2026, 14:00–14:40",
+        "event_date": "2026-09-08",
+        "original_event_time": "September 8, 2026, 14:00–14:40",
+        "record_time": "2026-09-08",
+        "record_date": "2026-09-08",
+        "time_basis": "explicit_event_time_window",
+        "normalization_basis": "explicit_event_time_window",
+        "action_type": "physical therapy session",
+        "action_state": "completed",
+        "completion_scope": "single_event",
+        "attributes": {
+          "value": "40",
+          "unit": "minutes",
+          "duration": "40 minutes"
+        },
+        "review_status": "unreviewed",
+        "verification_status": "INSUFFICIENT_EVIDENCE",
+        "contradicted_dimensions": [],
+        "source_refs": [
+          {
+            "case_id": "wb-4a483e4f085ad64290127faca22c",
+            "packet_version": 1,
+            "document_id": "showcase-pt-session-1",
+            "fact_id": "f-57cad9d857cd5f1c73e1",
+            "start": 1690,
+            "end": 1770,
+            "quote": "On September 8, 2026, one physical therapy session was completed for 40 minutes.",
+            "reference_kind": "clinical_source_span"
+          },
+          {
+            "case_id": "wb-4a483e4f085ad64290127faca22c",
+            "packet_version": 1,
+            "document_id": "showcase-pt-session-1",
+            "fact_id": "f-57cad9d857cd5f1c73e1",
+            "start": 337,
+            "end": 391,
+            "quote": "Treatment event: PT-S1, September 8, 2026, 14:00–14:40",
+            "reference_kind": "clinical_source_span"
+          },
+          {
+            "case_id": "wb-4a483e4f085ad64290127faca22c",
+            "packet_version": 1,
+            "document_id": "showcase-pt-session-1",
+            "fact_id": "f-57cad9d857cd5f1c73e1",
+            "start": 1771,
+            "end": 1849,
+            "quote": "This was the single PT-S1 session, not a 40-minute duration for each exercise.",
+            "reference_kind": "clinical_source_span"
+          },
+          {
+            "case_id": "wb-4a483e4f085ad64290127faca22c",
+            "packet_version": 1,
+            "document_id": "showcase-pt-session-1",
+            "fact_id": "f-57cad9d857cd5f1c73e1",
+            "start": 2133,
+            "end": 2233,
+            "quote": "The session's 40 minutes are actual treatment time, not the duration of the six-week planned course.",
+            "reference_kind": "clinical_source_span"
+          }
+        ],
+        "event_time_variants": [
+          "September 8, 2026, 14:00–14:40"
+        ],
+        "minutes": 40.0,
+        "event_identity": {
+          "event_date": "2026-09-08",
+          "event_timestamp": "2026-09-08T14:00:00",
+          "event_window_end": "2026-09-08T14:40:00",
+          "timestamp_timezone": "unspecified",
+          "timestamp_context": [
+            "encounter",
+            "V2",
+            "2026-09-08"
+          ],
+          "encounter_id": null,
+          "basis": "explicit_event_time_window"
+        }
+      },
+      {
+        "case_id": "wb-f75dfcdaa1bcec17116422e39bea",
+        "packet_version": 1,
+        "document_id": "showcase-pt-session-2",
+        "fact_id": "f-81412f3a1f08e964720c",
+        "encounter_id": "V3",
+        "source_sha256": "907847ac318d4183b830eded10a3ee6effd72e87be06b3036baf078fbe948336",
+        "category": "treatment",
+        "concept": "physical therapy session",
+        "experiencer": "patient",
+        "polarity": "present",
+        "temporality": "historical",
+        "assertion_basis": "clinician_observation",
+        "clinical_status": "completed",
+        "status_qualifier": "completed",
+        "event_time": "September 15, 2026, 14:00–14:45",
+        "event_date": "2026-09-15",
+        "original_event_time": "September 15, 2026, 14:00–14:45",
+        "record_time": "2026-09-15",
+        "record_date": "2026-09-15",
+        "time_basis": "explicit_event_time_window",
+        "normalization_basis": "explicit_event_time_window",
+        "action_type": "physical therapy session",
+        "action_state": "completed",
+        "completion_scope": "single_event",
+        "attributes": {
+          "value": "single physical therapy session",
+          "duration": "45 minutes"
+        },
+        "review_status": "unreviewed",
+        "verification_status": "INSUFFICIENT_EVIDENCE",
+        "contradicted_dimensions": [],
+        "source_refs": [
+          {
+            "case_id": "wb-f75dfcdaa1bcec17116422e39bea",
+            "packet_version": 1,
+            "document_id": "showcase-pt-session-2",
+            "fact_id": "f-81412f3a1f08e964720c",
+            "start": 1729,
+            "end": 1812,
+            "quote": "We have now finished today's single physical therapy session on September 15, 2026.",
+            "reference_kind": "clinical_source_span"
+          },
+          {
+            "case_id": "wb-f75dfcdaa1bcec17116422e39bea",
+            "packet_version": 1,
+            "document_id": "showcase-pt-session-2",
+            "fact_id": "f-81412f3a1f08e964720c",
+            "start": 1813,
+            "end": 1874,
+            "quote": "The completed session lasted 45 minutes, from 14:00 to 14:45.",
+            "reference_kind": "clinical_source_span"
+          }
+        ],
+        "event_time_variants": [
+          "September 15, 2026, 14:00–14:45"
+        ],
+        "minutes": 45.0,
+        "event_identity": {
+          "event_date": "2026-09-15",
+          "event_timestamp": "2026-09-15T14:00:00",
+          "event_window_end": "2026-09-15T14:45:00",
+          "timestamp_timezone": "unspecified",
+          "timestamp_context": [
+            "encounter",
+            "V3",
+            "2026-09-15"
+          ],
+          "encounter_id": null,
+          "basis": "explicit_event_time_window"
+        }
+      }
+    ],
+    "unaggregated_durations": [],
+    "interpretation": "Sum of documented completed single-event contact minutes/hours; course duration remains separately quoted in its original units and scope."
+  },
+  "query_spec": {
+    "family": "documented_duration_sum",
+    "filters": {
+      "start": null,
+      "end": null,
+      "concept": null,
+      "experiencer": "patient",
+      "service_type": "physical therapy session"
+    }
+  },
+  "evidence_version": "5c12d962a7077c4140382b03f1af11a7b280ec5a646b7cbd9a2550f378b5e67d",
+  "computed_from": [
+    {
+      "case_id": "wb-3376b986d1df1c819721dfba90fc",
+      "packet_version": 1,
+      "document_id": "showcase-initial-consultation-v2",
+      "content_hash": "e8990283d286f4b4db9a7c4b3d0fb9e4123595b897c798800f65b81b3d4a4281",
+      "source_sha256": "cb189a6d3fa4eeb69ecb6b6e8e25ce8b36366f621b3c89f72d184521c94b050d"
+    },
+    {
+      "case_id": "wb-49f191ba4df5232a0b97ee5bd119",
+      "packet_version": 1,
+      "document_id": "showcase-knee-radiology",
+      "content_hash": "e3612edb86a518b34f594685ca3be09674abf004374df4df3ac780f5c91d350a",
+      "source_sha256": "53a4c3003b1f36c70fb0dcd03643f3bce8d16ece738ef7d46efcfe9e24a4f26c"
+    },
+    {
+      "case_id": "wb-4a483e4f085ad64290127faca22c",
+      "packet_version": 1,
+      "document_id": "showcase-pt-session-1",
+      "content_hash": "a5e2436e183a0c8eed8c79c82ad3bbfd1853d3fde9fbc85edf0fd1e0ed1031ca",
+      "source_sha256": "81fbd3fe215f3debaf3335137eb39f368a2414fc19b1df0be51106092ec204dd"
+    },
+    {
+      "case_id": "wb-e2eacfb59d11f90042137242dbb2",
+      "packet_version": 1,
+      "document_id": "showcase-medical-followup",
+      "content_hash": "6ee06c121d7904c13d432f6102e0efba7eac63760822197a9558c31978f07fc5",
+      "source_sha256": "3e628cffdc020085c9420411d72a146f9f6f6a8638e2683d336654351225f9a1"
+    },
+    {
+      "case_id": "wb-e300ccdfd490fadb2883595d483e",
+      "packet_version": 1,
+      "document_id": "showcase-pt-session-3",
+      "content_hash": "f74a3481a30bf1c6ae7c876c3d3a19e9aaa3ece632a43f8da065c69be8988073",
+      "source_sha256": "4303951090f36839d5e6674725d7cfb3fd8ec3daf07e84834c75aa75ff250fc8"
+    },
+    {
+      "case_id": "wb-f75dfcdaa1bcec17116422e39bea",
+      "packet_version": 1,
+      "document_id": "showcase-pt-session-2",
+      "content_hash": "439938359882b700592d73a84f0384562148677204d8cc3745d41f6d649a0615",
+      "source_sha256": "907847ac318d4183b830eded10a3ee6effd72e87be06b3036baf078fbe948336"
+    }
+  ],
+  "calculation_steps": [
+    {
+      "operation": "documented_duration_sum",
+      "inputs": {
+        "query": {
+          "family": "documented_duration_sum",
+          "filters": {
+            "start": null,
+            "end": null,
+            "concept": null,
+            "experiencer": "patient",
+            "service_type": "physical therapy session"
+          }
+        },
+        "record_count": 2,
+        "contributions": [
+          {
+            "case_id": "wb-4a483e4f085ad64290127faca22c",
+            "fact_id": "f-57cad9d857cd5f1c73e1",
+            "encounter_id": "V2",
+            "event_date": "2026-09-08",
+            "event_time": "September 8, 2026, 14:00–14:40",
+            "event_time_variants": [
+              "September 8, 2026, 14:00–14:40"
+            ],
+            "time_basis": "explicit_event_time_window",
+            "event_identity": {
+              "event_date": "2026-09-08",
+              "event_timestamp": "2026-09-08T14:00:00",
+              "event_window_end": "2026-09-08T14:40:00",
+              "timestamp_timezone": "unspecified",
+              "timestamp_context": [
+                "encounter",
+                "V2",
+                "2026-09-08"
+              ],
+              "encounter_id": null,
+              "basis": "explicit_event_time_window"
+            },
+            "minutes": 40.0
+          },
+          {
+            "case_id": "wb-f75dfcdaa1bcec17116422e39bea",
+            "fact_id": "f-81412f3a1f08e964720c",
+            "encounter_id": "V3",
+            "event_date": "2026-09-15",
+            "event_time": "September 15, 2026, 14:00–14:45",
+            "event_time_variants": [
+              "September 15, 2026, 14:00–14:45"
+            ],
+            "time_basis": "explicit_event_time_window",
+            "event_identity": {
+              "event_date": "2026-09-15",
+              "event_timestamp": "2026-09-15T14:00:00",
+              "event_window_end": "2026-09-15T14:45:00",
+              "timestamp_timezone": "unspecified",
+              "timestamp_context": [
+                "encounter",
+                "V3",
+                "2026-09-15"
+              ],
+              "encounter_id": null,
+              "basis": "explicit_event_time_window"
+            },
+            "minutes": 45.0
+          }
+        ],
+        "duration_identity_assessment": [
+          {
+            "case_id": "wb-4a483e4f085ad64290127faca22c",
+            "fact_id": "f-57cad9d857cd5f1c73e1",
+            "event_date": "2026-09-08",
+            "event_time": "September 8, 2026, 14:00–14:40",
+            "event_time_variants": [
+              "September 8, 2026, 14:00–14:40"
+            ],
+            "event_identity": {
+              "event_date": "2026-09-08",
+              "event_timestamp": "2026-09-08T14:00:00",
+              "event_window_end": "2026-09-08T14:40:00",
+              "timestamp_timezone": "unspecified",
+              "timestamp_context": [
+                "encounter",
+                "V2",
+                "2026-09-08"
+              ],
+              "encounter_id": null,
+              "basis": "explicit_event_time_window"
+            }
+          },
+          {
+            "case_id": "wb-f75dfcdaa1bcec17116422e39bea",
+            "fact_id": "f-81412f3a1f08e964720c",
+            "event_date": "2026-09-15",
+            "event_time": "September 15, 2026, 14:00–14:45",
+            "event_time_variants": [
+              "September 15, 2026, 14:00–14:45"
+            ],
+            "event_identity": {
+              "event_date": "2026-09-15",
+              "event_timestamp": "2026-09-15T14:00:00",
+              "event_window_end": "2026-09-15T14:45:00",
+              "timestamp_timezone": "unspecified",
+              "timestamp_context": [
+                "encounter",
+                "V3",
+                "2026-09-15"
+              ],
+              "encounter_id": null,
+              "basis": "explicit_event_time_window"
+            }
+          }
+        ]
+      },
+      "output": {
+        "documented_minutes": 85.0,
+        "documented_hours": 1.4166666666666667,
+        "complete": false
+      },
+      "claim_ids": [
+        "f-57cad9d857cd5f1c73e1",
+        "f-81412f3a1f08e964720c"
+      ],
+      "event_ids": [
+        "V2",
+        "V3"
+      ],
+      "assumptions": [
+        "Current saved packets only; sources are not re-extracted.",
+        "Missing/ambiguous events are retained separately; no undocumented negative is imputed.",
+        "Source citations establish location, not clinical correctness."
+      ]
+    }
+  ],
+  "excluded_records": [],
+  "missing_data": [
+    {
+      "case_id": "wb-4a483e4f085ad64290127faca22c",
+      "document_id": "showcase-pt-session-1",
+      "fact_id": "f-25d99bdfa767cc3aaeef",
+      "encounter_id": "V2",
+      "reason": "event_date_unknown_or_not_exact",
+      "source_refs": [
+        {
+          "case_id": "wb-4a483e4f085ad64290127faca22c",
+          "packet_version": 1,
+          "document_id": "showcase-pt-session-1",
+          "fact_id": "f-25d99bdfa767cc3aaeef",
+          "start": 794,
+          "end": 860,
+          "quote": "This is the first attended physical-therapy session for this knee.",
+          "reference_kind": "clinical_source_span"
+        },
+        {
+          "case_id": "wb-4a483e4f085ad64290127faca22c",
+          "packet_version": 1,
+          "document_id": "showcase-pt-session-1",
+          "fact_id": "f-25d99bdfa767cc3aaeef",
+          "start": 1690,
+          "end": 1770,
+          "quote": "On September 8, 2026, one physical therapy session was completed for 40 minutes.",
+          "reference_kind": "clinical_source_span"
+        }
+      ],
+      "record": {
+        "case_id": "wb-4a483e4f085ad64290127faca22c",
+        "packet_version": 1,
+        "document_id": "showcase-pt-session-1",
+        "fact_id": "f-25d99bdfa767cc3aaeef",
+        "encounter_id": "V2",
+        "source_sha256": "81fbd3fe215f3debaf3335137eb39f368a2414fc19b1df0be51106092ec204dd",
+        "category": "treatment",
+        "concept": "physical therapy session",
+        "experiencer": "patient",
+        "polarity": "present",
+        "temporality": "historical",
+        "assertion_basis": "patient_report",
+        "clinical_status": "first attended session for this knee",
+        "status_qualifier": "first attended session for this knee",
+        "event_time": null,
+        "event_date": null,
+        "original_event_time": null,
+        "record_time": "2026-09-08",
+        "record_date": "2026-09-08",
+        "time_basis": "unknown_event_time",
+        "normalization_basis": "unknown_event_time",
+        "action_type": "attended physical therapy",
+        "action_state": "completed",
+        "completion_scope": "single_event",
+        "attributes": {},
+        "review_status": "unreviewed",
+        "verification_status": "INSUFFICIENT_EVIDENCE",
+        "contradicted_dimensions": [],
+        "source_refs": [
+          {
+            "case_id": "wb-4a483e4f085ad64290127faca22c",
+            "packet_version": 1,
+            "document_id": "showcase-pt-session-1",
+            "fact_id": "f-25d99bdfa767cc3aaeef",
+            "start": 794,
+            "end": 860,
+            "quote": "This is the first attended physical-therapy session for this knee.",
+            "reference_kind": "clinical_source_span"
+          },
+          {
+            "case_id": "wb-4a483e4f085ad64290127faca22c",
+            "packet_version": 1,
+            "document_id": "showcase-pt-session-1",
+            "fact_id": "f-25d99bdfa767cc3aaeef",
+            "start": 1690,
+            "end": 1770,
+            "quote": "On September 8, 2026, one physical therapy session was completed for 40 minutes.",
+            "reference_kind": "clinical_source_span"
+          }
+        ],
+        "event_time_variants": [
+          null
+        ]
+      }
+    },
+    {
+      "case_id": "wb-f75dfcdaa1bcec17116422e39bea",
+      "document_id": "showcase-pt-session-2",
+      "fact_id": "f-7fd3b5b670bc06d3701c",
+      "encounter_id": "V3",
+      "reason": "event_date_unknown_or_not_exact",
+      "source_refs": [
+        {
+          "case_id": "wb-f75dfcdaa1bcec17116422e39bea",
+          "packet_version": 1,
+          "document_id": "showcase-pt-session-2",
+          "fact_id": "f-7fd3b5b670bc06d3701c",
+          "start": 892,
+          "end": 918,
+          "quote": "This is my second session.",
+          "reference_kind": "clinical_source_span"
+        }
+      ],
+      "record": {
+        "case_id": "wb-f75dfcdaa1bcec17116422e39bea",
+        "packet_version": 1,
+        "document_id": "showcase-pt-session-2",
+        "fact_id": "f-7fd3b5b670bc06d3701c",
+        "encounter_id": "V3",
+        "source_sha256": "907847ac318d4183b830eded10a3ee6effd72e87be06b3036baf078fbe948336",
+        "category": "treatment",
+        "concept": "physical therapy session",
+        "experiencer": "patient",
+        "polarity": "present",
+        "temporality": "current",
+        "assertion_basis": "patient_report",
+        "clinical_status": "attended",
+        "status_qualifier": "attended",
+        "event_time": "this session",
+        "event_date": null,
+        "original_event_time": "this session",
+        "record_time": "2026-09-15",
+        "record_date": "2026-09-15",
+        "time_basis": "unknown_event_time",
+        "normalization_basis": "unknown_event_time",
+        "action_type": "physical therapy session",
+        "action_state": "completed",
+        "completion_scope": "single_event",
+        "attributes": {
+          "value": "second session"
+        },
+        "review_status": "unreviewed",
+        "verification_status": "INSUFFICIENT_EVIDENCE",
+        "contradicted_dimensions": [],
+        "source_refs": [
+          {
+            "case_id": "wb-f75dfcdaa1bcec17116422e39bea",
+            "packet_version": 1,
+            "document_id": "showcase-pt-session-2",
+            "fact_id": "f-7fd3b5b670bc06d3701c",
+            "start": 892,
+            "end": 918,
+            "quote": "This is my second session.",
+            "reference_kind": "clinical_source_span"
+          }
+        ],
+        "event_time_variants": [
+          "this session"
+        ]
+      }
+    },
+    {
+      "case_id": "wb-e2eacfb59d11f90042137242dbb2",
+      "document_id": "showcase-medical-followup",
+      "fact_id": "f-3fe1e78bc11345a0f4a8",
+      "encounter_id": "V4",
+      "reason": "event_date_unknown_or_not_exact",
+      "source_refs": [
+        {
+          "case_id": "wb-e2eacfb59d11f90042137242dbb2",
+          "packet_version": 1,
+          "document_id": "showcase-medical-followup",
+          "fact_id": "f-3fe1e78bc11345a0f4a8",
+          "start": 3209,
+          "end": 3256,
+          "quote": "The next attended session has not yet occurred.",
+          "reference_kind": "clinical_source_span"
+        }
+      ],
+      "record": {
+        "case_id": "wb-e2eacfb59d11f90042137242dbb2",
+        "packet_version": 1,
+        "document_id": "showcase-medical-followup",
+        "fact_id": "f-3fe1e78bc11345a0f4a8",
+        "encounter_id": "V4",
+        "source_sha256": "3e628cffdc020085c9420411d72a146f9f6f6a8638e2683d336654351225f9a1",
+        "category": "treatment",
+        "concept": "next attended physical therapy session",
+        "experiencer": "patient",
+        "polarity": "absent",
+        "temporality": "planned",
+        "assertion_basis": "documented_history",
+        "clinical_status": "not yet occurred",
+        "status_qualifier": "not yet occurred",
+        "event_time": "next session as of this note",
+        "event_date": null,
+        "original_event_time": "next session as of this note",
+        "record_time": "2026-09-22",
+        "record_date": "2026-09-22",
+        "time_basis": "unknown_event_time",
+        "normalization_basis": "unknown_event_time",
+        "action_type": "physical therapy session",
+        "action_state": "not_completed",
+        "completion_scope": "single_event",
+        "attributes": {},
+        "review_status": "unreviewed",
+        "verification_status": "INSUFFICIENT_EVIDENCE",
+        "contradicted_dimensions": [],
+        "source_refs": [
+          {
+            "case_id": "wb-e2eacfb59d11f90042137242dbb2",
+            "packet_version": 1,
+            "document_id": "showcase-medical-followup",
+            "fact_id": "f-3fe1e78bc11345a0f4a8",
+            "start": 3209,
+            "end": 3256,
+            "quote": "The next attended session has not yet occurred.",
+            "reference_kind": "clinical_source_span"
+          }
+        ],
+        "event_time_variants": [
+          "next session as of this note"
+        ]
+      }
+    },
+    {
+      "case_id": "wb-e300ccdfd490fadb2883595d483e",
+      "document_id": "showcase-pt-session-3",
+      "fact_id": "f-510d8667750352f1493a",
+      "encounter_id": "V5",
+      "reason": "event_date_unknown_or_not_exact",
+      "source_refs": [
+        {
+          "case_id": "wb-e300ccdfd490fadb2883595d483e",
+          "packet_version": 1,
+          "document_id": "showcase-pt-session-3",
+          "fact_id": "f-510d8667750352f1493a",
+          "start": 1528,
+          "end": 1593,
+          "quote": "One physical therapy session was completed on September 29, 2026.",
+          "reference_kind": "clinical_source_span"
+        },
+        {
+          "case_id": "wb-e300ccdfd490fadb2883595d483e",
+          "packet_version": 1,
+          "document_id": "showcase-pt-session-3",
+          "fact_id": "f-510d8667750352f1493a",
+          "start": 124,
+          "end": 186,
+          "quote": "Encounter: V5, outpatient physical therapy, September 29, 2026",
+          "reference_kind": "clinical_source_span"
+        },
+        {
+          "case_id": "wb-e300ccdfd490fadb2883595d483e",
+          "packet_version": 1,
+          "document_id": "showcase-pt-session-3",
+          "fact_id": "f-510d8667750352f1493a",
+          "start": 187,
+          "end": 229,
+          "quote": "Treatment event: PT-S3, September 29, 2026",
+          "reference_kind": "clinical_source_span"
+        },
+        {
+          "case_id": "wb-e300ccdfd490fadb2883595d483e",
+          "packet_version": 1,
+          "document_id": "showcase-pt-session-3",
+          "fact_id": "f-510d8667750352f1493a",
+          "start": 1594,
+          "end": 1643,
+          "quote": "This is PT-S3, the third attended clinic session.",
+          "reference_kind": "clinical_source_span"
+        }
+      ],
+      "record": {
+        "case_id": "wb-e300ccdfd490fadb2883595d483e",
+        "packet_version": 1,
+        "document_id": "showcase-pt-session-3",
+        "fact_id": "f-510d8667750352f1493a",
+        "encounter_id": "V5",
+        "source_sha256": "4303951090f36839d5e6674725d7cfb3fd8ec3daf07e84834c75aa75ff250fc8",
+        "category": "treatment",
+        "concept": "physical therapy session PT-S3",
+        "experiencer": "patient",
+        "polarity": "present",
+        "temporality": "historical",
+        "assertion_basis": "documented_history",
+        "clinical_status": "completed",
+        "status_qualifier": "completed",
+        "event_time": "September 29, 2026; third attended clinic session",
+        "event_date": null,
+        "original_event_time": "September 29, 2026; third attended clinic session",
+        "record_time": "2026-09-29",
+        "record_date": "2026-09-29",
+        "time_basis": "unknown_event_time",
+        "normalization_basis": "unknown_event_time",
+        "action_type": "physical therapy session",
+        "action_state": "completed",
+        "completion_scope": "single_event",
+        "attributes": {},
+        "review_status": "unreviewed",
+        "verification_status": "INSUFFICIENT_EVIDENCE",
+        "contradicted_dimensions": [],
+        "source_refs": [
+          {
+            "case_id": "wb-e300ccdfd490fadb2883595d483e",
+            "packet_version": 1,
+            "document_id": "showcase-pt-session-3",
+            "fact_id": "f-510d8667750352f1493a",
+            "start": 1528,
+            "end": 1593,
+            "quote": "One physical therapy session was completed on September 29, 2026.",
+            "reference_kind": "clinical_source_span"
+          },
+          {
+            "case_id": "wb-e300ccdfd490fadb2883595d483e",
+            "packet_version": 1,
+            "document_id": "showcase-pt-session-3",
+            "fact_id": "f-510d8667750352f1493a",
+            "start": 124,
+            "end": 186,
+            "quote": "Encounter: V5, outpatient physical therapy, September 29, 2026",
+            "reference_kind": "clinical_source_span"
+          },
+          {
+            "case_id": "wb-e300ccdfd490fadb2883595d483e",
+            "packet_version": 1,
+            "document_id": "showcase-pt-session-3",
+            "fact_id": "f-510d8667750352f1493a",
+            "start": 187,
+            "end": 229,
+            "quote": "Treatment event: PT-S3, September 29, 2026",
+            "reference_kind": "clinical_source_span"
+          },
+          {
+            "case_id": "wb-e300ccdfd490fadb2883595d483e",
+            "packet_version": 1,
+            "document_id": "showcase-pt-session-3",
+            "fact_id": "f-510d8667750352f1493a",
+            "start": 1594,
+            "end": 1643,
+            "quote": "This is PT-S3, the third attended clinic session.",
+            "reference_kind": "clinical_source_span"
+          }
+        ],
+        "event_time_variants": [
+          "September 29, 2026; third attended clinic session"
+        ]
+      }
+    },
+    {
+      "case_id": "wb-e300ccdfd490fadb2883595d483e",
+      "document_id": "showcase-pt-session-3",
+      "fact_id": "f-20b123abb0c6ace201f2",
+      "encounter_id": "V5",
+      "reason": "event_date_unknown_or_not_exact",
+      "source_refs": [
+        {
+          "case_id": "wb-e300ccdfd490fadb2883595d483e",
+          "packet_version": 1,
+          "document_id": "showcase-pt-session-3",
+          "fact_id": "f-20b123abb0c6ace201f2",
+          "start": 2322,
+          "end": 2421,
+          "quote": "Continue the home program and arrange the next session after scheduling and any required paperwork.",
+          "reference_kind": "clinical_source_span"
+        }
+      ],
+      "record": {
+        "case_id": "wb-e300ccdfd490fadb2883595d483e",
+        "packet_version": 1,
+        "document_id": "showcase-pt-session-3",
+        "fact_id": "f-20b123abb0c6ace201f2",
+        "encounter_id": "V5",
+        "source_sha256": "4303951090f36839d5e6674725d7cfb3fd8ec3daf07e84834c75aa75ff250fc8",
+        "category": "treatment",
+        "concept": "physical therapy session",
+        "experiencer": "patient",
+        "polarity": "present",
+        "temporality": "planned",
+        "assertion_basis": "clinician_assessment",
+        "clinical_status": "next session to be arranged after scheduling and any required paperwork",
+        "status_qualifier": "next session to be arranged after scheduling and any required paperwork",
+        "event_time": "after scheduling and any required paperwork",
+        "event_date": null,
+        "original_event_time": "after scheduling and any required paperwork",
+        "record_time": "2026-09-29",
+        "record_date": "2026-09-29",
+        "time_basis": "unknown_event_time",
+        "normalization_basis": "unknown_event_time",
+        "action_type": "arrange next session",
+        "action_state": "planned",
+        "completion_scope": "single_event",
+        "attributes": {},
+        "review_status": "unreviewed",
+        "verification_status": "INSUFFICIENT_EVIDENCE",
+        "contradicted_dimensions": [],
+        "source_refs": [
+          {
+            "case_id": "wb-e300ccdfd490fadb2883595d483e",
+            "packet_version": 1,
+            "document_id": "showcase-pt-session-3",
+            "fact_id": "f-20b123abb0c6ace201f2",
+            "start": 2322,
+            "end": 2421,
+            "quote": "Continue the home program and arrange the next session after scheduling and any required paperwork.",
+            "reference_kind": "clinical_source_span"
+          }
+        ],
+        "event_time_variants": [
+          "after scheduling and any required paperwork"
+        ]
+      }
+    }
+  ],
+  "source_refs": [
+    {
+      "case_id": "wb-4a483e4f085ad64290127faca22c",
+      "packet_version": 1,
+      "document_id": "showcase-pt-session-1",
+      "fact_id": "f-57cad9d857cd5f1c73e1",
+      "start": 1690,
+      "end": 1770,
+      "quote": "On September 8, 2026, one physical therapy session was completed for 40 minutes.",
+      "reference_kind": "clinical_source_span"
+    },
+    {
+      "case_id": "wb-4a483e4f085ad64290127faca22c",
+      "packet_version": 1,
+      "document_id": "showcase-pt-session-1",
+      "fact_id": "f-57cad9d857cd5f1c73e1",
+      "start": 337,
+      "end": 391,
+      "quote": "Treatment event: PT-S1, September 8, 2026, 14:00–14:40",
+      "reference_kind": "clinical_source_span"
+    },
+    {
+      "case_id": "wb-4a483e4f085ad64290127faca22c",
+      "packet_version": 1,
+      "document_id": "showcase-pt-session-1",
+      "fact_id": "f-57cad9d857cd5f1c73e1",
+      "start": 1771,
+      "end": 1849,
+      "quote": "This was the single PT-S1 session, not a 40-minute duration for each exercise.",
+      "reference_kind": "clinical_source_span"
+    },
+    {
+      "case_id": "wb-4a483e4f085ad64290127faca22c",
+      "packet_version": 1,
+      "document_id": "showcase-pt-session-1",
+      "fact_id": "f-57cad9d857cd5f1c73e1",
+      "start": 2133,
+      "end": 2233,
+      "quote": "The session's 40 minutes are actual treatment time, not the duration of the six-week planned course.",
+      "reference_kind": "clinical_source_span"
+    },
+    {
+      "case_id": "wb-f75dfcdaa1bcec17116422e39bea",
+      "packet_version": 1,
+      "document_id": "showcase-pt-session-2",
+      "fact_id": "f-81412f3a1f08e964720c",
+      "start": 1729,
+      "end": 1812,
+      "quote": "We have now finished today's single physical therapy session on September 15, 2026.",
+      "reference_kind": "clinical_source_span"
+    },
+    {
+      "case_id": "wb-f75dfcdaa1bcec17116422e39bea",
+      "packet_version": 1,
+      "document_id": "showcase-pt-session-2",
+      "fact_id": "f-81412f3a1f08e964720c",
+      "start": 1813,
+      "end": 1874,
+      "quote": "The completed session lasted 45 minutes, from 14:00 to 14:45.",
+      "reference_kind": "clinical_source_span"
+    }
+  ],
+  "model_used_for_interpretation": false,
+  "model_calls": 0
+}

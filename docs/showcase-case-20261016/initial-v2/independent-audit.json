@@ -1,0 +1,3212 @@
+{
+  "document_type": "independent_non_clinician_source_audit",
+  "scope": "Synthetic V1 primary-care encounter v2 source; exact text-to-facts and exported SOAP review. Not a physician gold standard or treatment recommendation.",
+  "source": {
+    "path": "../sources/01-initial-consultation-v2.txt",
+    "sha256": "cb189a6d3fa4eeb69ecb6b6e8e25ce8b36366f621b3c89f72d184521c94b050d",
+    "packet_source_hash_match": true,
+    "all_106_primary_fact_spans_exact_match": true,
+    "soap_fact_identity_set_match": true
+  },
+  "method": "Read v2 raw transcript and compared each extracted fact, primary source span, speaker, qualifiers/action state and exported V1-soap.json display row. Reviewed source-first coverage and explicitly compared material v1 defects. No model/API/network calls.",
+  "source_first_completeness": [
+    {
+      "domain": "chief_complaint_hpi",
+      "source_content": "左膝疼痛约三个月；内侧渐进起病、酸痛伴楼梯较锐痛；楼梯7/10（近24小时）/静息2/10；现步行约10分钟而之前30分钟；起身僵硬约10分钟；忙后偶轻肿、今天无；无跌伤、卡锁或不稳",
+      "related_fact_indices": "1-21,44,47",
+      "assessment": "主要覆盖，起病信息在 v2 有独立事实"
+    },
+    {
+      "domain": "past_history_and_social",
+      "source_content": "高血压始于2018；无糖尿病/肾肝病/胃出血/血栓；双膝无手术；童年青霉素皮疹无呼吸困难；教师久站、楼上教室、改乘公交、不烟、每周约一杯酒",
+      "related_fact_indices": "27-37,45-49",
+      "assessment": "覆盖；原文的既往无PT和既往无膝注射遗漏"
+    },
+    {
+      "domain": "actual_medication_and_prior_care",
+      "source_content": "赖诺普利10mg每日晨服；对乙酰氨基酚500mg口服按需，过去一周四天各一片且每天不超一片，稍有缓解且无自觉副作用；休息有帮助；此前无左膝X光",
+      "related_fact_indices": "22-26,28,81",
+      "assessment": "覆盖实际用药；不得与第85条新指导混同"
+    },
+    {
+      "domain": "ros",
+      "source_content": "否认发热、膝红、腓肠疼痛/肿胀、麻木/无力、胸痛/呼吸困难、腹痛/恶心/黑便、右膝痛；当前可负重",
+      "related_fact_indices": "11-16,38-43,100",
+      "assessment": "覆盖；安全提醒未错写成现症"
+    },
+    {
+      "domain": "vitals",
+      "source_content": "血压128/78、脉搏72、呼吸16、体温36.8°C、室内空气血氧98%、身高165cm、体重77kg",
+      "related_fact_indices": "50-56",
+      "assessment": "覆盖"
+    },
+    {
+      "domain": "examination",
+      "source_content": "左侧轻跛；内侧关节线压痛、轻捻发音；无红热或可见积液；伸0°屈120°且深屈痛；韧带稳定、伸屈力5/5；左小腿无压痛/肿胀，足温脉搏可触；右膝无压痛",
+      "related_fact_indices": "57-72",
+      "assessment": "覆盖；可见积液限定保留"
+    },
+    {
+      "domain": "assessment",
+      "source_content": "机械性左膝痛、疑似早期骨关节炎而非影像确诊；无急性热肿关节体征；活动受限；高血压控制",
+      "related_fact_indices": "73-77",
+      "assessment": "核心判断覆盖；A 中混入治疗计划/建议"
+    },
+    {
+      "domain": "plan",
+      "source_content": "下单站立左膝X光但尚未做，门诊PT转诊、拟每周两次六周；新对乙酰氨基酚指导，继续赖诺普利、不加口服抗炎药；活动节奏/短走/扶手，治疗师先评估后定力量计划，三周复诊，警示症状就医",
+      "related_fact_indices": "78-99",
+      "assessment": "临床内容均在 106 条事实/全 SOAP 中；P 分区缺继续赖诺普利、不加抗炎药及三条活动建议，错置于 A"
+    },
+    {
+      "domain": "end_of_encounter",
+      "source_content": "Doctor 明言本次未注射/给药/摄片/PT、30分钟仅为门诊时间、无付款方授权决定",
+      "related_fact_indices": "102-106",
+      "assessment": "Doctor 归属已修复；本次未做 PT 没独立事实，行政付款状态错置 S"
+    }
+  ],
+  "source_backed_omissions": [
+    {
+      "source_quote": "I have not attended any physical therapy and have not had a knee injection or operation.",
+      "source_start": 1692,
+      "finding": "此前从未参加物理治疗、此前未打膝关节针未被提为独立病史事实或 SOAP S 陈述；第84条只说截至就诊尚无已完成治疗，第102条只说本次门诊未注射，不能等同覆盖。",
+      "severity": "moderate",
+      "source_end": 1780
+    },
+    {
+      "source_quote": "No injection, medication administration, radiograph or physical therapy was performed during this primary-care visit.",
+      "source_start": 5941,
+      "finding": "本次门诊未进行物理治疗没有独立事实；第84条医生说无已完成治疗/疗程，可覆盖较广结论，但丢失“本次门诊未实施”的精确边界。",
+      "severity": "low",
+      "source_end": 6058
+    }
+  ],
+  "findings": [
+    {
+      "id": "V2-1",
+      "severity": "moderate",
+      "layer": "fact_coverage",
+      "fact_indices": [
+        84,
+        102
+      ],
+      "finding": "Prior PT nonattendance and prior knee injection denial are explicit in the source but absent as distinct historical facts and S statements. Current noncompletion and no injection during this encounter are narrower/different claims."
+    },
+    {
+      "id": "V2-2",
+      "severity": "moderate",
+      "layer": "soap_section",
+      "fact_indices": [
+        86,
+        87,
+        88,
+        89,
+        90
+      ],
+      "finding": "Continuation of lisinopril, decision not to add an oral anti-inflammatory, and three clinician activity recommendations are in A rather than P; the P section therefore omits these otherwise extracted plan details."
+    },
+    {
+      "id": "V2-3",
+      "severity": "low",
+      "layer": "soap_section",
+      "fact_indices": [
+        106
+      ],
+      "finding": "No payer authorization decision is a Doctor-stated administrative event with unknown experiencer; SOAP S is an unsuitable section, although the prior patient-speaker error is gone."
+    },
+    {
+      "id": "V2-4",
+      "severity": "review",
+      "layer": "machine_flag",
+      "fact_indices": [
+        24
+      ],
+      "finding": "Machine marked actual acetaminophen doses as source_insufficient_evidence for execution, but the primary source explicitly reports doses taken on four separate days. Retain as patient-reported use without independent administration certification."
+    },
+    {
+      "id": "V2-5",
+      "severity": "low",
+      "layer": "action_state",
+      "fact_indices": [
+        22,
+        25
+      ],
+      "finding": "Rest as ongoing and mild relief as completed are interpretive action labels; the source supports patient-reported help but not a discrete treatment course."
+    },
+    {
+      "id": "V2-6",
+      "severity": "resolved_v1_error",
+      "layer": "source_format_and_speaker",
+      "fact_indices": [
+        102,
+        103,
+        104,
+        105,
+        106
+      ],
+      "finding": "The ending paragraph now has an explicit Doctor label. The five extracted ending facts cite Doctor, and the exported SOAP no longer says the patient reported those acts or administrative status. The explicit no-PT-during-visit sentence is not separately extracted."
+    },
+    {
+      "id": "V2-7",
+      "severity": "none_identified",
+      "layer": "critical_unsupported",
+      "fact_indices": [],
+      "finding": "No materially false dose, vital sign, test result, completed therapy, confirmed imaging diagnosis, or new clinical event identified in the 106 quoted assertions. This does not establish clinical accuracy or exhaustiveness."
+    }
+  ],
+  "fact_reviews": [
+    {
+      "index": 1,
+      "fact_id": "f-918625c2daba8ec2e366",
+      "concept": "left knee pain",
+      "source_support": {
+        "quote": "My left knee has been hurting for about three months.",
+        "start": 422,
+        "end": 475,
+        "speaker_in_raw_line": "Patient"
+      },
+      "assertion": {
+        "polarity": "present",
+        "temporality": "current",
+        "experiencer": "patient",
+        "assertion_basis": "patient_report",
+        "clinical_status": "reported current symptom",
+        "action_status": "unknown"
+      },
+      "soap": {
+        "section": "S",
+        "display_text": "The patient reports left knee pain for about three months. The source describes this as “reported current symptom”."
+      },
+      "audit": {
+        "verdict": "supported",
+        "issue_tags": [],
+        "note": "原文直接支持该事实；SOAP 的主体、极性、时间和原文限定没有发现重大不符。"
+      }
+    },
+    {
+      "index": 2,
+      "fact_id": "f-6013c4590b0a6c18bb48",
+      "concept": "left knee pain location",
+      "source_support": {
+        "quote": "It is along the inner side of the left knee.",
+        "start": 627,
+        "end": 671,
+        "speaker_in_raw_line": "Patient"
+      },
+      "assertion": {
+        "polarity": "present",
+        "temporality": "current",
+        "experiencer": "patient",
+        "assertion_basis": "patient_report",
+        "clinical_status": "reported current symptom location",
+        "action_status": "unknown"
+      },
+      "soap": {
+        "section": "S",
+        "display_text": "The patient reports left knee pain location, with a recorded value of inner side of left knee. The source describes this as “reported current symptom location”."
+      },
+      "audit": {
+        "verdict": "supported",
+        "issue_tags": [],
+        "note": "原文直接支持该事实；SOAP 的主体、极性、时间和原文限定没有发现重大不符。"
+      }
+    },
+    {
+      "index": 3,
+      "fact_id": "f-d355aeff7112288dbc0b",
+      "concept": "left knee pain onset",
+      "source_support": {
+        "quote": "It came on gradually.",
+        "start": 672,
+        "end": 693,
+        "speaker_in_raw_line": "Patient"
+      },
+      "assertion": {
+        "polarity": "present",
+        "temporality": "historical",
+        "experiencer": "patient",
+        "assertion_basis": "patient_report",
+        "clinical_status": "reported onset",
+        "action_status": "unknown"
+      },
+      "soap": {
+        "section": "S",
+        "display_text": "The patient reports left knee pain onset (historical), with a recorded value of gradual onset. The source describes this as “reported onset”."
+      },
+      "audit": {
+        "verdict": "supported",
+        "issue_tags": [
+          "onset"
+        ],
+        "note": "渐进起病有独立事实与 S 显示；v1 的显示遗漏在 v2 中已解决。"
+      }
+    },
+    {
+      "index": 4,
+      "fact_id": "f-bd408d4320a630b1e157",
+      "concept": "left knee pain quality",
+      "source_support": {
+        "quote": "It feels like an ache, with a sharper pain when I go up or down stairs.",
+        "start": 745,
+        "end": 816,
+        "speaker_in_raw_line": "Patient"
+      },
+      "assertion": {
+        "polarity": "present",
+        "temporality": "current",
+        "experiencer": "patient",
+        "assertion_basis": "patient_report",
+        "clinical_status": "reported current pain quality and trigger",
+        "action_status": "unknown"
+      },
+      "soap": {
+        "section": "S",
+        "display_text": "The patient reports left knee pain quality, with a recorded value of ache with sharper pain going up or down stairs. The source describes this as “reported current pain quality and trigger”."
+      },
+      "audit": {
+        "verdict": "supported",
+        "issue_tags": [],
+        "note": "原文直接支持该事实；SOAP 的主体、极性、时间和原文限定没有发现重大不符。"
+      }
+    },
+    {
+      "index": 5,
+      "fact_id": "f-a697b9e08b6e002f35cb",
+      "concept": "left knee pain",
+      "source_support": {
+        "quote": "Seven out of ten when climbing stairs.",
+        "start": 952,
+        "end": 990,
+        "speaker_in_raw_line": "Patient"
+      },
+      "assertion": {
+        "polarity": "present",
+        "temporality": "current",
+        "experiencer": "patient",
+        "assertion_basis": "patient_report",
+        "clinical_status": "reported pain severity",
+        "action_status": "unknown"
+      },
+      "soap": {
+        "section": "S",
+        "display_text": "The patient reports left knee pain, described as 7, with a recorded value of pain when climbing stairs out of 10. The source describes this as “reported pain severity”. The recorded timing is “last 24 hours”."
+      },
+      "audit": {
+        "verdict": "supported",
+        "issue_tags": [
+          "activity_qualified_severity"
+        ],
+        "note": "7/10 专指过去24小时上下楼疼痛；不能写成静息或一般疼痛强度。"
+      }
+    },
+    {
+      "index": 6,
+      "fact_id": "f-96314999a3ff792503b0",
+      "concept": "left knee pain",
+      "source_support": {
+        "quote": "At rest it is two out of ten.",
+        "start": 991,
+        "end": 1020,
+        "speaker_in_raw_line": "Patient"
+      },
+      "assertion": {
+        "polarity": "present",
+        "temporality": "current",
+        "experiencer": "patient",
+        "assertion_basis": "patient_report",
+        "clinical_status": "reported pain severity",
+        "action_status": "unknown"
+      },
+      "soap": {
+        "section": "S",
+        "display_text": "The patient reports left knee pain, described as 2, with a recorded value of pain at rest out of 10. The source describes this as “reported pain severity”."
+      },
+      "audit": {
+        "verdict": "supported",
+        "issue_tags": [
+          "rest_severity"
+        ],
+        "note": "静息疼痛 2/10，与上下楼 7/10 区分。"
+      }
+    },
+    {
+      "index": 7,
+      "fact_id": "f-96f0f084af43be00c03c",
+      "concept": "left knee stiffness",
+      "source_support": {
+        "quote": "It feels stiff for about ten minutes when I first get up.",
+        "start": 1229,
+        "end": 1286,
+        "speaker_in_raw_line": "Patient"
+      },
+      "assertion": {
+        "polarity": "present",
+        "temporality": "current",
+        "experiencer": "patient",
+        "assertion_basis": "patient_report",
+        "clinical_status": "reported current symptom",
+        "action_status": "unknown"
+      },
+      "soap": {
+        "section": "S",
+        "display_text": "The patient reports left knee stiffness for about ten minutes, with a recorded value of stiffness for about ten minutes when first getting up. The source describes this as “reported current symptom”. The recorded timing is “when first getting up”."
+      },
+      "audit": {
+        "verdict": "supported",
+        "issue_tags": [],
+        "note": "原文直接支持该事实；SOAP 的主体、极性、时间和原文限定没有发现重大不符。"
+      }
+    },
+    {
+      "index": 8,
+      "fact_id": "f-46e3377b30a0ee46a13a",
+      "concept": "left knee puffiness",
+      "source_support": {
+        "quote": "Sometimes it looks slightly puffy after a busy day, but not today.",
+        "start": 1287,
+        "end": 1353,
+        "speaker_in_raw_line": "Patient"
+      },
+      "assertion": {
+        "polarity": "present",
+        "temporality": "current",
+        "experiencer": "patient",
+        "assertion_basis": "patient_report",
+        "clinical_status": "intermittent swelling reported; absent today",
+        "action_status": "unknown"
+      },
+      "soap": {
+        "section": "S",
+        "display_text": "The patient reports left knee puffiness, with a recorded frequency of sometimes, described as slight, with a recorded value of puffy after a busy day; not today. The source describes this as “intermittent swelling reported; absent today”. The recorded timing is “after a busy day; not today”."
+      },
+      "audit": {
+        "verdict": "supported",
+        "issue_tags": [
+          "today_vs_intermitent"
+        ],
+        "note": "轻微膝部“puffy”只在忙碌日后偶发，今天没有；显示保留此限定。"
+      }
+    },
+    {
+      "index": 9,
+      "fact_id": "f-b8547fc27ef705e36b69",
+      "concept": "knee locking",
+      "source_support": {
+        "quote": "It does not lock or give way.",
+        "start": 1354,
+        "end": 1383,
+        "speaker_in_raw_line": "Patient"
+      },
+      "assertion": {
+        "polarity": "absent",
+        "temporality": "current",
+        "experiencer": "patient",
+        "assertion_basis": "patient_report",
+        "clinical_status": "explicitly denied",
+        "action_status": "unknown"
+      },
+      "soap": {
+        "section": "S",
+        "display_text": "The patient reports no knee locking. The source describes this as “explicitly denied”."
+      },
+      "audit": {
+        "verdict": "supported",
+        "issue_tags": [],
+        "note": "原文直接支持该事实；SOAP 的主体、极性、时间和原文限定没有发现重大不符。"
+      }
+    },
+    {
+      "index": 10,
+      "fact_id": "f-6b16caf5b3c70f22ddcb",
+      "concept": "knee giving way",
+      "source_support": {
+        "quote": "It does not lock or give way.",
+        "start": 1354,
+        "end": 1383,
+        "speaker_in_raw_line": "Patient"
+      },
+      "assertion": {
+        "polarity": "absent",
+        "temporality": "current",
+        "experiencer": "patient",
+        "assertion_basis": "patient_report",
+        "clinical_status": "explicitly denied",
+        "action_status": "unknown"
+      },
+      "soap": {
+        "section": "S",
+        "display_text": "The patient reports no knee giving way. The source describes this as “explicitly denied”."
+      },
+      "audit": {
+        "verdict": "supported",
+        "issue_tags": [],
+        "note": "原文直接支持该事实；SOAP 的主体、极性、时间和原文限定没有发现重大不符。"
+      }
+    },
+    {
+      "index": 11,
+      "fact_id": "f-156e55bcc45b343fcc2f",
+      "concept": "fever",
+      "source_support": {
+        "quote": "No fever or redness.",
+        "start": 1488,
+        "end": 1508,
+        "speaker_in_raw_line": "Patient"
+      },
+      "assertion": {
+        "polarity": "absent",
+        "temporality": "current",
+        "experiencer": "patient",
+        "assertion_basis": "patient_report",
+        "clinical_status": "explicitly denied",
+        "action_status": "unknown"
+      },
+      "soap": {
+        "section": "S",
+        "display_text": "The patient reports no fever. The source describes this as “explicitly denied”. The recorded timing is “today”."
+      },
+      "audit": {
+        "verdict": "supported",
+        "issue_tags": [],
+        "note": "原文直接支持该事实；SOAP 的主体、极性、时间和原文限定没有发现重大不符。"
+      }
+    },
+    {
+      "index": 12,
+      "fact_id": "f-c96c3cfbfc16160b936f",
+      "concept": "redness of left knee",
+      "source_support": {
+        "quote": "No fever or redness.",
+        "start": 1488,
+        "end": 1508,
+        "speaker_in_raw_line": "Patient"
+      },
+      "assertion": {
+        "polarity": "absent",
+        "temporality": "current",
+        "experiencer": "patient",
+        "assertion_basis": "patient_report",
+        "clinical_status": "explicitly denied",
+        "action_status": "unknown"
+      },
+      "soap": {
+        "section": "S",
+        "display_text": "The patient reports no redness of left knee. The source describes this as “explicitly denied”."
+      },
+      "audit": {
+        "verdict": "supported",
+        "issue_tags": [],
+        "note": "原文直接支持该事实；SOAP 的主体、极性、时间和原文限定没有发现重大不符。"
+      }
+    },
+    {
+      "index": 13,
+      "fact_id": "f-6e311ab16654ee3b054c",
+      "concept": "calf pain",
+      "source_support": {
+        "quote": "No calf pain or swelling.",
+        "start": 1509,
+        "end": 1534,
+        "speaker_in_raw_line": "Patient"
+      },
+      "assertion": {
+        "polarity": "absent",
+        "temporality": "current",
+        "experiencer": "patient",
+        "assertion_basis": "patient_report",
+        "clinical_status": "explicitly denied",
+        "action_status": "unknown"
+      },
+      "soap": {
+        "section": "S",
+        "display_text": "The patient reports no calf pain. The source describes this as “explicitly denied”."
+      },
+      "audit": {
+        "verdict": "supported",
+        "issue_tags": [],
+        "note": "原文直接支持该事实；SOAP 的主体、极性、时间和原文限定没有发现重大不符。"
+      }
+    },
+    {
+      "index": 14,
+      "fact_id": "f-545d861bd83c41d6280a",
+      "concept": "calf swelling",
+      "source_support": {
+        "quote": "No calf pain or swelling.",
+        "start": 1509,
+        "end": 1534,
+        "speaker_in_raw_line": "Patient"
+      },
+      "assertion": {
+        "polarity": "absent",
+        "temporality": "current",
+        "experiencer": "patient",
+        "assertion_basis": "patient_report",
+        "clinical_status": "explicitly denied",
+        "action_status": "unknown"
+      },
+      "soap": {
+        "section": "S",
+        "display_text": "The patient reports no calf swelling. The source describes this as “explicitly denied”."
+      },
+      "audit": {
+        "verdict": "supported",
+        "issue_tags": [],
+        "note": "原文直接支持该事实；SOAP 的主体、极性、时间和原文限定没有发现重大不符。"
+      }
+    },
+    {
+      "index": 15,
+      "fact_id": "f-d7749653fbd1e7265219",
+      "concept": "numbness",
+      "source_support": {
+        "quote": "No numbness or weakness.",
+        "start": 1535,
+        "end": 1559,
+        "speaker_in_raw_line": "Patient"
+      },
+      "assertion": {
+        "polarity": "absent",
+        "temporality": "current",
+        "experiencer": "patient",
+        "assertion_basis": "patient_report",
+        "clinical_status": "explicitly denied",
+        "action_status": "unknown"
+      },
+      "soap": {
+        "section": "S",
+        "display_text": "The patient reports no numbness. The source describes this as “explicitly denied”."
+      },
+      "audit": {
+        "verdict": "supported",
+        "issue_tags": [],
+        "note": "原文直接支持该事实；SOAP 的主体、极性、时间和原文限定没有发现重大不符。"
+      }
+    },
+    {
+      "index": 16,
+      "fact_id": "f-dfcc4e0ddcc93907555a",
+      "concept": "weakness",
+      "source_support": {
+        "quote": "No numbness or weakness.",
+        "start": 1535,
+        "end": 1559,
+        "speaker_in_raw_line": "Patient"
+      },
+      "assertion": {
+        "polarity": "absent",
+        "temporality": "current",
+        "experiencer": "patient",
+        "assertion_basis": "patient_report",
+        "clinical_status": "explicitly denied",
+        "action_status": "unknown"
+      },
+      "soap": {
+        "section": "S",
+        "display_text": "The patient reports no weakness. The source describes this as “explicitly denied”."
+      },
+      "audit": {
+        "verdict": "supported",
+        "issue_tags": [],
+        "note": "原文直接支持该事实；SOAP 的主体、极性、时间和原文限定没有发现重大不符。"
+      }
+    },
+    {
+      "index": 17,
+      "fact_id": "f-a3b61bd072f53f3d707a",
+      "concept": "fall",
+      "source_support": {
+        "quote": "I did not fall, twist the knee, or have an injury.",
+        "start": 694,
+        "end": 744,
+        "speaker_in_raw_line": "Patient"
+      },
+      "assertion": {
+        "polarity": "absent",
+        "temporality": "historical",
+        "experiencer": "patient",
+        "assertion_basis": "patient_report",
+        "clinical_status": "explicitly denied history",
+        "action_status": "unknown"
+      },
+      "soap": {
+        "section": "S",
+        "display_text": "The patient reports no fall (historical). The source describes this as “explicitly denied history”."
+      },
+      "audit": {
+        "verdict": "supported",
+        "issue_tags": [],
+        "note": "原文直接支持该事实；SOAP 的主体、极性、时间和原文限定没有发现重大不符。"
+      }
+    },
+    {
+      "index": 18,
+      "fact_id": "f-1990493e6b8a48d56ee5",
+      "concept": "knee twisting event",
+      "source_support": {
+        "quote": "I did not fall, twist the knee, or have an injury.",
+        "start": 694,
+        "end": 744,
+        "speaker_in_raw_line": "Patient"
+      },
+      "assertion": {
+        "polarity": "absent",
+        "temporality": "historical",
+        "experiencer": "patient",
+        "assertion_basis": "patient_report",
+        "clinical_status": "explicitly denied history",
+        "action_status": "unknown"
+      },
+      "soap": {
+        "section": "S",
+        "display_text": "The patient reports no knee twisting event (historical). The source describes this as “explicitly denied history”."
+      },
+      "audit": {
+        "verdict": "supported",
+        "issue_tags": [],
+        "note": "原文直接支持该事实；SOAP 的主体、极性、时间和原文限定没有发现重大不符。"
+      }
+    },
+    {
+      "index": 19,
+      "fact_id": "f-b6fa533acf0c7a010d7c",
+      "concept": "knee injury",
+      "source_support": {
+        "quote": "I did not fall, twist the knee, or have an injury.",
+        "start": 694,
+        "end": 744,
+        "speaker_in_raw_line": "Patient"
+      },
+      "assertion": {
+        "polarity": "absent",
+        "temporality": "historical",
+        "experiencer": "patient",
+        "assertion_basis": "patient_report",
+        "clinical_status": "explicitly denied history",
+        "action_status": "unknown"
+      },
+      "soap": {
+        "section": "S",
+        "display_text": "The patient reports no knee injury (historical). The source describes this as “explicitly denied history”."
+      },
+      "audit": {
+        "verdict": "supported",
+        "issue_tags": [],
+        "note": "原文直接支持该事实；SOAP 的主体、极性、时间和原文限定没有发现重大不符。"
+      }
+    },
+    {
+      "index": 20,
+      "fact_id": "f-41ffce683deb3ca9c31e",
+      "concept": "walking tolerance limited by left knee pain",
+      "source_support": {
+        "quote": "I can walk for about ten minutes before the knee pain makes me stop.",
+        "start": 1021,
+        "end": 1089,
+        "speaker_in_raw_line": "Patient"
+      },
+      "assertion": {
+        "polarity": "present",
+        "temporality": "current",
+        "experiencer": "patient",
+        "assertion_basis": "patient_report",
+        "clinical_status": "reported functional limitation",
+        "action_status": "unknown"
+      },
+      "soap": {
+        "section": "S",
+        "display_text": "The patient reports walking tolerance limited by left knee pain for about ten minutes walking, with a recorded value of stops after about ten minutes. The source describes this as “reported functional limitation”."
+      },
+      "audit": {
+        "verdict": "supported",
+        "issue_tags": [],
+        "note": "原文直接支持该事实；SOAP 的主体、极性、时间和原文限定没有发现重大不符。"
+      }
+    },
+    {
+      "index": 21,
+      "fact_id": "f-ae6bd7f787dd9fe40354",
+      "concept": "walking tolerance",
+      "source_support": {
+        "quote": "Before this started, I could walk for half an hour without stopping.",
+        "start": 1090,
+        "end": 1158,
+        "speaker_in_raw_line": "Patient"
+      },
+      "assertion": {
+        "polarity": "present",
+        "temporality": "historical",
+        "experiencer": "patient",
+        "assertion_basis": "patient_report",
+        "clinical_status": "reported prior functional capacity",
+        "action_status": "unknown"
+      },
+      "soap": {
+        "section": "S",
+        "display_text": "The patient reports walking tolerance (historical) for half an hour walking, with a recorded value of could walk half an hour without stopping. The source describes this as “reported prior functional capacity”. The recorded timing is “before knee symptoms started”."
+      },
+      "audit": {
+        "verdict": "supported",
+        "issue_tags": [],
+        "note": "原文直接支持该事实；SOAP 的主体、极性、时间和原文限定没有发现重大不符。"
+      }
+    },
+    {
+      "index": 22,
+      "fact_id": "f-25140c45ead24869cea8",
+      "concept": "rest for knee pain",
+      "source_support": {
+        "quote": "I have used acetaminophen, and resting helps.",
+        "start": 1646,
+        "end": 1691,
+        "speaker_in_raw_line": "Patient"
+      },
+      "assertion": {
+        "polarity": "present",
+        "temporality": "current",
+        "experiencer": "patient",
+        "assertion_basis": "patient_report",
+        "clinical_status": "used; patient reports resting helps",
+        "action_status": "ongoing"
+      },
+      "soap": {
+        "section": "S",
+        "display_text": "The patient reports rest for knee pain with the recorded status “used; patient reports resting helps”."
+      },
+      "audit": {
+        "verdict": "supported_with_action_caveat",
+        "issue_tags": [
+          "action_state"
+        ],
+        "note": "“resting helps”支持休息可缓解的患者报告；ongoing 治疗状态仍是解释性标签，原文未给出具体休息频次/疗程。"
+      }
+    },
+    {
+      "index": 23,
+      "fact_id": "f-7a715359aaa100d7e04a",
+      "concept": "acetaminophen",
+      "source_support": {
+        "quote": "I take one 500 mg tablet by mouth when I need it.",
+        "start": 1895,
+        "end": 1944,
+        "speaker_in_raw_line": "Patient"
+      },
+      "assertion": {
+        "polarity": "present",
+        "temporality": "current",
+        "experiencer": "patient",
+        "assertion_basis": "patient_report",
+        "clinical_status": "patient reports taking as needed",
+        "action_status": "ongoing"
+      },
+      "soap": {
+        "section": "S",
+        "display_text": "The patient reports acetaminophen with the recorded status “patient reports taking as needed”, with a recorded frequency of when needed, with a recorded value of 500 mg tablet by mouth when needed."
+      },
+      "audit": {
+        "verdict": "supported",
+        "issue_tags": [],
+        "note": "原文直接支持该事实；SOAP 的主体、极性、时间和原文限定没有发现重大不符。"
+      }
+    },
+    {
+      "index": 24,
+      "fact_id": "f-5410b95403bf45c7174b",
+      "concept": "acetaminophen use",
+      "source_support": {
+        "quote": "Over the past week I took one tablet on four separate days, never more than one tablet in a day.",
+        "start": 1945,
+        "end": 2041,
+        "speaker_in_raw_line": "Patient"
+      },
+      "assertion": {
+        "polarity": "present",
+        "temporality": "historical",
+        "experiencer": "patient",
+        "assertion_basis": "patient_report",
+        "clinical_status": "patient reports doses taken",
+        "action_status": "completed"
+      },
+      "soap": {
+        "section": "S",
+        "display_text": "The patient reports acetaminophen use with the recorded status “patient reports doses taken” (historical), with a recorded frequency of four separate days; no more than once per day, with a recorded value of one tablet on four separate days; no more than one tablet per day. The recorded timing is “over the past week”."
+      },
+      "audit": {
+        "verdict": "supported_machine_flag_disputed",
+        "issue_tags": [
+          "machine_review_flag"
+        ],
+        "note": "患者明确说过去一周四天各服 500 mg 一片、每日不超过一片；事实属已发生服药，机器“unverified_high_risk_execution”标记与这句明确第一人称报告不一致。此报告不等同独立核药。"
+      }
+    },
+    {
+      "index": 25,
+      "fact_id": "f-9655fe02a46530ded75e",
+      "concept": "acetaminophen helps knee pain",
+      "source_support": {
+        "quote": "It helps a little.",
+        "start": 2042,
+        "end": 2060,
+        "speaker_in_raw_line": "Patient"
+      },
+      "assertion": {
+        "polarity": "present",
+        "temporality": "current",
+        "experiencer": "patient",
+        "assertion_basis": "patient_report",
+        "clinical_status": "patient-reported response",
+        "action_status": "completed"
+      },
+      "soap": {
+        "section": "S",
+        "display_text": "The patient reports acetaminophen helps knee pain, described as a little, with a recorded value of symptom relief. The source describes this as “patient-reported response”."
+      },
+      "audit": {
+        "verdict": "supported_with_action_caveat",
+        "issue_tags": [
+          "action_state"
+        ],
+        "note": "“It helps a little”是患者主观疗效，不宜把 completed 当成独立已完成治疗事件。"
+      }
+    },
+    {
+      "index": 26,
+      "fact_id": "f-deb544cce38ba401f7ed",
+      "concept": "acetaminophen side effects",
+      "source_support": {
+        "quote": "I have not noticed any side effects.",
+        "start": 2061,
+        "end": 2097,
+        "speaker_in_raw_line": "Patient"
+      },
+      "assertion": {
+        "polarity": "absent",
+        "temporality": "current",
+        "experiencer": "patient",
+        "assertion_basis": "patient_report",
+        "clinical_status": "no side effects noticed",
+        "action_status": "unknown"
+      },
+      "soap": {
+        "section": "S",
+        "display_text": "The patient reports no acetaminophen side effects. The source describes this as “no side effects noticed”."
+      },
+      "audit": {
+        "verdict": "supported",
+        "issue_tags": [],
+        "note": "原文直接支持该事实；SOAP 的主体、极性、时间和原文限定没有发现重大不符。"
+      }
+    },
+    {
+      "index": 27,
+      "fact_id": "f-4dba1ab927d751a01908",
+      "concept": "high blood pressure",
+      "source_support": {
+        "quote": "I have had high blood pressure since 2018.",
+        "start": 2172,
+        "end": 2214,
+        "speaker_in_raw_line": "Patient"
+      },
+      "assertion": {
+        "polarity": "present",
+        "temporality": "current",
+        "experiencer": "patient",
+        "assertion_basis": "patient_report",
+        "clinical_status": "patient-reported history/current condition",
+        "action_status": "ongoing"
+      },
+      "soap": {
+        "section": "S",
+        "display_text": "The patient reports high blood pressure, with a recorded value of since 2018. The source describes this as “patient-reported history/current condition”. The recorded timing is “since 2018”."
+      },
+      "audit": {
+        "verdict": "supported",
+        "issue_tags": [],
+        "note": "原文直接支持该事实；SOAP 的主体、极性、时间和原文限定没有发现重大不符。"
+      }
+    },
+    {
+      "index": 28,
+      "fact_id": "f-6cf29a7c949ff59320ca",
+      "concept": "lisinopril",
+      "source_support": {
+        "quote": "I take lisinopril 10 mg by mouth every morning.",
+        "start": 2215,
+        "end": 2262,
+        "speaker_in_raw_line": "Patient"
+      },
+      "assertion": {
+        "polarity": "present",
+        "temporality": "current",
+        "experiencer": "patient",
+        "assertion_basis": "patient_report",
+        "clinical_status": "patient reports current use",
+        "action_status": "ongoing"
+      },
+      "soap": {
+        "section": "S",
+        "display_text": "The patient reports lisinopril with the recorded status “patient reports current use”, with a recorded frequency of every morning, with a recorded value of 10 mg by mouth every morning."
+      },
+      "audit": {
+        "verdict": "supported",
+        "issue_tags": [],
+        "note": "原文直接支持该事实；SOAP 的主体、极性、时间和原文限定没有发现重大不符。"
+      }
+    },
+    {
+      "index": 29,
+      "fact_id": "f-d85fa3cca4f840f59064",
+      "concept": "diabetes",
+      "source_support": {
+        "quote": "I have no history of diabetes, kidney disease, liver disease, stomach bleeding or blood clots.",
+        "start": 2263,
+        "end": 2357,
+        "speaker_in_raw_line": "Patient"
+      },
+      "assertion": {
+        "polarity": "absent",
+        "temporality": "historical",
+        "experiencer": "patient",
+        "assertion_basis": "patient_report",
+        "clinical_status": "explicitly no history",
+        "action_status": "unknown"
+      },
+      "soap": {
+        "section": "S",
+        "display_text": "The patient reports no diabetes (historical). The source describes this as “explicitly no history”."
+      },
+      "audit": {
+        "verdict": "supported",
+        "issue_tags": [],
+        "note": "原文直接支持该事实；SOAP 的主体、极性、时间和原文限定没有发现重大不符。"
+      }
+    },
+    {
+      "index": 30,
+      "fact_id": "f-3169891a82d959baa3ff",
+      "concept": "kidney disease",
+      "source_support": {
+        "quote": "I have no history of diabetes, kidney disease, liver disease, stomach bleeding or blood clots.",
+        "start": 2263,
+        "end": 2357,
+        "speaker_in_raw_line": "Patient"
+      },
+      "assertion": {
+        "polarity": "absent",
+        "temporality": "historical",
+        "experiencer": "patient",
+        "assertion_basis": "patient_report",
+        "clinical_status": "explicitly no history",
+        "action_status": "unknown"
+      },
+      "soap": {
+        "section": "S",
+        "display_text": "The patient reports no kidney disease (historical). The source describes this as “explicitly no history”."
+      },
+      "audit": {
+        "verdict": "supported",
+        "issue_tags": [],
+        "note": "原文直接支持该事实；SOAP 的主体、极性、时间和原文限定没有发现重大不符。"
+      }
+    },
+    {
+      "index": 31,
+      "fact_id": "f-daaabd6e1e1459a72c65",
+      "concept": "liver disease",
+      "source_support": {
+        "quote": "I have no history of diabetes, kidney disease, liver disease, stomach bleeding or blood clots.",
+        "start": 2263,
+        "end": 2357,
+        "speaker_in_raw_line": "Patient"
+      },
+      "assertion": {
+        "polarity": "absent",
+        "temporality": "historical",
+        "experiencer": "patient",
+        "assertion_basis": "patient_report",
+        "clinical_status": "explicitly no history",
+        "action_status": "unknown"
+      },
+      "soap": {
+        "section": "S",
+        "display_text": "The patient reports no liver disease (historical). The source describes this as “explicitly no history”."
+      },
+      "audit": {
+        "verdict": "supported",
+        "issue_tags": [],
+        "note": "原文直接支持该事实；SOAP 的主体、极性、时间和原文限定没有发现重大不符。"
+      }
+    },
+    {
+      "index": 32,
+      "fact_id": "f-feecdb09a4b674427d01",
+      "concept": "stomach bleeding",
+      "source_support": {
+        "quote": "I have no history of diabetes, kidney disease, liver disease, stomach bleeding or blood clots.",
+        "start": 2263,
+        "end": 2357,
+        "speaker_in_raw_line": "Patient"
+      },
+      "assertion": {
+        "polarity": "absent",
+        "temporality": "historical",
+        "experiencer": "patient",
+        "assertion_basis": "patient_report",
+        "clinical_status": "explicitly no history",
+        "action_status": "unknown"
+      },
+      "soap": {
+        "section": "S",
+        "display_text": "The patient reports no stomach bleeding (historical). The source describes this as “explicitly no history”."
+      },
+      "audit": {
+        "verdict": "supported",
+        "issue_tags": [],
+        "note": "原文直接支持该事实；SOAP 的主体、极性、时间和原文限定没有发现重大不符。"
+      }
+    },
+    {
+      "index": 33,
+      "fact_id": "f-ca4b8b7cdfc204a98915",
+      "concept": "blood clots",
+      "source_support": {
+        "quote": "I have no history of diabetes, kidney disease, liver disease, stomach bleeding or blood clots.",
+        "start": 2263,
+        "end": 2357,
+        "speaker_in_raw_line": "Patient"
+      },
+      "assertion": {
+        "polarity": "absent",
+        "temporality": "historical",
+        "experiencer": "patient",
+        "assertion_basis": "patient_report",
+        "clinical_status": "explicitly no history",
+        "action_status": "unknown"
+      },
+      "soap": {
+        "section": "S",
+        "display_text": "The patient reports no blood clots (historical). The source describes this as “explicitly no history”."
+      },
+      "audit": {
+        "verdict": "supported",
+        "issue_tags": [],
+        "note": "原文直接支持该事实；SOAP 的主体、极性、时间和原文限定没有发现重大不符。"
+      }
+    },
+    {
+      "index": 34,
+      "fact_id": "f-278ea96d10d44275b424",
+      "concept": "surgery on either knee",
+      "source_support": {
+        "quote": "I have never had surgery on either knee.",
+        "start": 2358,
+        "end": 2398,
+        "speaker_in_raw_line": "Patient"
+      },
+      "assertion": {
+        "polarity": "absent",
+        "temporality": "historical",
+        "experiencer": "patient",
+        "assertion_basis": "patient_report",
+        "clinical_status": "explicitly never had",
+        "action_status": "not_completed"
+      },
+      "soap": {
+        "section": "S",
+        "display_text": "The patient reports surgery on either knee with the recorded status “explicitly never had” (historical). The recorded timing is “ever”."
+      },
+      "audit": {
+        "verdict": "supported",
+        "issue_tags": [
+          "bilateral_history"
+        ],
+        "note": "原文明确双膝均无既往手术；本条已覆盖双侧范围。"
+      }
+    },
+    {
+      "index": 35,
+      "fact_id": "f-e892a9bef0e433c84a77",
+      "concept": "penicillin-associated rash",
+      "source_support": {
+        "quote": "Penicillin caused a rash when I was a child.",
+        "start": 2440,
+        "end": 2484,
+        "speaker_in_raw_line": "Patient"
+      },
+      "assertion": {
+        "polarity": "present",
+        "temporality": "historical",
+        "experiencer": "patient",
+        "assertion_basis": "patient_report",
+        "clinical_status": "patient-reported childhood reaction",
+        "action_status": "completed"
+      },
+      "soap": {
+        "section": "S",
+        "display_text": "The patient reports penicillin-associated rash (historical), with a recorded value of rash. The source describes this as “patient-reported childhood reaction”. The recorded timing is “when patient was a child”."
+      },
+      "audit": {
+        "verdict": "supported",
+        "issue_tags": [
+          "historical_allergy"
+        ],
+        "note": "童年青霉素相关皮疹；现时无青霉素用药，呼吸困难也仅针对当年反应被否认。"
+      }
+    },
+    {
+      "index": 36,
+      "fact_id": "f-22d3fd44a53f9ff4edf6",
+      "concept": "trouble breathing",
+      "source_support": {
+        "quote": "I did not have trouble breathing.",
+        "start": 2485,
+        "end": 2518,
+        "speaker_in_raw_line": "Patient"
+      },
+      "assertion": {
+        "polarity": "absent",
+        "temporality": "historical",
+        "experiencer": "patient",
+        "assertion_basis": "patient_report",
+        "clinical_status": "explicitly denied with penicillin reaction",
+        "action_status": "unknown"
+      },
+      "soap": {
+        "section": "S",
+        "display_text": "The patient reports no trouble breathing (historical). The source describes this as “explicitly denied with penicillin reaction”. The recorded timing is “during childhood penicillin reaction”."
+      },
+      "audit": {
+        "verdict": "supported",
+        "issue_tags": [],
+        "note": "原文直接支持该事实；SOAP 的主体、极性、时间和原文限定没有发现重大不符。"
+      }
+    },
+    {
+      "index": 37,
+      "fact_id": "f-65f0a19d7cd7ca08cb9d",
+      "concept": "penicillin",
+      "source_support": {
+        "quote": "I do not take penicillin now.",
+        "start": 2519,
+        "end": 2548,
+        "speaker_in_raw_line": "Patient"
+      },
+      "assertion": {
+        "polarity": "absent",
+        "temporality": "current",
+        "experiencer": "patient",
+        "assertion_basis": "patient_report",
+        "clinical_status": "explicitly not currently taken",
+        "action_status": "not_completed"
+      },
+      "soap": {
+        "section": "S",
+        "display_text": "The patient reports penicillin with the recorded status “explicitly not currently taken”. The recorded timing is “now”."
+      },
+      "audit": {
+        "verdict": "supported",
+        "issue_tags": [],
+        "note": "原文直接支持该事实；SOAP 的主体、极性、时间和原文限定没有发现重大不符。"
+      }
+    },
+    {
+      "index": 38,
+      "fact_id": "f-7ea892e00d62aad8bace",
+      "concept": "chest pain",
+      "source_support": {
+        "quote": "No chest pain or shortness of breath.",
+        "start": 2609,
+        "end": 2646,
+        "speaker_in_raw_line": "Patient"
+      },
+      "assertion": {
+        "polarity": "absent",
+        "temporality": "current",
+        "experiencer": "patient",
+        "assertion_basis": "patient_report",
+        "clinical_status": "explicitly denied",
+        "action_status": "unknown"
+      },
+      "soap": {
+        "section": "S",
+        "display_text": "The patient reports no chest pain. The source describes this as “explicitly denied”. The recorded timing is “today”."
+      },
+      "audit": {
+        "verdict": "supported",
+        "issue_tags": [],
+        "note": "原文直接支持该事实；SOAP 的主体、极性、时间和原文限定没有发现重大不符。"
+      }
+    },
+    {
+      "index": 39,
+      "fact_id": "f-77b137bbccc026a4177f",
+      "concept": "shortness of breath",
+      "source_support": {
+        "quote": "No chest pain or shortness of breath.",
+        "start": 2609,
+        "end": 2646,
+        "speaker_in_raw_line": "Patient"
+      },
+      "assertion": {
+        "polarity": "absent",
+        "temporality": "current",
+        "experiencer": "patient",
+        "assertion_basis": "patient_report",
+        "clinical_status": "explicitly denied",
+        "action_status": "unknown"
+      },
+      "soap": {
+        "section": "S",
+        "display_text": "The patient reports no shortness of breath. The source describes this as “explicitly denied”. The recorded timing is “today”."
+      },
+      "audit": {
+        "verdict": "supported",
+        "issue_tags": [],
+        "note": "原文直接支持该事实；SOAP 的主体、极性、时间和原文限定没有发现重大不符。"
+      }
+    },
+    {
+      "index": 40,
+      "fact_id": "f-1bcc5ed91a813cd6a3bc",
+      "concept": "abdominal pain",
+      "source_support": {
+        "quote": "No abdominal pain, nausea or black stools.",
+        "start": 2647,
+        "end": 2689,
+        "speaker_in_raw_line": "Patient"
+      },
+      "assertion": {
+        "polarity": "absent",
+        "temporality": "current",
+        "experiencer": "patient",
+        "assertion_basis": "patient_report",
+        "clinical_status": "explicitly denied",
+        "action_status": "unknown"
+      },
+      "soap": {
+        "section": "S",
+        "display_text": "The patient reports no abdominal pain. The source describes this as “explicitly denied”. The recorded timing is “today”."
+      },
+      "audit": {
+        "verdict": "supported",
+        "issue_tags": [],
+        "note": "原文直接支持该事实；SOAP 的主体、极性、时间和原文限定没有发现重大不符。"
+      }
+    },
+    {
+      "index": 41,
+      "fact_id": "f-8725e159788546ea8123",
+      "concept": "nausea",
+      "source_support": {
+        "quote": "No abdominal pain, nausea or black stools.",
+        "start": 2647,
+        "end": 2689,
+        "speaker_in_raw_line": "Patient"
+      },
+      "assertion": {
+        "polarity": "absent",
+        "temporality": "current",
+        "experiencer": "patient",
+        "assertion_basis": "patient_report",
+        "clinical_status": "explicitly denied",
+        "action_status": "unknown"
+      },
+      "soap": {
+        "section": "S",
+        "display_text": "The patient reports no nausea. The source describes this as “explicitly denied”. The recorded timing is “today”."
+      },
+      "audit": {
+        "verdict": "supported",
+        "issue_tags": [],
+        "note": "原文直接支持该事实；SOAP 的主体、极性、时间和原文限定没有发现重大不符。"
+      }
+    },
+    {
+      "index": 42,
+      "fact_id": "f-5b7780a3049085b98be2",
+      "concept": "black stools",
+      "source_support": {
+        "quote": "No abdominal pain, nausea or black stools.",
+        "start": 2647,
+        "end": 2689,
+        "speaker_in_raw_line": "Patient"
+      },
+      "assertion": {
+        "polarity": "absent",
+        "temporality": "current",
+        "experiencer": "patient",
+        "assertion_basis": "patient_report",
+        "clinical_status": "explicitly denied",
+        "action_status": "unknown"
+      },
+      "soap": {
+        "section": "S",
+        "display_text": "The patient reports no black stools. The source describes this as “explicitly denied”. The recorded timing is “today”."
+      },
+      "audit": {
+        "verdict": "supported",
+        "issue_tags": [],
+        "note": "原文直接支持该事实；SOAP 的主体、极性、时间和原文限定没有发现重大不符。"
+      }
+    },
+    {
+      "index": 43,
+      "fact_id": "f-b70a01daa45c706fd3b5",
+      "concept": "right knee pain",
+      "source_support": {
+        "quote": "No pain in my right knee.",
+        "start": 2690,
+        "end": 2715,
+        "speaker_in_raw_line": "Patient"
+      },
+      "assertion": {
+        "polarity": "absent",
+        "temporality": "current",
+        "experiencer": "patient",
+        "assertion_basis": "patient_report",
+        "clinical_status": "explicitly denied",
+        "action_status": "unknown"
+      },
+      "soap": {
+        "section": "S",
+        "display_text": "The patient reports no right knee pain. The source describes this as “explicitly denied”. The recorded timing is “today”."
+      },
+      "audit": {
+        "verdict": "supported",
+        "issue_tags": [],
+        "note": "原文直接支持该事实；SOAP 的主体、极性、时间和原文限定没有发现重大不符。"
+      }
+    },
+    {
+      "index": 44,
+      "fact_id": "f-972d7a55b9978ab86089",
+      "concept": "left knee pain is main problem",
+      "source_support": {
+        "quote": "My left knee pain is the problem.",
+        "start": 2716,
+        "end": 2749,
+        "speaker_in_raw_line": "Patient"
+      },
+      "assertion": {
+        "polarity": "present",
+        "temporality": "current",
+        "experiencer": "patient",
+        "assertion_basis": "patient_report",
+        "clinical_status": "reported current concern",
+        "action_status": "unknown"
+      },
+      "soap": {
+        "section": "S",
+        "display_text": "The patient reports left knee pain is main problem. The source describes this as “reported current concern”. The recorded timing is “today”."
+      },
+      "audit": {
+        "verdict": "supported",
+        "issue_tags": [],
+        "note": "原文直接支持该事实；SOAP 的主体、极性、时间和原文限定没有发现重大不符。"
+      }
+    },
+    {
+      "index": 45,
+      "fact_id": "f-4641769b8298f26fa9a5",
+      "concept": "school teacher; stands a lot at work",
+      "source_support": {
+        "quote": "I teach at a school and stand a lot.",
+        "start": 2801,
+        "end": 2837,
+        "speaker_in_raw_line": "Patient"
+      },
+      "assertion": {
+        "polarity": "present",
+        "temporality": "current",
+        "experiencer": "patient",
+        "assertion_basis": "patient_report",
+        "clinical_status": "reported occupation and activity",
+        "action_status": "ongoing"
+      },
+      "soap": {
+        "section": "S",
+        "display_text": "The patient reports school teacher; stands a lot at work. The source describes this as “reported occupation and activity”."
+      },
+      "audit": {
+        "verdict": "supported",
+        "issue_tags": [],
+        "note": "原文直接支持该事实；SOAP 的主体、极性、时间和原文限定没有发现重大不符。"
+      }
+    },
+    {
+      "index": 46,
+      "fact_id": "f-f4b9eab2e50f6a189781",
+      "concept": "classroom is upstairs",
+      "source_support": {
+        "quote": "My classroom is upstairs.",
+        "start": 2838,
+        "end": 2863,
+        "speaker_in_raw_line": "Patient"
+      },
+      "assertion": {
+        "polarity": "present",
+        "temporality": "current",
+        "experiencer": "patient",
+        "assertion_basis": "patient_report",
+        "clinical_status": "reported environmental context",
+        "action_status": "ongoing"
+      },
+      "soap": {
+        "section": "S",
+        "display_text": "The patient reports classroom is upstairs. The source describes this as “reported environmental context”."
+      },
+      "audit": {
+        "verdict": "supported",
+        "issue_tags": [],
+        "note": "原文直接支持该事实；SOAP 的主体、极性、时间和原文限定没有发现重大不符。"
+      }
+    },
+    {
+      "index": 47,
+      "fact_id": "f-a12fc8491506cb722ba8",
+      "concept": "walking commute reduced; bus use",
+      "source_support": {
+        "quote": "I used to walk to work three days a week, but I now take the bus because of the knee.",
+        "start": 2864,
+        "end": 2949,
+        "speaker_in_raw_line": "Patient"
+      },
+      "assertion": {
+        "polarity": "present",
+        "temporality": "current",
+        "experiencer": "patient",
+        "assertion_basis": "patient_report",
+        "clinical_status": "reported change in transportation associated with knee",
+        "action_status": "ongoing"
+      },
+      "soap": {
+        "section": "S",
+        "display_text": "The patient reports walking commute reduced; bus use, with a recorded frequency of three days a week (prior walking commute), with a recorded value of walked to work three days a week; now takes the bus because of the knee. The source describes this as “reported change in transportation associated with knee”. The recorded timing is “used to walk; now takes the bus”."
+      },
+      "audit": {
+        "verdict": "supported",
+        "issue_tags": [],
+        "note": "原文直接支持该事实；SOAP 的主体、极性、时间和原文限定没有发现重大不符。"
+      }
+    },
+    {
+      "index": 48,
+      "fact_id": "f-0f0d7d11a82b854c5358",
+      "concept": "tobacco smoking",
+      "source_support": {
+        "quote": "I do not smoke.",
+        "start": 2950,
+        "end": 2965,
+        "speaker_in_raw_line": "Patient"
+      },
+      "assertion": {
+        "polarity": "absent",
+        "temporality": "current",
+        "experiencer": "patient",
+        "assertion_basis": "patient_report",
+        "clinical_status": "explicitly does not smoke",
+        "action_status": "unknown"
+      },
+      "soap": {
+        "section": "S",
+        "display_text": "The patient reports no tobacco smoking. The source describes this as “explicitly does not smoke”."
+      },
+      "audit": {
+        "verdict": "supported",
+        "issue_tags": [],
+        "note": "原文直接支持该事实；SOAP 的主体、极性、时间和原文限定没有发现重大不符。"
+      }
+    },
+    {
+      "index": 49,
+      "fact_id": "f-b493169aa30bd25030c8",
+      "concept": "wine consumption",
+      "source_support": {
+        "quote": "I drink about one glass of wine a week.",
+        "start": 2966,
+        "end": 3005,
+        "speaker_in_raw_line": "Patient"
+      },
+      "assertion": {
+        "polarity": "present",
+        "temporality": "current",
+        "experiencer": "patient",
+        "assertion_basis": "patient_report",
+        "clinical_status": "reported alcohol use",
+        "action_status": "ongoing"
+      },
+      "soap": {
+        "section": "S",
+        "display_text": "The patient reports wine consumption, with a recorded frequency of about one glass per week, with a recorded value of about one glass of wine. The source describes this as “reported alcohol use”."
+      },
+      "audit": {
+        "verdict": "supported",
+        "issue_tags": [],
+        "note": "原文直接支持该事实；SOAP 的主体、极性、时间和原文限定没有发现重大不符。"
+      }
+    },
+    {
+      "index": 50,
+      "fact_id": "f-dc7990fb2ae453d0a182",
+      "concept": "blood pressure",
+      "source_support": {
+        "quote": "Your blood pressure is 128 over 78 millimeters of mercury, pulse 72 beats per minute, respiratory rate 16 per minute, temperature 36.8 degrees Celsius, and oxygen saturation 98 percent on room air.",
+        "start": 3051,
+        "end": 3248,
+        "speaker_in_raw_line": "Doctor"
+      },
+      "assertion": {
+        "polarity": "present",
+        "temporality": "current",
+        "experiencer": "patient",
+        "assertion_basis": "clinician_observation",
+        "clinical_status": "reviewed vital sign",
+        "action_status": "completed"
+      },
+      "soap": {
+        "section": "O",
+        "display_text": "The source describes blood pressure as present for the patient as a clinician observation, with a recorded value of 128/78 mmHg. The source describes this as “reviewed vital sign”. The recorded timing is “today”."
+      },
+      "audit": {
+        "verdict": "supported",
+        "issue_tags": [],
+        "note": "原文直接支持该事实；SOAP 的主体、极性、时间和原文限定没有发现重大不符。"
+      }
+    },
+    {
+      "index": 51,
+      "fact_id": "f-a58658b21bcc59cc6262",
+      "concept": "pulse",
+      "source_support": {
+        "quote": "Your blood pressure is 128 over 78 millimeters of mercury, pulse 72 beats per minute, respiratory rate 16 per minute, temperature 36.8 degrees Celsius, and oxygen saturation 98 percent on room air.",
+        "start": 3051,
+        "end": 3248,
+        "speaker_in_raw_line": "Doctor"
+      },
+      "assertion": {
+        "polarity": "present",
+        "temporality": "current",
+        "experiencer": "patient",
+        "assertion_basis": "clinician_observation",
+        "clinical_status": "reviewed vital sign",
+        "action_status": "completed"
+      },
+      "soap": {
+        "section": "O",
+        "display_text": "The source describes pulse as present for the patient as a clinician observation, with a recorded value of 72 beats per minute. The source describes this as “reviewed vital sign”. The recorded timing is “today”."
+      },
+      "audit": {
+        "verdict": "supported",
+        "issue_tags": [],
+        "note": "原文直接支持该事实；SOAP 的主体、极性、时间和原文限定没有发现重大不符。"
+      }
+    },
+    {
+      "index": 52,
+      "fact_id": "f-0a7dc143fa86f1674c1f",
+      "concept": "respiratory rate",
+      "source_support": {
+        "quote": "Your blood pressure is 128 over 78 millimeters of mercury, pulse 72 beats per minute, respiratory rate 16 per minute, temperature 36.8 degrees Celsius, and oxygen saturation 98 percent on room air.",
+        "start": 3051,
+        "end": 3248,
+        "speaker_in_raw_line": "Doctor"
+      },
+      "assertion": {
+        "polarity": "present",
+        "temporality": "current",
+        "experiencer": "patient",
+        "assertion_basis": "clinician_observation",
+        "clinical_status": "reviewed vital sign",
+        "action_status": "completed"
+      },
+      "soap": {
+        "section": "O",
+        "display_text": "The source describes respiratory rate as present for the patient as a clinician observation, with a recorded value of 16 per minute. The source describes this as “reviewed vital sign”. The recorded timing is “today”."
+      },
+      "audit": {
+        "verdict": "supported",
+        "issue_tags": [],
+        "note": "原文直接支持该事实；SOAP 的主体、极性、时间和原文限定没有发现重大不符。"
+      }
+    },
+    {
+      "index": 53,
+      "fact_id": "f-0d81b53e239c09eceb25",
+      "concept": "body temperature",
+      "source_support": {
+        "quote": "Your blood pressure is 128 over 78 millimeters of mercury, pulse 72 beats per minute, respiratory rate 16 per minute, temperature 36.8 degrees Celsius, and oxygen saturation 98 percent on room air.",
+        "start": 3051,
+        "end": 3248,
+        "speaker_in_raw_line": "Doctor"
+      },
+      "assertion": {
+        "polarity": "present",
+        "temporality": "current",
+        "experiencer": "patient",
+        "assertion_basis": "clinician_observation",
+        "clinical_status": "reviewed vital sign",
+        "action_status": "completed"
+      },
+      "soap": {
+        "section": "O",
+        "display_text": "The source describes body temperature as present for the patient as a clinician observation, with a recorded value of 36.8 degrees Celsius. The source describes this as “reviewed vital sign”. The recorded timing is “today”."
+      },
+      "audit": {
+        "verdict": "supported",
+        "issue_tags": [],
+        "note": "原文直接支持该事实；SOAP 的主体、极性、时间和原文限定没有发现重大不符。"
+      }
+    },
+    {
+      "index": 54,
+      "fact_id": "f-d521c8be9e589b087482",
+      "concept": "oxygen saturation",
+      "source_support": {
+        "quote": "Your blood pressure is 128 over 78 millimeters of mercury, pulse 72 beats per minute, respiratory rate 16 per minute, temperature 36.8 degrees Celsius, and oxygen saturation 98 percent on room air.",
+        "start": 3051,
+        "end": 3248,
+        "speaker_in_raw_line": "Doctor"
+      },
+      "assertion": {
+        "polarity": "present",
+        "temporality": "current",
+        "experiencer": "patient",
+        "assertion_basis": "clinician_observation",
+        "clinical_status": "reviewed vital sign",
+        "action_status": "completed"
+      },
+      "soap": {
+        "section": "O",
+        "display_text": "The source describes oxygen saturation as present for the patient as a clinician observation, with a recorded value of 98 percent on room air. The source describes this as “reviewed vital sign”. The recorded timing is “today”."
+      },
+      "audit": {
+        "verdict": "supported",
+        "issue_tags": [],
+        "note": "原文直接支持该事实；SOAP 的主体、极性、时间和原文限定没有发现重大不符。"
+      }
+    },
+    {
+      "index": 55,
+      "fact_id": "f-21763bc2295c4c9c7edb",
+      "concept": "height",
+      "source_support": {
+        "quote": "Your height is 165 centimeters and your weight is 77 kilograms.",
+        "start": 3249,
+        "end": 3312,
+        "speaker_in_raw_line": "Doctor"
+      },
+      "assertion": {
+        "polarity": "present",
+        "temporality": "current",
+        "experiencer": "patient",
+        "assertion_basis": "clinician_observation",
+        "clinical_status": "reviewed measurement",
+        "action_status": "completed"
+      },
+      "soap": {
+        "section": "O",
+        "display_text": "The source describes height as present for the patient as a clinician observation, with a recorded value of 165 centimeters. The source describes this as “reviewed measurement”. The recorded timing is “today”."
+      },
+      "audit": {
+        "verdict": "supported",
+        "issue_tags": [],
+        "note": "原文直接支持该事实；SOAP 的主体、极性、时间和原文限定没有发现重大不符。"
+      }
+    },
+    {
+      "index": 56,
+      "fact_id": "f-a9788e958e55f0b6407f",
+      "concept": "weight",
+      "source_support": {
+        "quote": "Your height is 165 centimeters and your weight is 77 kilograms.",
+        "start": 3249,
+        "end": 3312,
+        "speaker_in_raw_line": "Doctor"
+      },
+      "assertion": {
+        "polarity": "present",
+        "temporality": "current",
+        "experiencer": "patient",
+        "assertion_basis": "clinician_observation",
+        "clinical_status": "reviewed measurement",
+        "action_status": "completed"
+      },
+      "soap": {
+        "section": "O",
+        "display_text": "The source describes weight as present for the patient as a clinician observation, with a recorded value of 77 kilograms. The source describes this as “reviewed measurement”. The recorded timing is “today”."
+      },
+      "audit": {
+        "verdict": "supported",
+        "issue_tags": [],
+        "note": "原文直接支持该事实；SOAP 的主体、极性、时间和原文限定没有发现重大不符。"
+      }
+    },
+    {
+      "index": 57,
+      "fact_id": "f-6350aaf47e5ed7211042",
+      "concept": "limp",
+      "source_support": {
+        "quote": "On examination, you walk with a mild limp favoring the left leg.",
+        "start": 3321,
+        "end": 3385,
+        "speaker_in_raw_line": "Doctor"
+      },
+      "assertion": {
+        "polarity": "present",
+        "temporality": "current",
+        "experiencer": "patient",
+        "assertion_basis": "clinician_observation",
+        "clinical_status": "observed on examination",
+        "action_status": "completed"
+      },
+      "soap": {
+        "section": "O",
+        "display_text": "The source describes limp as present for the patient as a clinician observation, described as mild, with a recorded value of favoring left leg. The source describes this as “observed on examination”. The recorded timing is “today”."
+      },
+      "audit": {
+        "verdict": "supported",
+        "issue_tags": [],
+        "note": "原文直接支持该事实；SOAP 的主体、极性、时间和原文限定没有发现重大不符。"
+      }
+    },
+    {
+      "index": 58,
+      "fact_id": "f-4e1f4f531c1dda03ebc7",
+      "concept": "left knee tenderness",
+      "source_support": {
+        "quote": "The left knee has tenderness along the medial joint line and mild crepitus during movement.",
+        "start": 3386,
+        "end": 3477,
+        "speaker_in_raw_line": "Doctor"
+      },
+      "assertion": {
+        "polarity": "present",
+        "temporality": "current",
+        "experiencer": "patient",
+        "assertion_basis": "clinician_observation",
+        "clinical_status": "observed on examination",
+        "action_status": "completed"
+      },
+      "soap": {
+        "section": "O",
+        "display_text": "The source describes left knee tenderness as present for the patient as a clinician observation, with a recorded value of medial joint line. The source describes this as “observed on examination”. The recorded timing is “today”."
+      },
+      "audit": {
+        "verdict": "supported",
+        "issue_tags": [],
+        "note": "原文直接支持该事实；SOAP 的主体、极性、时间和原文限定没有发现重大不符。"
+      }
+    },
+    {
+      "index": 59,
+      "fact_id": "f-be8eaea8cf5ff4fa83a5",
+      "concept": "left knee crepitus",
+      "source_support": {
+        "quote": "The left knee has tenderness along the medial joint line and mild crepitus during movement.",
+        "start": 3386,
+        "end": 3477,
+        "speaker_in_raw_line": "Doctor"
+      },
+      "assertion": {
+        "polarity": "present",
+        "temporality": "current",
+        "experiencer": "patient",
+        "assertion_basis": "clinician_observation",
+        "clinical_status": "observed on examination",
+        "action_status": "completed"
+      },
+      "soap": {
+        "section": "O",
+        "display_text": "The source describes left knee crepitus as present for the patient as a clinician observation, described as mild, with a recorded value of during movement. The source describes this as “observed on examination”. The recorded timing is “today”."
+      },
+      "audit": {
+        "verdict": "supported",
+        "issue_tags": [],
+        "note": "原文直接支持该事实；SOAP 的主体、极性、时间和原文限定没有发现重大不符。"
+      }
+    },
+    {
+      "index": 60,
+      "fact_id": "f-fc25445f38792216595c",
+      "concept": "left knee redness",
+      "source_support": {
+        "quote": "There is no redness, warmth or visible effusion today.",
+        "start": 3478,
+        "end": 3532,
+        "speaker_in_raw_line": "Doctor"
+      },
+      "assertion": {
+        "polarity": "absent",
+        "temporality": "current",
+        "experiencer": "patient",
+        "assertion_basis": "clinician_observation",
+        "clinical_status": "not present on examination today",
+        "action_status": "completed"
+      },
+      "soap": {
+        "section": "O",
+        "display_text": "The source describes left knee redness as explicitly absent for the patient as a clinician observation. The source describes this as “not present on examination today”. The recorded timing is “today”."
+      },
+      "audit": {
+        "verdict": "supported",
+        "issue_tags": [],
+        "note": "原文直接支持该事实；SOAP 的主体、极性、时间和原文限定没有发现重大不符。"
+      }
+    },
+    {
+      "index": 61,
+      "fact_id": "f-61bb82412a540884f9a4",
+      "concept": "left knee warmth",
+      "source_support": {
+        "quote": "There is no redness, warmth or visible effusion today.",
+        "start": 3478,
+        "end": 3532,
+        "speaker_in_raw_line": "Doctor"
+      },
+      "assertion": {
+        "polarity": "absent",
+        "temporality": "current",
+        "experiencer": "patient",
+        "assertion_basis": "clinician_observation",
+        "clinical_status": "not present on examination today",
+        "action_status": "completed"
+      },
+      "soap": {
+        "section": "O",
+        "display_text": "The source describes left knee warmth as explicitly absent for the patient as a clinician observation. The source describes this as “not present on examination today”. The recorded timing is “today”."
+      },
+      "audit": {
+        "verdict": "supported",
+        "issue_tags": [],
+        "note": "原文直接支持该事实；SOAP 的主体、极性、时间和原文限定没有发现重大不符。"
+      }
+    },
+    {
+      "index": 62,
+      "fact_id": "f-d8f17da961acf21d1817",
+      "concept": "left knee effusion",
+      "source_support": {
+        "quote": "There is no redness, warmth or visible effusion today.",
+        "start": 3478,
+        "end": 3532,
+        "speaker_in_raw_line": "Doctor"
+      },
+      "assertion": {
+        "polarity": "absent",
+        "temporality": "current",
+        "experiencer": "patient",
+        "assertion_basis": "clinician_observation",
+        "clinical_status": "not visible on examination today",
+        "action_status": "completed"
+      },
+      "soap": {
+        "section": "O",
+        "display_text": "The source describes left knee effusion as explicitly absent for the patient as a clinician observation. The source describes this as “not visible on examination today”. The recorded timing is “today”."
+      },
+      "audit": {
+        "verdict": "supported",
+        "issue_tags": [
+          "visible_effusion"
+        ],
+        "note": "原文为今天无可见积液；显示保留“not visible”限定。"
+      }
+    },
+    {
+      "index": 63,
+      "fact_id": "f-2e611c51547ff8f0f4fc",
+      "concept": "left knee range of motion",
+      "source_support": {
+        "quote": "Left knee motion is from zero degrees of extension to 120 degrees of flexion, with pain at deep flexion.",
+        "start": 3533,
+        "end": 3637,
+        "speaker_in_raw_line": "Doctor"
+      },
+      "assertion": {
+        "polarity": "present",
+        "temporality": "current",
+        "experiencer": "patient",
+        "assertion_basis": "clinician_observation",
+        "clinical_status": "measured on examination",
+        "action_status": "completed"
+      },
+      "soap": {
+        "section": "O",
+        "display_text": "The source describes left knee range of motion as present for the patient as a clinician observation, with a recorded value of extension 0; flexion 120 degrees. The source describes this as “measured on examination”. The recorded timing is “today”."
+      },
+      "audit": {
+        "verdict": "supported",
+        "issue_tags": [],
+        "note": "原文直接支持该事实；SOAP 的主体、极性、时间和原文限定没有发现重大不符。"
+      }
+    },
+    {
+      "index": 64,
+      "fact_id": "f-684a4436931e9bf8eaf8",
+      "concept": "left knee pain at deep flexion",
+      "source_support": {
+        "quote": "Left knee motion is from zero degrees of extension to 120 degrees of flexion, with pain at deep flexion.",
+        "start": 3533,
+        "end": 3637,
+        "speaker_in_raw_line": "Doctor"
+      },
+      "assertion": {
+        "polarity": "present",
+        "temporality": "current",
+        "experiencer": "patient",
+        "assertion_basis": "clinician_observation",
+        "clinical_status": "pain observed/reported during examination",
+        "action_status": "completed"
+      },
+      "soap": {
+        "section": "O",
+        "display_text": "The source describes left knee pain at deep flexion as present for the patient as a clinician observation, with a recorded value of deep flexion. The source describes this as “pain observed/reported during examination”. The recorded timing is “today”."
+      },
+      "audit": {
+        "verdict": "supported",
+        "issue_tags": [],
+        "note": "原文直接支持该事实；SOAP 的主体、极性、时间和原文限定没有发现重大不符。"
+      }
+    },
+    {
+      "index": 65,
+      "fact_id": "f-fa880c66605eee35b692",
+      "concept": "knee ligaments",
+      "source_support": {
+        "quote": "The ligaments are stable on examination.",
+        "start": 3638,
+        "end": 3678,
+        "speaker_in_raw_line": "Doctor"
+      },
+      "assertion": {
+        "polarity": "present",
+        "temporality": "current",
+        "experiencer": "patient",
+        "assertion_basis": "clinician_observation",
+        "clinical_status": "stable on examination",
+        "action_status": "completed"
+      },
+      "soap": {
+        "section": "O",
+        "display_text": "The source describes knee ligaments as present for the patient as a clinician observation. The source describes this as “stable on examination”. The recorded timing is “today”."
+      },
+      "audit": {
+        "verdict": "supported",
+        "issue_tags": [],
+        "note": "原文直接支持该事实；SOAP 的主体、极性、时间和原文限定没有发现重大不符。"
+      }
+    },
+    {
+      "index": 66,
+      "fact_id": "f-b3091919646ebc47db71",
+      "concept": "knee extension strength",
+      "source_support": {
+        "quote": "Knee extension and flexion strength are both five out of five.",
+        "start": 3679,
+        "end": 3741,
+        "speaker_in_raw_line": "Doctor"
+      },
+      "assertion": {
+        "polarity": "present",
+        "temporality": "current",
+        "experiencer": "patient",
+        "assertion_basis": "clinician_observation",
+        "clinical_status": "measured on examination",
+        "action_status": "completed"
+      },
+      "soap": {
+        "section": "O",
+        "display_text": "The source describes knee extension strength as present for the patient as a clinician observation, described as 5/5, with a recorded value of knee extension strength scale. The source describes this as “measured on examination”. The recorded timing is “today”."
+      },
+      "audit": {
+        "verdict": "supported",
+        "issue_tags": [],
+        "note": "原文直接支持该事实；SOAP 的主体、极性、时间和原文限定没有发现重大不符。"
+      }
+    },
+    {
+      "index": 67,
+      "fact_id": "f-7bbabcab34472aaaf65d",
+      "concept": "knee flexion strength",
+      "source_support": {
+        "quote": "Knee extension and flexion strength are both five out of five.",
+        "start": 3679,
+        "end": 3741,
+        "speaker_in_raw_line": "Doctor"
+      },
+      "assertion": {
+        "polarity": "present",
+        "temporality": "current",
+        "experiencer": "patient",
+        "assertion_basis": "clinician_observation",
+        "clinical_status": "measured on examination",
+        "action_status": "completed"
+      },
+      "soap": {
+        "section": "O",
+        "display_text": "The source describes knee flexion strength as present for the patient as a clinician observation, described as 5/5, with a recorded value of knee flexion strength scale. The source describes this as “measured on examination”. The recorded timing is “today”."
+      },
+      "audit": {
+        "verdict": "supported",
+        "issue_tags": [],
+        "note": "原文直接支持该事实；SOAP 的主体、极性、时间和原文限定没有发现重大不符。"
+      }
+    },
+    {
+      "index": 68,
+      "fact_id": "f-5e0f1dbbeb695a169235",
+      "concept": "left calf tenderness",
+      "source_support": {
+        "quote": "Your left calf is not tender or swollen, and the foot is warm with a palpable pulse.",
+        "start": 3742,
+        "end": 3826,
+        "speaker_in_raw_line": "Doctor"
+      },
+      "assertion": {
+        "polarity": "absent",
+        "temporality": "current",
+        "experiencer": "patient",
+        "assertion_basis": "clinician_observation",
+        "clinical_status": "not tender on examination",
+        "action_status": "completed"
+      },
+      "soap": {
+        "section": "O",
+        "display_text": "The source describes left calf tenderness as explicitly absent for the patient as a clinician observation. The source describes this as “not tender on examination”. The recorded timing is “today”."
+      },
+      "audit": {
+        "verdict": "supported",
+        "issue_tags": [],
+        "note": "原文直接支持该事实；SOAP 的主体、极性、时间和原文限定没有发现重大不符。"
+      }
+    },
+    {
+      "index": 69,
+      "fact_id": "f-39acf1d407f779d43380",
+      "concept": "left calf swelling",
+      "source_support": {
+        "quote": "Your left calf is not tender or swollen, and the foot is warm with a palpable pulse.",
+        "start": 3742,
+        "end": 3826,
+        "speaker_in_raw_line": "Doctor"
+      },
+      "assertion": {
+        "polarity": "absent",
+        "temporality": "current",
+        "experiencer": "patient",
+        "assertion_basis": "clinician_observation",
+        "clinical_status": "not swollen on examination",
+        "action_status": "completed"
+      },
+      "soap": {
+        "section": "O",
+        "display_text": "The source describes left calf swelling as explicitly absent for the patient as a clinician observation. The source describes this as “not swollen on examination”. The recorded timing is “today”."
+      },
+      "audit": {
+        "verdict": "supported",
+        "issue_tags": [],
+        "note": "原文直接支持该事实；SOAP 的主体、极性、时间和原文限定没有发现重大不符。"
+      }
+    },
+    {
+      "index": 70,
+      "fact_id": "f-8359361a8b9510f7fea5",
+      "concept": "left foot temperature",
+      "source_support": {
+        "quote": "Your left calf is not tender or swollen, and the foot is warm with a palpable pulse.",
+        "start": 3742,
+        "end": 3826,
+        "speaker_in_raw_line": "Doctor"
+      },
+      "assertion": {
+        "polarity": "present",
+        "temporality": "current",
+        "experiencer": "patient",
+        "assertion_basis": "clinician_observation",
+        "clinical_status": "observed on examination",
+        "action_status": "completed"
+      },
+      "soap": {
+        "section": "O",
+        "display_text": "The source describes left foot temperature as present for the patient as a clinician observation, with a recorded value of warm. The source describes this as “observed on examination”. The recorded timing is “today”."
+      },
+      "audit": {
+        "verdict": "supported",
+        "issue_tags": [],
+        "note": "原文直接支持该事实；SOAP 的主体、极性、时间和原文限定没有发现重大不符。"
+      }
+    },
+    {
+      "index": 71,
+      "fact_id": "f-db99abbc93ab07b986c9",
+      "concept": "left foot pulse",
+      "source_support": {
+        "quote": "Your left calf is not tender or swollen, and the foot is warm with a palpable pulse.",
+        "start": 3742,
+        "end": 3826,
+        "speaker_in_raw_line": "Doctor"
+      },
+      "assertion": {
+        "polarity": "present",
+        "temporality": "current",
+        "experiencer": "patient",
+        "assertion_basis": "clinician_observation",
+        "clinical_status": "observed on examination",
+        "action_status": "completed"
+      },
+      "soap": {
+        "section": "O",
+        "display_text": "The source describes left foot pulse as present for the patient as a clinician observation, with a recorded value of palpable. The source describes this as “observed on examination”. The recorded timing is “today”."
+      },
+      "audit": {
+        "verdict": "supported",
+        "issue_tags": [],
+        "note": "原文直接支持该事实；SOAP 的主体、极性、时间和原文限定没有发现重大不符。"
+      }
+    },
+    {
+      "index": 72,
+      "fact_id": "f-d0f4507e0f4c8c0d3cd8",
+      "concept": "right knee tenderness",
+      "source_support": {
+        "quote": "The right knee is not tender.",
+        "start": 3827,
+        "end": 3856,
+        "speaker_in_raw_line": "Doctor"
+      },
+      "assertion": {
+        "polarity": "absent",
+        "temporality": "current",
+        "experiencer": "patient",
+        "assertion_basis": "clinician_observation",
+        "clinical_status": "not tender on examination",
+        "action_status": "completed"
+      },
+      "soap": {
+        "section": "O",
+        "display_text": "The source describes right knee tenderness as explicitly absent for the patient as a clinician observation. The source describes this as “not tender on examination”. The recorded timing is “today”."
+      },
+      "audit": {
+        "verdict": "supported",
+        "issue_tags": [],
+        "note": "原文直接支持该事实；SOAP 的主体、极性、时间和原文限定没有发现重大不符。"
+      }
+    },
+    {
+      "index": 73,
+      "fact_id": "f-d498eb49a3eb855bca32",
+      "concept": "mechanical left knee pain",
+      "source_support": {
+        "quote": "My assessment today is mechanical left knee pain, with early osteoarthritis suspected from the gradual onset and examination.",
+        "start": 3907,
+        "end": 4032,
+        "speaker_in_raw_line": "Doctor"
+      },
+      "assertion": {
+        "polarity": "present",
+        "temporality": "current",
+        "experiencer": "patient",
+        "assertion_basis": "clinician_assessment",
+        "clinical_status": "assessment",
+        "action_status": "unknown"
+      },
+      "soap": {
+        "section": "A",
+        "display_text": "The source describes mechanical left knee pain as present for the patient as a clinician assessment. The source describes this as “assessment”. The recorded timing is “today”."
+      },
+      "audit": {
+        "verdict": "supported",
+        "issue_tags": [],
+        "note": "原文直接支持该事实；SOAP 的主体、极性、时间和原文限定没有发现重大不符。"
+      }
+    },
+    {
+      "index": 74,
+      "fact_id": "f-e77e8a1d478172fab772",
+      "concept": "early osteoarthritis",
+      "source_support": {
+        "quote": "My assessment today is mechanical left knee pain, with early osteoarthritis suspected from the gradual onset and examination.",
+        "start": 3907,
+        "end": 4032,
+        "speaker_in_raw_line": "Doctor"
+      },
+      "assertion": {
+        "polarity": "uncertain",
+        "temporality": "current",
+        "experiencer": "patient",
+        "assertion_basis": "clinician_assessment",
+        "clinical_status": "suspected; working diagnosis; not imaging-confirmed",
+        "action_status": "unknown"
+      },
+      "soap": {
+        "section": "A",
+        "display_text": "The source describes early osteoarthritis as uncertain for the patient as a clinician assessment. The source describes this as “suspected; working diagnosis; not imaging-confirmed”. The recorded timing is “today”."
+      },
+      "audit": {
+        "verdict": "supported",
+        "issue_tags": [
+          "working_diagnosis"
+        ],
+        "note": "早期骨关节炎只是疑似工作诊断，没有影像确诊；SOAP 保留不确定性。"
+      }
+    },
+    {
+      "index": 75,
+      "fact_id": "f-bbbd7b301289bce9e575",
+      "concept": "acutely hot or swollen joint",
+      "source_support": {
+        "quote": "There are no examination findings of an acutely hot or swollen joint.",
+        "start": 4114,
+        "end": 4183,
+        "speaker_in_raw_line": "Doctor"
+      },
+      "assertion": {
+        "polarity": "absent",
+        "temporality": "current",
+        "experiencer": "patient",
+        "assertion_basis": "clinician_assessment",
+        "clinical_status": "no examination findings of acute hot or swollen joint",
+        "action_status": "completed"
+      },
+      "soap": {
+        "section": "A",
+        "display_text": "The source describes acutely hot or swollen joint as explicitly absent for the patient as a clinician assessment. The source describes this as “no examination findings of acute hot or swollen joint”. The recorded timing is “today”."
+      },
+      "audit": {
+        "verdict": "supported",
+        "issue_tags": [],
+        "note": "原文直接支持该事实；SOAP 的主体、极性、时间和原文限定没有发现重大不符。"
+      }
+    },
+    {
+      "index": 76,
+      "fact_id": "f-56ec38113017569a871f",
+      "concept": "walking and stair use limited by pain",
+      "source_support": {
+        "quote": "Your walking and stair use are limited by the pain.",
+        "start": 4184,
+        "end": 4235,
+        "speaker_in_raw_line": "Doctor"
+      },
+      "assertion": {
+        "polarity": "present",
+        "temporality": "current",
+        "experiencer": "patient",
+        "assertion_basis": "clinician_assessment",
+        "clinical_status": "assessment of functional limitation",
+        "action_status": "ongoing"
+      },
+      "soap": {
+        "section": "A",
+        "display_text": "The source describes walking and stair use limited by pain as present for the patient as a clinician assessment. The source describes this as “assessment of functional limitation”. The recorded timing is “today”."
+      },
+      "audit": {
+        "verdict": "supported",
+        "issue_tags": [],
+        "note": "原文直接支持该事实；SOAP 的主体、极性、时间和原文限定没有发现重大不符。"
+      }
+    },
+    {
+      "index": 77,
+      "fact_id": "f-ed1023e90235aac86119",
+      "concept": "high blood pressure",
+      "source_support": {
+        "quote": "Your blood pressure is controlled on the current medicine.",
+        "start": 4236,
+        "end": 4294,
+        "speaker_in_raw_line": "Doctor"
+      },
+      "assertion": {
+        "polarity": "present",
+        "temporality": "current",
+        "experiencer": "patient",
+        "assertion_basis": "clinician_assessment",
+        "clinical_status": "clinician assesses as controlled on current medicine",
+        "action_status": "ongoing"
+      },
+      "soap": {
+        "section": "A",
+        "display_text": "The source describes high blood pressure as present for the patient as a clinician assessment. The source describes this as “clinician assesses as controlled on current medicine”. The recorded timing is “today”."
+      },
+      "audit": {
+        "verdict": "supported",
+        "issue_tags": [],
+        "note": "原文直接支持该事实；SOAP 的主体、极性、时间和原文限定没有发现重大不符。"
+      }
+    },
+    {
+      "index": 78,
+      "fact_id": "f-5992a8d1ae0fd2ef6c65",
+      "concept": "return to comfortable walking and stair use",
+      "source_support": {
+        "quote": "I want to get back to walking to work and using stairs comfortably.",
+        "start": 501,
+        "end": 568,
+        "speaker_in_raw_line": "Patient"
+      },
+      "assertion": {
+        "polarity": "present",
+        "temporality": "planned",
+        "experiencer": "patient",
+        "assertion_basis": "patient_report",
+        "clinical_status": "patient-stated goal",
+        "action_status": "planned"
+      },
+      "soap": {
+        "section": "P",
+        "display_text": "The patient reports return to comfortable walking and stair use (planned), with a recorded value of walking to work and stairs comfortably. The source describes this as “patient-stated goal”. The recorded timing is “future”."
+      },
+      "audit": {
+        "verdict": "supported",
+        "issue_tags": [
+          "patient_goal"
+        ],
+        "note": "患者提出的回到步行通勤/舒服上下楼目标，属于未来目标，非已恢复功能。"
+      }
+    },
+    {
+      "index": 79,
+      "fact_id": "f-1500bd0e486c27d73fa7",
+      "concept": "left knee X-ray",
+      "source_support": {
+        "quote": "I am ordering a standing left knee X-ray today to evaluate the joint.",
+        "start": 4331,
+        "end": 4400,
+        "speaker_in_raw_line": "Doctor"
+      },
+      "assertion": {
+        "polarity": "present",
+        "temporality": "planned",
+        "experiencer": "patient",
+        "assertion_basis": "clinician_assessment",
+        "clinical_status": "ordered; not performed",
+        "action_status": "planned"
+      },
+      "soap": {
+        "section": "P",
+        "display_text": "Planned for the patient: left knee X-ray with the recorded status “ordered; not performed”, with a recorded value of standing left knee X-ray. The recorded timing is “today order; future performance intended”."
+      },
+      "audit": {
+        "verdict": "supported",
+        "issue_tags": [
+          "ordered_not_performed"
+        ],
+        "note": "当日下单站立位左膝 X 光，原文明确未实施；不应当作结果。"
+      }
+    },
+    {
+      "index": 80,
+      "fact_id": "f-4da9e008c05b9ee11e3d",
+      "concept": "left knee imaging result",
+      "source_support": {
+        "quote": "It has not been performed, and there is no imaging result to review at this visit.",
+        "start": 4401,
+        "end": 4483,
+        "speaker_in_raw_line": "Doctor"
+      },
+      "assertion": {
+        "polarity": "absent",
+        "temporality": "current",
+        "experiencer": "patient",
+        "assertion_basis": "clinician_assessment",
+        "clinical_status": "no imaging result available to review",
+        "action_status": "unknown"
+      },
+      "soap": {
+        "section": "A",
+        "display_text": "The source describes left knee imaging result as explicitly absent for the patient as a clinician assessment. The source describes this as “no imaging result available to review”. The recorded timing is “at this visit”."
+      },
+      "audit": {
+        "verdict": "supported",
+        "issue_tags": [
+          "no_imaging_result"
+        ],
+        "note": "本次无可回顾的影像结果；不是之后也永远没有结果。"
+      }
+    },
+    {
+      "index": 81,
+      "fact_id": "f-8a17466184f2646977ce",
+      "concept": "left knee X-ray",
+      "source_support": {
+        "quote": "I have not had an X-ray of this knee yet.",
+        "start": 1781,
+        "end": 1822,
+        "speaker_in_raw_line": "Patient"
+      },
+      "assertion": {
+        "polarity": "absent",
+        "temporality": "historical",
+        "experiencer": "patient",
+        "assertion_basis": "patient_report",
+        "clinical_status": "explicitly not yet had",
+        "action_status": "not_completed"
+      },
+      "soap": {
+        "section": "S",
+        "display_text": "The patient reports left knee X-ray with the recorded status “explicitly not yet had” (historical). The recorded timing is “yet”."
+      },
+      "audit": {
+        "verdict": "supported",
+        "issue_tags": [],
+        "note": "原文直接支持该事实；SOAP 的主体、极性、时间和原文限定没有发现重大不符。"
+      }
+    },
+    {
+      "index": 82,
+      "fact_id": "f-96e4c7a5901c1bded443",
+      "concept": "outpatient physical therapy for left knee",
+      "source_support": {
+        "quote": "I am also placing a referral for outpatient physical therapy for the left knee.",
+        "start": 4484,
+        "end": 4563,
+        "speaker_in_raw_line": "Doctor"
+      },
+      "assertion": {
+        "polarity": "present",
+        "temporality": "planned",
+        "experiencer": "patient",
+        "assertion_basis": "clinician_assessment",
+        "clinical_status": "referral being placed; future outpatient therapy plan",
+        "action_status": "planned"
+      },
+      "soap": {
+        "section": "P",
+        "display_text": "Planned for the patient: outpatient physical therapy for left knee with the recorded status “referral being placed; future outpatient therapy plan”. The recorded timing is “future”."
+      },
+      "audit": {
+        "verdict": "supported",
+        "issue_tags": [
+          "referral_intent_only"
+        ],
+        "note": "医生说正在放置门诊 PT 转诊；不能据此证明正式转诊纸件已收取、排期或开始治疗。"
+      }
+    },
+    {
+      "index": 83,
+      "fact_id": "f-7facbe33c25c69e04b93",
+      "concept": "outpatient physical therapy course",
+      "source_support": {
+        "quote": "The planned course is two visits per week for six weeks, subject to scheduling and the required paperwork.",
+        "start": 4564,
+        "end": 4670,
+        "speaker_in_raw_line": "Doctor"
+      },
+      "assertion": {
+        "polarity": "present",
+        "temporality": "planned",
+        "experiencer": "patient",
+        "assertion_basis": "clinician_assessment",
+        "clinical_status": "planned course subject to scheduling and paperwork",
+        "action_status": "planned"
+      },
+      "soap": {
+        "section": "P",
+        "display_text": "Planned for the patient: outpatient physical therapy course with the recorded status “planned course subject to scheduling and paperwork” for six weeks, with a recorded frequency of two visits per week, with a recorded value of two visits per week for six weeks. The recorded timing is “future; subject to scheduling and required paperwork”."
+      },
+      "audit": {
+        "verdict": "supported",
+        "issue_tags": [
+          "future_conditional"
+        ],
+        "note": "每周两次六周为拟定疗程，仍受排期与文书约束；没有已完成次数。"
+      }
+    },
+    {
+      "index": 84,
+      "fact_id": "f-48c62af08cc1eb44d336",
+      "concept": "physical therapy for left knee",
+      "source_support": {
+        "quote": "That is a future treatment plan; no therapy session or treatment course has been completed yet.",
+        "start": 4671,
+        "end": 4766,
+        "speaker_in_raw_line": "Doctor"
+      },
+      "assertion": {
+        "polarity": "absent",
+        "temporality": "historical",
+        "experiencer": "patient",
+        "assertion_basis": "clinician_assessment",
+        "clinical_status": "no therapy session or course completed yet",
+        "action_status": "not_completed"
+      },
+      "soap": {
+        "section": "A",
+        "display_text": "The source records physical therapy for left knee for the patient with the recorded status “no therapy session or course completed yet” (historical). The recorded timing is “to date”."
+      },
+      "audit": {
+        "verdict": "supported",
+        "issue_tags": [
+          "no_therapy_completed"
+        ],
+        "note": "Doctor 明确说未来计划且治疗或疗程尚未完成；不等同于抽取了患者“此前从未参加PT”的独立病史。"
+      }
+    },
+    {
+      "index": 85,
+      "fact_id": "f-ab658882f1d74e1ec70b",
+      "concept": "acetaminophen",
+      "source_support": {
+        "quote": "Until we review your response, you may use acetaminophen 500 mg by mouth every eight hours as needed for knee pain, with a maximum of three of those 500 mg tablets in a day.",
+        "start": 4775,
+        "end": 4948,
+        "speaker_in_raw_line": "Doctor"
+      },
+      "assertion": {
+        "polarity": "present",
+        "temporality": "planned",
+        "experiencer": "patient",
+        "assertion_basis": "clinician_assessment",
+        "clinical_status": "new instruction; permitted use, not evidence of administration at this regimen",
+        "action_status": "planned"
+      },
+      "soap": {
+        "section": "P",
+        "display_text": "Planned for the patient: acetaminophen with the recorded status “new instruction; permitted use, not evidence of administration at this regimen” for until response is reviewed, with a recorded frequency of every eight hours as needed; maximum three tablets per day, with a recorded value of 500 mg by mouth; every eight hours as needed for knee pain; maximum three 500 mg tablets per day. The recorded timing is “today instruction; future use”."
+      },
+      "audit": {
+        "verdict": "supported",
+        "issue_tags": [
+          "new_medication_instruction"
+        ],
+        "note": "500 mg 每八小时按需且日上限三片是新的前瞻指令；未把过去一周真实服法改写为每日三次。"
+      }
+    },
+    {
+      "index": 86,
+      "fact_id": "f-3e0b419c6642b3d727d1",
+      "concept": "lisinopril",
+      "source_support": {
+        "quote": "Continue lisinopril 10 mg every morning.",
+        "start": 5044,
+        "end": 5084,
+        "speaker_in_raw_line": "Doctor"
+      },
+      "assertion": {
+        "polarity": "present",
+        "temporality": "current",
+        "experiencer": "patient",
+        "assertion_basis": "clinician_assessment",
+        "clinical_status": "instructed to continue current medicine",
+        "action_status": "ongoing"
+      },
+      "soap": {
+        "section": "A",
+        "display_text": "The source records lisinopril for the patient with the recorded status “instructed to continue current medicine”, with a recorded frequency of every morning, with a recorded value of 10 mg every morning. The recorded timing is “today”."
+      },
+      "audit": {
+        "verdict": "content_supported_section_error",
+        "issue_tags": [
+          "soap_section"
+        ],
+        "note": "“Continue lisinopril 10 mg every morning”是医生计划/处方延续；SOAP 错放 A，P 中没有对应句。"
+      }
+    },
+    {
+      "index": 87,
+      "fact_id": "f-76a30569cbcd7c11abd7",
+      "concept": "oral anti-inflammatory medicine",
+      "source_support": {
+        "quote": "We are not adding an oral anti-inflammatory medicine today.",
+        "start": 5085,
+        "end": 5144,
+        "speaker_in_raw_line": "Doctor"
+      },
+      "assertion": {
+        "polarity": "absent",
+        "temporality": "current",
+        "experiencer": "patient",
+        "assertion_basis": "clinician_assessment",
+        "clinical_status": "not added today",
+        "action_status": "not_completed"
+      },
+      "soap": {
+        "section": "A",
+        "display_text": "The source records oral anti-inflammatory medicine for the patient with the recorded status “not added today”. The recorded timing is “today”."
+      },
+      "audit": {
+        "verdict": "content_supported_section_error",
+        "issue_tags": [
+          "soap_section"
+        ],
+        "note": "不新增口服抗炎药是当日治疗决定，SOAP 错放 A，P 中没有对应句。"
+      }
+    },
+    {
+      "index": 88,
+      "fact_id": "f-5f34cd339105712f7c76",
+      "concept": "activity pacing",
+      "source_support": {
+        "quote": "We discussed pacing activity, taking short walks within your tolerance, and using a handrail on stairs.",
+        "start": 5153,
+        "end": 5256,
+        "speaker_in_raw_line": "Doctor"
+      },
+      "assertion": {
+        "polarity": "present",
+        "temporality": "current",
+        "experiencer": "patient",
+        "assertion_basis": "clinician_assessment",
+        "clinical_status": "discussed",
+        "action_status": "discussed"
+      },
+      "soap": {
+        "section": "A",
+        "display_text": "The source records activity pacing for the patient with the recorded status “discussed”. The recorded timing is “today discussion”."
+      },
+      "audit": {
+        "verdict": "content_supported_section_error",
+        "issue_tags": [
+          "soap_section"
+        ],
+        "note": "医生讨论活动节奏属于建议/计划，SOAP 错放 A，P 中没有对应句。"
+      }
+    },
+    {
+      "index": 89,
+      "fact_id": "f-49a2e7bf50923d4c93d3",
+      "concept": "short walks within tolerance",
+      "source_support": {
+        "quote": "We discussed pacing activity, taking short walks within your tolerance, and using a handrail on stairs.",
+        "start": 5153,
+        "end": 5256,
+        "speaker_in_raw_line": "Doctor"
+      },
+      "assertion": {
+        "polarity": "present",
+        "temporality": "current",
+        "experiencer": "patient",
+        "assertion_basis": "clinician_assessment",
+        "clinical_status": "discussed",
+        "action_status": "discussed"
+      },
+      "soap": {
+        "section": "A",
+        "display_text": "The source records short walks within tolerance for the patient with the recorded status “discussed”. The recorded timing is “today discussion”."
+      },
+      "audit": {
+        "verdict": "content_supported_section_error",
+        "issue_tags": [
+          "soap_section"
+        ],
+        "note": "耐受内短走是医生建议，SOAP 错放 A，P 中没有对应句。"
+      }
+    },
+    {
+      "index": 90,
+      "fact_id": "f-a626a37485a9c8dfb7bd",
+      "concept": "use a handrail on stairs",
+      "source_support": {
+        "quote": "We discussed pacing activity, taking short walks within your tolerance, and using a handrail on stairs.",
+        "start": 5153,
+        "end": 5256,
+        "speaker_in_raw_line": "Doctor"
+      },
+      "assertion": {
+        "polarity": "present",
+        "temporality": "planned",
+        "experiencer": "patient",
+        "assertion_basis": "clinician_assessment",
+        "clinical_status": "discussed",
+        "action_status": "discussed"
+      },
+      "soap": {
+        "section": "A",
+        "display_text": "Planned for the patient: use a handrail on stairs with the recorded status “discussed”. The recorded timing is “future recommendation discussed”."
+      },
+      "audit": {
+        "verdict": "content_supported_section_error",
+        "issue_tags": [
+          "soap_section"
+        ],
+        "note": "楼梯扶手是医生建议，SOAP 错放 A，P 中没有对应句。"
+      }
+    },
+    {
+      "index": 91,
+      "fact_id": "f-1a841e1ca0a7b1de6660",
+      "concept": "physical therapist assessment before strengthening program",
+      "source_support": {
+        "quote": "The physical therapist will assess you before setting a strengthening program.",
+        "start": 5257,
+        "end": 5335,
+        "speaker_in_raw_line": "Doctor"
+      },
+      "assertion": {
+        "polarity": "present",
+        "temporality": "planned",
+        "experiencer": "patient",
+        "assertion_basis": "clinician_assessment",
+        "clinical_status": "assessment will precede strengthening program; program not yet set",
+        "action_status": "planned"
+      },
+      "soap": {
+        "section": "P",
+        "display_text": "Planned for the patient: physical therapist assessment before strengthening program with the recorded status “assessment will precede strengthening program; program not yet set”. The recorded timing is “future”."
+      },
+      "audit": {
+        "verdict": "supported",
+        "issue_tags": [
+          "future_not_completed"
+        ],
+        "note": "治疗师未来先评估、后制定强化方案；未将强化训练误作当日完成。"
+      }
+    },
+    {
+      "index": 92,
+      "fact_id": "f-86ea8cf7769fdba1c145",
+      "concept": "follow-up visit to review X-ray and progress",
+      "source_support": {
+        "quote": "Please arrange a follow-up visit here in three weeks so we can review the X-ray and your progress.",
+        "start": 5336,
+        "end": 5434,
+        "speaker_in_raw_line": "Doctor"
+      },
+      "assertion": {
+        "polarity": "present",
+        "temporality": "planned",
+        "experiencer": "patient",
+        "assertion_basis": "clinician_assessment",
+        "clinical_status": "requested follow-up",
+        "action_status": "planned"
+      },
+      "soap": {
+        "section": "P",
+        "display_text": "The source describes follow-up visit to review X-ray and progress as present for the patient as a clinician assessment (planned). The source describes this as “requested follow-up”. The recorded timing is “in three weeks”."
+      },
+      "audit": {
+        "verdict": "supported",
+        "issue_tags": [
+          "requested_not_scheduled"
+        ],
+        "note": "三周后回诊是医生请求，非已排好的门诊。"
+      }
+    },
+    {
+      "index": 93,
+      "fact_id": "f-f53ce765da6fce4079b2",
+      "concept": "left knee X-ray appointment",
+      "source_support": {
+        "quote": "I will arrange the X-ray and therapy appointments.",
+        "start": 5458,
+        "end": 5508,
+        "speaker_in_raw_line": "Patient"
+      },
+      "assertion": {
+        "polarity": "present",
+        "temporality": "planned",
+        "experiencer": "patient",
+        "assertion_basis": "patient_report",
+        "clinical_status": "patient intends to arrange appointments",
+        "action_status": "planned"
+      },
+      "soap": {
+        "section": "P",
+        "display_text": "Planned for the patient: left knee X-ray appointment with the recorded status “patient intends to arrange appointments”. The recorded timing is “future”."
+      },
+      "audit": {
+        "verdict": "supported",
+        "issue_tags": [
+          "patient_future_intent"
+        ],
+        "note": "患者将安排 X 光预约，不代表检查已完成。"
+      }
+    },
+    {
+      "index": 94,
+      "fact_id": "f-f11aaac60980b242ff0b",
+      "concept": "physical therapy appointment",
+      "source_support": {
+        "quote": "I will arrange the X-ray and therapy appointments.",
+        "start": 5458,
+        "end": 5508,
+        "speaker_in_raw_line": "Patient"
+      },
+      "assertion": {
+        "polarity": "present",
+        "temporality": "planned",
+        "experiencer": "patient",
+        "assertion_basis": "patient_report",
+        "clinical_status": "patient intends to arrange appointments",
+        "action_status": "planned"
+      },
+      "soap": {
+        "section": "P",
+        "display_text": "Planned for the patient: physical therapy appointment with the recorded status “patient intends to arrange appointments”. The recorded timing is “future”."
+      },
+      "audit": {
+        "verdict": "supported",
+        "issue_tags": [
+          "patient_future_intent"
+        ],
+        "note": "患者将安排 PT 预约，不代表排期或治疗已完成。"
+      }
+    },
+    {
+      "index": 95,
+      "fact_id": "f-d601d561c7f2eea12fe5",
+      "concept": "walking goal",
+      "source_support": {
+        "quote": "My goal is to walk for thirty minutes and use the stairs with less pain.",
+        "start": 5509,
+        "end": 5581,
+        "speaker_in_raw_line": "Patient"
+      },
+      "assertion": {
+        "polarity": "present",
+        "temporality": "planned",
+        "experiencer": "patient",
+        "assertion_basis": "patient_report",
+        "clinical_status": "patient-stated goal",
+        "action_status": "planned"
+      },
+      "soap": {
+        "section": "P",
+        "display_text": "The patient reports walking goal (planned) for thirty minutes walking, with a recorded value of walk for thirty minutes. The source describes this as “patient-stated goal”. The recorded timing is “future”."
+      },
+      "audit": {
+        "verdict": "supported",
+        "issue_tags": [
+          "patient_goal"
+        ],
+        "note": "30 分钟步行是患者未来目标，与当前约10分钟耐受区分。"
+      }
+    },
+    {
+      "index": 96,
+      "fact_id": "f-26071cb8c6a3b82fde2f",
+      "concept": "use stairs with less pain",
+      "source_support": {
+        "quote": "My goal is to walk for thirty minutes and use the stairs with less pain.",
+        "start": 5509,
+        "end": 5581,
+        "speaker_in_raw_line": "Patient"
+      },
+      "assertion": {
+        "polarity": "present",
+        "temporality": "planned",
+        "experiencer": "patient",
+        "assertion_basis": "patient_report",
+        "clinical_status": "patient-stated goal",
+        "action_status": "planned"
+      },
+      "soap": {
+        "section": "P",
+        "display_text": "The patient reports use stairs with less pain (planned). The source describes this as “patient-stated goal”. The recorded timing is “future”."
+      },
+      "audit": {
+        "verdict": "supported",
+        "issue_tags": [
+          "patient_goal"
+        ],
+        "note": "较少疼痛上下楼是目标，不是当前改善结论。"
+      }
+    },
+    {
+      "index": 97,
+      "fact_id": "f-87f0fafc3ae1cf799bae",
+      "concept": "seek prompt medical assessment if knee becomes hot and very swollen",
+      "source_support": {
+        "quote": "Seek prompt medical assessment if the knee becomes hot and very swollen, you develop fever, or you become unable to bear weight.",
+        "start": 5590,
+        "end": 5718,
+        "speaker_in_raw_line": "Doctor"
+      },
+      "assertion": {
+        "polarity": "present",
+        "temporality": "planned",
+        "experiencer": "patient",
+        "assertion_basis": "clinician_assessment",
+        "clinical_status": "precaution; conditional instruction, not a symptom reported today",
+        "action_status": "planned"
+      },
+      "soap": {
+        "section": "P",
+        "display_text": "Planned for the patient: seek prompt medical assessment if knee becomes hot and very swollen with the recorded status “precaution; conditional instruction, not a symptom reported today”. The recorded timing is “if knee becomes hot and very swollen”."
+      },
+      "audit": {
+        "verdict": "supported",
+        "issue_tags": [
+          "conditional_precaution"
+        ],
+        "note": "热且明显肿胀是条件性返诊警示，不是今日症状。"
+      }
+    },
+    {
+      "index": 98,
+      "fact_id": "f-d6ff2211d234b3ac6553",
+      "concept": "seek prompt medical assessment if fever develops",
+      "source_support": {
+        "quote": "Seek prompt medical assessment if the knee becomes hot and very swollen, you develop fever, or you become unable to bear weight.",
+        "start": 5590,
+        "end": 5718,
+        "speaker_in_raw_line": "Doctor"
+      },
+      "assertion": {
+        "polarity": "present",
+        "temporality": "planned",
+        "experiencer": "patient",
+        "assertion_basis": "clinician_assessment",
+        "clinical_status": "precaution; conditional instruction, not a symptom reported today",
+        "action_status": "planned"
+      },
+      "soap": {
+        "section": "P",
+        "display_text": "Planned for the patient: seek prompt medical assessment if fever develops with the recorded status “precaution; conditional instruction, not a symptom reported today”. The recorded timing is “if fever develops”."
+      },
+      "audit": {
+        "verdict": "supported",
+        "issue_tags": [
+          "conditional_precaution"
+        ],
+        "note": "若发生发热须及时评估，不是今日报告发热。"
+      }
+    },
+    {
+      "index": 99,
+      "fact_id": "f-d1c2e1e52d070ad77445",
+      "concept": "seek prompt medical assessment if unable to bear weight",
+      "source_support": {
+        "quote": "Seek prompt medical assessment if the knee becomes hot and very swollen, you develop fever, or you become unable to bear weight.",
+        "start": 5590,
+        "end": 5718,
+        "speaker_in_raw_line": "Doctor"
+      },
+      "assertion": {
+        "polarity": "present",
+        "temporality": "planned",
+        "experiencer": "patient",
+        "assertion_basis": "clinician_assessment",
+        "clinical_status": "precaution; conditional instruction, not a symptom reported today",
+        "action_status": "planned"
+      },
+      "soap": {
+        "section": "P",
+        "display_text": "Planned for the patient: seek prompt medical assessment if unable to bear weight with the recorded status “precaution; conditional instruction, not a symptom reported today”. The recorded timing is “if unable to bear weight”."
+      },
+      "audit": {
+        "verdict": "supported",
+        "issue_tags": [
+          "conditional_precaution"
+        ],
+        "note": "若无法负重须及时评估；患者当时能负重。"
+      }
+    },
+    {
+      "index": 100,
+      "fact_id": "f-860d6688b7e0fcf05285",
+      "concept": "weight-bearing ability",
+      "source_support": {
+        "quote": "I have no fever and can bear weight.",
+        "start": 5820,
+        "end": 5856,
+        "speaker_in_raw_line": "Patient"
+      },
+      "assertion": {
+        "polarity": "present",
+        "temporality": "current",
+        "experiencer": "patient",
+        "assertion_basis": "patient_report",
+        "clinical_status": "explicitly able to bear weight",
+        "action_status": "ongoing"
+      },
+      "soap": {
+        "section": "S",
+        "display_text": "The patient reports weight-bearing ability. The source describes this as “explicitly able to bear weight”. The recorded timing is “today”."
+      },
+      "audit": {
+        "verdict": "supported",
+        "issue_tags": [],
+        "note": "原文直接支持该事实；SOAP 的主体、极性、时间和原文限定没有发现重大不符。"
+      }
+    },
+    {
+      "index": 101,
+      "fact_id": "f-dfb0821fa73394a940d6",
+      "concept": "clinical plan",
+      "source_support": {
+        "quote": "I agree with the plan.",
+        "start": 5857,
+        "end": 5879,
+        "speaker_in_raw_line": "Patient"
+      },
+      "assertion": {
+        "polarity": "present",
+        "temporality": "current",
+        "experiencer": "patient",
+        "assertion_basis": "patient_report",
+        "clinical_status": "patient agrees with plan",
+        "action_status": "discussed"
+      },
+      "soap": {
+        "section": "S",
+        "display_text": "The patient reports clinical plan with the recorded status “patient agrees with plan”. The recorded timing is “today”."
+      },
+      "audit": {
+        "verdict": "supported",
+        "issue_tags": [],
+        "note": "原文直接支持该事实；SOAP 的主体、极性、时间和原文限定没有发现重大不符。"
+      }
+    },
+    {
+      "index": 102,
+      "fact_id": "f-d1a77c649274aa95a87b",
+      "concept": "knee injection",
+      "source_support": {
+        "quote": "No injection, medication administration, radiograph or physical therapy was performed during this primary-care visit.",
+        "start": 5941,
+        "end": 6058,
+        "speaker_in_raw_line": "Doctor"
+      },
+      "assertion": {
+        "polarity": "absent",
+        "temporality": "historical",
+        "experiencer": "patient",
+        "assertion_basis": "clinician_observation",
+        "clinical_status": "explicitly not performed during primary-care visit",
+        "action_status": "not_completed"
+      },
+      "soap": {
+        "section": "O",
+        "display_text": "The source records knee injection for the patient with the recorded status “explicitly not performed during primary-care visit” (historical). The recorded timing is “during this primary-care visit”."
+      },
+      "audit": {
+        "verdict": "supported",
+        "issue_tags": [
+          "speaker_corrected"
+        ],
+        "note": "原文末尾已有 Doctor 标签，本次未注射的主引文和 speaker_label 均为 Doctor；v1 患者误归属已不再发生。仅限本次初诊，不能代替“既往无注射”病史。"
+      }
+    },
+    {
+      "index": 103,
+      "fact_id": "f-4777444575b45007f5bd",
+      "concept": "medication administration",
+      "source_support": {
+        "quote": "No injection, medication administration, radiograph or physical therapy was performed during this primary-care visit.",
+        "start": 5941,
+        "end": 6058,
+        "speaker_in_raw_line": "Doctor"
+      },
+      "assertion": {
+        "polarity": "absent",
+        "temporality": "historical",
+        "experiencer": "patient",
+        "assertion_basis": "clinician_observation",
+        "clinical_status": "explicitly not performed during primary-care visit",
+        "action_status": "not_completed"
+      },
+      "soap": {
+        "section": "O",
+        "display_text": "The source records medication administration for the patient with the recorded status “explicitly not performed during primary-care visit” (historical). The recorded timing is “during this primary-care visit”."
+      },
+      "audit": {
+        "verdict": "supported",
+        "issue_tags": [
+          "speaker_corrected"
+        ],
+        "note": "本次门诊未给药由 Doctor 明言，不是患者自述；SOAP O 显示没有误称 patient reports。"
+      }
+    },
+    {
+      "index": 104,
+      "fact_id": "f-e902f6f83e9fae971f4a",
+      "concept": "radiograph",
+      "source_support": {
+        "quote": "No injection, medication administration, radiograph or physical therapy was performed during this primary-care visit.",
+        "start": 5941,
+        "end": 6058,
+        "speaker_in_raw_line": "Doctor"
+      },
+      "assertion": {
+        "polarity": "absent",
+        "temporality": "historical",
+        "experiencer": "patient",
+        "assertion_basis": "clinician_observation",
+        "clinical_status": "explicitly not performed during primary-care visit",
+        "action_status": "not_completed"
+      },
+      "soap": {
+        "section": "O",
+        "display_text": "The source records radiograph for the patient with the recorded status “explicitly not performed during primary-care visit” (historical). The recorded timing is “during this primary-care visit”."
+      },
+      "audit": {
+        "verdict": "supported",
+        "issue_tags": [
+          "speaker_corrected"
+        ],
+        "note": "本次门诊未摄片由 Doctor 明言，与计划下单并存；SOAP O 不再误称患者报告。"
+      }
+    },
+    {
+      "index": 105,
+      "fact_id": "f-51d98f3d11e0fa57edf6",
+      "concept": "primary-care office visit duration",
+      "source_support": {
+        "quote": "The visit lasted 30 minutes; that is an office-visit duration, not physical-therapy treatment time.",
+        "start": 6059,
+        "end": 6158,
+        "speaker_in_raw_line": "Doctor"
+      },
+      "assertion": {
+        "polarity": "present",
+        "temporality": "historical",
+        "experiencer": "patient",
+        "assertion_basis": "clinician_observation",
+        "clinical_status": "office-visit duration; not physical therapy treatment time",
+        "action_status": "completed"
+      },
+      "soap": {
+        "section": "O",
+        "display_text": "The source describes primary-care office visit duration as present for the patient as a clinician observation (historical) for 30 minutes, with a recorded value of 30 minutes. The source describes this as “office-visit duration; not physical therapy treatment time”. The recorded timing is “this visit”."
+      },
+      "audit": {
+        "verdict": "supported",
+        "issue_tags": [
+          "speaker_corrected",
+          "duration_scope"
+        ],
+        "note": "Doctor 明言本次门诊历时30分钟，非物理治疗时间；SOAP O 保留时长边界。"
+      }
+    },
+    {
+      "index": 106,
+      "fact_id": "f-0d171e3e3ac41730304a",
+      "concept": "payer authorization decision",
+      "source_support": {
+        "quote": "No payer authorization decision was made.",
+        "start": 6159,
+        "end": 6200,
+        "speaker_in_raw_line": "Doctor"
+      },
+      "assertion": {
+        "polarity": "absent",
+        "temporality": "historical",
+        "experiencer": "unknown",
+        "assertion_basis": "clinician_observation",
+        "clinical_status": "no decision made",
+        "action_status": "not_completed"
+      },
+      "soap": {
+        "section": "S",
+        "display_text": "The source describes payer authorization decision as explicitly absent for an unspecified subject as a clinician observation (historical). The source describes this as “no decision made”. The recorded timing is “during this encounter”."
+      },
+      "audit": {
+        "verdict": "content_supported_section_error",
+        "issue_tags": [
+          "soap_section",
+          "administrative_subject"
+        ],
+        "note": "Doctor 明言未作 payer 授权决定，来源归属正确、主体 unknown 比患者归属谨慎；但行政状态被放进 SOAP S，且不属于患者主诉。"
+      }
+    }
+  ],
+  "conclusion": "v2 corrected the v1 ending speaker attribution and preserves the main clinical facts and planned-versus-completed boundaries. Its main remaining defects are omitted prior PT/injection history and a P section missing several plan items that appear in A. No critical unsupported clinical assertion was found in this non-expert textual review; fact count is not an accuracy measure.",
+  "limitations": "Synthetic source, supplied exported packet and SOAP only. No clinical gold standard, external corroboration, UI observation, model rerun or network request. Exact source quote matching verifies provenance spans, not medical truth.",
+  "english_summary": {
+    "gate": "Core initial-consultation content is present across all nine audited source domains and visible somewhere in the complete exported SOAP; the Plan section itself is incomplete because five plan items are placed in Assessment.",
+    "critical_unsupported": "None identified in this non-clinician source review. The suspected osteoarthritis remains qualified; the X-ray and PT course remain unperformed at this visit. Patient-reported acetaminophen doses are actual prior use, not in-visit administration or the new maximum-dose instruction.",
+    "material_omissions": "The explicit prior history of no physical therapy attendance and no knee injection is missing as distinct historical facts. Current noncompletion and no injection during this visit do not replace that history.",
+    "v1_boundary": "The ending narrative now has an explicit Doctor label; extracted ending assertions cite Doctor rather than Patient. The administrative payer-decision item remains misplaced in Subjective.",
+    "interpretation": "106 facts and two machine review flags are inventory counts, not precision, recall, an accuracy score, or clinical validation."
+  }
+}

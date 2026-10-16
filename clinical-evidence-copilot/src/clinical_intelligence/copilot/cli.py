@@ -38,6 +38,7 @@ def main(argv=None):
     serve = sub.add_parser('serve', help='Start local evidence workspace')
     serve.add_argument('--port', type=int, default=8765)
     serve.add_argument('--live', action='store_true', help='Explicitly enable inherited model extraction')
+    serve.add_argument('--careflow-url', help='Connect the patient workbench to a loopback CareFlow origin')
     create = sub.add_parser('create', help='Import a source + extraction bundle')
     create.add_argument('bundle')
     reviewed=sub.add_parser('reviewed-input',help='Offline evaluation only: import retained source judgments without model dispatch')
@@ -105,7 +106,7 @@ def main(argv=None):
     if args.command == 'serve':
         from .server import serve
         seed_demo(store)
-        serve(store, port=args.port, live=args.live, ledger=ledger)
+        serve(store, port=args.port, live=args.live, ledger=ledger, careflow_url=args.careflow_url)
         return
     if args.command == 'demo':
         saved = seed_demo(store)

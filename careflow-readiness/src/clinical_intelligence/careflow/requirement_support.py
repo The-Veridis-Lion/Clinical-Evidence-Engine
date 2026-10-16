@@ -122,8 +122,9 @@ def support_manifest():
             'Luna-only product inputs recompute bounded source checks without external AI opinions.',
             'Available clinical-summary attachment is separate from clinical assertion correctness.'],
         'clinical_support_version': CLINICAL_SUPPORT_VERSION,
-        'structured_model_support_version':'careflow-structured-model-support/2',
+        'structured_model_support_version':'careflow-structured-model-support/3',
         'completed_course_object_contract':'careflow-completed-course-object/1',
+        'noncompleted_course_object_contract':'careflow-noncompleted-course-object/1',
         'model_context_evidence_bundle_version':'careflow-model-context-evidence-bundle/1',
         'received_form_adapter': adapter_identity(),
         'product_support_policy': PRODUCT_SUPPORT_POLICY,
@@ -686,6 +687,29 @@ def _structured_model_support(clinical, source, fact, source_check):
             'source_event':event,'course_object_contract':'careflow-completed-course-object/1',
             'same_primary_source_event':same_primary_event,'whole_course_scope_equivalent':course_equivalent,
             'action_representation':action_representation}
+    if fact.requirement == 'therapy_completed' and fact.assertion is False:
+        # A denial of future eligibility or one unperformed session is not a
+        # denial that the requested patient course was completed. The model
+        # proposal must itself deny that exact course/object proposition. An
+        # unrecognized source grammar is retained as uncertainty, as for other
+        # model-extracted assertions; it is not independent clinical proof.
+        event = source_check.get('source_assertion') or {}
+        dimensions = {row['dimension']:row['status'] for row in source_check.get('dimension_checks', [])}
+        norm = lambda value:' '.join((value or '').casefold().split())
+        action_representation = ('source_action_type' if dimensions.get('action_type') == 'SUPPORTED' else
+            'course_action_type' if semantics.get('action_type') == 'therapy_course' else
+            'same_treatment_object' if norm(semantics.get('action_type')) == norm(clinical.get('concept'))
+                and norm(clinical.get('concept')) else 'unresolved')
+        if (semantics.get('action_state') != 'not_completed'
+                or semantics.get('completion_scope') not in {'course','full_course'}
+                or action_representation == 'unresolved'):
+            issues.append('requested_therapy_noncompleted_course_object_not_source_established')
+        completion = {'concept':clinical['concept'], 'category':clinical['category'],
+            'action_state':semantics.get('action_state'), 'completion_scope':semantics.get('completion_scope'),
+            'primary_support':spans, 'source_event':event,
+            'course_object_contract':'careflow-noncompleted-course-object/1',
+            'action_representation':action_representation,
+            'scope_method':'explicit_model_course_negation; source counterevidence checked separately'}
     retained = [{**{k:span[k] for k in ('start','end','quote')}, 'source_id':source.source_id,
         'source_text_sha256':proposal['source_sha256'],
         'source_provenance_sha256':source_key(source.model_dump(mode='json'))} for span in spans]
@@ -693,7 +717,7 @@ def _structured_model_support(clinical, source, fact, source_check):
         'original_source_unit_id':span['source_id'],'source_text_sha256':proposal['source_sha256'],
         'source_provenance_sha256':source_key(source.model_dump(mode='json'))}
         for span in clinical.get('provenance', [])]
-    return {'version':'careflow-structured-model-support/2', 'supported':not issues,
+    return {'version':'careflow-structured-model-support/3', 'supported':not issues,
         'method':'model_extracted', 'independently_source_verified':False,
         'task_version':proposal['task_version'], 'source_sha256':proposal['source_sha256'],
         'raw_response_sha256':proposal['raw_response_sha256'], 'wire_fact_id':anchor['wire_fact_id'],
@@ -735,7 +759,14 @@ def _product_clinical_value(case, fact, clinical, source, binding_source):
             event_comparability_version=PRODUCT_EVENT_COMPARABILITY[case.source_support_policy], **local_options)
     status = main['status']
     extracted = None
-    if case.source_support_policy == 'luna-only-source-policy/7' and clinical.get('structured_clinical_proposal'):
+    shared_revision = (clinical.get('structured_clinical_proposal') or {}).get('shared_evidence')
+    # The snapshot hook verifies the full saved lineage before exposing this
+    # provenance. A changed assertion is source-rechecked; it cannot borrow its
+    # superseded model proposal's support merely because the raw is retained.
+    saved_model_proposal = (shared_revision is None or
+        shared_revision['consumption'] == 'saved_structured_model_proposal')
+    if (case.source_support_policy == 'luna-only-source-policy/7'
+            and clinical.get('structured_clinical_proposal') and saved_model_proposal):
         extracted = _structured_model_support(clinical, source, fact, main)
     pos = next(i for i, item in enumerate(case.sources) if item.source_id == binding_source.source_id)
     ref = citation(EvidenceRef(source_id=binding_source.source_id, field='clinical_binding'),
@@ -754,6 +785,14 @@ def _product_clinical_value(case, fact, clinical, source, binding_source):
         supported = extracted['supported']
     risk = main['risk_route']
     automatic = supported and (documentary or risk == 'AUTO_ACCEPT_ELIGIBLE' and nonempty(main.get('calibration_id')))
+    # A real saved human correction plus a new complete source proof can satisfy
+    # documentation without asking for a second signature. The review itself
+    # cannot supply missing/contradicted dimensions or course-completion scope.
+    saved_correction_supported = bool(shared_revision and not saved_model_proposal
+        and shared_revision.get('current_human_correction')
+        and supported and main['status'] == 'SUPPORTED_BY_SOURCE')
+    if saved_correction_supported:
+        automatic = True
     if extracted is not None:
         automatic = supported
     preferred = []
@@ -797,6 +836,10 @@ def _product_clinical_value(case, fact, clinical, source, binding_source):
         'retained_offline_review_count': (len(binding_source.content['atomic_support_reviews'])
             if isinstance(binding_source.content.get('atomic_support_reviews'), list) else 0),
         'boundary': 'Program source checks and declared documentary scope; no external AI approval or clinical expert certification.'}
+    if shared_revision is not None:
+        record['shared_saved_evidence'] = shared_revision
+        if not saved_model_proposal:
+            record['current_saved_proposal'] = record.pop('original_luna_proposal')
     if extracted is not None:
         record['model_extraction_support'] = extracted
     # A contradictory fact does not disprove that its source document exists.
@@ -810,7 +853,7 @@ def _product_clinical_value(case, fact, clinical, source, binding_source):
         'source_verification': verification, 'clinical_source_support': status,
         'clinical_expert_validation': 'NOT_ESTABLISHED', 'auto_accept_eligible': automatic,
         'risk_route': 'MODEL_EXTRACTED' if supported and extracted is not None and not documentary else
-            'AUTO_ACCEPT_ELIGIBLE' if documentary else risk,
+            'AUTO_ACCEPT_ELIGIBLE' if documentary or saved_correction_supported else risk,
         'readiness_review_required': supported and not automatic,
         'clinical_support_version': CLINICAL_SUPPORT_VERSION,
         'document_content_satisfaction': documentary,

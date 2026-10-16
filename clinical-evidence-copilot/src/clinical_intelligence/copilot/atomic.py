@@ -108,6 +108,8 @@ def automatic_source_coverage(packet):
         sha256=packet.source.sha256, patient_id=packet.patient_id,
         encounter_id=packet.case_id, available_at=None, input_kind=packet.source.input_kind)
     claims = []
+    layered = packet.extraction_metadata.get('soap_projection_version') == 'soap/v6'
+    semantics_by_fact = None
     for item in packet.facts:
         fact = item.assertion
         attributes = {k:v for k,v in (fact.attributes.model_dump() if fact.attributes else {}).items() if v is not None}
@@ -117,9 +119,11 @@ def automatic_source_coverage(packet):
             spans=[core.Span(start=p.start,end=p.end,quote=p.quote,source_id=source.source_id) for p in fact.provenance],
             experiencer=fact.experiencer, reporting_basis=fact.assertion_basis or 'unknown',
             polarity=fact.polarity, temporality=fact.temporality, attributes=attributes)
-        if packet.extraction_metadata.get('soap_projection_version') == 'soap/v6':
+        if layered:
             from .semantics import apply_semantics, checked_records
-            claim = core.Claim.model_validate(apply_semantics(claim.model_dump(mode='json'),checked_records(packet).get(item.fact_id)))
+            if semantics_by_fact is None:
+                semantics_by_fact = checked_records(packet)
+            claim = core.Claim.model_validate(apply_semantics(claim.model_dump(mode='json'), semantics_by_fact.get(item.fact_id)))
         claims.append(claim)
     external=packet.extraction_metadata.get('source_atomic_enumeration')
     independent=[]

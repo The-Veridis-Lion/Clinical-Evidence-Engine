@@ -1,9 +1,10 @@
 """Source-only product extraction using the frozen engine prompt and validator."""
 from dataclasses import asdict
 import json
+import os
 from pathlib import Path
 
-from ..clinical_notes.runner import SingleDispatchProvider
+from ..clinical_notes.runner import SingleDispatchProvider, product_provider
 from ..clinical_notes.dataset import sha
 from ..dialogue_first.dataset import Document
 from ..dialogue_first.contract import inspect, inspect_repair, schema
@@ -201,7 +202,11 @@ def extract_document(record, cache_root, ledger, *, provider=None, max_attempts=
     result_path = root / 'result.json'
     if result_path.exists():
         return validate_cached(root, document, identity, ledger)
-    provider = provider or SingleDispatchProvider(ProviderConfig(model='gpt-6-luna', reasoning_effort='high', timeout_seconds=300))
+    if provider is None and os.environ.get('CLINICAL_PRODUCT_PROVIDER', 'codex_cli') == 'openai_api':
+        from evidence_verification.extensions.review_transport import strict_schema_preflight
+        strict_schema_preflight(shape)
+    provider = provider or (SingleDispatchProvider(ProviderConfig(model='gpt-6-luna', reasoning_effort='high', timeout_seconds=300))
+                            if os.environ.get('CLINICAL_PRODUCT_PROVIDER', 'codex_cli') == 'codex_cli' else product_provider())
     if callable(getattr(provider, 'preflight', None)):
         provider.preflight()
     previous = None
@@ -226,7 +231,8 @@ def extract_document(record, cache_root, ledger, *, provider=None, max_attempts=
             ledger.finish(token, status, error=f'{type(exc).__name__}: {exc}', usage=usage)
             write_once(folder / 'failure.json', (canonical({'status': status, 'error_type': type(exc).__name__,
                                                            'error': str(exc), 'usage': usage}) + '\n').encode('utf-8'))
-            if status == 'UNRESOLVED_DISPATCH' or token['attempt'] == 3 or local_attempt + 1 == max_attempts:
+            if (status == 'UNRESOLVED_DISPATCH' or getattr(getattr(provider, 'config', None), 'provider', None) == 'openai_api'
+                    or token['attempt'] == 3 or local_attempt + 1 == max_attempts):
                 raise
             previous = None
             continue
@@ -281,7 +287,8 @@ def run_development(frozen_root, output, ledger_path, *, groups=1, provider=None
               'reference_input_to_model': False}
     write_once(root / 'cohort.json', (canonical(cohort) + '\n').encode('utf-8'))
     ledger = CallLedger(ledger_path)
-    provider = provider or SingleDispatchProvider(ProviderConfig(model='gpt-6-luna', reasoning_effort='high', timeout_seconds=300))
+    provider = provider or (SingleDispatchProvider(ProviderConfig(model='gpt-6-luna', reasoning_effort='high', timeout_seconds=300))
+                            if os.environ.get('CLINICAL_PRODUCT_PROVIDER', 'codex_cli') == 'codex_cli' else product_provider())
     provider.preflight()
     successes, failures = [], []
     for record in records:

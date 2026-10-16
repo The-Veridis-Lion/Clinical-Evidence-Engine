@@ -1,5 +1,7 @@
 """Local-only demonstration server. Browser and CLI share the same application."""
 import json
+import os
+import re
 import secrets
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from importlib.resources import files
@@ -19,8 +21,13 @@ from .presentation import draft_presentation
 MAX_BODY_BYTES = 2_000_000
 
 
-def make_server(store, *, port=8765, live=False, ledger=None, offline_evaluation=False):
+def make_server(store, *, port=8765, live=False, ledger=None, offline_evaluation=False,
+                careflow_url=None, workbench_extractor=None):
     token = secrets.token_urlsafe(32)
+    from .workbench import Workbench
+    from .workbench_routes import route
+    options = {'extractor': workbench_extractor} if workbench_extractor else {}
+    workbench = Workbench(store, ledger=ledger, live=live, careflow_url=careflow_url, **options)
 
     class Handler(BaseHTTPRequestHandler):
         def log_message(self, *args):
@@ -47,15 +54,28 @@ def make_server(store, *, port=8765, live=False, ledger=None, offline_evaluation
                     return self.reply({'error': 'Invalid local host'}, 403)
                 parsed = urlparse(self.path)
                 path, query = parsed.path, parse_qs(parsed.query)
-                if path in {'/', '/app.js', '/editor.js', '/style.css'}:
-                    name = {'/': 'index.html', '/app.js': 'app.js', '/editor.js': 'editor.js', '/style.css': 'style.css'}[path]
-                    content_type = {'index.html': 'text/html', 'app.js': 'text/javascript', 'editor.js': 'text/javascript', 'style.css': 'text/css'}[name]
-                    return self.reply(files('clinical_intelligence.copilot').joinpath('static', name).read_bytes(), content_type=content_type+'; charset=utf-8')
+                if path.startswith('/ui/'):
+                    value, status = route(workbench, 'GET', path, query)
+                    return self.reply(value, status)
+                if path in {'/', '/workbench', '/workbench/'} or path.startswith('/workbench/'):
+                    name = 'index.html' if path in {'/', '/workbench', '/workbench/'} else path.removeprefix('/workbench/')
+                    # The Gemini-designed workbench is the only browser UI. Vite
+                    # assets have one bounded directory; no arbitrary filesystem path.
+                    if name != 'index.html' and not re.fullmatch(r'assets/[A-Za-z0-9_-]+\.(?:js|css)', name):
+                        return self.reply({'error': 'Unknown static asset'}, 404)
+                    asset = files('clinical_intelligence.copilot').joinpath('static', 'gemini', *name.split('/'))
+                    if not asset.is_file():
+                        return self.reply({'error': 'Unknown static asset'}, 404)
+                    content_type = 'text/html' if name.endswith('.html') else 'text/javascript' if name.endswith('.js') else 'text/css'
+                    return self.reply(asset.read_bytes(), content_type=content_type+'; charset=utf-8')
                 if path == '/api/config':
                     from .defaults import request_options,PROFILE_VERSION
                     return self.reply({'csrf_token': token, 'live_enabled': live, 'offline_evaluation': offline_evaluation,
                                        'extraction_defaults':request_options(),'extraction_profile_version':PROFILE_VERSION,
-                                       'runtime_model': 'gpt-6-luna', 'schema_version': 'clinical-evidence-copilot/v1'})
+                                       'runtime_model': 'gpt-6-luna', 'provider': os.environ.get('CLINICAL_PRODUCT_PROVIDER', 'codex_cli'),
+                                       'schema_version': 'clinical-evidence-copilot/v1',
+                                       'workbench_url': '/workbench/', 'workbench_contract': 'workbench/1',
+                                       'careflow_url': careflow_url})
                 if path == '/api/cases':
                     return self.reply(store.list_cases())
                 if path == '/api/demo-bundles':
@@ -101,6 +121,12 @@ def make_server(store, *, port=8765, live=False, ledger=None, offline_evaluation
                 if length < 1 or length > MAX_BODY_BYTES:
                     return self.reply({'error': 'Request body size outside allowed range'}, 413)
                 body = json.loads(self.rfile.read(length))
+                if not isinstance(body, dict):
+                    raise ValueError('Request body must be an object')
+                parsed = urlparse(self.path)
+                if parsed.path.startswith('/ui/'):
+                    value, status = route(workbench, 'POST', parsed.path, parse_qs(parsed.query), body)
+                    return self.reply(value, status)
                 if self.path == '/api/cases':
                     p = create_from_bundle(body)
                     store.save(p, expected_version=0)
@@ -186,11 +212,17 @@ def make_server(store, *, port=8765, live=False, ledger=None, offline_evaluation
             except (ValueError, TypeError) as exc:
                 self.reply({'error': str(exc)}, 400)
 
-    return ThreadingHTTPServer(('127.0.0.1', port), Handler)
+    class LocalServer(ThreadingHTTPServer):
+        def server_close(self):
+            workbench.close()
+            super().server_close()
+    server = LocalServer(('127.0.0.1', port), Handler)
+    server.workbench = workbench
+    return server
 
 
-def serve(store, *, port=8765, live=False, ledger=None, offline_evaluation=False):
-    server = make_server(store, port=port, live=live, ledger=ledger, offline_evaluation=offline_evaluation)
+def serve(store, *, port=8765, live=False, ledger=None, offline_evaluation=False, careflow_url=None):
+    server = make_server(store, port=port, live=live, ledger=ledger, offline_evaluation=offline_evaluation, careflow_url=careflow_url)
     print(f'Clinical Evidence Copilot: http://127.0.0.1:{server.server_port} · live extraction {"enabled" if live else "disabled"}', flush=True)
     try:
         server.serve_forever()

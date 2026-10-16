@@ -1,6 +1,8 @@
 """Append-only SQLite snapshots with optimistic concurrency and hash chaining."""
 import sqlite3
+from collections import OrderedDict
 from pathlib import Path
+from threading import Lock
 
 from .models import Packet
 
@@ -102,6 +104,10 @@ def validate_verified_revision(old, packet, record):
 class CaseStore:
     def __init__(self, path):
         self.path = Path(path)
+        # Exact SQLite rows are immutable snapshots. Keep only a few previously
+        # verified reads; callers always receive independent packet objects.
+        self._verified_reads = OrderedDict()
+        self._verified_lock = Lock()
         self.path.parent.mkdir(parents=True, exist_ok=True)
         with self.connect() as db:
             db.executescript('''
@@ -183,13 +189,31 @@ class CaseStore:
             rows = db.execute('SELECT version, content_hash, parent_hash, payload FROM versions WHERE case_id=? AND (? IS NULL OR version<=?) ORDER BY version', (case_id, version, version)).fetchall()
         if not rows or (version is not None and rows[-1][0] != version):
             raise KeyError('Case/version not found')
+        # Read the database on every request. The complete original row values,
+        # including payload text and chain headers, form the cache identity.
+        previous = None
+        for i, row in enumerate(rows, 1):
+            if row[0] != i or row[2] != previous:
+                raise ValueError('Version chain integrity mismatch')
+            previous = row[1]
+        key = (str(self.path.resolve()), case_id, tuple(rows))
+        with self._verified_lock:
+            cached = self._verified_reads.get(key)
+            if cached is not None:
+                self._verified_reads.move_to_end(key)
+                return cached.model_copy(deep=True)
         previous = None
         for i, row in enumerate(rows, 1):
             p = Packet.model_validate_json(row[3]).verify()
             if row[0] != i or p.version != i or p.content_hash != row[1] or p.parent_hash != row[2] or p.parent_hash != previous:
                 raise ValueError('Version chain integrity mismatch')
             previous = p.content_hash
-        return p
+        with self._verified_lock:
+            self._verified_reads[key] = p
+            self._verified_reads.move_to_end(key)
+            if len(self._verified_reads) > 8:
+                self._verified_reads.popitem(last=False)
+        return p.model_copy(deep=True)
 
     def history(self, case_id):
         with self.connect() as db:

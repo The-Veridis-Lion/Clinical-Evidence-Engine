@@ -1,0 +1,26 @@
+SYNTHETIC DEMONSTRATION. All people and events in this record are invented.
+Patient ID: SYN-SHOWCASE-KNEE-001
+Patient name: Jordan Avery, age 54
+Encounter: V2, outpatient physical therapy, September 8, 2026
+Clinician: Alex Rivera, PT (synthetic clinician SYN-RIVERA)
+Referral: SYN-REFERRAL-ORDER-0901, left knee evaluation and treatment
+Treatment event: PT-S1, September 8, 2026, 14:00–14:40
+
+Subjective:
+Jordan reports medial left knee pain with stairs, rated 6/10 on a zero-to-ten scale during stair climbing in the last 24 hours. Rest pain is 2/10. Walking tolerance is approximately 12 minutes before pain requires a pause. Jordan describes less puffiness than during the preceding month, with no swelling noticed today. There is no new injury, locking, giving way, fever or calf swelling. This is the first attended physical-therapy session for this knee.
+
+Jordan has taken acetaminophen 500 mg by mouth on five separate days since the September 1 primary-care visit, one tablet on each of those days. Jordan has not taken it on a fixed every-eight-hour schedule and reports no side effects. Lisinopril 10 mg every morning continues. The patient brings the September 3 X-ray report, which describes mild medial compartment degenerative changes and no acute fracture.
+
+Objective:
+The therapist observes a mild antalgic gait and left medial joint-line tenderness. There is no visible knee effusion. Left knee active motion is zero degrees extension to 120 degrees flexion, with discomfort at end-range flexion. Left knee extension strength is 5/5. A step-down task reproduces the patient's medial knee pain. The patient can bear weight and uses the stair handrail.
+
+Treatment performed:
+On September 8, 2026, one physical therapy session was completed for 40 minutes. This was the single PT-S1 session, not a 40-minute duration for each exercise. The session included supervised quadriceps activation, low-load seated knee extension, supported sit-to-stand practice, gait practice and instruction in activity pacing. The patient tolerated the session without a reported adverse event. No injection or medication was administered. The session's 40 minutes are actual treatment time, not the duration of the six-week planned course.
+
+Assessment:
+The therapist records left knee pain and activity limitation with preserved weight-bearing ability. The symptom history and examination are consistent with the referring clinician's mechanical knee-pain assessment. The therapist does not document completion of the overall therapy course or discharge from care.
+
+Plan:
+Continue a graded exercise and walking program with symptom monitoring. The referral requests two visits per week, but the patient's teaching schedule allows the next appointment on September 15; the scheduled interval is not proof that two visits occurred. Jordan was instructed in a short home program and demonstrated the movements during this session. No home-program completion outside the clinic is yet documented. The goal remains walking for 30 minutes and using stairs with less pain. The course is ongoing after one attended session.
+
+Signed in this fictional record: Alex Rivera, PT, September 8, 2026.

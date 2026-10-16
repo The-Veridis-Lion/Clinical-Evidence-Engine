@@ -14,6 +14,9 @@ from .evidence import available
 def checked_structured(context, source):
     if context.structured_extraction is None:
         return {}
+    if context.structured_extraction.get('version') == 'careflow-shared-copilot-snapshot/1':
+        from .shared_evidence import checked_snapshot
+        return checked_snapshot(context, source)
     from .extraction import inspect_structured
     retained = context.structured_extraction
     if not isinstance(retained, dict) or retained.get('source_sha256') != sha(source.content):

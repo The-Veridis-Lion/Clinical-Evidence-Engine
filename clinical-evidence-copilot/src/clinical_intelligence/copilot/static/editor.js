@@ -23,7 +23,7 @@ const CopilotEditor = (() => {
   const get = (object, key) => key.split('.').reduce((value, part) => value?.[part], object);
   const copy = object => JSON.parse(JSON.stringify(object));
   const escape = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-  function render(container, proposal, semantics=false) {
+  function render(container, proposal, semantics=false, availablePassages=[]) {
     const fields = semantics ? timing : main;
     container.innerHTML = '<div class="correction-grid">' + fields.map(([key,label,choices]) => {
       const value = get(proposal,key) ?? '';
@@ -33,8 +33,14 @@ const CopilotEditor = (() => {
       return `<label>${label}${input}</label>`;
     }).join('') + '</div>';
     if (!semantics) {
-      const spans = [proposal.evidence, ...(proposal.supporting_evidence || [])];
-      container.innerHTML += `<label>Primary source passage<select data-primary-evidence aria-label="Primary source passage">${spans.map((span,i)=>`<option value="${i}">${escape(`[${span.start}:${span.end}] ${span.quote}`)}</option>`).join('')}</select></label><p class="field-help">All cited passages are retained. A question alone does not establish a symptom; a short answer may need the question as context. Select a passage only after reading the full source.</p>`;
+      const selected = [proposal.evidence, ...(proposal.supporting_evidence || [])];
+      const spans = [...selected];
+      for (const span of availablePassages) {
+        if (!spans.some(existing=>existing.start===span.start&&existing.end===span.end))
+          spans.push({start:span.start,end:span.end,quote:span.quote});
+      }
+      container.citationSpans=spans;
+      container.innerHTML += `<p class="field-help">The draft's citations start selected. Recheck them after changing the statement. A question and its answer may need to stay together. Selection does not independently validate an edited assertion.</p><label>Primary source passage<select data-primary-evidence aria-label="Primary source passage">${spans.map((span,i)=>`<option value="${i}">${escape(`[${span.start}:${span.end}] ${span.quote}`)}</option>`).join('')}</select></label><details class="citation-picker"><summary>Choose supporting passages from the original source</summary>${spans.map((span,i)=>`<label class="checkbox-label"><input type="checkbox" data-citation="${i}" ${i<selected.length?'checked':''}><span>[${span.start}:${span.end}] ${escape(span.quote)}</span></label>`).join('')}</details>`;
     }
   }
   function collect(container, proposal, semantics=false) {
@@ -52,10 +58,11 @@ const CopilotEditor = (() => {
     if (!semantics && attributeChanged) result.attributes = attributes;
     if (!semantics) {
       const index = Number(container.querySelector('[data-primary-evidence]').value);
-      if (index) {
-        const spans = [proposal.evidence, ...(proposal.supporting_evidence || [])];
-        result.evidence = copy(spans[index]);
-        result.supporting_evidence = spans.filter((_,i)=>i!==index).map(copy);
+      const spans = container.citationSpans;
+      const selected = new Set([...container.querySelectorAll('[data-citation]:checked')].map(input=>Number(input.dataset.citation)));
+      result.evidence = copy(spans[index]);
+      result.supporting_evidence = spans.filter((_,i)=>i!==index&&selected.has(i)).map(copy);
+      if (JSON.stringify([result.evidence,...result.supporting_evidence]) !== JSON.stringify([proposal.evidence,...(proposal.supporting_evidence||[])])) {
         // The server rebuilds and checks provenance against unchanged source text.
         result.provenance = [];
       }

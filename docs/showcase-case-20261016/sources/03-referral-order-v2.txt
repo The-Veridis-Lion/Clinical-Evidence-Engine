@@ -1,0 +1,12 @@
+Patient ID: SYN-SHOWCASE-KNEE-001
+Request ID: SYN-SHOWCASE-REF-001
+Service code: PT-LEFT-KNEE
+Code system: SYNTHETIC-LOCAL
+Provider ID: SYN-ELLIS
+Intent state: ordered
+Clinical reason: SYNTHETIC DEMONSTRATION. Left knee pain with reduced walking tolerance and difficulty using stairs; evaluate and treat. Intended outpatient PT schedule is two visits per week for six weeks, subject to scheduling and therapist assessment. This is a fictional provider request, not attendance evidence, a real signature, an insurance approval or a billing claim.
+Destination ID: SYN-RIVER-PT
+Destination name: River Rehabilitation - fictional demonstration facility
+Investigation required: no
+Prior therapy required: no
+Event date: 2026-09-01

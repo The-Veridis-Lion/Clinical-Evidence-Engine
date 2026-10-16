@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Clinical Evidence Workbench</title>
+  <link rel="stylesheet" href="/workbench/style.css">
+  <script type="module" src="/workbench/app.js"></script>
+</head>
+<body>
+<a class="skip" href="#soap-panel">Skip to SOAP</a>
+<header class="topbar">
+  <a class="brand" href="/workbench/"><span class="brand-mark" aria-hidden="true">ce</span><span>Clinical Evidence <strong>Workbench</strong></span></a>
+  <nav aria-label="Products"><a href="/">Copilot original</a><a id="careflow-link" href="http://localhost:8858/" target="_blank" rel="noopener">CareFlow original ↗</a></nav>
+  <span id="connection" class="status">Connecting</span>
+</header>
+<main>
+  <section class="contextbar" aria-label="Patient and encounter">
+    <label>Patient<select id="patient-select"><option value="">Select patient</option></select></label>
+    <button id="add-patient" class="quiet">Add patient</button>
+    <label>Encounter<select id="encounter-select" disabled><option value="">Select encounter</option></select></label>
+    <div class="context-note"><span id="patient-id">Explicit patient identity required</span><small id="evidence-version">Sources stay linked across the workspace</small></div>
+    <button id="open-intake" class="primary">Add sources</button>
+  </section>
+  <div id="notice" class="notice" role="status" aria-live="polite" hidden></div>
+  <form id="patient-form" class="inline-form" hidden>
+    <h2>Add a patient</h2><p class="hint">Use the same explicit ID for all of this patient's sources. Identity is never inferred from a filename.</p>
+    <div class="fields"><label>Patient ID<input name="patient_id" required maxlength="120" pattern="[A-Za-z0-9][A-Za-z0-9_.:-]{0,119}" title="Letters, digits, dots, dashes, colons or underscores" autocomplete="off"></label><label>Display name<input name="display_label" required maxlength="200" autocomplete="off"></label></div>
+    <div class="actions"><button type="button" data-close="patient-form">Cancel</button><button class="primary">Save patient</button></div>
+  </form>
+  <section id="intake" class="intake" hidden aria-labelledby="intake-title">
+    <div class="section-heading"><div><span class="eyebrow">SOURCE INTAKE</span><h2 id="intake-title">Add the original record</h2></div><button type="button" data-close="intake">Close</button></div>
+    <p class="hint">Paste a note or dialogue, or add several UTF-8 text files. Give files the same encounter ID when they belong to the same visit. Leave unknown dates and encounter IDs blank.</p>
+    <div class="intake-layout"><form id="paste-form"><div class="fields"><label>Source filename<input name="filename" required value="clinical-note.txt" maxlength="200"></label><label>Input type<select name="input_kind"><option value="note">Clinical note</option><option value="dialogue">Dialogue</option></select></label></div><label>Original text<textarea name="text" rows="5" required placeholder="Paste the original clinical note or full conversation."></textarea></label><button type="submit">Add to upload list</button></form><div class="file-picker"><label>Text files<input id="file-input" type="file" multiple accept=".txt,.md,.text,text/plain,text/markdown"></label><p class="hint">Text only. PDF, images, audio and saved extraction JSON are not accepted here.</p><p class="hint">Each new source uses its saved extraction across SOAP, queries and CareFlow.</p></div></div>
+    <div class="table-scroll"><table id="upload-table" hidden><caption class="sr-only">Sources queued for this patient</caption><thead><tr><th scope="col">Source</th><th scope="col">Encounter ID</th><th scope="col">Encounter date</th><th scope="col">Input type</th><th scope="col">State</th><th scope="col"><span class="sr-only">Actions</span></th></tr></thead><tbody id="upload-rows"></tbody></table></div>
+    <div class="actions"><span id="upload-help" class="hint">One extraction for each new source. Failed or uncertain jobs are never automatically retried.</span><button id="upload-submit" class="primary" disabled>Extract & save sources</button></div>
+    <div id="job-list" aria-live="polite"></div>
+  </section>
+  <div class="mobile-switch" role="tablist" aria-label="Workspace pane"><button id="show-soap" role="tab" aria-selected="true">SOAP note</button><button id="show-evidence" role="tab" aria-selected="false">Clinical Evidence</button></div>
+  <div id="workspace-grid" class="workspace-grid">
+    <section id="soap-panel" class="soap-panel" aria-labelledby="soap-title">
+      <div class="panel-heading"><div><span class="eyebrow">CLINICAL EVIDENCE COPILOT</span><h1 id="soap-title">SOAP note</h1><p id="soap-context" class="hint">Choose a patient and an encounter to read the saved draft.</p></div><button id="polish-button" disabled title="Select an encounter to check availability">Organize prose · extra Luna call</button></div>
+      <div id="soap"><div class="empty"><h2>Start with the source.</h2><p>Add a patient, then paste a clinical note or dialogue. The saved facts will appear here as a source-linked SOAP draft.</p><button id="start-intake" class="primary">Add clinical sources</button></div></div>
+      <section id="polish-proposal" class="proposal" hidden aria-label="Separate wording proposal"></section>
+      <p class="note-foot">Source-linked draft. Click a statement to inspect its original passage or save a correction. A source match does not establish clinical correctness.</p>
+    </section>
+    <aside class="clinical-panel" aria-labelledby="clinical-title">
+      <div class="panel-heading"><div><span class="eyebrow">SHARED PATIENT EVIDENCE</span><h2 id="clinical-title">Clinical Evidence</h2></div><span class="badge">Saved facts</span></div>
+      <div class="tabs" role="tablist" aria-label="Clinical Evidence"><button id="tab-query" role="tab" aria-selected="true" aria-controls="pane-query">Query</button><button id="tab-careflow" role="tab" aria-selected="false" aria-controls="pane-careflow">CareFlow</button><button id="tab-sources" role="tab" aria-selected="false" aria-controls="pane-sources">Sources</button></div>
+      <section id="pane-query" role="tabpanel" aria-labelledby="tab-query">
+        <p class="hint">Query across this patient's saved documents. Structured queries use no model calls.</p>
+        <form id="query-form"><label>Question type<select id="query-family" required><option value="">Loading supported queries…</option></select></label><div class="fields"><label>From date<input id="query-start" type="date"></label><label>Through date<input id="query-end" type="date"></label></div><label id="concept-label">Clinical concept<input id="query-concept" placeholder="e.g. physical therapy" maxlength="300"></label><div class="fields"><label>Subject<select id="query-experiencer"><option value="patient">Patient</option><option value="family">Family</option><option value="other">Other</option><option value="unknown">Unknown</option></select></label><label>Service type (optional)<input id="query-service" maxlength="200"></label></div><button id="run-query" class="primary" disabled>Run query · no model call</button></form>
+        <details class="natural-question"><summary>Ask in your own words</summary><p class="hint">Luna interprets the question into a supported query. The answer is calculated from saved facts. This makes an additional model call.</p><form id="question-form"><label>Question<textarea id="question" required rows="3" maxlength="2000"></textarea></label><button id="interpret-question" disabled>Interpret with Luna · extra call</button></form></details>
+        <div id="query-result" aria-live="polite"></div>
+      </section>
+      <section id="pane-careflow" role="tabpanel" aria-labelledby="tab-careflow" hidden>
+        <p class="hint">Use the same saved evidence for a request-specific material check. Formal orders, request forms and payer requirements remain separate received documents.</p>
+        <div id="careflow-status" class="hint"></div><div id="careflow-requests"></div>
+        <details id="careflow-create"><summary>Create a request from saved evidence</summary><form id="careflow-form"><div class="fields"><label>Request type<select name="request_type"><option value="referral">Referral</option><option value="prior_authorization">Prior authorization</option></select></label><label>Request ID<input name="request_id" required maxlength="160"></label><label>Service code<input name="service_code" required maxlength="160"></label><label>Code system<input name="code_system" required placeholder="CPT, SNOMED, local…" maxlength="160"></label><label>Requested service date<input name="requested_service_date" type="date"></label></div><label>Clinical reason (optional)<textarea name="clinical_reason" rows="2" maxlength="4000"></textarea></label><div class="fields"><label>Additional clinical evidence<select name="target_requirement" id="cf-target"><option value="">No additional association</option><option value="therapy_completed">Completed treatment course</option><option value="investigation_result">Investigation result</option></select></label><label>Exact clinical concept<input name="target_concept" id="cf-concept" maxlength="300"></label><label>Concept category<select name="target_category"><option value="treatment">Treatment</option><option value="procedure">Procedure</option><option value="medication">Medication</option><option value="laboratory_result">Laboratory result</option><option value="observation">Observation</option></select></label><label>Clinical purpose<select name="target_purpose"><option value="unknown">Unknown</option><option value="therapeutic">Therapeutic</option><option value="diagnostic">Diagnostic</option></select></label></div><label class="check-label"><input type="checkbox" name="attach_summary"> Attach the saved clinical text as the clinical summary for this request</label><p class="hint">Enter payer details in the actual received payer request or PA form after creating the request.</p><p class="hint">All ready source documents for this patient are sent as saved case references. No new extraction is dispatched.</p><button id="create-careflow" class="primary" disabled>Create material check · no model call</button></form></details>
+        <section id="careflow-detail" hidden></section>
+      </section>
+      <section id="pane-sources" role="tabpanel" aria-labelledby="tab-sources" hidden><p class="hint">Files and encounters are separate. Unknown visit associations stay unknown.</p><div id="source-list"></div></section>
+    </aside>
+  </div>
+</main>
+<aside id="evidence-drawer" class="evidence-drawer" hidden aria-labelledby="evidence-title">
+  <div class="drawer-header"><div><span class="eyebrow">ORIGINAL EVIDENCE</span><h2 id="evidence-title" tabindex="-1">Source passage</h2></div><button id="close-evidence" aria-label="Close evidence panel">Close</button></div>
+  <div id="evidence-body"></div>
+</aside>
+</body>
+</html>

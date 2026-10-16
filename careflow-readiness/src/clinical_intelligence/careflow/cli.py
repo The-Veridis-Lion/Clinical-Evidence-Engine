@@ -33,6 +33,7 @@ def main(argv=None):
     p = sub.add_parser('serve'); p.add_argument('--host', default='127.0.0.1'); p.add_argument('--port', type=int, default=8765)
     p.add_argument('--enable-live-extraction', action='store_true')
     p.add_argument('--cache'); p.add_argument('--ledger')
+    p.add_argument('--shared-copilot-db')
     p = sub.add_parser('extract-intake'); p.add_argument('--input', required=True)
     p.add_argument('--cache'); p.add_argument('--ledger')
     p = sub.add_parser('retrieve'); p.add_argument('--archive', required=True); p.add_argument('--case', required=True)
@@ -56,7 +57,8 @@ def main(argv=None):
         if args.command == 'serve':
             from .api import make_server
             server = make_server(args.db, args.host, args.port,
-                allow_live_extraction=args.enable_live_extraction, cache=args.cache, ledger=args.ledger)
+                allow_live_extraction=args.enable_live_extraction, cache=args.cache, ledger=args.ledger,
+                shared_copilot_db=args.shared_copilot_db)
             print(f'CareFlow local API: http://{args.host}:{server.server_port}', flush=True)
             try:
                 server.serve_forever()

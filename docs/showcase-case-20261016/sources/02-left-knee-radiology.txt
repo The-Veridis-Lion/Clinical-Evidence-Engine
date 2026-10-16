@@ -1,0 +1,19 @@
+SYNTHETIC DEMONSTRATION. Invented patient, clinician, facility and report; not a real medical record.
+Patient ID: SYN-SHOWCASE-KNEE-001
+Patient name: Jordan Avery
+Document: left knee radiology report, XR-SYN-0903
+Exam performed: September 3, 2026, at 10:15
+Report finalized: September 3, 2026, at 11:10
+Ordering clinician: Morgan Ellis, MD (synthetic clinician SYN-ELLIS)
+Reporting clinician: Casey Reed, MD (synthetic radiologist SYN-REED)
+Study: standing anteroposterior, lateral and patellofemoral views of the left knee.
+
+Clinical indication: three months of gradual medial left knee pain, worse on stairs. The September 1 primary-care assessment suspected early osteoarthritis; there was no prior left knee image available for comparison.
+
+Findings: Mild narrowing of the medial tibiofemoral joint space and small marginal osteophytes are present. Alignment is maintained. There is no acute fracture or dislocation. No large joint effusion is visible on these views. The lateral compartment joint space is preserved. The study contains no measurement of cartilage thickness and no MRI assessment of meniscal integrity.
+
+Impression: Mild medial compartment degenerative change of the left knee. No acute osseous abnormality identified. This is an imaging interpretation, not a measurement of the patient's pain or a prediction of response to treatment.
+
+The examination was completed on September 3. It was not performed at the September 1 primary-care visit. This report was later brought to the September 22 follow-up for review; the review date does not replace the original imaging date. This report does not document a physical-therapy treatment session, medication administration or insurer authorization.
+
+Synthetic sign-off: Casey Reed, MD, September 3, 2026, 11:10. Signature is a fictional demonstration entry, not a credential or real digital signature.

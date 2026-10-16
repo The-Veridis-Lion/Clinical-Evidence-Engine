@@ -1,6 +1,7 @@
 """Local synthetic-data HTTP API; no implicit provider calls or rule overrides."""
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 import json
+import os
 from pathlib import Path
 import secrets
 from threading import Lock
@@ -21,10 +22,17 @@ class BodyTooLarge(ValueError):
 
 
 def make_server(db, host='127.0.0.1', port=8765, *, allow_live_extraction=False,
-                cache=None, ledger=None, provider=None):
+                cache=None, ledger=None, provider=None, shared_copilot_db=None, workbench_url=None):
     app = CareFlow(db)
     live_token = secrets.token_urlsafe(32)
     extraction_lock = Lock()
+    from .shared_evidence import SharedEvidenceReader, SharedIntake, SharedSync, shared_intake, sync_shared
+    shared_reader = SharedEvidenceReader(shared_copilot_db) if shared_copilot_db else None
+    workbench_url = workbench_url or os.environ.get('CLINICAL_WORKBENCH_URL')
+    if workbench_url:
+        destination = urlsplit(workbench_url)
+        if destination.scheme != 'http' or destination.hostname not in {'127.0.0.1', 'localhost'} or destination.username or destination.password or '\r' in workbench_url or '\n' in workbench_url:
+            raise ValueError('Workbench URL must be a local HTTP address')
 
     class Handler(BaseHTTPRequestHandler):
         def log_message(self, *_):
@@ -90,11 +98,21 @@ def make_server(db, host='127.0.0.1', port=8765, *, allow_live_extraction=False,
             path = [unquote(p) for p in parsed.path.strip('/').split('/')]
             query = parse_qs(parsed.query)
             if self.command == 'GET' and path == ['']:
-                return self.respond(200, Path(__file__).with_name('workspace.html').read_text(encoding='utf-8'),
-                                    text=True, content_type='text/html; charset=utf-8')
+                # The products keep separate APIs, but have one user-facing UI.
+                if workbench_url:
+                    self.send_response(303)
+                    self.send_header('Location', workbench_url)
+                    self.send_header('Content-Length', '0')
+                    self.send_header('Cache-Control', 'no-store')
+                    self.end_headers()
+                    return
+                return self.respond(200, {'product': 'CareFlow Readiness API',
+                    'workbench_url': None, 'message': 'Start tools/serve_products.py for the shared workbench.'})
             if self.command == 'GET' and path == ['v1', 'config']:
                 return self.respond(200, {'live_extraction_enabled': allow_live_extraction,
-                    'model': 'gpt-6-luna', 'reasoning_effort': 'high', 'csrf_token': live_token,
+                    'shared_evidence_enabled': shared_reader is not None,
+                    'model': 'gpt-6-luna', 'reasoning_effort': 'high',
+                    'provider': os.environ.get('CLINICAL_PRODUCT_PROVIDER', 'codex_cli'), 'csrf_token': live_token,
                     'clinical_text_contract': 'careflow-clinical-text-intake/1'})
             if self.command == 'GET' and path == ['v1', 'cases']:
                 return self.respond(200, app.cases())
@@ -119,6 +137,17 @@ def make_server(db, host='127.0.0.1', port=8765, *, allow_live_extraction=False,
                     return self.respond(201, extract_intake(app, intake, cache=cache, ledger=ledger, provider=provider))
                 finally:
                     extraction_lock.release()
+            if self.command == 'POST' and (path == ['v1', 'shared-intake'] or
+                    len(path) == 4 and path[:2] == ['v1', 'cases'] and path[3] == 'sync-shared'):
+                if shared_reader is None:
+                    return self.respond(403, {'error': 'SHARED_EVIDENCE_DISABLED'})
+                origin = self.headers.get('Origin')
+                if (self.headers.get('X-CareFlow-Token') != live_token
+                        or origin is not None and origin != 'http://' + self.headers.get('Host', '')):
+                    return self.respond(403, {'error': 'INVALID_LOCAL_TOKEN'})
+                if path == ['v1', 'shared-intake']:
+                    return self.respond(201, shared_intake(app, self.body(SharedIntake), shared_reader))
+                return self.respond(201, sync_shared(app, path[2], self.body(SharedSync), shared_reader))
             if self.command == 'GET' and path == ['health']:
                 return self.respond(200, {'status': 'ok', 'product': 'careflow/1.0.0'})
             if self.command == 'GET' and path == ['v1', 'rules']:
@@ -135,7 +164,9 @@ def make_server(db, host='127.0.0.1', port=8765, *, allow_live_extraction=False,
                                           'clinical_text_intake': ClinicalTextIntake.model_json_schema(),
                                           'selected_clinical_association': SelectedClinicalAssociation.model_json_schema(),
                                           'program_recalculation':ProgramRecalculation.model_json_schema(),
-                                          'received_document': ReceivedMaterialUpdate.model_json_schema()})
+                                          'received_document': ReceivedMaterialUpdate.model_json_schema(),
+                                          'shared_intake': SharedIntake.model_json_schema(),
+                                          'shared_sync': SharedSync.model_json_schema()})
             if self.command == 'POST' and path == ['v1', 'intake']:
                 from .raw_input import build_case
                 intake = self.body(SourceIntake)

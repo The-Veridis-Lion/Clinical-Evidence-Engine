@@ -1,0 +1,24 @@
+SYNTHETIC DEMONSTRATION. Invented patient and clinical events.
+Patient ID: SYN-SHOWCASE-KNEE-001
+Patient name: Jordan Avery
+Encounter: V5, outpatient physical therapy, September 29, 2026
+Treatment event: PT-S3, September 29, 2026
+Clinician: Alex Rivera, PT (SYN-RIVERA)
+
+Subjective:
+Jordan reports left knee pain of 3/10 when climbing stairs during the last 24 hours, using the same zero-to-ten scale. Rest pain is 0/10. The patient can walk approximately 25 minutes before taking a pause for the knee. The patient still uses a handrail and has not yet reached the goal of a comfortable 30-minute walk to work. There is no new injury, locking, giving way, fever or calf swelling. No swelling was noticed today. The patient does not describe the condition as cured.
+
+Jordan reports following the updated September 22 acetaminophen instruction: one 500 mg tablet was taken on each of two separate days over the last week, and no more than one tablet was taken on either day. The every-twelve-hour instruction is an allowed interval when needed, not a statement of twice-daily use. No side effects are reported. Lisinopril 10 mg every morning continues.
+
+Objective:
+The patient walks independently on level ground without an obvious limp. Left knee motion is 0–128 degrees. Mild medial joint-line tenderness remains, with no visible effusion. Supported step-down control is improved compared with the first PT examination, but repeated steps still provoke discomfort. No new imaging is obtained at this session.
+
+Treatment record:
+One physical therapy session was completed on September 29, 2026. This is PT-S3, the third attended clinic session. It included supervised strengthening, graded step practice and walking practice. The patient tolerated the session without a reported adverse event. The treatment minutes and start/end times were omitted from the signed session record. Its actual duration is unknown; neither the appointment schedule nor the durations of the first two sessions can supply the missing minutes.
+
+Assessment and plan:
+The therapist records improved reported walking tolerance with persistent activity-related left knee pain. Three clinic sessions are now documented, but the six-week prescribed course has not been completed. A final full-course assessment and discharge report are not available. Continue the home program and arrange the next session after scheduling and any required paperwork. There is no recorded physical-therapy clinic visit between September 15 and September 29, and home exercise is not counted as clinic attendance. The primary-care follow-up on September 22 was a separate medical visit.
+
+The missing duration should be requested from the treating clinic rather than filled with an estimate. No injection or medication was administered during PT-S3. No insurer approval is asserted by this record.
+
+Synthetic sign-off: Alex Rivera, PT, September 29, 2026. Duration field intentionally left missing for the software demonstration.

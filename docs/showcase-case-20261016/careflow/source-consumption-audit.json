@@ -1,0 +1,69 @@
+{
+  "document_type": "non_expert_source_consumption_audit",
+  "scope": "Read-only trace of the saved final PA packet; no new evaluation, model call, changed source, or injected review.",
+  "packet": "careflow/showcase-pa-final-packet.json",
+  "request_id": "SYN-SHOWCASE-PA-001",
+  "readiness": "NEEDS_EVIDENCE",
+  "requirement": "therapy_completed",
+  "rule_id": "CF-DOC-005",
+  "observed_status": "INSUFFICIENT_EVIDENCE",
+  "trace": [
+    {
+      "layer": "PT3 source and saved clinical extraction",
+      "packet_pointer": "/clinical_context/1/facts/31",
+      "fact_id": "clinical-56fbd58b8eb72764ece3ed59",
+      "source_quote": "Three clinic sessions are now documented, but the six-week prescribed course has not been completed.",
+      "original_fact_index": 31,
+      "concept": "six-week physical therapy course",
+      "semantics": {
+        "action_type": "physical therapy course",
+        "action_state": "not_completed",
+        "completion_scope": "full_course"
+      },
+      "result": "Explicitly says three sessions are documented and the six-week prescribed course is not completed; preserved as a model-extracted claim, not independently certified clinical truth."
+    },
+    {
+      "layer": "request target and mapping",
+      "packet_pointers": [
+        "/sources/8/content",
+        "/clinical_mapping/decisions/4"
+      ],
+      "result": "Explicit binding maps PT3 clinical fact to PA therapy_completed; mapping has no issues and derives a false/ASSERTED_ABSENT fact."
+    },
+    {
+      "layer": "independent bounded source check",
+      "packet_pointer": "/facts/12/requirement_support/source_reviews/0/main_assertion_verification",
+      "result": "INSUFFICIENT_EVIDENCE, unrecognized_source_semantics; no independent bounded assertion was established. This alone does not discard the saved model proposal under the current policy."
+    },
+    {
+      "layer": "earliest decisive support block",
+      "packet_pointers": [
+        "/facts/12/requirement_support/source_reviews/0/model_extraction_support",
+        "careflow-readiness/src/clinical_intelligence/careflow/requirement_support.py:696-706"
+      ],
+      "result": "The noncompleted-course object check sets action_representation=unresolved. Extracted action_type is physical therapy course while the target concept is six-week physical therapy course; action_type is neither canonical therapy_course nor an exact normalized match, and the bounded source check did not support action_type. The negative proposition therefore fails the current object contract.",
+      "issue": "requested_therapy_noncompleted_course_object_not_source_established"
+    },
+    {
+      "layer": "effective fact and rule",
+      "packet_pointers": [
+        "/facts/12/requirement_support",
+        "/checks/4",
+        "/gaps/0"
+      ],
+      "result": "Mapped assertion=false and ASSERTED_ABSENT remain visible, but requirement_support=UNVERIFIED and effective_assertion=null. CF-DOC-005 yields INSUFFICIENT_EVIDENCE; overall NEEDS_EVIDENCE. No therapy_record establishes completed prior course."
+    }
+  ],
+  "accurate_display": "Prior PT course completion is not established for this PA request. The PT3 note records three attended sessions and says the prescribed six-week course was not completed; the saved negative extraction is visible but did not satisfy the product’s exact course-object support check. The PA packet therefore remains NEEDS_EVIDENCE (CF-DOC-005: INSUFFICIENT_EVIDENCE).",
+  "can_demonstrate": [
+    "Traceable PA request and submitted form/payer context with matching synthetic request identity.",
+    "Preserved PT3 noncompletion statement, explicit target binding, and transparent support/gap trace.",
+    "Conservative non-Ready PA outcome for missing accepted prior-course completion evidence."
+  ],
+  "cannot_demonstrate": [
+    "A NOT_SUPPORTED ruling or formally established negative proof for therapy_completed.",
+    "Completed six-week therapy, payer approval or denial, medical necessity, or expert-validated clinical accuracy."
+  ],
+  "classification": "Consumption/semantic-support boundary in current saved output, not a source-authoring contradiction or a new model hallucination.",
+  "limitations": "Non-expert AI-assisted audit of one already-saved packet; does not alter production rules or independently validate the underlying clinical events."
+}

@@ -1,0 +1,132 @@
+{
+  "created_at": "2026-10-16T06:03:50.822647+00:00",
+  "dataset": "synthetic-knee-showcase/1",
+  "patient_id": "SYN-SHOWCASE-KNEE-001",
+  "collection_performs_model_calls": false,
+  "initialized_empty_auxiliary_ledger": true,
+  "existing_source_databases_modified": false,
+  "database_snapshots": [
+    {
+      "path": "evidence/sqlite/copilot/cases.sqlite3.gz",
+      "uncompressed_bytes": 4718592,
+      "uncompressed_sha256": "41f05ebad4b55588fb6219791f204a71aa1e8ecdfafeb20c0a00c71e59b51283",
+      "compressed_bytes": 383622,
+      "sha256": "d2e64394fe310a0f0db7cadb30236c4560927700616ad6e68f65c0c777516841"
+    },
+    {
+      "path": "evidence/sqlite/copilot/product-calls.sqlite3.gz",
+      "uncompressed_bytes": 856064,
+      "uncompressed_sha256": "16efa1b46e7171f5ccae0b6642c374315cfb1eb54545f480bafc1c062f26b2b7",
+      "compressed_bytes": 74896,
+      "sha256": "f15e5dc44a5ba6ec91f6ffbfefa195532568fbf5c69f530d81e4bb7383cfb884"
+    },
+    {
+      "path": "evidence/sqlite/copilot/workbench-calls.sqlite3.gz",
+      "uncompressed_bytes": 20480,
+      "uncompressed_sha256": "c0f134bb415c48a08ceec830d61a05103a313232566dd158bf37de8365310fce",
+      "compressed_bytes": 635,
+      "sha256": "3def91119648022c1d5769080f84c0b1d15acfe5faa16697a4360c92fefeaeba"
+    },
+    {
+      "path": "evidence/sqlite/careflow/cases.sqlite3.gz",
+      "uncompressed_bytes": 26447872,
+      "uncompressed_sha256": "128dcb25a764d12f1124a0606360c513312c145faf3b04006189ee5efa7ccaf9",
+      "compressed_bytes": 2170988,
+      "sha256": "4eddf40cc2ca7b1ad952df8a03b5df4473d869d40840d1511e1c8da3ff88ab72"
+    }
+  ],
+  "raw_files": [
+    {
+      "path": "evidence/requests/product-requests/4eed3eaa19f22c3bb54a04f0dfe8c3b3651f719278536ca92f2e28be4d629ccf/prompt.txt",
+      "bytes": 19519,
+      "sha256": "9face49d787f7a64e8d15d0cb2c55db9a992ec361df6c061d70b45326be54110"
+    },
+    {
+      "path": "evidence/requests/product-requests/4eed3eaa19f22c3bb54a04f0dfe8c3b3651f719278536ca92f2e28be4d629ccf/raw-response.json",
+      "bytes": 29546,
+      "sha256": "6151caa5f1b7d161abaa1a68b6f01ed942f67188e7842872cc6db5e76012473f"
+    },
+    {
+      "path": "evidence/requests/product-requests/4eed3eaa19f22c3bb54a04f0dfe8c3b3651f719278536ca92f2e28be4d629ccf/usage.json",
+      "bytes": 148,
+      "sha256": "96d263fdee909ef35b592daca8d62451389c5ee6d20f62f9adff9891369215e6"
+    },
+    {
+      "path": "evidence/requests/product-requests/51c6c2758dde652378b73f061cc06c660314b37d63a3bf2a935e2d337140887b/prompt.txt",
+      "bytes": 20270,
+      "sha256": "24c7dad92a986657c531c4a15bcc0a031cdaed6ccb9094532b0f41f68a55eef5"
+    },
+    {
+      "path": "evidence/requests/product-requests/51c6c2758dde652378b73f061cc06c660314b37d63a3bf2a935e2d337140887b/raw-response.json",
+      "bytes": 29718,
+      "sha256": "1b90331f3c575269d2d747cc210cb237623ddb9dd29b9f3e474cf9e238a09104"
+    },
+    {
+      "path": "evidence/requests/product-requests/51c6c2758dde652378b73f061cc06c660314b37d63a3bf2a935e2d337140887b/usage.json",
+      "bytes": 148,
+      "sha256": "618c99a08123ecda3a15e1eb4f152f842fd575c4e18e886be8b67783f3178abb"
+    },
+    {
+      "path": "evidence/requests/product-requests/64070eafddd538cea57db484b83334e5064e3f50e4c0f1831322d1ed55fd932f/prompt.txt",
+      "bytes": 13466,
+      "sha256": "48451741a182e96f327aa56acc1e7d257dbdea57d66418031aae2b3e36ee89a7"
+    },
+    {
+      "path": "evidence/requests/product-requests/64070eafddd538cea57db484b83334e5064e3f50e4c0f1831322d1ed55fd932f/raw-response.json",
+      "bytes": 14641,
+      "sha256": "0c6e2d3014aebaa31dddbdd06473b363a99e56c0c1f11119aee5cb046de2ac54"
+    },
+    {
+      "path": "evidence/requests/product-requests/64070eafddd538cea57db484b83334e5064e3f50e4c0f1831322d1ed55fd932f/usage.json",
+      "bytes": 149,
+      "sha256": "faa223e5c606e38885d86fae38b390ca17b7871a67e441040ee401029ef36d5a"
+    },
+    {
+      "path": "evidence/requests/product-requests/b813f69f681652510e1767cb0bab4273f3ad079bb88804dcc14502fc5d88f5b6/prompt.txt",
+      "bytes": 24121,
+      "sha256": "b084dccad82c1e4fada966dfe89cbd3aed4d39f0178ca868702ec2ffcb9c1522"
+    },
+    {
+      "path": "evidence/requests/product-requests/b813f69f681652510e1767cb0bab4273f3ad079bb88804dcc14502fc5d88f5b6/raw-response.json",
+      "bytes": 45123,
+      "sha256": "03c07eb855567ac348e2e279ebba6cedb1e94a418259c8dd204026fb1027b86d"
+    },
+    {
+      "path": "evidence/requests/product-requests/b813f69f681652510e1767cb0bab4273f3ad079bb88804dcc14502fc5d88f5b6/usage.json",
+      "bytes": 149,
+      "sha256": "dce3d906c6b564eb608580e53837e6d8bca3d5d6660ca110054d5624221605ae"
+    },
+    {
+      "path": "evidence/requests/product-requests/c27fcaea09324a4dfc25be6bc2c5f6765f8d130c19d2cc1124efadc62db0e8a5/prompt.txt",
+      "bytes": 38551,
+      "sha256": "1ae5927a85275b6bc2eafec006aa759165667319175e2ba420a65f5c90fa785d"
+    },
+    {
+      "path": "evidence/requests/product-requests/c27fcaea09324a4dfc25be6bc2c5f6765f8d130c19d2cc1124efadc62db0e8a5/raw-response.json",
+      "bytes": 64275,
+      "sha256": "f68f580e30fe902061fb59747a91629783de1973f0da10f7e78e34f562f2e7d4"
+    },
+    {
+      "path": "evidence/requests/product-requests/c27fcaea09324a4dfc25be6bc2c5f6765f8d130c19d2cc1124efadc62db0e8a5/usage.json",
+      "bytes": 149,
+      "sha256": "ed6cf4cc29bc2c6c4a669ac28aa82fe3afd58288536df401d2c9f942dd062924"
+    },
+    {
+      "path": "evidence/requests/product-requests/ceb8731e7b1c137a594347c12ca9912d8a0a3de2070e99e56629a66f4b949d7b/prompt.txt",
+      "bytes": 18796,
+      "sha256": "be1ca7b261a24bd0dbec0daa438232cbb6d5c67a416b959360edbed76c225eb2"
+    },
+    {
+      "path": "evidence/requests/product-requests/ceb8731e7b1c137a594347c12ca9912d8a0a3de2070e99e56629a66f4b949d7b/raw-response.json",
+      "bytes": 24829,
+      "sha256": "54dadba1617e973d938cd6f1c8a1143ab0b643a898c802e6c7da07735ac82861"
+    },
+    {
+      "path": "evidence/requests/product-requests/ceb8731e7b1c137a594347c12ca9912d8a0a3de2070e99e56629a66f4b949d7b/usage.json",
+      "bytes": 149,
+      "sha256": "9f1b079f917dde42679296e0f80286df1b38758056784c0a71774f6d388d3e6d"
+    }
+  ],
+  "public_export_note": "Derived showcase-only subset from immutable private synthetic snapshot; two unrelated old synthetic versions removed only in this copy. Six active showcase packet payloads and content hashes unchanged.",
+  "public_evidence_scope": "Clinical source prompts without local paths, original model output and usage; operational traces remain private. Application SQLite snapshots preserve the six showcase packets."
+}

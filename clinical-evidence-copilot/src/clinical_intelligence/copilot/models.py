@@ -125,6 +125,8 @@ class ReviewRecord(ReviewRequest):
     after: dict
     supersedes_review_id: str | None = None
     correction_contract_version: Literal['citation-permutation-preservation/1'] | None = None
+    evidence_binding_version: Literal['review-resulting-evidence/1'] | None = None
+    requested_evidence_ids: list[str] | None = None
 
     @model_serializer(mode='wrap')
     def serialize_retained_contract(self, handler):
@@ -132,6 +134,9 @@ class ReviewRecord(ReviewRequest):
         # Old saved review bytes/hashes do not acquire a newly defaulted field.
         if self.correction_contract_version is None:
             value.pop('correction_contract_version', None)
+        for name in ('evidence_binding_version', 'requested_evidence_ids'):
+            if getattr(self, name) is None:
+                value.pop(name, None)
         return value
 
 
@@ -234,6 +239,26 @@ class Packet(Model):
             for c in self.conflicts:
                 if not set(c.fact_ids) <= fact_ids:
                     raise ValueError('Conflict references unknown facts')
+            for review in self.reviews:
+                if review.evidence_binding_version is None:
+                    continue  # Historical packets retain their original review contract.
+                _, before_spans = ground_fact(review.before, self.source)
+                after, after_spans = ground_fact(review.after, self.source)
+                resulting_ids = [e.evidence_id for e in after_spans]
+                if (review.fact_id not in fact_ids or not review.evidence_ids
+                        or len(review.evidence_ids) != len(set(review.evidence_ids))
+                        or any(evidence.get(e.evidence_id) != e for e in after_spans)):
+                    raise ValueError('Review evidence binding differs from resulting statement')
+                if review.action == 'correct':
+                    replacement, _ = ground_fact(review.replacement, self.source)
+                    allowed = {e.evidence_id for e in before_spans + after_spans}
+                    if (review.evidence_ids != resulting_ids or replacement != after
+                            or not review.requested_evidence_ids
+                            or not set(review.requested_evidence_ids) <= allowed):
+                        raise ValueError('Correction evidence binding must name resulting citations')
+                elif (review.before != review.after or review.replacement is not None
+                        or not set(review.evidence_ids) <= set(resulting_ids)):
+                    raise ValueError('Review evidence binding must stay within the target statement')
             if self.extraction_metadata.get('soap_projection_version') == 'soap/v4':
                 from .atomic import validate_checklist
                 from .action_state import inspect_action

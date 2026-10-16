@@ -1,0 +1,466 @@
+{
+  "created_at": "2026-10-16T06:03:51.403340+00:00",
+  "synthetic": true,
+  "active_source_files": 8,
+  "clinical_extraction_sources": 6,
+  "registered_encounters": 5,
+  "source_words": 3586,
+  "model": "gpt-6-luna",
+  "reasoning_effort": "high",
+  "task": "clinical-structured-extraction/1",
+  "semantics": "clinical-fact-semantics/2",
+  "active_collection_requests": [
+    {
+      "request_key": "c27fcaea09324a4dfc25be6bc2c5f6765f8d130c19d2cc1124efadc62db0e8a5",
+      "document_id": "showcase-initial-consultation-v2",
+      "status": "valid",
+      "model": "gpt-6-luna",
+      "started_at": "2026-10-16T05:29:48.130420+00:00",
+      "ended_at": "2026-10-16T05:31:28.803411+00:00",
+      "latency_seconds": 100.670627399988,
+      "dispatched": 1,
+      "usage": {
+        "input_tokens": 27784,
+        "cached_input_tokens": 0,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 16291,
+        "reasoning_output_tokens": 297
+      },
+      "error": null
+    },
+    {
+      "request_key": "64070eafddd538cea57db484b83334e5064e3f50e4c0f1831322d1ed55fd932f",
+      "document_id": "showcase-knee-radiology",
+      "status": "valid",
+      "model": "gpt-6-luna",
+      "started_at": "2026-10-16T05:42:16.680074+00:00",
+      "ended_at": "2026-10-16T05:42:50.109586+00:00",
+      "latency_seconds": 33.41547079998418,
+      "dispatched": 1,
+      "usage": {
+        "input_tokens": 17077,
+        "cached_input_tokens": 0,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 4851,
+        "reasoning_output_tokens": 1094
+      },
+      "error": null
+    },
+    {
+      "request_key": "4eed3eaa19f22c3bb54a04f0dfe8c3b3651f719278536ca92f2e28be4d629ccf",
+      "document_id": "showcase-pt-session-1",
+      "status": "valid",
+      "model": "gpt-6-luna",
+      "started_at": "2026-10-16T05:42:16.693543+00:00",
+      "ended_at": "2026-10-16T05:43:13.478915+00:00",
+      "latency_seconds": 56.775534899992635,
+      "dispatched": 1,
+      "usage": {
+        "input_tokens": 19119,
+        "cached_input_tokens": 0,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 7819,
+        "reasoning_output_tokens": 516
+      },
+      "error": null
+    },
+    {
+      "request_key": "51c6c2758dde652378b73f061cc06c660314b37d63a3bf2a935e2d337140887b",
+      "document_id": "showcase-pt-session-2",
+      "status": "valid",
+      "model": "gpt-6-luna",
+      "started_at": "2026-10-16T05:42:53.024586+00:00",
+      "ended_at": "2026-10-16T05:43:36.771842+00:00",
+      "latency_seconds": 43.7458741000155,
+      "dispatched": 1,
+      "usage": {
+        "input_tokens": 19586,
+        "cached_input_tokens": 0,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 7962,
+        "reasoning_output_tokens": 469
+      },
+      "error": null
+    },
+    {
+      "request_key": "b813f69f681652510e1767cb0bab4273f3ad079bb88804dcc14502fc5d88f5b6",
+      "document_id": "showcase-medical-followup",
+      "status": "valid",
+      "model": "gpt-6-luna",
+      "started_at": "2026-10-16T05:43:18.628739+00:00",
+      "ended_at": "2026-10-16T05:44:21.875346+00:00",
+      "latency_seconds": 63.23669400002109,
+      "dispatched": 1,
+      "usage": {
+        "input_tokens": 20548,
+        "cached_input_tokens": 0,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 11506,
+        "reasoning_output_tokens": 304
+      },
+      "error": null
+    },
+    {
+      "request_key": "ceb8731e7b1c137a594347c12ca9912d8a0a3de2070e99e56629a66f4b949d7b",
+      "document_id": "showcase-pt-session-3",
+      "status": "valid",
+      "model": "gpt-6-luna",
+      "started_at": "2026-10-16T05:43:41.761639+00:00",
+      "ended_at": "2026-10-16T05:44:33.065410+00:00",
+      "latency_seconds": 51.28563709999435,
+      "dispatched": 1,
+      "usage": {
+        "input_tokens": 18812,
+        "cached_input_tokens": 0,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 7746,
+        "reasoning_output_tokens": 1535
+      },
+      "error": null
+    }
+  ],
+  "total_new_model_calls": 7,
+  "retries": 0,
+  "model_failures": 0,
+  "partial_results": 0,
+  "uncertain_requests": 0,
+  "tokens_all_seven_calls": {
+    "input_tokens": 150645,
+    "output_tokens": 71130,
+    "cached_input_tokens": 0,
+    "reasoning_output_tokens": 4910
+  },
+  "model_call_seconds_range_active": [
+    33.41547079998418,
+    100.670627399988
+  ],
+  "billed_amount": null,
+  "billing_note": "CLI channel returned token usage, not a bill or a zero-cost guarantee.",
+  "same_saved_evidence_comparison": {
+    "evidence_version": "5c12d962a7077c4140382b03f1af11a7b280ec5a646b7cbd9a2550f378b5e67d",
+    "before_documented_minutes": 0.0,
+    "after_documented_minutes": 85.0,
+    "before_complete": false,
+    "after_complete": false,
+    "change_type": "Deterministic query consumption repair; no change to Luna output or clinical accuracy denominator."
+  },
+  "queries": {
+    "at": "2026-10-16T05:59:29.023276+00:00",
+    "queries": {
+      "visits": {
+        "visit_count": 5,
+        "complete": true,
+        "model_calls": 0,
+        "response_keys": [
+          "answer",
+          "query_spec",
+          "evidence_version",
+          "computed_from",
+          "calculation_steps",
+          "excluded_records",
+          "missing_data",
+          "source_refs",
+          "model_used_for_interpretation",
+          "model_calls"
+        ],
+        "answer_keys": [
+          "visit_count",
+          "encounters",
+          "counting_basis",
+          "attendance_confirmation",
+          "complete"
+        ]
+      },
+      "frequency": {
+        "visit_count": 5,
+        "complete": true,
+        "model_calls": 0,
+        "response_keys": [
+          "answer",
+          "query_spec",
+          "evidence_version",
+          "computed_from",
+          "calculation_steps",
+          "excluded_records",
+          "missing_data",
+          "source_refs",
+          "model_used_for_interpretation",
+          "model_calls"
+        ],
+        "answer_keys": [
+          "visit_count",
+          "encounters",
+          "counting_basis",
+          "attendance_confirmation",
+          "complete",
+          "weeks",
+          "start",
+          "end",
+          "prescribed_frequency_used",
+          "interpretation"
+        ]
+      },
+      "pt-duration": {
+        "documented_minutes": 85.0,
+        "complete": false,
+        "model_calls": 0,
+        "response_keys": [
+          "answer",
+          "query_spec",
+          "evidence_version",
+          "computed_from",
+          "calculation_steps",
+          "excluded_records",
+          "missing_data",
+          "source_refs",
+          "model_used_for_interpretation",
+          "model_calls"
+        ],
+        "answer_keys": [
+          "documented_minutes",
+          "documented_hours",
+          "minutes",
+          "complete",
+          "comparable_total",
+          "groups",
+          "events",
+          "unaggregated_durations",
+          "interpretation"
+        ]
+      },
+      "knee-pain": {
+        "model_calls": 0,
+        "response_keys": [
+          "answer",
+          "query_spec",
+          "evidence_version",
+          "computed_from",
+          "calculation_steps",
+          "excluded_records",
+          "missing_data",
+          "source_refs",
+          "model_used_for_interpretation",
+          "model_calls"
+        ],
+        "answer_keys": [
+          "events",
+          "histories",
+          "comparability",
+          "interpretation_limits",
+          "undated_records",
+          "recorded_mentions"
+        ]
+      },
+      "all-symptom-records": {
+        "model_calls": 0,
+        "response_keys": [
+          "answer",
+          "query_spec",
+          "evidence_version",
+          "computed_from",
+          "calculation_steps",
+          "excluded_records",
+          "missing_data",
+          "source_refs",
+          "model_used_for_interpretation",
+          "model_calls"
+        ],
+        "answer_keys": [
+          "events",
+          "histories",
+          "comparability",
+          "interpretation_limits",
+          "undated_records",
+          "recorded_mentions"
+        ]
+      }
+    },
+    "ledger_before": {
+      "valid": 6
+    },
+    "ledger_after": {
+      "valid": 6
+    },
+    "new_extraction_calls": 0
+  },
+  "careflow": {
+    "requests": {
+      "showcase-referral": {
+        "clinical_only": "NEEDS_EVIDENCE",
+        "with_form": "DOCUMENTATION_READY",
+        "checks": {
+          "request_intent": "SUPPORTED",
+          "referral_reason": "SUPPORTED",
+          "clinical_summary": "SUPPORTED",
+          "investigation_result": "NOT_APPLICABLE",
+          "therapy_completed": "NOT_APPLICABLE",
+          "destination": "SUPPORTED"
+        }
+      },
+      "showcase-pa": {
+        "clinical_only": "NEEDS_EVIDENCE",
+        "with_form": "NEEDS_EVIDENCE",
+        "checks": {
+          "request_intent": "SUPPORTED",
+          "referral_reason": "SUPPORTED",
+          "clinical_summary": "SUPPORTED",
+          "investigation_result": "NOT_APPLICABLE",
+          "therapy_completed": "INSUFFICIENT_EVIDENCE",
+          "pa_form": "SUPPORTED",
+          "payer_context": "SUPPORTED"
+        }
+      }
+    },
+    "ledger_before": {
+      "valid": 6
+    },
+    "ledger_after": {
+      "valid": 6
+    },
+    "new_extraction_calls": 0,
+    "clinical_reviews_imported": 0,
+    "boundary": "Synthetic project checklist, not payer approval."
+  },
+  "source_audit": {
+    "method": "Non-expert AI-assisted source audit; not physician gold",
+    "initial_facts_reviewed": 106,
+    "followup_facts_reviewed": 226,
+    "clinical_precision": null,
+    "clinical_recall": null,
+    "clinical_f1": null,
+    "references": [
+      "initial-v2/independent-audit.json",
+      "followups/source-audit.json",
+      "careflow/source-consumption-audit.json"
+    ]
+  },
+  "recording": {
+    "status": "completed",
+    "mp4_seconds": 93.6,
+    "gif_seconds": 60.2,
+    "mp4": "media/workbench-walkthrough.mp4",
+    "gif": "media/workbench-walkthrough.gif",
+    "playback_and_source_checks": "media/playback-validation.json",
+    "new_extraction_calls": 0
+  },
+  "authoring_format_revision_calls": 1,
+  "public_export": {
+    "derived_from_original_report": true,
+    "original_report_sha256": "0ce9779b9e0e6bf197d22190e9bd00f153b5f7d2488fc90d39f4d789ec7c2f12",
+    "active_response_count": 6,
+    "full_authoring_history_retained_privately": true
+  },
+  "api_cost_estimate": {
+    "calculated_at": "2026-10-16T18:27:48.427522+00:00",
+    "basis": "API-equivalent estimate from recorded Codex CLI token usage; not an API invoice.",
+    "model": "gpt-6-luna",
+    "currency": "USD",
+    "processing": "Standard, short-context, global endpoint",
+    "pricing_as_of": "2026-10-16",
+    "pricing_source": "https://developers.openai.com/api/docs/models/gpt-6-luna",
+    "rates_per_million_tokens": {
+      "uncached_input": "0.10",
+      "cached_input": "0.01",
+      "output": "0.50"
+    },
+    "reasoning_accounting": "Reasoning is included in reported output_tokens and is not charged a second time.",
+    "active_demo": {
+      "clinical_files": 6,
+      "formal_material_files": 2,
+      "input_tokens": 122926,
+      "cached_input_tokens": 0,
+      "output_tokens": 56175,
+      "reasoning_output_tokens": 4215,
+      "total_tokens": 179101,
+      "estimated_input_usd": "0.0122926",
+      "estimated_output_usd": "0.0280875",
+      "estimated_total_usd": "0.0403801",
+      "estimated_mean_per_clinical_file_usd": "0.006730016666666666666666666667",
+      "post_extraction_calls_in_demonstrated_queries_and_readiness": 0,
+      "post_extraction_incremental_model_cost_usd": "0"
+    },
+    "all_seven_recorded_calls": {
+      "input_tokens": 150645,
+      "output_tokens": 71130,
+      "cached_input_tokens": 0,
+      "reasoning_output_tokens": 4910,
+      "total_tokens": 221775,
+      "estimated_total_usd": "0.0506295",
+      "includes_one_superseded_authoring_format_revision": true
+    },
+    "files": [
+      {
+        "document_id": "showcase-initial-consultation-v2",
+        "request_key": "c27fcaea09324a4dfc25be6bc2c5f6765f8d130c19d2cc1124efadc62db0e8a5",
+        "input_tokens": 27784,
+        "cached_input_tokens": 0,
+        "output_tokens": 16291,
+        "reasoning_output_tokens": 297,
+        "estimated_input_usd": "0.0027784",
+        "estimated_output_usd": "0.0081455",
+        "estimated_total_usd": "0.0109239",
+        "usage_sha256": "ed6cf4cc29bc2c6c4a669ac28aa82fe3afd58288536df401d2c9f942dd062924"
+      },
+      {
+        "document_id": "showcase-knee-radiology",
+        "request_key": "64070eafddd538cea57db484b83334e5064e3f50e4c0f1831322d1ed55fd932f",
+        "input_tokens": 17077,
+        "cached_input_tokens": 0,
+        "output_tokens": 4851,
+        "reasoning_output_tokens": 1094,
+        "estimated_input_usd": "0.0017077",
+        "estimated_output_usd": "0.0024255",
+        "estimated_total_usd": "0.0041332",
+        "usage_sha256": "faa223e5c606e38885d86fae38b390ca17b7871a67e441040ee401029ef36d5a"
+      },
+      {
+        "document_id": "showcase-pt-session-1",
+        "request_key": "4eed3eaa19f22c3bb54a04f0dfe8c3b3651f719278536ca92f2e28be4d629ccf",
+        "input_tokens": 19119,
+        "cached_input_tokens": 0,
+        "output_tokens": 7819,
+        "reasoning_output_tokens": 516,
+        "estimated_input_usd": "0.0019119",
+        "estimated_output_usd": "0.0039095",
+        "estimated_total_usd": "0.0058214",
+        "usage_sha256": "96d263fdee909ef35b592daca8d62451389c5ee6d20f62f9adff9891369215e6"
+      },
+      {
+        "document_id": "showcase-pt-session-2",
+        "request_key": "51c6c2758dde652378b73f061cc06c660314b37d63a3bf2a935e2d337140887b",
+        "input_tokens": 19586,
+        "cached_input_tokens": 0,
+        "output_tokens": 7962,
+        "reasoning_output_tokens": 469,
+        "estimated_input_usd": "0.0019586",
+        "estimated_output_usd": "0.003981",
+        "estimated_total_usd": "0.0059396",
+        "usage_sha256": "618c99a08123ecda3a15e1eb4f152f842fd575c4e18e886be8b67783f3178abb"
+      },
+      {
+        "document_id": "showcase-medical-followup",
+        "request_key": "b813f69f681652510e1767cb0bab4273f3ad079bb88804dcc14502fc5d88f5b6",
+        "input_tokens": 20548,
+        "cached_input_tokens": 0,
+        "output_tokens": 11506,
+        "reasoning_output_tokens": 304,
+        "estimated_input_usd": "0.0020548",
+        "estimated_output_usd": "0.005753",
+        "estimated_total_usd": "0.0078078",
+        "usage_sha256": "dce3d906c6b564eb608580e53837e6d8bca3d5d6660ca110054d5624221605ae"
+      },
+      {
+        "document_id": "showcase-pt-session-3",
+        "request_key": "ceb8731e7b1c137a594347c12ca9912d8a0a3de2070e99e56629a66f4b949d7b",
+        "input_tokens": 18812,
+        "cached_input_tokens": 0,
+        "output_tokens": 7746,
+        "reasoning_output_tokens": 1535,
+        "estimated_input_usd": "0.0018812",
+        "estimated_output_usd": "0.003873",
+        "estimated_total_usd": "0.0057542",
+        "usage_sha256": "9f1b079f917dde42679296e0f80286df1b38758056784c0a71774f6d388d3e6d"
+      }
+    ]
+  }
+}

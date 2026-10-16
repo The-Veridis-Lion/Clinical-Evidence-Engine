@@ -38,7 +38,9 @@ def mapping_manifest(version=VERSION):
         {'rule_id': 'CF-MAP-EXECUTION', 'version': '1.0.0' if legacy else '2.0.0',
          'condition': 'Canonical completed execution; procedures additionally require source-declared therapeutic purpose.' if legacy
          else 'Explicit completed/finished requested course plus independently source-confirmed course scope; procedures require therapeutic purpose.'},
-        {'rule_id': 'CF-MAP-RESULT', 'version': '1.0.0', 'condition': 'Known patient result, not pending/order; negative findings still document results.'},
+        {'rule_id': 'CF-MAP-RESULT', 'version': '1.0.0' if legacy else '2.0.0',
+         'condition': 'Known patient result, not pending/order; negative findings still document results.' if legacy else
+         'Known patient result, not pending/order; a structured completed diagnostic procedure additionally requires its own nonempty result value.'},
         {'rule_id': 'CF-MAP-SUMMARY', 'version': '1.0.0', 'condition': 'Explicitly attached clinical-summary document role and grounded patient facts.'},
         {'rule_id': 'CF-MAP-REASON', 'version': '1.0.0', 'condition': 'Positive clinical assertion explicitly bound as the reason for this service.'},
         {'rule_id': 'CF-MAP-PAPERWORK', 'version': '1.0.0', 'condition': 'Clinical evidence cannot establish provider intent, destination, PA form or payer identifiers.'},
@@ -91,7 +93,14 @@ def material_assertion(fact, binding, *, source_support_policy=None):
             return None, 'execution_not_explicitly_completed'
         return True, 'documented_completed_patient_therapy'
     if requirement == 'investigation_result':
-        if fact['category'] not in {'laboratory_result', 'observation'} or status in (PENDING - {'unknown'} if structured else PENDING):
+        if structured:
+            status = structured['semantics'].get('action_state', 'unknown')
+        procedure_result = (structured and fact['category'] == 'procedure'
+            and binding.clinical_purpose == 'diagnostic' and status in COMPLETED
+            and isinstance((fact.get('attributes') or {}).get('value'), str)
+            and bool(fact['attributes']['value'].strip()))
+        if (fact['category'] not in {'laboratory_result', 'observation'} and not procedure_result
+                or status in ((PENDING - {'unknown'}) | {'discussed'} if structured else PENDING)):
             return None, 'completed_investigation_result_not_established'
         if not fact['concept']:
             return None, 'result_concept_unknown'

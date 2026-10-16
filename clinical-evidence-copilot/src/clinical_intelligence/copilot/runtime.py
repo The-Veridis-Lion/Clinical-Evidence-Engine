@@ -7,7 +7,7 @@ from time import perf_counter
 
 from .source_adapter import inspect, schema, prompt
 from ..provider import ProviderConfig
-from ..clinical_notes.runner import SingleDispatchProvider
+from ..clinical_notes.runner import SingleDispatchProvider, product_provider
 from .models import Packet, Source, digest, now
 from .service import (build_packet, PRODUCT_EVIDENCE_USAGE, SOURCE_INTERPRETATION_VERSION,
                       SOURCE_EVENT_SUPPORT_VERSION, SOURCE_SEMANTICS_CORRECTION_VERSION)
@@ -266,7 +266,8 @@ def extract_live(case_id, patient_id, source, ledger, *, provider_factory=None, 
             extraction_profile={'version':PROFILE_VERSION if using_default_profile else 'explicit-extraction-profile/1',
                 'selection':'default' if using_default_profile else 'explicit',
                 'semantics_version':semantics_version,'task_version':task_version})
-    if semantics_version == 'clinical-fact-semantics/2':
+    if (semantics_version == 'clinical-fact-semantics/2'
+            or provider_factory is None and os.environ.get('CLINICAL_PRODUCT_PROVIDER', 'codex_cli') == 'openai_api'):
         # Mechanical errors are rejected before ledger reservation or provider
         # construction. Legacy payloads retain their frozen schema contract.
         from ..evidence_bridge import verification_package
@@ -289,6 +290,8 @@ def extract_live(case_id, patient_id, source, ledger, *, provider_factory=None, 
             projection_version=projection)
         from .reprocessing import process_new_packet
         return process_new_packet(mark_partial(p, p.extraction_metadata['validation_errors']) if previous['status'] == 'partial' else p)
+    if provider_factory is None and os.environ.get('CLINICAL_PRODUCT_PROVIDER', 'codex_cli') == 'openai_api':
+        product_provider().preflight()
     try:
         prior=ledger.reserve(key, source, request_prompt, model)
     except sqlite3.IntegrityError:
@@ -315,7 +318,9 @@ def extract_live(case_id, patient_id, source, ledger, *, provider_factory=None, 
                 if hasattr(provider, 'usage'):
                     usage = provider.usage(perf_counter()-start).model_dump(mode='json')
             else:
-                provider=SingleDispatchProvider(ProviderConfig(model=model,reasoning_effort='high'))
+                provider=(SingleDispatchProvider(ProviderConfig(model=model, reasoning_effort='high'))
+                          if os.environ.get('CLINICAL_PRODUCT_PROVIDER', 'codex_cli') == 'codex_cli'
+                          else product_provider())
                 provider.preflight()
                 folder=ledger.path.parent/'product-requests'/key
                 folder.mkdir(parents=True,exist_ok=True)

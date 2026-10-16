@@ -1,0 +1,14 @@
+Patient ID: SYN-SHOWCASE-KNEE-001
+Request ID: SYN-SHOWCASE-PA-001
+Service code: PT-LEFT-KNEE-EXTENSION
+Code system: SYNTHETIC-LOCAL
+Provider ID: SYN-ELLIS
+Intent state: requested
+Clinical reason: SYNTHETIC DEMONSTRATION. Persistent left knee pain with stair and walking limitations; request six additional outpatient PT visits beginning October 6. The project checklist requires completed prior-course evidence, but only three sessions of an unfinished six-week course are documented. No completion or discharge report is available. This fictional request and submitted form do not assert real payer coverage, approval, denial, treatment completion or a billing claim.
+Investigation required: no
+Prior therapy required: yes
+Form ID: SYN-PA-FORM-0930
+Form status: submitted
+Payer ID: SYN-HARBOR-PLAN
+Payer request ID: SYN-HARBOR-REQ-001
+Event date: 2026-09-30

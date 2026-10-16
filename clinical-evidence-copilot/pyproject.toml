@@ -32,7 +32,7 @@ where = ["src"]
 clinical_intelligence = ["contracts/*.json", "synthetic.json"]
 "clinical_intelligence.claims_review" = ["resources/*.json"]
 "clinical_intelligence.rule_first" = ["resources/*.json", "resources/*.html"]
-"clinical_intelligence.copilot" = ["resources/*.json", "static/*.html", "static/*.css", "static/*.js"]
+"clinical_intelligence.copilot" = ["resources/*.json", "static/*.html", "static/*.css", "static/*.js", "static/workbench/*.html", "static/workbench/*.css", "static/workbench/*.js", "static/gemini/*.html", "static/gemini/assets/*.js", "static/gemini/assets/*.css"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

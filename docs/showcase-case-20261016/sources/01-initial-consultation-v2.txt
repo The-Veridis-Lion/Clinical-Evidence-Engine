@@ -1,0 +1,40 @@
+SYNTHETIC DEMONSTRATION — invented patient, clinician and clinical events. Not a real medical record or treatment recommendation.
+Patient: Jordan Avery (synthetic), patient ID SYN-SHOWCASE-KNEE-001, age 54.
+Encounter: primary-care visit V1, September 1, 2026, 09:00–09:30.
+This is the complete dialogue for this encounter. Imaging and physical therapy have not yet taken place.
+
+Doctor: What brings you in today?
+Patient: My left knee has been hurting for about three months. That is my main concern. I want to get back to walking to work and using stairs comfortably.
+Doctor: Where is the pain, and how did it start?
+Patient: It is along the inner side of the left knee. It came on gradually. I did not fall, twist the knee, or have an injury. It feels like an ache, with a sharper pain when I go up or down stairs.
+Doctor: Using zero for no pain and ten for the worst pain, how bad has it been when climbing stairs during the last 24 hours?
+Patient: Seven out of ten when climbing stairs. At rest it is two out of ten. I can walk for about ten minutes before the knee pain makes me stop. Before this started, I could walk for half an hour without stopping.
+Doctor: Is there stiffness, swelling, locking or giving way?
+Patient: It feels stiff for about ten minutes when I first get up. Sometimes it looks slightly puffy after a busy day, but not today. It does not lock or give way. I have not fallen.
+Doctor: Any fever, redness, calf pain, calf swelling, numbness or weakness?
+Patient: No fever or redness. No calf pain or swelling. No numbness or weakness.
+Doctor: What have you tried, and have you already attended physical therapy?
+Patient: I have used acetaminophen, and resting helps. I have not attended any physical therapy and have not had a knee injection or operation. I have not had an X-ray of this knee yet.
+Doctor: Please tell me exactly how you take the acetaminophen.
+Patient: I take one 500 mg tablet by mouth when I need it. Over the past week I took one tablet on four separate days, never more than one tablet in a day. It helps a little. I have not noticed any side effects.
+Doctor: What other medicines and medical conditions do you have?
+Patient: I have had high blood pressure since 2018. I take lisinopril 10 mg by mouth every morning. I have no history of diabetes, kidney disease, liver disease, stomach bleeding or blood clots. I have never had surgery on either knee.
+Doctor: Any medicine allergies?
+Patient: Penicillin caused a rash when I was a child. I did not have trouble breathing. I do not take penicillin now.
+Doctor: Any other symptoms we should review today?
+Patient: No chest pain or shortness of breath. No abdominal pain, nausea or black stools. No pain in my right knee. My left knee pain is the problem.
+Doctor: What does your usual day involve?
+Patient: I teach at a school and stand a lot. My classroom is upstairs. I used to walk to work three days a week, but I now take the bus because of the knee. I do not smoke. I drink about one glass of wine a week.
+Doctor: I have reviewed today's vital signs. Your blood pressure is 128 over 78 millimeters of mercury, pulse 72 beats per minute, respiratory rate 16 per minute, temperature 36.8 degrees Celsius, and oxygen saturation 98 percent on room air. Your height is 165 centimeters and your weight is 77 kilograms.
+Doctor: On examination, you walk with a mild limp favoring the left leg. The left knee has tenderness along the medial joint line and mild crepitus during movement. There is no redness, warmth or visible effusion today. Left knee motion is from zero degrees of extension to 120 degrees of flexion, with pain at deep flexion. The ligaments are stable on examination. Knee extension and flexion strength are both five out of five. Your left calf is not tender or swollen, and the foot is warm with a palpable pulse. The right knee is not tender.
+Patient: Does that mean I have arthritis?
+Doctor: My assessment today is mechanical left knee pain, with early osteoarthritis suspected from the gradual onset and examination. Osteoarthritis is a working diagnosis, not an imaging-confirmed diagnosis today. There are no examination findings of an acutely hot or swollen joint. Your walking and stair use are limited by the pain. Your blood pressure is controlled on the current medicine.
+Patient: What happens next?
+Doctor: I am ordering a standing left knee X-ray today to evaluate the joint. It has not been performed, and there is no imaging result to review at this visit. I am also placing a referral for outpatient physical therapy for the left knee. The planned course is two visits per week for six weeks, subject to scheduling and the required paperwork. That is a future treatment plan; no therapy session or treatment course has been completed yet.
+Doctor: Until we review your response, you may use acetaminophen 500 mg by mouth every eight hours as needed for knee pain, with a maximum of three of those 500 mg tablets in a day. This is today's new instruction; it does not mean you have already taken it three times a day. Continue lisinopril 10 mg every morning. We are not adding an oral anti-inflammatory medicine today.
+Doctor: We discussed pacing activity, taking short walks within your tolerance, and using a handrail on stairs. The physical therapist will assess you before setting a strengthening program. Please arrange a follow-up visit here in three weeks so we can review the X-ray and your progress.
+Patient: I understand. I will arrange the X-ray and therapy appointments. My goal is to walk for thirty minutes and use the stairs with less pain.
+Doctor: Seek prompt medical assessment if the knee becomes hot and very swollen, you develop fever, or you become unable to bear weight. Those are precautions, not symptoms you reported today. Do you have any other concerns?
+Patient: No. I have no fever and can bear weight. I agree with the plan.
+
+Doctor: For the encounter record, this concludes our visit. No injection, medication administration, radiograph or physical therapy was performed during this primary-care visit. The visit lasted 30 minutes; that is an office-visit duration, not physical-therapy treatment time. No payer authorization decision was made.
