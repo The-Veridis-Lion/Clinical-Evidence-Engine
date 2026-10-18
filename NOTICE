@@ -2,3 +2,8 @@ Required Notice: Copyright (c) 2026 The-Veridis-Lion
 
 Applies only to original material owned by The-Veridis-Lion and licensed here.
 Third-party components retain their own rights and terms; see THIRD_PARTY_NOTICES.md.
+
+Existing frontend files carrying Apache-2.0 SPDX notices retain that stated scope.
+Bundled frontend dependency notices are provided in the workbench's
+THIRD_PARTY_LICENSES.txt. No project-wide relicensing is asserted.
+Medical-use guidance in MEDICAL_USE.md is separate from license conditions.

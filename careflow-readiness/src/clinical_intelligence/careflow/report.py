@@ -79,6 +79,7 @@ def markdown(packet, reviews=()):
     support_notice += 'No evidence recomputation or signature authentication occurs in this report.\n'
     out = [f"# CareFlow Evidence Review Packet — {cell(packet['case_id'])}\n",
            support_notice,
+           'Documentation checklist only: not medical necessity, insurance approval or final authorization. Qualified professional review of original evidence is required before substantive patient-care decisions. No clinical validation, regulatory approval or compliance certification is claimed.\n',
            f"**{packet['readiness']}** · revision {packet['revision']} · as of {packet['review_as_of']}\n",
            f"Request: {cell(r['request_id'])} · type: {r['request_type']} · patient: {cell(r['patient_id'])} · encounter: {cell(r['encounter_id'])}\n",
            f"Service: {cell(r['code_system'])} / {cell(r['service_code'])} · requested date: {r['requested_service_date']}\n",
