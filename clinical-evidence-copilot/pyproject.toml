@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "clinical-evidence-engine"
 version = "0.1.0"
-license = "LicenseRef-PolyForm-Noncommercial-1.0.0"
+license = "Apache-2.0"
 license-files = ["LICENSE.md", "NOTICE", "THIRD_PARTY_NOTICES.md"]
 authors = [{name = "The-Veridis-Lion"}]
 description = "Evidence-preserving clinical abstraction and deterministic review"
@@ -32,7 +32,7 @@ where = ["src"]
 clinical_intelligence = ["contracts/*.json", "synthetic.json"]
 "clinical_intelligence.claims_review" = ["resources/*.json"]
 "clinical_intelligence.rule_first" = ["resources/*.json", "resources/*.html"]
-"clinical_intelligence.copilot" = ["resources/*.json", "static/*.html", "static/*.css", "static/*.js", "static/workbench/*.html", "static/workbench/*.css", "static/workbench/*.js", "static/gemini/*.html", "static/gemini/assets/*.js", "static/gemini/assets/*.css"]
+"clinical_intelligence.copilot" = ["resources/*.json", "static/*.html", "static/*.css", "static/*.js", "static/workbench/*.html", "static/workbench/*.css", "static/workbench/*.js", "static/gemini/*.html", "static/gemini/*.txt", "static/gemini/assets/*.js", "static/gemini/assets/*.css"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

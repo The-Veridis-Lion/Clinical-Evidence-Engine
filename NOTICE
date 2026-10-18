@@ -1,4 +1,10 @@
-Required Notice: Copyright (c) 2026 The-Veridis-Lion
+Clinical Evidence Workbench
+Copyright (c) 2026 The-Veridis-Lion
 
-Applies only to original material owned by The-Veridis-Lion and licensed here.
-Third-party components retain their own rights and terms; see THIRD_PARTY_NOTICES.md.
+Original project code and documentation are licensed under the Apache License,
+Version 2.0. Third-party code, datasets, terminology and model resources retain
+their own rights and terms; the project license does not relicense them.
+See THIRD_PARTY_NOTICES.md for the dependency and resource inventory.
+Bundled frontend dependency notices are also provided in the workbench's
+THIRD_PARTY_LICENSES.txt.
+Medical-use guidance in MEDICAL_USE.md is separate from license conditions.

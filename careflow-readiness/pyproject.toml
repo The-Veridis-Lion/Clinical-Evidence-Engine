@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "clinical-evidence-engine"
 version = "0.1.0"
-license = "LicenseRef-PolyForm-Noncommercial-1.0.0"
+license = "Apache-2.0"
 license-files = ["LICENSE.md", "NOTICE", "THIRD_PARTY_NOTICES.md"]
 authors = [{name = "The-Veridis-Lion"}]
 description = "Evidence-preserving clinical abstraction and deterministic review"

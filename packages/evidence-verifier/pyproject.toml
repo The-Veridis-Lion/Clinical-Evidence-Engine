@@ -6,8 +6,8 @@ build-backend = "setuptools.build_meta"
 name = "clinical-evidence-verifier"
 version = "0.1.0"
 description = "Versioned source support and partial coverage verification"
-license = "LicenseRef-PolyForm-Noncommercial-1.0.0"
-license-files = ["LICENSE.md"]
+license = "Apache-2.0"
+license-files = ["LICENSE.md", "NOTICE"]
 requires-python = ">=3.12"
 dependencies = ["pydantic==2.13.5"]
 

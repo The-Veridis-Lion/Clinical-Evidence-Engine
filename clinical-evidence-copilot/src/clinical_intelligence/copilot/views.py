@@ -8,7 +8,7 @@ def render_readable_markdown(packet):
     counts = view['summary']
     lines = [f'# SOAP draft · {packet.case_id}', '',
              f'Patient: {packet.patient_id} · Encounter: {packet.source.encounter_time or "Not documented"} · Version: {packet.version}',
-             'Source-linked extraction draft. Human review is optional; machine checks and human decisions are recorded separately.',
+             'Supporting evidence draft. Extraction and demonstration do not require sign-off. A qualified healthcare professional must independently review original evidence before diagnosis, treatment, medication or other substantive patient-care decisions. Machine checks and human decisions are recorded separately.',
              f'{counts["specific_risks"]} assertions with specific risk flags; {counts["machine_unverified"]} not confirmed by automatic checks; {counts["human_reviewed"]} reviewed by a person.',
              'These counts can overlap. An unconfirmed machine check is not a finding that the assertion is false.',
              f'Extraction: {packet.extraction_status}. Complete clinical coverage and independent clinical accuracy are not established.',
@@ -77,6 +77,7 @@ def render_markdown(packet):
     packet.verify()
     lines = [f'# Clinical Evidence Copilot · {packet.case_id}',
              f'Patient: {packet.patient_id} · Version: {packet.version}',
+             'Supporting evidence draft only. Qualified professional review of original evidence is required before substantive patient-care decisions. No clinical validation, regulatory approval or compliance certification is claimed.',
              f'Packet hash: `{packet.content_hash}`',
              f'Extraction: {packet.extraction_status} · Interpretation: not clinically validated',
              f'Source: {packet.source.document_id} · SHA256: `{packet.source.sha256}`',

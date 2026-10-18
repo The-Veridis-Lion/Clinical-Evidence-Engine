@@ -14,15 +14,17 @@ Meliha Yetisgen. ACI-BENCH: a Novel Ambient Clinical Intelligence Dataset for
 Benchmarking Automatic Visit Note Generation. Nature Scientific Data (2023).
 https://doi.org/10.1038/s41597-023-02487-3 .
 
-This repository distributes original application code, not dependency source, wheels,
-model weights, the Python interpreter, or the external Codex executable. PolyForm
-applies only to original material owned by The-Veridis-Lion; it does not relicense dependencies.
-The inventory below was retained from the installed locked-distribution audit and
-rechecked against the local installed metadata during preparation. Package license
-files remain with independently installed distributions. Retain full upstream licenses,
-copyright and NOTICE files when distributing dependencies; summaries are not replacements.
+Original project code and documentation use Apache-2.0. Third-party libraries,
+datasets, terminology and model resources retain their own licenses and terms.
+The compiled workbench includes third-party frontend code. Python dependencies
+are installed separately; their source, wheels and model weights are not bundled.
 
-Direct dependencies: Pydantic (MIT), LangExtract (Apache-2.0 and health-use terms),
+The package inventory summarizes declared and component licenses for the pinned
+dependencies. When redistributing dependencies, include their complete upstream
+licenses, copyright notices and any required NOTICE files. The summaries here do
+not replace those texts.
+
+Direct dependencies: Pydantic (MIT), LangExtract (Apache-2.0; separate health-use reference below),
 intervaltree (Apache-2.0). pytest and setuptools are MIT. Python uses PSF and component
 licenses; SQLite core is public domain. Codex CLI is independently installed under
 Apache-2.0; hosted inference has separate service terms and operator authentication.
@@ -45,17 +47,26 @@ care record," Journal of the American Medical Informatics Association 25(3), 201
 CMS full documents, code tables and CPT descriptions are not bundled;
 the draft registry retains links and limited paraphrases.
 
-## LangExtract health-use notice
+## LangExtract code license and health-use reference
 
-HAI-DEF is provided under and subject to the Health AI Developer Foundations Terms of Use found at https://developers.google.com/health-ai-developer-foundations/terms
+LangExtract 1.7.0's LICENSE is Apache-2.0. Its README (also included in installed
+package metadata) separately refers health-related applications to HAI-DEF terms.
+The health-use reference is not text in the Apache LICENSE:
+https://github.com/google/langextract/blob/v1.7.0/LICENSE
+https://github.com/google/langextract/blob/v1.7.0/README.md#disclaimer
 
-LangExtract's upstream LICENSE subjects health-related applications to those terms
-and their incorporated prohibited-use policy, in addition to Apache-2.0.
-See https://github.com/google/langextract/blob/v1.7.0/LICENSE and
-https://developers.google.com/health-ai-developer-foundations/prohibited-use-policy.
-Future dependency redistribution or hosting requires reviewing the actual distributions
-and applicable agreement, preserving notices and any required modification notices.
-No HAI-DEF model weights or LangExtract source are bundled or modified here.
+The HAI-DEF agreement defines covered models/services and derivatives and has
+use/distribution requirements, including hosting, where applicable:
+https://developers.google.com/health-ai-developer-foundations/terms
+https://developers.google.com/health-ai-developer-foundations/prohibited-use-policy
+
+The launcher uses Codex CLI or OpenAI API inference; no HAI-DEF weights are bundled.
+The library's Apache license and its README's health-use reference have distinct
+scopes. Use of the library does not by itself relicense original project code
+under model-use terms. Operators should assess how the referenced agreements
+apply to their chosen integration before clinical use or external hosting, and
+retain applicable upstream agreements and notices. Project medical-use guidance
+is separate from these third-party obligations.
 
 ## Component obligations
 
@@ -64,7 +75,7 @@ Apache-2.0 and CNRI-Python. The installed NumPy Windows wheel includes component
 licenses and a GCC runtime under GPL-3.0-or-later WITH GCC-exception-3.1.
 Preserve complete wheel license directories for redistribution. The environment is
 not exclusively permissive. Google packages are LangExtract transitive dependencies;
-the retained provider uses Codex, not Google inference.
+the current launcher selects Codex CLI or the OpenAI API, not Google inference.
 
 ## Exact locked package inventory
 
@@ -102,7 +113,7 @@ License expressions below come from the pinned installed metadata, with generic 
 | [idna](https://pypi.org/project/idna/3.20/) | 3.20 | BSD-3-Clause |
 | [iniconfig](https://pypi.org/project/iniconfig/2.3.0/) | 2.3.0 | MIT |
 | [intervaltree](https://pypi.org/project/intervaltree/3.2.1/) | 3.2.1 | Apache-2.0 |
-| [langextract](https://pypi.org/project/langextract/1.7.0/) | 1.7.0 | Apache-2.0; health-use terms above |
+| [langextract](https://pypi.org/project/langextract/1.7.0/) | 1.7.0 | Apache-2.0; separate health-use reference above |
 | [ml_collections](https://pypi.org/project/ml-collections/1.1.0/) | 1.1.0 | Apache-2.0 |
 | [more-itertools](https://pypi.org/project/more-itertools/11.1.0/) | 11.1.0 | MIT |
 | [multidict](https://pypi.org/project/multidict/6.9.1/) | 6.9.1 | Apache-2.0 |
@@ -263,3 +274,16 @@ any independently redistributed dependency distribution.
 | weasel | 1.0.0 | MIT |
 | win32_setctime | 1.2.0 | MIT |
 | wrapt | 2.5.0 | BSD-2-Clause |
+
+## Frontend licenses
+
+The checked-in workbench JavaScript/CSS includes third-party runtime code.
+React 19.3.1, React DOM 19.3.1 and Scheduler 0.28.0 use MIT; Lucide React
+0.546.0 uses ISC with MIT-licensed Feather portions. Tailwind CSS 4.3.3 uses MIT.
+Complete installed upstream license texts are preserved in the Copilot frontend's
+`public/THIRD_PARTY_LICENSES.txt` and copied into the shipped
+`static/gemini/THIRD_PARTY_LICENSES.txt`. The workbench exposes that notice.
+Original frontend code uses Apache-2.0. The Apache license text is also included
+in the frontend notice.
+
+These summaries do not relicense data, models, dependencies or upstream resources.

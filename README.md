@@ -18,7 +18,7 @@ The workbench also follows recorded symptoms across visits, so a trend can be in
 
 ## How it works
 
-**GPT-6 Luna** powers the complete workflow shown here. This lightweight general-purpose model captures the main clinical story across notes and conversations. Models trained specifically on clinical records could extract finer details more accurately and capture more of the record.
+**GPT-6 Luna** powers the complete workflow shown here. This lightweight general-purpose model captures the main clinical story across notes and conversations. Whether a specialized clinical model improves extraction requires separate evaluation.
 
 **Luna extracts each clinical file once.** The workbench stores structured facts with encounter identity and exact references. Copilot projects those facts into SOAP key points and answers cross-file questions; CareFlow combines the same evidence with received referral and PA materials. Preset calculations and material checks run from saved evidence, without re-extracting the documents. A correction creates a versioned fact revision so dependent answers can be recalculated.
 
@@ -55,3 +55,22 @@ To inspect the showcase immediately, run `.\start-products.ps1 -SavedCase`. This
 [Selected reports and evidence](docs/REPORTS.md) · [HTTP interface](docs/patient-workbench/API.md) · [Frontend development](clinical-evidence-copilot/frontend/workbench/README.md)
 
 [Project history](docs/HISTORY.md)
+
+## Medical use and license
+
+**Clinical outputs are supporting drafts and evidence summaries.** A qualified
+healthcare professional must independently review the original sources and relevant
+patient context before using outputs for diagnosis, treatment, medication or any
+other substantive patient-care decision. CareFlow checks documentation completeness;
+it does not decide medical necessity, insurance approval or final authorization.
+No clinical validation, regulatory approval or compliance certification is claimed.
+See [medical-use guidance](MEDICAL_USE.md).
+
+Original project code and documentation are open source under the standard
+[Apache License 2.0](LICENSE.md), including commercial use subject to its terms.
+Third-party libraries, datasets, terminology and model resources retain their own
+licenses and applicable agreements. See [NOTICE](NOTICE) and
+[third-party notices](THIRD_PARTY_NOTICES.md).
+Medical-use guidance does not add a condition to the Apache license.
+
+Contact: [theveridislion@duck.com](mailto:theveridislion@duck.com).

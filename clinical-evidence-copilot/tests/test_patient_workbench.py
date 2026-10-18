@@ -223,6 +223,14 @@ def test_workbench_http_uses_normal_security_and_patient_owner_checks(tmp_path):
         with urlopen(Request(base+path, data=json.dumps(body).encode() if body is not None else None, headers=headers)) as result:
             return json.load(result)
     try:
+        with urlopen(base+'/workbench/THIRD_PARTY_LICENSES.txt') as response:
+            assert response.headers.get_content_type() == 'text/plain'
+            notices = response.read().decode('utf-8')
+            assert 'React' in notices or 'react 19.3.1' in notices
+            assert 'Cole Bemis' in notices and 'MIT License' in notices
+        with pytest.raises(HTTPError) as invalid_asset:
+            urlopen(base+'/workbench/../LICENSE.md')
+        assert invalid_asset.value.code == 404
         token=request('/api/config')['csrf_token']
         with pytest.raises(HTTPError) as exc:
             request('/ui/patients', {'patient_id':'p-one','display_label':'One'})

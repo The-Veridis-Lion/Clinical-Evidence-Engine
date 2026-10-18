@@ -61,12 +61,12 @@ def make_server(store, *, port=8765, live=False, ledger=None, offline_evaluation
                     name = 'index.html' if path in {'/', '/workbench', '/workbench/'} else path.removeprefix('/workbench/')
                     # The Gemini-designed workbench is the only browser UI. Vite
                     # assets have one bounded directory; no arbitrary filesystem path.
-                    if name != 'index.html' and not re.fullmatch(r'assets/[A-Za-z0-9_-]+\.(?:js|css)', name):
+                    if name not in {'index.html', 'THIRD_PARTY_LICENSES.txt'} and not re.fullmatch(r'assets/[A-Za-z0-9_-]+\.(?:js|css)', name):
                         return self.reply({'error': 'Unknown static asset'}, 404)
                     asset = files('clinical_intelligence.copilot').joinpath('static', 'gemini', *name.split('/'))
                     if not asset.is_file():
                         return self.reply({'error': 'Unknown static asset'}, 404)
-                    content_type = 'text/html' if name.endswith('.html') else 'text/javascript' if name.endswith('.js') else 'text/css'
+                    content_type = 'text/html' if name.endswith('.html') else 'text/javascript' if name.endswith('.js') else 'text/plain' if name.endswith('.txt') else 'text/css'
                     return self.reply(asset.read_bytes(), content_type=content_type+'; charset=utf-8')
                 if path == '/api/config':
                     from .defaults import request_options,PROFILE_VERSION
